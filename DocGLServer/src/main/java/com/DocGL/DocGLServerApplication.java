@@ -4,6 +4,8 @@ import com.DocGL.DB.AdminLoginDAO;
 import com.DocGL.api.Admin;
 import com.DocGL.resources.AdminResource;
 import io.dropwizard.Application;
+import io.dropwizard.db.DataSourceFactory;
+import io.dropwizard.hibernate.HibernateBundle;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 

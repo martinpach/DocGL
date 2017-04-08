@@ -1,8 +1,9 @@
 package com.DocGL.DB;
 
 import com.DocGL.api.Admin;
+import io.dropwizard.hibernate.AbstractDAO;
 import org.hibernate.SessionFactory;
-import io.dropwizard.DB.DataSourceFactory;
+
 
 
 /**
@@ -11,6 +12,7 @@ import io.dropwizard.DB.DataSourceFactory;
 public class AdminLoginDAO extends AbstractDAO<Admin> {
 
     public AdminLoginDAO(SessionFactory factory) {
+
         super(factory);
     }
 
