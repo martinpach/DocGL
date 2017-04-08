@@ -1,10 +1,21 @@
 package com.DocGL;
 
-import io.dropwizard.Configuration;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.hibernate.validator.constraints.*;
-import javax.validation.constraints.*;
+import com.sun.istack.internal.NotNull;
+import io.dropwizard.Configuration;
+
+
+
 
 public class DocGLServerConfiguration extends Configuration {
-    // TODO: implement service configuration
+
+
+    @Valid
+    @NotNull
+    private DataSourceFactory database = new DataSourceFactory();
+
+    @JsonProperty("database")
+    public DataSourceFactory getDataSourceFactory() {
+        return database;
+    }
 }
