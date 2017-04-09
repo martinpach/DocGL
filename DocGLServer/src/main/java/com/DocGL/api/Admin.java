@@ -10,10 +10,10 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 
 @Entity
-@Table(name = "admins")
-@NamedNativeQueries({
-        @NamedNativeQuery(name = "com.DocGL.api.getAllAdmins",
-                query = "select * from Admins")
+@Table(name = "Admins")
+@NamedQueries({
+        @NamedQuery(name = "com.DocGL.api.getAllAdmins",
+                query = "from Admin")
 })
 public class Admin {
 
@@ -37,6 +37,54 @@ public class Admin {
     private String password;
 
     public Admin() {
+    }
+
+    public int getIdadmin() {
+        return idadmin;
+    }
+
+    public void setIdadmin(int idadmin) {
+        this.idadmin = idadmin;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public Admin(String firstName, String lastName, String email, String userName, String password) {
