@@ -2,6 +2,8 @@ package com.DocGL.resources;
 
 import com.DocGL.DB.AdminDAO;
 import com.DocGL.api.Admin;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import io.dropwizard.hibernate.UnitOfWork;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -23,7 +25,8 @@ public class AdminResource {
     }
 
     @GET
-    public List<Admin> getAllAdmins(){
+    @UnitOfWork
+    public List getAllAdmins(){
         return adminDAO.getAllAdmins();
     }
 }

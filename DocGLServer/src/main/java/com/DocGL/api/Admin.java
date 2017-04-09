@@ -1,6 +1,9 @@
 package com.DocGL.api;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import javax.persistence.*;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * Created by D33 on 4/8/2017.
@@ -8,7 +11,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "admins")
-@NamedNativeQueries(value = {
+@NamedNativeQueries({
         @NamedNativeQuery(name = "com.DocGL.api.getAllAdmins",
                 query = "select * from Admins")
 })
@@ -34,7 +37,13 @@ public class Admin {
     private String password;
 
     public Admin() {
-
     }
 
+    public Admin(String firstName, String lastName, String email, String userName, String password) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.userName = userName;
+        this.password = password;
+    }
 }

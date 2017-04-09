@@ -2,9 +2,13 @@ package com.DocGL.DB;
 
 import com.DocGL.api.Admin;
 import io.dropwizard.hibernate.AbstractDAO;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.query.Query;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -13,7 +17,6 @@ import java.util.List;
 public class AdminDAO extends AbstractDAO<Admin> {
 
     public AdminDAO(SessionFactory factory) {
-
         super(factory);
     }
 
