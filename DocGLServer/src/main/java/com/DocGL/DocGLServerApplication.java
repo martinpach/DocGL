@@ -1,6 +1,6 @@
 package com.DocGL;
 
-import com.DocGL.DB.AdminLoginDAO;
+import com.DocGL.DB.AdminDAO;
 import com.DocGL.api.Admin;
 import com.DocGL.resources.AdminResource;
 import io.dropwizard.Application;
@@ -38,7 +38,7 @@ public class DocGLServerApplication extends Application<DocGLServerConfiguration
                     final Environment environment) {
         // TODO: implement application
 
-        final AdminLoginDAO dao = new AdminLoginDAO(hibernate.getSessionFactory());
+        final AdminDAO dao = new AdminDAO(hibernate.getSessionFactory());
         environment.jersey().register(new AdminResource(dao));
     }
 
