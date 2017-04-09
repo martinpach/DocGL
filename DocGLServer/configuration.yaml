@@ -1,6 +1,6 @@
 database:
   # the name of your JDBC driver
-  driverClass: com.mysql.cj.jdbc.Driver
+  driverClass: com.mysql.jdbc.Driver
 
   # the username
   user: root
@@ -9,7 +9,7 @@ database:
   password:
 
   # the JDBC URL
-  url: jdbc:mysql://localhost/
+  url: jdbc:mysql://localhost/Test?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
 
   # any properties specific to your JDBC driver:
   properties:
