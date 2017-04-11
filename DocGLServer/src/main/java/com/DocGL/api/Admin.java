@@ -1,9 +1,19 @@
 package com.DocGL.api;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+
+import jersey.repackaged.com.google.common.base.Throwables;
+import org.jose4j.jws.JsonWebSignature;
+import org.jose4j.jwt.JwtClaims;
+import org.jose4j.keys.HmacKey;
+import org.jose4j.lang.JoseException;
 
 import javax.persistence.*;
-import javax.xml.bind.annotation.XmlRootElement;
+import java.security.Principal;
+import java.util.Map;
+import java.util.Objects;
+
+import static java.util.Collections.singletonMap;
+
 
 /**
  * Created by D33 on 4/8/2017.
@@ -13,9 +23,11 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "Admins")
 @NamedQueries({
         @NamedQuery(name = "com.DocGL.api.getAllAdmins",
-                query = "from Admin")
+                query = "from Admin"),
+        @NamedQuery(name="com.DocGL.api.getAllCredentials",
+                    query="from Admin where userName =:userName and password =:password")
 })
-public class Admin {
+public class Admin/* implements Principal */{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,7 +45,7 @@ public class Admin {
     @Column(name = "username")
     private String userName;
 
-    @Column(name = "firstname")
+    @Column(name = "password")
     private String password;
 
     public Admin() {
@@ -94,4 +106,23 @@ public class Admin {
         this.userName = userName;
         this.password = password;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        final Admin admin = (Admin) o;
+        return Objects.equals(idadmin, admin.idadmin) && Objects.equals(userName, admin.userName);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(idadmin, userName);
+    }
+
+
+
+
+
+
 }
