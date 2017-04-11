@@ -24,8 +24,8 @@ import static java.util.Collections.singletonMap;
 @NamedQueries({
         @NamedQuery(name = "com.DocGL.api.getAllAdmins",
                 query = "from Admin"),
-        @NamedQuery(name="com.DocGL.api.getAllCredentials",
-                    query="from Admin where userName =:userName and password =:password")
+        @NamedQuery(name="com.DocGL.api.getAdminInformation",
+                    query="from Admin where userName = :username and password = :password")
 })
 public class Admin/* implements Principal */{
 
@@ -106,23 +106,5 @@ public class Admin/* implements Principal */{
         this.userName = userName;
         this.password = password;
     }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        final Admin admin = (Admin) o;
-        return Objects.equals(idadmin, admin.idadmin) && Objects.equals(userName, admin.userName);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(idadmin, userName);
-    }
-
-
-
-
-
 
 }

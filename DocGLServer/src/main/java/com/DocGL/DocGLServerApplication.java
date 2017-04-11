@@ -3,6 +3,7 @@ package com.DocGL;
 import com.DocGL.DB.AdminDAO;
 import com.DocGL.api.Admin;
 import com.DocGL.resources.AdminResource;
+import com.DocGL.resources.LoginResource;
 import io.dropwizard.Application;
 import io.dropwizard.db.DataSourceFactory;
 import io.dropwizard.hibernate.HibernateBundle;
@@ -29,17 +30,16 @@ public class DocGLServerApplication extends Application<DocGLServerConfiguration
 
     @Override
     public void initialize(final Bootstrap<DocGLServerConfiguration> bootstrap) {
-        // TODO: application initialization
         bootstrap.addBundle(hibernate);
     }
 
     @Override
     public void run(final DocGLServerConfiguration configuration,
                     final Environment environment) {
-        // TODO: implement application
 
         final AdminDAO dao = new AdminDAO(hibernate.getSessionFactory());
         environment.jersey().register(new AdminResource(dao));
+        environment.jersey().register(new LoginResource(dao));
     }
 
 

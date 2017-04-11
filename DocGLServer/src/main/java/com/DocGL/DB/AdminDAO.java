@@ -26,12 +26,14 @@ public class AdminDAO extends AbstractDAO<Admin> {
         return list(namedQuery("com.DocGL.api.getAllAdmins"));
     }
 
-    public Admin getAdminCredentials(String userName,String password){
-        Query query= session.getNamedQuery("com.DocGL.api.getAllCredentials");
-        query.setString(userName,"rastobutton");
-        query.setString(password, "rastobutton");
-        System.out.println((Admin) query);
-        return (Admin) query ;
+    public Admin getAdminInformation(String username, String password){
+        Query query= session.getNamedQuery("com.DocGL.api.getAdminInformation");
+        query.setString("username",username);
+        query.setString("password", password);
+        if(query.list().isEmpty()){
+            return null;
+        }
+        return (Admin) query.getSingleResult() ;
     }
 
 
