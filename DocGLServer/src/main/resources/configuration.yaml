@@ -9,7 +9,7 @@ database:
   password:
 
   # the JDBC URL
-  url: jdbc:mysql://localhost/docgl?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
+  url: jdbc:mysql://localhost/docgl?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC&useSSL=false
 
   # any properties specific to your JDBC driver:
   properties:

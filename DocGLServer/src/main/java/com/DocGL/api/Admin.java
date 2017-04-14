@@ -27,7 +27,7 @@ import static java.util.Collections.singletonMap;
         @NamedQuery(name="com.DocGL.api.getAdminInformation",
                     query="from Admin where userName = :username and password = :password")
 })
-public class Admin/* implements Principal */{
+public class Admin implements Principal {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -107,4 +107,12 @@ public class Admin/* implements Principal */{
         this.password = password;
     }
 
+    public Admin(String userName){
+        this.userName=userName;
+    }
+
+    @Override
+    public String getName() {
+        return userName;
+    }
 }

@@ -1,15 +1,14 @@
 package com.DocGL.resources;
 
 import com.DocGL.DB.AdminDAO;
-import com.DocGL.api.Admin;
-import com.DocGL.api.Credentials;
-import com.fasterxml.jackson.annotation.JsonProperty;
+
 import io.dropwizard.hibernate.UnitOfWork;
 import jersey.repackaged.com.google.common.base.Throwables;
 import org.jose4j.jws.JsonWebSignature;
 import org.jose4j.jwt.JwtClaims;
 import org.jose4j.keys.HmacKey;
 import org.jose4j.lang.JoseException;
+import static org.jose4j.jws.AlgorithmIdentifiers.HMAC_SHA256;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -27,15 +26,35 @@ import static java.util.Collections.singletonMap;
 @Produces(MediaType.APPLICATION_JSON)
 public class AdminResource {
     private AdminDAO adminDAO;
+    private byte[] tokenSecret;
 
-    public AdminResource(AdminDAO adminDAO) {
+    public AdminResource(AdminDAO adminDAO, byte[] tokenSecret) {
         this.adminDAO = adminDAO;
+        this.tokenSecret=tokenSecret;
     }
 
     @GET
     @UnitOfWork
     public List getAllAdmins(){
         return adminDAO.getAllAdmins();
+    }
+
+    @GET
+    @Path("/generate-valid-token")
+    public Map<String, String> generateValidToken() {
+        final JwtClaims claims = new JwtClaims();
+        claims.setSubject("admin");
+        claims.setExpirationTimeMinutesInTheFuture(30);
+
+        final JsonWebSignature jws = new JsonWebSignature();
+        jws.setPayload(claims.toJson());
+        jws.setAlgorithmHeaderValue(HMAC_SHA256);
+        jws.setKey(new HmacKey(tokenSecret));
+
+        try {
+            return singletonMap("token", jws.getCompactSerialization());
+        }
+        catch (JoseException e) { throw Throwables.propagate(e); }
     }
 
 }
