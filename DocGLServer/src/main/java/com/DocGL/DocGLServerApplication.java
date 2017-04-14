@@ -73,7 +73,7 @@ public class DocGLServerApplication extends Application<DocGLServerConfiguration
                         .setJwtConsumer(consumer)
                         .setRealm("realm")
                         .setPrefix("Bearer")
-                        .setAuthenticator((Authenticator<JwtContext, Admin>) new ExampleAuthenticator())
+                        .setAuthenticator( new ExampleAuthenticator())
                         .buildAuthFilter()));
 
         environment.jersey().register(new AuthValueFactoryProvider.Binder<>(Principal.class));

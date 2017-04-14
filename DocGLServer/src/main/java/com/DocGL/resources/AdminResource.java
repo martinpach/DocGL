@@ -44,12 +44,14 @@ public class AdminResource {
     public Map<String, String> generateValidToken() {
         final JwtClaims claims = new JwtClaims();
         claims.setSubject("admin");
+        claims.setGeneratedJwtId();
         claims.setExpirationTimeMinutesInTheFuture(30);
 
         final JsonWebSignature jws = new JsonWebSignature();
         jws.setPayload(claims.toJson());
         jws.setAlgorithmHeaderValue(HMAC_SHA256);
         jws.setKey(new HmacKey(tokenSecret));
+        jws.setDoKeyValidation(false);//relaxes key length validation. might be removed later
 
         try {
             return singletonMap("token", jws.getCompactSerialization());
