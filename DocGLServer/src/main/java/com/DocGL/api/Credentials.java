@@ -5,16 +5,20 @@ package com.DocGL.api;
  */
 public class Credentials {
     private String username;
-    private String password;
+    private String password="";
+    private String subject;
 
     public Credentials(){
 
     }
 
-    public Credentials(String username, String password) {
-        this.username = username;
-        this.password = password;
+    public Credentials(String username, String subject){
+        this.username=username;
+        this.subject=subject;
+
     }
+
+
 
     public String getUsername() {
         return username;
@@ -24,11 +28,6 @@ public class Credentials {
         return password;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
+    public String getSubject(){return subject;}
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
 }

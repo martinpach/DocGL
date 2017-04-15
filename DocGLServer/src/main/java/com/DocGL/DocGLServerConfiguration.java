@@ -12,12 +12,12 @@ import java.io.UnsupportedEncodingException;
 
 public class DocGLServerConfiguration extends Configuration {
 
-    //@NotEmpty
-    //private String jwtTokenSecret = "dfwzsdzwh823zebdwdz772632gdsbd";
+    @NotEmpty
+    private static String jwtTokenSecret = "dfwzsdzwh823zebdwdz772632gdsbd";
 
-    /*public byte[] getJwtTokenSecret() throws UnsupportedEncodingException {
+    public static byte[] getJwtTokenSecret() throws UnsupportedEncodingException {
         return jwtTokenSecret.getBytes("UTF-8");
-    }*/
+    }
 
     @Valid
     @NotNull

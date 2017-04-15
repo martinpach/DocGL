@@ -1,14 +1,12 @@
 package com.DocGL.DB;
 
-import com.DocGL.api.Admin;
+import com.DocGL.entities.Admin;
 import io.dropwizard.hibernate.AbstractDAO;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 
 /**
@@ -26,12 +24,15 @@ public class AdminDAO extends AbstractDAO<Admin> {
         return list(namedQuery("com.DocGL.api.getAllAdmins"));
     }
 
-    public Admin getAdminCredentials(String userName,String password){
-        Query query= session.getNamedQuery("com.DocGL.api.getAllCredentials");
-        query.setString(userName,"rastobutton");
-        query.setString(password, "rastobutton");
-        System.out.println((Admin) query);
-        return (Admin) query ;
+
+    public Admin getAdminInformation(String username, String password){
+        Query query= session.getNamedQuery("com.DocGL.api.getAdminInformation");
+        query.setString("username",username);
+        query.setString("password", password);
+        if(query.list().isEmpty()){
+            return null;
+        }
+        return (Admin) query.getSingleResult() ;
     }
 
 

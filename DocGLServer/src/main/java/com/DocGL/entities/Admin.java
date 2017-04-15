@@ -1,18 +1,9 @@
-package com.DocGL.api;
+package com.DocGL.entities;
 
-
-import jersey.repackaged.com.google.common.base.Throwables;
-import org.jose4j.jws.JsonWebSignature;
-import org.jose4j.jwt.JwtClaims;
-import org.jose4j.keys.HmacKey;
-import org.jose4j.lang.JoseException;
 
 import javax.persistence.*;
 import java.security.Principal;
-import java.util.Map;
 import java.util.Objects;
-
-import static java.util.Collections.singletonMap;
 
 
 /**
@@ -24,10 +15,10 @@ import static java.util.Collections.singletonMap;
 @NamedQueries({
         @NamedQuery(name = "com.DocGL.api.getAllAdmins",
                 query = "from Admin"),
-        @NamedQuery(name="com.DocGL.api.getAllCredentials",
-                    query="from Admin where userName =:userName and password =:password")
+        @NamedQuery(name="com.DocGL.api.getAdminInformation",
+                    query="from Admin where userName = :username and password = :password")
 })
-public class Admin/* implements Principal */{
+public class Admin implements Principal {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -107,6 +98,28 @@ public class Admin/* implements Principal */{
         this.password = password;
     }
 
+    public Admin(String userName){
+        this.userName=userName;
+    }
+
+    @Override
+    public String getName() {
+        return userName;
+    }
+
+    @Override
+    public String toString(){
+
+        return "Admin{" +
+                "id='" + idadmin + '\'' +
+                ", firstname='" + firstName + '\'' +
+                ", lastname='" + lastName +'\''+
+                ", email='" + email +'\''+
+                ", username='"+userName+'\''+
+                ", password='"+password+'\''+
+                '}';
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -119,10 +132,5 @@ public class Admin/* implements Principal */{
     public int hashCode() {
         return Objects.hash(idadmin, userName);
     }
-
-
-
-
-
-
 }
+

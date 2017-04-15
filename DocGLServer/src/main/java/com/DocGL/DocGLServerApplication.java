@@ -1,13 +1,31 @@
 package com.DocGL;
 
 import com.DocGL.DB.AdminDAO;
-import com.DocGL.api.Admin;
+import com.DocGL.entities.Admin;
 import com.DocGL.resources.AdminResource;
+import com.DocGL.resources.LoginResource;
+import com.github.toastshaman.dropwizard.auth.jwt.JwtAuthFilter;
 import io.dropwizard.Application;
+import io.dropwizard.auth.AuthDynamicFeature;
+import io.dropwizard.auth.AuthValueFactoryProvider;
+import io.dropwizard.auth.Authenticator;
 import io.dropwizard.db.DataSourceFactory;
 import io.dropwizard.hibernate.HibernateBundle;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
+import org.glassfish.jersey.server.filter.RolesAllowedDynamicFeature;
+import org.jose4j.jwt.MalformedClaimException;
+import org.jose4j.jwt.consumer.JwtConsumer;
+import org.jose4j.jwt.consumer.JwtConsumerBuilder;
+import org.jose4j.jwt.consumer.JwtContext;
+import org.jose4j.keys.HmacKey;
+
+import java.io.UnsupportedEncodingException;
+import java.security.Principal;
+import java.util.Optional;
+
+
+
 
 public class DocGLServerApplication extends Application<DocGLServerConfiguration> {
 
@@ -17,6 +35,7 @@ public class DocGLServerApplication extends Application<DocGLServerConfiguration
             return configuration.getDataSourceFactory();
         }
     };
+
 
     public static void main(final String[] args) throws Exception {
         new DocGLServerApplication().run(args);
@@ -29,21 +48,54 @@ public class DocGLServerApplication extends Application<DocGLServerConfiguration
 
     @Override
     public void initialize(final Bootstrap<DocGLServerConfiguration> bootstrap) {
-        // TODO: application initialization
         bootstrap.addBundle(hibernate);
     }
 
     @Override
     public void run(final DocGLServerConfiguration configuration,
-                    final Environment environment) {
-        // TODO: implement application
+                    final Environment environment) throws UnsupportedEncodingException {
 
         final AdminDAO dao = new AdminDAO(hibernate.getSessionFactory());
-        environment.jersey().register(new AdminResource(dao));
+        environment.jersey().register(new LoginResource(dao,DocGLServerConfiguration.getJwtTokenSecret()));
+
+        byte[] key = DocGLServerConfiguration.getJwtTokenSecret();
+
+        final JwtConsumer consumer = new JwtConsumerBuilder()
+                .setAllowedClockSkewInSeconds(30)
+                .setRequireExpirationTime()
+                .setRequireSubject()
+                .setVerificationKey(new HmacKey(key))
+                .setRelaxVerificationKeyValidation()
+                .build();
+
+        environment.jersey().register(new AuthDynamicFeature(
+                new JwtAuthFilter.Builder<Admin>()
+                        .setJwtConsumer(consumer)
+                        .setRealm("realm")
+                        .setPrefix("Bearer")
+                        .setAuthenticator( new ExampleAuthenticator())
+                        .buildAuthFilter()));
+
+        environment.jersey().register(new AuthValueFactoryProvider.Binder<>(Principal.class));
+        environment.jersey().register(RolesAllowedDynamicFeature.class);
+        environment.jersey().register(new AdminResource(dao,DocGLServerConfiguration.getJwtTokenSecret()));
     }
 
+    private static class ExampleAuthenticator  implements Authenticator<JwtContext, Admin> {
 
+        @Override
+        public Optional<Admin> authenticate(JwtContext context) {
 
+            try {
+                final String subject = context.getJwtClaims().getSubject();
+                if ("admin".equals(subject)) {
+                    return Optional.of(new Admin("admin"));
+                }
+                return Optional.empty();
+            }
+            catch (MalformedClaimException e) { return Optional.empty(); }
+        }
+    }
 
 
 }
