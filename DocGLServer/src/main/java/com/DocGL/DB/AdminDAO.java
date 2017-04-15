@@ -17,13 +17,10 @@ import java.util.List;
 public class AdminDAO extends AbstractDAO<Admin> {
     private Session session = null;
     private Transaction tx = null;
+
     public AdminDAO(SessionFactory factory) {
         super(factory);
         session=factory.openSession();
-    }
-
-    public List<Admin> getAllAdmins(){
-        return list(namedQuery("com.DocGL.api.getAllAdmins"));
     }
 
 
@@ -56,13 +53,13 @@ public class AdminDAO extends AbstractDAO<Admin> {
         return isChanged;
     }
 
-    public void updateProfile(AdminInput admin, int id){
+    public void updateProfile(String userName, String email, String password, int id){
         try {
             tx = session.beginTransaction();
-            Query query = session.getNamedQuery("com.DocGL.api.setPassword");
-            query.setString("username", admin.getUserName());
-            query.setString("email", admin.getEmail());
-            query.setString("password", admin.getPassword());
+            Query query = session.getNamedQuery("com.DocGL.api.setProfile");
+            query.setString("username", userName);
+            query.setString("email", email);
+            query.setString("password", password);
             query.setInteger("id", id);
             query.executeUpdate();
             tx.commit();

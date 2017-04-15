@@ -8,7 +8,16 @@ public class AdminInput {
     private String password;
     private String email;
 
-    public String getUserName() {
+    public AdminInput() {
+    }
+
+    public AdminInput(String username, String password, String email) {
+        this.username = username;
+        this.password = password;
+        this.email = email;
+    }
+
+    public String getUsername() {
         return username;
     }
 
@@ -18,14 +27,5 @@ public class AdminInput {
 
     public String getEmail() {
         return email;
-    }
-
-    public AdminInput() {
-    }
-
-    public AdminInput(String userName, String password, String email) {
-        this.username = userName;
-        this.password = password;
-        this.email = email;
     }
 }

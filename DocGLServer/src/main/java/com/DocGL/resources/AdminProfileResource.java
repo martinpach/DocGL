@@ -36,7 +36,7 @@ public class AdminProfileResource {
     @PUT
     @UnitOfWork
     public void updateProfile(@PathParam("id") int id, AdminInput admin){
-        adminDAO.updateProfile(admin, id);
+        adminDAO.updateProfile(admin.getUsername(), admin.getPassword(), admin.getEmail(), id);
     }
 
 }
