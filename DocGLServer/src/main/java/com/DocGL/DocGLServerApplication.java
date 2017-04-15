@@ -2,6 +2,7 @@ package com.DocGL;
 
 import com.DocGL.DB.AdminDAO;
 import com.DocGL.entities.Admin;
+import com.DocGL.resources.AdminProfileResource;
 import com.DocGL.resources.AdminResource;
 import com.DocGL.resources.LoginResource;
 import com.github.toastshaman.dropwizard.auth.jwt.JwtAuthFilter;
@@ -79,6 +80,7 @@ public class DocGLServerApplication extends Application<DocGLServerConfiguration
         environment.jersey().register(new AuthValueFactoryProvider.Binder<>(Principal.class));
         environment.jersey().register(RolesAllowedDynamicFeature.class);
         environment.jersey().register(new AdminResource(dao,DocGLServerConfiguration.getJwtTokenSecret()));
+        environment.jersey().register(new AdminProfileResource(dao));
     }
 
     private static class ExampleAuthenticator  implements Authenticator<JwtContext, Admin> {

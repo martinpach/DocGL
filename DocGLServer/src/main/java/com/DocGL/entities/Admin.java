@@ -16,7 +16,9 @@ import java.util.Objects;
         @NamedQuery(name = "com.DocGL.api.getAllAdmins",
                 query = "from Admin"),
         @NamedQuery(name="com.DocGL.api.getAdminInformation",
-                    query="from Admin where userName = :username and password = :password")
+                    query="from Admin where userName = :username and password = :password"),
+        @NamedQuery(name="com.DocGL.api.setPassword",
+                query="update Admin set password = :password where idadmin = :id")
 })
 public class Admin implements Principal {
 

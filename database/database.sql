@@ -36,8 +36,8 @@ insert into Admins(firstname,lastname,email,username,password)
 values("Rasto", "Button", "rasto@button.sk", "rastobutton", "rastobutton123");
 
 CREATE VIEW logins AS 
-SELECT username, password, 'a' AS role FROM Admins
+SELECT   username, password, 'a' AS role FROM Admins
 UNION ALL
-SELECT username, password, 'u' AS role FROM Users
+SELECT  username, password, 'u' AS role FROM Users
 UNION ALL
-SELECT username, password, 'd' AS role FROM Doctors;
+SELECT  username, password, 'd' AS role FROM Doctors;
