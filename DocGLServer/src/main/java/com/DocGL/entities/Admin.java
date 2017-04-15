@@ -1,21 +1,9 @@
-package com.DocGL.api;
+package com.DocGL.entities;
 
-
-import com.fasterxml.jackson.annotation.JsonProperty;
-import jersey.repackaged.com.google.common.base.Throwables;
-import org.jose4j.jws.JsonWebSignature;
-import org.jose4j.jwt.JwtClaims;
-import org.jose4j.keys.HmacKey;
-import org.jose4j.lang.JoseException;
 
 import javax.persistence.*;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
 import java.security.Principal;
-import java.util.Map;
 import java.util.Objects;
-
-import static java.util.Collections.singletonMap;
 
 
 /**

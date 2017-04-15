@@ -1,15 +1,12 @@
 package com.DocGL.DB;
 
-import com.DocGL.api.Admin;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.DocGL.entities.Admin;
 import io.dropwizard.hibernate.AbstractDAO;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 
 /**

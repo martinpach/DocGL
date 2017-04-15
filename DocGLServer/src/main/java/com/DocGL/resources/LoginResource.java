@@ -1,9 +1,9 @@
 package com.DocGL.resources;
 
 import com.DocGL.DB.AdminDAO;
-import com.DocGL.api.Admin;
+import com.DocGL.api.AdminRepresentation;
 import com.DocGL.api.Credentials;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.DocGL.entities.Admin;
 import io.dropwizard.hibernate.UnitOfWork;
 import jersey.repackaged.com.google.common.base.Throwables;
 import org.jose4j.jws.JsonWebSignature;
@@ -39,15 +39,18 @@ public class LoginResource {
 
     @POST
     @UnitOfWork
-
-    public String logInAdmin(Credentials credentials){
+    public AdminRepresentation logInAdmin(Credentials credentials){
         String username=credentials.getUsername();
         String password=credentials.getPassword();
-        return  adminDAO.getAdminInformation(username,password)+" "+generateValidToken();
+        Admin adminInfo = adminDAO.getAdminInformation(username, password);
+        if(adminInfo != null) {
+            return new AdminRepresentation(adminInfo, generateValidToken());
+        }
+        return null;
     }
 
 
-    public Map<String, String> generateValidToken() {
+    public String generateValidToken() {
         final JwtClaims claims = new JwtClaims();
         claims.setSubject("admin");
         claims.setGeneratedJwtId();
@@ -60,7 +63,7 @@ public class LoginResource {
         jws.setDoKeyValidation(false);//relaxes key length validation. might be removed later
 
         try {
-            return singletonMap("token", jws.getCompactSerialization());
+            return jws.getCompactSerialization();
         }
         catch (JoseException e) { throw Throwables.propagate(e); }
     }

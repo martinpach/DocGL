@@ -1,7 +1,7 @@
 package com.DocGL;
 
 import com.DocGL.DB.AdminDAO;
-import com.DocGL.api.Admin;
+import com.DocGL.entities.Admin;
 import com.DocGL.resources.AdminResource;
 import com.DocGL.resources.LoginResource;
 import com.github.toastshaman.dropwizard.auth.jwt.JwtAuthFilter;
