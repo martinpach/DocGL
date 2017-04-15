@@ -1,5 +1,6 @@
 package com.DocGL.DB;
 
+import com.DocGL.api.AdminInput;
 import com.DocGL.entities.Admin;
 import io.dropwizard.hibernate.AbstractDAO;
 import org.hibernate.Session;
@@ -37,7 +38,7 @@ public class AdminDAO extends AbstractDAO<Admin> {
     }
 
     public boolean setPassword(String password, int id){
-        boolean d=false;
+        boolean isChanged=false;
         try {
             tx = session.beginTransaction();
             Query query = session.getNamedQuery("com.DocGL.api.setPassword");
@@ -45,14 +46,30 @@ public class AdminDAO extends AbstractDAO<Admin> {
             query.setInteger("id", id);
             query.executeUpdate();
             tx.commit();
-            d= true;
+            isChanged= true;
         }catch(Exception ex){
-            d=false;
+            isChanged=false;
             System.out.println(ex);
             tx.rollback();
         }
 
-        return d;
+        return isChanged;
+    }
+
+    public void updateProfile(AdminInput admin, int id){
+        try {
+            tx = session.beginTransaction();
+            Query query = session.getNamedQuery("com.DocGL.api.setPassword");
+            query.setString("username", admin.getUserName());
+            query.setString("email", admin.getEmail());
+            query.setString("password", admin.getPassword());
+            query.setInteger("id", id);
+            query.executeUpdate();
+            tx.commit();
+        }catch(Exception ex) {
+            System.out.println(ex);
+            tx.rollback();
+        }
     }
 
 

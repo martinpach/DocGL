@@ -3,16 +3,16 @@ package com.DocGL.api;
 /**
  * Created by Solanid on 11.4.2017.
  */
-public class Credentials {
+public class LoginInput {
     private String username;
     private String password="";
     private String subject;
 
-    public Credentials(){
+    public LoginInput(){
 
     }
 
-    public Credentials(String username, String subject){
+    public LoginInput(String username, String subject){
         this.username=username;
         this.subject=subject;
 

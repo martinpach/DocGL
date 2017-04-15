@@ -2,7 +2,7 @@ package com.DocGL.resources;
 
 import com.DocGL.DB.AdminDAO;
 import com.DocGL.api.AdminRepresentation;
-import com.DocGL.api.Credentials;
+import com.DocGL.api.LoginInput;
 import com.DocGL.entities.Admin;
 import io.dropwizard.hibernate.UnitOfWork;
 import jersey.repackaged.com.google.common.base.Throwables;
@@ -16,9 +16,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import java.util.Map;
 
-import static java.util.Collections.singletonMap;
 import static org.jose4j.jws.AlgorithmIdentifiers.HMAC_SHA256;
 
 /**
@@ -39,7 +37,7 @@ public class LoginResource {
 
     @POST
     @UnitOfWork
-    public AdminRepresentation logInAdmin(Credentials credentials){
+    public AdminRepresentation logInAdmin(LoginInput credentials){
         String username=credentials.getUsername();
         String password=credentials.getPassword();
         Admin adminInfo = adminDAO.getAdminInformation(username, password);

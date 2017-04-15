@@ -18,7 +18,9 @@ import java.util.Objects;
         @NamedQuery(name="com.DocGL.api.getAdminInformation",
                     query="from Admin where userName = :username and password = :password"),
         @NamedQuery(name="com.DocGL.api.setPassword",
-                query="update Admin set password = :password where idadmin = :id")
+                query="update Admin set password = :password, passwordChanged = 'T' where idadmin = :id"),
+        @NamedQuery(name="com.DocGL.api.setProfile",
+                query="update Admin set userName = :username, password = :password, email = :email where idadmin = :id")
 })
 public class Admin implements Principal {
 
@@ -40,6 +42,9 @@ public class Admin implements Principal {
 
     @Column(name = "password")
     private String password;
+
+    @Column(name = "passwordChanged")
+    private char passwordChanged;
 
     public Admin() {
     }
@@ -90,6 +95,14 @@ public class Admin implements Principal {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public char getPasswordChanged() {
+        return passwordChanged;
+    }
+
+    public void setPasswordChanged(char passwordChanged) {
+        this.passwordChanged = passwordChanged;
     }
 
     public Admin(String firstName, String lastName, String email, String userName, String password) {

@@ -8,6 +8,7 @@ CREATE TABLE Admins(idadmin INTEGER AUTO_INCREMENT,
 					email VARCHAR(50),
 					username VARCHAR(20),
 					password VARCHAR(30),
+					passwordChanged CHAR(1) DEFAULT 'F',  
 					PRIMARY KEY (idadmin));
 
 CREATE TABLE Users(iduser INTEGER AUTO_INCREMENT,
@@ -34,10 +35,3 @@ values("Doctor", "Who", "doctor@who.sk", "who", "doc123");
 
 insert into Admins(firstname,lastname,email,username,password) 
 values("Rasto", "Button", "rasto@button.sk", "rastobutton", "rastobutton123");
-
-CREATE VIEW logins AS 
-SELECT   username, password, 'a' AS role FROM Admins
-UNION ALL
-SELECT  username, password, 'u' AS role FROM Users
-UNION ALL
-SELECT  username, password, 'd' AS role FROM Doctors;

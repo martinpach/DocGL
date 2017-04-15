@@ -1,6 +1,8 @@
 package com.DocGL.resources;
 
 import com.DocGL.DB.AdminDAO;
+import com.DocGL.api.AdminInput;
+import com.DocGL.entities.Admin;
 import io.dropwizard.hibernate.UnitOfWork;
 
 import javax.ws.rs.*;
@@ -24,12 +26,17 @@ public class AdminProfileResource {
     @Path("password")
     @PUT
     @UnitOfWork
-    public void changePassword(@PathParam("id") int id, String password){
-        if(adminDAO.setPassword(password,id))
+    public void changePassword(@PathParam("id") int id, Admin admin){
+        if(adminDAO.setPassword(admin.getPassword(),id))
         {
             System.out.println("pass changed");
         }else System.out.println("pass not changed");
+    }
 
+    @PUT
+    @UnitOfWork
+    public void updateProfile(@PathParam("id") int id, AdminInput admin){
+        adminDAO.updateProfile(admin, id);
     }
 
 }
