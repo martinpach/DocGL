@@ -56,7 +56,7 @@ public class DocGLServerApplication extends Application<DocGLServerConfiguration
                     final Environment environment) throws UnsupportedEncodingException {
 
         final AdminDAO dao = new AdminDAO(hibernate.getSessionFactory());
-        environment.jersey().register(new LoginResource(dao));
+        environment.jersey().register(new LoginResource(dao,DocGLServerConfiguration.getJwtTokenSecret()));
 
         byte[] key = DocGLServerConfiguration.getJwtTokenSecret();
 

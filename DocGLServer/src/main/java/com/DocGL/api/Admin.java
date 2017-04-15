@@ -1,6 +1,7 @@
 package com.DocGL.api;
 
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jersey.repackaged.com.google.common.base.Throwables;
 import org.jose4j.jws.JsonWebSignature;
 import org.jose4j.jwt.JwtClaims;
@@ -8,6 +9,8 @@ import org.jose4j.keys.HmacKey;
 import org.jose4j.lang.JoseException;
 
 import javax.persistence.*;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
 import java.security.Principal;
 import java.util.Map;
 import java.util.Objects;
@@ -114,6 +117,19 @@ public class Admin implements Principal {
     @Override
     public String getName() {
         return userName;
+    }
+
+    @Override
+    public String toString(){
+
+        return "Admin{" +
+                "id='" + idadmin + '\'' +
+                ", firstname='" + firstName + '\'' +
+                ", lastname='" + lastName +'\''+
+                ", email='" + email +'\''+
+                ", username='"+userName+'\''+
+                ", password='"+password+'\''+
+                '}';
     }
 
     @Override

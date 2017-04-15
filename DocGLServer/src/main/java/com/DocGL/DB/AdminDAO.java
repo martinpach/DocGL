@@ -1,6 +1,7 @@
 package com.DocGL.DB;
 
 import com.DocGL.api.Admin;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.dropwizard.hibernate.AbstractDAO;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -25,6 +26,7 @@ public class AdminDAO extends AbstractDAO<Admin> {
     public List<Admin> getAllAdmins(){
         return list(namedQuery("com.DocGL.api.getAllAdmins"));
     }
+
 
     public Admin getAdminInformation(String username, String password){
         Query query= session.getNamedQuery("com.DocGL.api.getAdminInformation");

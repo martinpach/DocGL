@@ -39,7 +39,7 @@ public class AdminResource {
         return adminDAO.getAllAdmins();
     }
 
-    @GET
+   /* @GET
     @Path("/generate-valid-token")
     public Map<String, String> generateValidToken() {
         final JwtClaims claims = new JwtClaims();
@@ -57,7 +57,7 @@ public class AdminResource {
             return singletonMap("token", jws.getCompactSerialization());
         }
         catch (JoseException e) { throw Throwables.propagate(e); }
-    }
+    } */
 
 }
 
