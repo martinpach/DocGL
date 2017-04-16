@@ -46,15 +46,16 @@ $(document).ready(function(){
                     localStorage.setItem("username", admin.photoUrl);
                     localStorage.setItem("token", data.token);
                     //window.location.href = "home.html"; not yet
+                },
+                error:function(){ 
+                	$("#errorMsg").html("Incorrect username or password.");
+                	$("#errorMsg").show();
                 }
-                /*error:function(){ //this will be enabled once server returns error after a bad request
-                	$("#errorMsg").html("Incorrect username or password");
-                	$("errorMsg").show();
-                }*/
                 	
 			});
 		}
 		else{
+			$("#errorMsg").html("Please enter username and password.");
 			$("#errorMsg").show();
 		}
 	}
