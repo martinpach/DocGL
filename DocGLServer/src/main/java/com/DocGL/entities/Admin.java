@@ -12,15 +12,15 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "Admins")
+
 @NamedQueries({
-        @NamedQuery(name = "com.DocGL.api.getAllAdmins",
-                query = "from Admin"),
+
         @NamedQuery(name="com.DocGL.api.getAdminInformation",
-                    query="from Admin where userName = :username and password = :password"),
+                    query="from Admin where userName = :username and password = AES_ENCRYPT(:password, 'sovy2017')"),
         @NamedQuery(name="com.DocGL.api.setPassword",
-                query="update Admin set password = :password, passwordChanged = 'T' where idadmin = :id"),
+                query="update Admin set password = AES_ENCRYPT(:password, 'sovy2017'), passwordChanged = 'T' where idadmin = :id"),
         @NamedQuery(name="com.DocGL.api.setProfile",
-                query="update Admin set userName = :username, password = :password, email = :email where idadmin = :id")
+                query="update Admin set userName = :username, password = AES_ENCRYPT(:password, 'sovy2017'), email = :email where idadmin = :id")
 })
 public class Admin implements Principal {
 
