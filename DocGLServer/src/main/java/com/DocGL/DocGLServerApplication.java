@@ -1,8 +1,10 @@
 package com.DocGL;
 
 import com.DocGL.DB.AdminDAO;
+import com.DocGL.DB.DoctorDAO;
 import com.DocGL.entities.Admin;
 import com.DocGL.resources.AdminProfileResource;
+import com.DocGL.resources.DoctorResource;
 import com.DocGL.resources.LoginResource;
 import com.github.toastshaman.dropwizard.auth.jwt.JwtAuthFilter;
 import io.dropwizard.Application;
@@ -56,6 +58,7 @@ public class DocGLServerApplication extends Application<DocGLServerConfiguration
                     final Environment environment) throws UnsupportedEncodingException {
 
         final AdminDAO dao = new AdminDAO(hibernate.getSessionFactory());
+        final DoctorDAO docDao = new DoctorDAO(hibernate.getSessionFactory());
         environment.jersey().register(new LoginResource(dao,DocGLServerConfiguration.getJwtTokenSecret()));
 
         byte[] key = DocGLServerConfiguration.getJwtTokenSecret();
@@ -79,6 +82,7 @@ public class DocGLServerApplication extends Application<DocGLServerConfiguration
         environment.jersey().register(new AuthValueFactoryProvider.Binder<>(Principal.class));
         environment.jersey().register(RolesAllowedDynamicFeature.class);
         environment.jersey().register(new AdminProfileResource(dao));
+        environment.jersey().register(new DoctorResource(docDao));
     }
 
     private static class ExampleAuthenticator  implements Authenticator<JwtContext, Admin> {
