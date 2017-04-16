@@ -11,10 +11,7 @@ import org.jose4j.jwt.JwtClaims;
 import org.jose4j.keys.HmacKey;
 import org.jose4j.lang.JoseException;
 
-import javax.ws.rs.Consumes;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 
 import static org.jose4j.jws.AlgorithmIdentifiers.HMAC_SHA256;
@@ -41,10 +38,17 @@ public class LoginResource {
         String username=credentials.getUsername();
         String password=credentials.getPassword();
         Admin adminInfo = adminDAO.getAdminInformation(username, password);
+        if(username == null || username.trim().isEmpty()){
+            throw new BadRequestException("Property 'username' is missing or not presented!");
+        }
+        if(password == null || password.trim().isEmpty()) {
+            throw new BadRequestException("Property 'password' is missing or not presented!");
+        }
+
         if(adminInfo != null) {
             return new AdminRepresentation(adminInfo, generateValidToken());
         }
-        return null;
+        throw new NotAuthorizedException("Invalid credentials!");
     }
 
 
