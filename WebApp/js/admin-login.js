@@ -43,9 +43,20 @@ $(document).ready(function () {
                 success: function (data) {
                     console.log(data);
                     var admin = data.admin;
-                    localStorage.setItem("username", admin.photoUrl);
+                    localStorage.setItem("idadmin", admin.idadmin);
+                    localStorage.setItem("firstName", admin.firstName);
+                    localStorage.setItem("lastName", admin.lastName);
+                    localStorage.setItem("email", admin.email);
+                    localStorage.setItem("userName", admin.userName);
+                    localStorage.setItem("passwordChanged", admin.passwordChanged);
                     localStorage.setItem("token", data.token);
-                    //window.location.href = "home.html"; not yet
+
+                    if (data.admin.passwordChanged == "F") {
+
+                        window.location.href = "changepass.html";
+
+                    } else
+                        window.location.href = "home.html";
                 },
                 error: function () {
                     $("#errorMsg").html("Incorrect username or password.");
