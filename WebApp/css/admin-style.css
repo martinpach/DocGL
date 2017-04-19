@@ -3,10 +3,11 @@ html{
 }
 body{
 	height:inherit;
+
 }
 .mainPage{
 	min-height:100%;
-	background: rgba(46, 166, 158, 1) !important;
+	background: #034F84 !important;
     background: -moz-linear-gradient(bottom, rgba(46, 166, 158, 1) 0%, rgba(10, 60, 113, 1) 100%) !important;
     background: -webkit-gradient(right top, left top, color-stop(0%, rgba(46, 166, 158, 1)), color-stop(100%, rgba(10, 60, 113, 1))) !important;
     background: -webkit-linear-gradient(bottom, rgba(46, 166, 158, 1) 0%, rgba(10, 60, 113, 1) 100%) !important;
@@ -63,10 +64,23 @@ body{
 #userMenu{
 	cursor:pointer;
 }
+
+.dropdown{
+	display:inline-block;
+} 
 .contentWrapper{
 	width:85%;
 	margin-top:5%;
 }
+
+.dropdown-menu > li>a{
+	color: #034F84;
+}
+
+.dropdown-menu > li > a:hover {
+    background-color: #B5DFFD;
+}
+
 
 .heading{
 	position:relative;
@@ -81,4 +95,5 @@ body{
 	width:100%;
 	padding:30px;
 }
+
 
