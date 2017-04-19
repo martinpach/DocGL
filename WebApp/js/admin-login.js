@@ -2,18 +2,15 @@ $(document).ready(function () {
     $("#username").on("input", function () {
         checkInput($(this));
     });
-
     $("#username").on("input", function () {
         checkInput($(this));
     });
-
     $("#loginBtn").on("click", function () {
         logIn();
     });
-
     $(document).keydown(function (event) {
         if (event.keyCode == 13) {
-            login();
+            logIn();
         }
     });
 
@@ -27,20 +24,18 @@ $(document).ready(function () {
 
     function logIn() {
         $("#errorMsg").hide();
-
         var username = $("#username").val();
         var password = $("#password").val();
-
         if (username.length > 2 && password.length > 2) {
             $.ajax({
-                url: 'http://localhost:8080/login',
-                type: 'POST',
-                contentType: 'application/json',
-                data: JSON.stringify({
-                    "username": username,
-                    "password": password
-                }),
-                success: function (data) {
+                url: 'http://localhost:8085/login'
+                , type: 'POST'
+                , contentType: 'application/json'
+                , data: JSON.stringify({
+                    "username": username
+                    , "password": password
+                })
+                , success: function (data) {
                     console.log(data);
                     var admin = data.admin;
                     localStorage.setItem("idadmin", admin.idadmin);
@@ -50,21 +45,18 @@ $(document).ready(function () {
                     localStorage.setItem("userName", admin.userName);
                     localStorage.setItem("passwordChanged", admin.passwordChanged);
                     localStorage.setItem("token", data.token);
-
-                    if (data.admin.passwordChanged == "F") {
-
+                    if (data.admin.passwordChanged == 0) {
                         window.location.href = "changepass.html";
-
-                    } else
-                        window.location.href = "home.html";
-                },
-                error: function () {
+                    }
+                    else window.location.href = "home.html";
+                }
+                , error: function () {
                     $("#errorMsg").html("Incorrect username or password.");
                     $("#errorMsg").show();
                 }
-
             });
-        } else {
+        }
+        else {
             $("#errorMsg").html("Please enter username and password.");
             $("#errorMsg").show();
         }

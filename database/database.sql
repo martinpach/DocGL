@@ -8,7 +8,7 @@ CREATE TABLE Admins(idadmin INTEGER AUTO_INCREMENT,
 					email VARCHAR(50),
 					username VARCHAR(20),
 					password VARBINARY(200),
-					passwordChanged CHAR(1) DEFAULT 'F',  
+					passwordChanged INTEGER DEFAULT 0,  
 					PRIMARY KEY (idadmin))
                     ENGINE = InnoDB
                     DEFAULT CHARACTER SET = utf8

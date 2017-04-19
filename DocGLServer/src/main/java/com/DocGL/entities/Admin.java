@@ -18,7 +18,7 @@ import java.util.Objects;
         @NamedQuery(name="com.DocGL.api.getAdminInformation",
                     query="from Admin where userName = :username and password = AES_ENCRYPT(:password, 'sovy2017')"),
         @NamedQuery(name="com.DocGL.api.setPassword",
-                query="update Admin set password = AES_ENCRYPT(:password, 'sovy2017'), passwordChanged = 'T' where idadmin = :id"),
+                query="update Admin set password = AES_ENCRYPT(:password, 'sovy2017'), passwordChanged = 1 where idadmin = :id"),
         @NamedQuery(name="com.DocGL.api.setProfile",
                 query="update Admin set userName = :username, password = AES_ENCRYPT(:password, 'sovy2017'), email = :email where idadmin = :id")
 })
@@ -44,7 +44,7 @@ public class Admin implements Principal {
     private String password;
 
     @Column(name = "passwordChanged")
-    private char passwordChanged;
+    private int passwordChanged;
 
     public Admin() {
     }
@@ -97,7 +97,7 @@ public class Admin implements Principal {
         this.password = password;
     }
 
-    public char getPasswordChanged() {
+    public int getPasswordChanged() {
         return passwordChanged;
     }
 
@@ -105,12 +105,13 @@ public class Admin implements Principal {
         this.passwordChanged = passwordChanged;
     }
 
-    public Admin(String firstName, String lastName, String email, String userName, String password) {
+    public Admin(String firstName, String lastName, String email, String userName, String password, int passwordChanged) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.userName = userName;
         this.password = password;
+        this.passwordChanged=passwordChanged;
     }
 
     public Admin(String userName){
@@ -132,6 +133,7 @@ public class Admin implements Principal {
                 ", email='" + email +'\''+
                 ", username='"+userName+'\''+
                 ", password='"+password+'\''+
+                ", passwordChanged='"+passwordChanged+'\''+
                 '}';
     }
 

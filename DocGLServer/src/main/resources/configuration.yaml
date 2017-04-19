@@ -1,6 +1,14 @@
+server:
+  applicationConnectors:
+  - type: http
+    port: 8085
+  adminConnectors:
+  - type: http
+    port: 8089
+
 database:
   # the name of your JDBC driver
-  driverClass: com.mysql.cj.jdbc.Driver
+  driverClass: com.mysql.jdbc.Driver
 
   # the username
   user: root
@@ -9,7 +17,7 @@ database:
   password:
 
   # the JDBC URL
-  url: jdbc:mysql://localhost/docgl?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC&useSSL=false
+  url: jdbc:mysql://localhost/DocGL?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC&useSSL=false
 
   # any properties specific to your JDBC driver:
   properties:
