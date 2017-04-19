@@ -15,6 +15,7 @@ import io.dropwizard.db.DataSourceFactory;
 import io.dropwizard.hibernate.HibernateBundle;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
+import org.eclipse.jetty.servlets.CrossOriginFilter;
 import org.glassfish.jersey.server.filter.RolesAllowedDynamicFeature;
 import org.jose4j.jwt.MalformedClaimException;
 import org.jose4j.jwt.consumer.JwtConsumer;
@@ -70,6 +71,8 @@ public class DocGLServerApplication extends Application<DocGLServerConfiguration
                 .setVerificationKey(new HmacKey(key))
                 .setRelaxVerificationKeyValidation()
                 .build();
+
+        environment.jersey().register(CORSResponseFilter.class);
 
         environment.jersey().register(new AuthDynamicFeature(
                 new JwtAuthFilter.Builder<Admin>()
