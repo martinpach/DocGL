@@ -1,3 +1,11 @@
+logging:
+  level: INFO
+  loggers:
+    io.dropwizard: INFO
+    org.hibernate: DEBUG
+  appenders:
+    - type: console
+
 database:
   # the name of your JDBC driver
   driverClass: com.mysql.cj.jdbc.Driver

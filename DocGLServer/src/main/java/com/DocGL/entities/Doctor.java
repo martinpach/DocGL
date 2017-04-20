@@ -1,6 +1,7 @@
 package com.DocGL.entities;
 
 import javax.persistence.*;
+import java.io.Serializable;
 
 /**
  * Created by Rasťo on 15.4.2017.
@@ -8,11 +9,10 @@ import javax.persistence.*;
 @Entity
 @Table(name = "Doctors")
 @NamedQueries({
-        @NamedQuery(name = "getAllDoctors",
+        @NamedQuery(name = "com.DocGL.api.getAllDoctors",
                 query = "from Doctor")
 })
-
-public class Doctor {
+public class Doctor implements Serializable{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -46,15 +46,16 @@ public class LoginResource {
         }
 
         if(adminInfo != null) {
-            return new AdminRepresentation(adminInfo, generateValidToken());
+            return new AdminRepresentation(adminInfo, generateValidToken("admin", adminInfo.getIdadmin()));
         }
         throw new NotAuthorizedException("Invalid credentials!");
     }
 
 
-    public String generateValidToken() {
+    public String generateValidToken(String role, int id) {
         final JwtClaims claims = new JwtClaims();
-        claims.setSubject("admin");
+        claims.setSubject(role);
+        claims.setClaim("id", id);
         claims.setGeneratedJwtId();
         claims.setExpirationTimeMinutesInTheFuture(30);
 

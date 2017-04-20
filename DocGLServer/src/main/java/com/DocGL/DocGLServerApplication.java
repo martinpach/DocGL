@@ -2,6 +2,7 @@ package com.DocGL;
 
 import com.DocGL.DB.AdminDAO;
 import com.DocGL.DB.DoctorDAO;
+import com.DocGL.api.LoggedUser;
 import com.DocGL.entities.Admin;
 import com.DocGL.resources.AdminProfileResource;
 import com.DocGL.resources.DoctorResource;
@@ -75,7 +76,7 @@ public class DocGLServerApplication extends Application<DocGLServerConfiguration
         environment.jersey().register(CORSResponseFilter.class);
 
         environment.jersey().register(new AuthDynamicFeature(
-                new JwtAuthFilter.Builder<Admin>()
+                new JwtAuthFilter.Builder<LoggedUser>()
                         .setJwtConsumer(consumer)
                         .setRealm("realm")
                         .setPrefix("Bearer")
@@ -88,15 +89,15 @@ public class DocGLServerApplication extends Application<DocGLServerConfiguration
         environment.jersey().register(new DoctorResource(docDao));
     }
 
-    private static class ExampleAuthenticator  implements Authenticator<JwtContext, Admin> {
-
+    private static class ExampleAuthenticator  implements Authenticator<JwtContext, LoggedUser> {
         @Override
-        public Optional<Admin> authenticate(JwtContext context) {
+        public Optional<LoggedUser> authenticate(JwtContext context) {
 
             try {
                 final String subject = context.getJwtClaims().getSubject();
+                final int id = Integer.parseInt(context.getJwtClaims().getClaimValue("id").toString());
                 if ("admin".equals(subject)) {
-                    return Optional.of(new Admin("admin"));
+                    return Optional.of(new LoggedUser("admin", id));
                 }
                 return Optional.empty();
             }
