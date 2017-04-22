@@ -3,6 +3,7 @@ package com.DocGL;
 import com.DocGL.DB.AdminDAO;
 import com.DocGL.DB.DoctorDAO;
 import com.DocGL.entities.Admin;
+import com.DocGL.entities.Doctor;
 import com.DocGL.resources.AdminProfileResource;
 import com.DocGL.resources.DoctorResource;
 import com.DocGL.resources.LoginResource;
@@ -32,7 +33,7 @@ import java.util.Optional;
 
 public class DocGLServerApplication extends Application<DocGLServerConfiguration> {
 
-    private final HibernateBundle<DocGLServerConfiguration> hibernate = new HibernateBundle<DocGLServerConfiguration>(Admin.class) {
+    private final HibernateBundle<DocGLServerConfiguration> hibernate = new HibernateBundle<DocGLServerConfiguration>(Admin.class, Doctor.class) {
         @Override
         public DataSourceFactory getDataSourceFactory(DocGLServerConfiguration configuration) {
             return configuration.getDataSourceFactory();
