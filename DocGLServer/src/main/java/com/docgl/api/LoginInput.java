@@ -5,7 +5,7 @@ package com.docgl.api;
  */
 public class LoginInput {
     private String username;
-    private String password="";
+    private String password;
     //private String subject;
 
     public LoginInput(){

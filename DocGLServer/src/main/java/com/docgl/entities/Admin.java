@@ -1,5 +1,7 @@
 package com.docgl.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 
 
@@ -12,47 +14,49 @@ import javax.persistence.*;
 
 @NamedQueries({
         @NamedQuery(name="getAdminInformationById",
-                    query = "from Admin where idadmin = :id"),
+                    query = "from Admin where id = :id"),
         @NamedQuery(name="getAdminInformation",
                     query="from Admin where userName = :username and password = AES_ENCRYPT(:password, 'sovy2017')"),
         @NamedQuery(name="setPassword",
-                query="update Admin set password = AES_ENCRYPT(:password, 'sovy2017'), passwordChanged = 1 where idadmin = :id"),
+                query="update Admin set password = AES_ENCRYPT(:password, 'sovy2017'), passwordChanged = 1 where id = :id"),
         @NamedQuery(name="setProfile",
-                query="update Admin set userName = :username, password = AES_ENCRYPT(:password, 'sovy2017'), email = :email where idadmin = :id")
+                query="update Admin set userName = :username, password = AES_ENCRYPT(:password, 'sovy2017'), email = :email where id = :id")
 })
 public class Admin {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int idadmin;
+    private int id;
 
-    @Column(name = "firstname", insertable = false, updatable = false)
+    @Column(name = "first_name", insertable = false, updatable = false)
     private String firstName;
 
-    @Column(name = "lastname")
+    @Column(name = "last_name")
     private String lastName;
 
     @Column(name = "email")
     private String email;
 
-    @Column(name = "username")
+    @JsonIgnore
+    @Column(name = "user_name")
     private String userName;
 
+    @JsonIgnore
     @Column(name = "password")
     private String password;
 
-    @Column(name = "passwordChanged")
+    @Column(name = "password_changed")
     private int passwordChanged;
 
     public Admin() {
     }
 
-    public int getIdadmin() {
-        return idadmin;
+    public int getId() {
+        return id;
     }
 
-    public void setIdadmin(int idadmin) {
-        this.idadmin = idadmin;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getFirstName() {
@@ -122,7 +126,7 @@ public class Admin {
     public String toString(){
 
         return "Admin{" +
-                "id='" + idadmin + '\'' +
+                "id='" + id + '\'' +
                 ", firstname='" + firstName + '\'' +
                 ", lastname='" + lastName +'\''+
                 ", email='" + email +'\''+

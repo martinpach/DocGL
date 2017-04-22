@@ -50,12 +50,12 @@ public class AuthResource {
 
         Admin adminInfo = adminDAO.getAdminInformation(username, password);
         if(adminInfo != null){
-            return new AdminRepresentation(adminInfo, generateValidToken("admin", adminInfo.getIdadmin()));
+            return new AdminRepresentation(adminInfo, generateValidToken("admin", adminInfo.getId()));
         }
 
         /*Doctor doctorInfo = doctorDAO.getDoctorInformation(username, password);
         if(doctorInfo != null){
-            return new DoctorRepresentation(doctorInfo, generateValidToken("doctor", doctorInfo.getIddoctor()));
+            return new DoctorRepresentation(doctorInfo, generateValidToken("doctor", doctorInfo.getId()));
         }
 
         User userInfo = userDAO.getUserInformation(username, password);

@@ -1,5 +1,7 @@
 package com.docgl.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.io.Serializable;
 
@@ -18,28 +20,30 @@ public class Doctor implements Serializable{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int iddoctor;
+    private int id;
 
-    @Column(name = "firstname", insertable = false, updatable = false)
+    @Column(name = "first_name", insertable = false, updatable = false)
     private String firstName;
 
-    @Column(name = "lastname")
+    @Column(name = "last_name")
     private String lastName;
 
     @Column(name = "email")
     private String email;
 
-    @Column(name = "username")
+    @JsonIgnore
+    @Column(name = "user_name")
     private String userName;
 
+    @JsonIgnore
     @Column(name = "password")
     private String password;
 
     public Doctor(){
     }
 
-    public int getIddoctor() {
-        return iddoctor;
+    public int getId() {
+        return id;
     }
 
     public String getFirstName() {

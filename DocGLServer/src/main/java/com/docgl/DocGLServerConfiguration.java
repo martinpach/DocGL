@@ -9,7 +9,6 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 import java.io.UnsupportedEncodingException;
 
-
 public class DocGLServerConfiguration extends Configuration {
 
     @NotEmpty
