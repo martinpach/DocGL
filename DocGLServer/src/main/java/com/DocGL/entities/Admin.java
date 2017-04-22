@@ -1,9 +1,8 @@
 package com.DocGL.entities;
 
-
+import javax.management.relation.Role;
 import javax.persistence.*;
 import java.security.Principal;
-import java.util.Objects;
 
 
 /**
@@ -14,7 +13,8 @@ import java.util.Objects;
 @Table(name = "Admins")
 
 @NamedQueries({
-
+        @NamedQuery(name="com.DocGL.api.getAdminInformationById",
+                    query = "from Admin where idadmin = :id"),
         @NamedQuery(name="com.DocGL.api.getAdminInformation",
                     query="from Admin where userName = :username and password = AES_ENCRYPT(:password, 'sovy2017')"),
         @NamedQuery(name="com.DocGL.api.setPassword",
@@ -22,7 +22,7 @@ import java.util.Objects;
         @NamedQuery(name="com.DocGL.api.setProfile",
                 query="update Admin set userName = :username, password = AES_ENCRYPT(:password, 'sovy2017'), email = :email where idadmin = :id")
 })
-public class Admin implements Principal {
+public class Admin {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -111,17 +111,14 @@ public class Admin implements Principal {
         this.email = email;
         this.userName = userName;
         this.password = password;
-        this.passwordChanged=passwordChanged;
+        this.passwordChanged = passwordChanged;
     }
 
     public Admin(String userName){
         this.userName=userName;
     }
 
-    @Override
-    public String getName() {
-        return userName;
-    }
+
 
     @Override
     public String toString(){
@@ -135,19 +132,6 @@ public class Admin implements Principal {
                 ", password='"+password+'\''+
                 ", passwordChanged='"+passwordChanged+'\''+
                 '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        final Admin admin = (Admin) o;
-        return Objects.equals(idadmin, admin.idadmin) && Objects.equals(userName, admin.userName);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(idadmin, userName);
     }
 }
 

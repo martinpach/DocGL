@@ -64,9 +64,7 @@
             <artifactId>dropwizard-hibernate</artifactId>
             <version>${dropwizard.version}</version>
         </dependency>
-
-
-
+        
     </dependencies>
 
     <build>

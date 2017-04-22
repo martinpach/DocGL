@@ -6,6 +6,14 @@ server:
   - type: http
     port: 8089
 
+logging:
+  level: INFO
+  loggers:
+    io.dropwizard: INFO
+    org.hibernate: DEBUG
+  appenders:
+    - type: console
+
 database:
   # the name of your JDBC driver
   driverClass: com.mysql.jdbc.Driver

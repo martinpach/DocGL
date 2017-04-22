@@ -69,5 +69,14 @@ public class AdminDAO extends AbstractDAO<Admin> {
         }
     }
 
+    public Admin getAdminInformation(int id){
+        Query query = session.getNamedQuery("com.DocGL.api.getAdminInformationById");
+        query.setParameter("id", id);
+        if(query.list().isEmpty()){
+            return null;
+        }
+        return (Admin) query.getSingleResult();
+    }
+
 
 }

@@ -15,7 +15,7 @@ public class DoctorDAO extends AbstractDAO<Doctor> {
     }
 
     public List<Doctor> getAllDoctors(){
-        return list(namedQuery("getAllDoctors"));
+        return list(namedQuery("com.DocGL.api.getAllDoctors"));
     }
 }
 
