@@ -1,7 +1,7 @@
 package com.DocGL;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.sun.istack.internal.NotNull;
+import javax.validation.constraints.NotNull;
 import io.dropwizard.Configuration;
 import io.dropwizard.db.DataSourceFactory;
 
