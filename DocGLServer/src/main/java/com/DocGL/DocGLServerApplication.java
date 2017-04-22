@@ -1,12 +1,8 @@
 package com.DocGL;
 
-import com.DocGL.DB.AdminDAO;
-import com.DocGL.DB.DoctorDAO;
-import com.DocGL.entities.Admin;
-import com.DocGL.entities.Doctor;
-import com.DocGL.resources.AdminProfileResource;
-import com.DocGL.resources.DoctorResource;
-import com.DocGL.resources.LoginResource;
+import com.DocGL.DB.*;
+import com.DocGL.entities.*;
+import com.DocGL.resources.*;
 import com.github.toastshaman.dropwizard.auth.jwt.JwtAuthFilter;
 import io.dropwizard.Application;
 import io.dropwizard.auth.AuthDynamicFeature;
@@ -33,7 +29,7 @@ import java.util.Optional;
 
 public class DocGLServerApplication extends Application<DocGLServerConfiguration> {
 
-    private final HibernateBundle<DocGLServerConfiguration> hibernate = new HibernateBundle<DocGLServerConfiguration>(Admin.class, Doctor.class) {
+    private final HibernateBundle<DocGLServerConfiguration> hibernate = new HibernateBundle<DocGLServerConfiguration>(Admin.class, Doctor.class, User.class) {
         @Override
         public DataSourceFactory getDataSourceFactory(DocGLServerConfiguration configuration) {
             return configuration.getDataSourceFactory();
@@ -61,6 +57,7 @@ public class DocGLServerApplication extends Application<DocGLServerConfiguration
 
         final AdminDAO dao = new AdminDAO(hibernate.getSessionFactory());
         final DoctorDAO docDao = new DoctorDAO(hibernate.getSessionFactory());
+        final UserDAO userDao = new UserDAO(hibernate.getSessionFactory());
         environment.jersey().register(new LoginResource(dao,DocGLServerConfiguration.getJwtTokenSecret()));
 
         byte[] key = DocGLServerConfiguration.getJwtTokenSecret();
@@ -87,6 +84,7 @@ public class DocGLServerApplication extends Application<DocGLServerConfiguration
         environment.jersey().register(RolesAllowedDynamicFeature.class);
         environment.jersey().register(new AdminProfileResource(dao));
         environment.jersey().register(new DoctorResource(docDao));
+        environment.jersey().register(new UserResource(userDao));
     }
 
     private static class ExampleAuthenticator  implements Authenticator<JwtContext, Admin> {
