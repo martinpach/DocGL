@@ -13,13 +13,13 @@ import java.security.Principal;
 @Table(name = "Admins")
 
 @NamedQueries({
-        @NamedQuery(name="com.DocGL.api.getAdminInformationById",
+        @NamedQuery(name="getAdminInformationById",
                     query = "from Admin where idadmin = :id"),
-        @NamedQuery(name="com.DocGL.api.getAdminInformation",
+        @NamedQuery(name="getAdminInformation",
                     query="from Admin where userName = :username and password = AES_ENCRYPT(:password, 'sovy2017')"),
-        @NamedQuery(name="com.DocGL.api.setPassword",
+        @NamedQuery(name="setPassword",
                 query="update Admin set password = AES_ENCRYPT(:password, 'sovy2017'), passwordChanged = 1 where idadmin = :id"),
-        @NamedQuery(name="com.DocGL.api.setProfile",
+        @NamedQuery(name="setProfile",
                 query="update Admin set userName = :username, password = AES_ENCRYPT(:password, 'sovy2017'), email = :email where idadmin = :id")
 })
 public class Admin {

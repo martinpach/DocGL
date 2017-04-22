@@ -9,7 +9,7 @@ import java.io.Serializable;
 @Entity
 @Table(name = "Doctors")
 @NamedQueries({
-        @NamedQuery(name = "com.DocGL.api.getAllDoctors",
+        @NamedQuery(name = "getAllDoctors",
                 query = "from Doctor")
 })
 public class Doctor implements Serializable{

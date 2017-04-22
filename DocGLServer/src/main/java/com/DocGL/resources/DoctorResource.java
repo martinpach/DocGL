@@ -1,13 +1,17 @@
 package com.DocGL.resources;
 
+import com.DocGL.Authorizer;
 import com.DocGL.DB.DoctorDAO;
 import com.DocGL.entities.Doctor;
+import io.dropwizard.auth.Auth;
 import io.dropwizard.hibernate.UnitOfWork;
 
 import javax.ws.rs.GET;
+import javax.ws.rs.NotAuthorizedException;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import java.security.Principal;
 import java.util.List;
 
 /**
@@ -25,7 +29,11 @@ public class DoctorResource {
 
     @GET
     @UnitOfWork
-    public List<Doctor> getListOfAllDoctors(){
-        return doctorDAO.getAllDoctors();
+    public List<Doctor> getListOfAllDoctors(@Auth Principal loggedUser){
+        Authorizer authorizer = new Authorizer();
+        if(authorizer.hasPermission(loggedUser.getName(), "admin")){
+            return doctorDAO.getAllDoctors();
+        }
+        throw new NotAuthorizedException("Don't have permission!");
     }
 }
