@@ -1,4 +1,4 @@
-package com.DocGL.Health;
+package com.docgl.health;
 
 /**
  * Created by D33 on 4/8/2017.

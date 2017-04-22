@@ -1,12 +1,10 @@
-package com.DocGL.resources;
+package com.docgl.resources;
 
-import com.DocGL.Authorizer;
-import com.DocGL.DB.AdminDAO;
-import com.DocGL.api.AdminInput;
-import com.DocGL.api.LoggedUser;
-import com.DocGL.entities.Admin;
+import com.docgl.Authorizer;
+import com.docgl.db.AdminDAO;
+import com.docgl.api.AdminInput;
+import com.docgl.entities.Admin;
 import io.dropwizard.auth.Auth;
-import io.dropwizard.auth.AuthenticationException;
 import io.dropwizard.hibernate.UnitOfWork;
 
 import javax.ws.rs.*;

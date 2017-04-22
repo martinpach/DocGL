@@ -1,14 +1,11 @@
-package com.DocGL.DB;
+package com.docgl.db;
 
-import com.DocGL.api.AdminInput;
-import com.DocGL.entities.Admin;
+import com.docgl.entities.Admin;
 import io.dropwizard.hibernate.AbstractDAO;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
-
-import java.util.List;
 
 
 /**

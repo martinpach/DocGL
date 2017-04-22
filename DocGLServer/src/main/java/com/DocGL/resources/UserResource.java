@@ -1,7 +1,7 @@
-package com.DocGL.resources;
+package com.docgl.resources;
 
-import com.DocGL.DB.UserDAO;
-import com.DocGL.entities.User;
+import com.docgl.db.UserDAO;
+import com.docgl.entities.User;
 import io.dropwizard.hibernate.UnitOfWork;
 
 import javax.ws.rs.GET;

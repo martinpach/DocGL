@@ -1,4 +1,4 @@
-package com.DocGL.api;
+package com.docgl.api;
 
 /**
  * Created by Martin on 15.4.2017.

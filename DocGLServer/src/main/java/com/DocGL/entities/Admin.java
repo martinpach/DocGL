@@ -1,8 +1,6 @@
-package com.DocGL.entities;
+package com.docgl.entities;
 
-import javax.management.relation.Role;
 import javax.persistence.*;
-import java.security.Principal;
 
 
 /**

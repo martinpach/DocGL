@@ -1,6 +1,6 @@
-package com.DocGL.DB;
+package com.docgl.db;
 
-import com.DocGL.entities.User;
+import com.docgl.entities.User;
 import io.dropwizard.hibernate.AbstractDAO;
 import org.hibernate.SessionFactory;
 

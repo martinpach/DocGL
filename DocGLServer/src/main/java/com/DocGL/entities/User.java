@@ -1,4 +1,4 @@
-package com.DocGL.entities;
+package com.docgl.entities;
 
 import javax.persistence.*;
 

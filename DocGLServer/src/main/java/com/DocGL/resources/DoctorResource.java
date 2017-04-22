@@ -1,12 +1,10 @@
-package com.DocGL.resources;
+package com.docgl.resources;
 
-import com.DocGL.DB.DoctorDAO;
-import com.DocGL.entities.Doctor;
+import com.docgl.db.DoctorDAO;
+import com.docgl.entities.Doctor;
 import io.dropwizard.hibernate.UnitOfWork;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
 
@@ -15,6 +13,7 @@ import java.util.List;
  */
 @Path("/doctors")
 @Produces(MediaType.APPLICATION_JSON)
+@Consumes(MediaType.APPLICATION_JSON)
 
 public class DoctorResource {
     private DoctorDAO doctorDAO;
@@ -25,7 +24,14 @@ public class DoctorResource {
 
     @GET
     @UnitOfWork
-    public List<Doctor> getListOfAllDoctors(){
-        return doctorDAO.getAllDoctors();
+    public List<Doctor> getListOfAllDoctors(@QueryParam("limit") int limit, @QueryParam("start") int start){
+        return doctorDAO.getAllDoctors(limit, start);
     }
+
+    /*@GET
+    @UnitOfWork
+    @Path("")
+    public List<Doctor> getListOfDoctors(@QueryParam("limit") int limit, @QueryParam("start") int start){
+        return doctorDAO.getFilteredDoctors(limit, start);
+    }*/
 }

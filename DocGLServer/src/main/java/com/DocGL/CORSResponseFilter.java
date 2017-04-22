@@ -1,4 +1,4 @@
-package com.DocGL;
+package com.docgl;
 
 import java.io.IOException;
 

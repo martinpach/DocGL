@@ -1,4 +1,4 @@
-package com.DocGL.api;
+package com.docgl.api;
 
 /**
  * Created by Solanid on 11.4.2017.

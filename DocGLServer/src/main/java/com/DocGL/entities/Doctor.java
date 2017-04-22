@@ -1,4 +1,4 @@
-package com.DocGL.entities;
+package com.docgl.entities;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -10,7 +10,9 @@ import java.io.Serializable;
 @Table(name = "Doctors")
 @NamedQueries({
         @NamedQuery(name = "com.DocGL.api.getAllDoctors",
-                query = "from Doctor")
+                query = "from Doctor"),
+        @NamedQuery(name = "com.docgl.entities.Doctor.getFilteredDoctors",
+                query = "from Doctor where iddoctor between :start and :last")
 })
 public class Doctor implements Serializable{
 

@@ -1,11 +1,9 @@
-package com.DocGL.resources;
+package com.docgl.resources;
 
-import com.DocGL.DB.AdminDAO;
-import com.DocGL.DB.DoctorDAO;
-import com.DocGL.api.AdminRepresentation;
-import com.DocGL.api.LoginInput;
-import com.DocGL.entities.Admin;
-import com.DocGL.entities.Doctor;
+import com.docgl.db.AdminDAO;
+import com.docgl.api.AdminRepresentation;
+import com.docgl.api.LoginInput;
+import com.docgl.entities.Admin;
 import io.dropwizard.hibernate.UnitOfWork;
 import jersey.repackaged.com.google.common.base.Throwables;
 import org.jose4j.jws.JsonWebSignature;

@@ -1,8 +1,6 @@
-package com.DocGL.api;
+package com.docgl.api;
 
-import com.DocGL.entities.Admin;
-
-import java.util.Map;
+import com.docgl.entities.Admin;
 
 /**
  * Created by Martin on 15.4.2017.

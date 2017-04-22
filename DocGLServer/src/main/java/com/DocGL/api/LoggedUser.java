@@ -1,4 +1,4 @@
-package com.DocGL.api;
+package com.docgl.api;
 
 import java.security.Principal;
 import java.util.Objects;
