@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">DocGL</string>
+    <string name="btn_login">Log In</string>
+</resources>
