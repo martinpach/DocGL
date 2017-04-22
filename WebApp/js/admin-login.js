@@ -28,7 +28,7 @@ $(document).ready(function () {
         var password = $("#password").val();
         if (username.length > 2 && password.length > 2) {
             $.ajax({
-                url: 'http://localhost:8085/login'
+                url: 'http://localhost:8085/auth/login'
                 , type: 'POST'
                 , contentType: 'application/json'
                 , data: JSON.stringify({

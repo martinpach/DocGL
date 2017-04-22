@@ -21,39 +21,33 @@ import java.security.Principal;
 @Produces(MediaType.APPLICATION_JSON)
 public class AdminProfileResource {
     private AdminDAO adminDAO;
+    private Authorizer authorizer;
 
     public AdminProfileResource(AdminDAO adminDAO){
         this.adminDAO=adminDAO;
+        this.authorizer=new Authorizer();
     }
 
     @Path("password")
     @PUT
     @UnitOfWork
     public void changePassword(@Auth Principal loggedUser, @PathParam("id") int id, Admin admin){
-        if(new Authorizer().hasPermission(loggedUser.getName(), "admin")) {
-            if (adminDAO.setPassword(admin.getPassword(), id)) {
-                System.out.println("pass changed");
-            } else System.out.println("pass not changed");
-        }
+        authorizer.checkAuthorization(loggedUser.getName(), "admin");
+        adminDAO.setPassword(admin.getPassword(), id);
     }
 
     @PUT
     @UnitOfWork
     public void updateProfile(@Auth Principal loggedUser, @PathParam("id") int id, AdminInput admin){
-        if(new Authorizer().hasPermission(loggedUser.getName(), "admin")) {
-            adminDAO.updateProfile(admin.getUsername(), admin.getPassword(), admin.getEmail(), id);
-        }
-        throw new NotAuthorizedException("Don't have permission!");
+        authorizer.checkAuthorization(loggedUser.getName(), "admin");
+        adminDAO.updateProfile(admin.getUsername(), admin.getPassword(), admin.getEmail(), id);
     }
 
     @GET
     @UnitOfWork
     public Admin getAdminProfile(@Auth Principal loggedUser, @PathParam("id") int id){
-        Authorizer authorizer = new Authorizer();
-        if(authorizer.hasPermission(loggedUser.getName(), "admin")){
-            return adminDAO.getAdminInformation(id);
-        }
-        throw new NotAuthorizedException("Don't have permission!");
+        authorizer.checkAuthorization(loggedUser.getName(), "admin");
+        return adminDAO.getAdminInformation(id);
     }
 
 }

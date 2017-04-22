@@ -7,72 +7,57 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 
+import java.util.List;
+
 
 /**
  * Created by D33 on 4/8/2017.
  */
 public class AdminDAO extends AbstractDAO<Admin> {
-    private Session session = null;
-    private Transaction tx = null;
 
     public AdminDAO(SessionFactory factory) {
         super(factory);
-        session=factory.openSession();
     }
 
 
     public Admin getAdminInformation(String username, String password){
-        Query query= session.getNamedQuery("getAdminInformation");
-        query.setParameter("username",username);
-        query.setParameter("password", password);
-        if(query.list().isEmpty()){
+        List<Admin> admin = list(namedQuery("getAdminInformation")
+                .setParameter("username",username)
+                .setParameter("password", password));
+        if(admin.isEmpty()){
             return null;
         }
-        return (Admin) query.getSingleResult() ;
+        return admin.get(0);
     }
 
-    public boolean setPassword(String password, int id){
-        boolean isChanged=false;
+    public void setPassword(String password, int id){
         try {
-            tx = session.beginTransaction();
-            Query query = session.getNamedQuery("setPassword");
-            query.setParameter("password", password);
-            query.setParameter("id", id);
-            query.executeUpdate();
-            tx.commit();
-            isChanged= true;
+            namedQuery("setPassword")
+                    .setParameter("password", password)
+                    .setParameter("id", id)
+                    .executeUpdate();
         }catch(Exception ex){
-            isChanged=false;
             System.out.println(ex);
-            tx.rollback();
         }
-
-        return isChanged;
     }
 
-    public void updateProfile(String userName, String email, String password, int id){
+    public void updateProfile(String userName, String password, String email, int id){
         try {
-            tx = session.beginTransaction();
-            Query query = session.getNamedQuery("setProfile");
-            query.setParameter("username", userName);
-            query.setParameter("email", email);
-            query.setParameter("password", password);
-            query.setParameter("id", id);
-            query.executeUpdate();
-            tx.commit();
+            namedQuery("setProfile")
+                    .setParameter("username", userName)
+                    .setParameter("email", email)
+                    .setParameter("password", password)
+                    .setParameter("id", id)
+                    .executeUpdate();
         }catch(Exception ex) {
             System.out.println(ex);
-            tx.rollback();
         }
     }
 
     public Admin getAdminInformation(int id){
-        Query query = session.getNamedQuery("getAdminInformationById");
-        query.setParameter("id", id);
-        if(query.list().isEmpty()){
-            return null;
-        }
-        return (Admin) query.getSingleResult();
+        return (Admin) namedQuery("getAdminInformationById")
+                .setParameter("id", id)
+                .getSingleResult();
     }
 
 

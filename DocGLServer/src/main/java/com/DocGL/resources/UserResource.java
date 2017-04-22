@@ -7,7 +7,6 @@ import io.dropwizard.auth.Auth;
 import io.dropwizard.hibernate.UnitOfWork;
 
 import javax.ws.rs.GET;
-import javax.ws.rs.NotAuthorizedException;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
@@ -22,19 +21,18 @@ import java.util.List;
 
 public class UserResource {
     private UserDAO userDAO;
+    private Authorizer authorizer;
 
     public UserResource(UserDAO userDAO) {
         this.userDAO = userDAO;
+        this.authorizer = new Authorizer();
     }
 
     @GET
     @UnitOfWork
     public List<User> getListOfAllUsers(@Auth Principal loggedUser) {
-        Authorizer authorizer = new Authorizer();
-        if(authorizer.hasPermission(loggedUser.getName(), "admin") ||
-                authorizer.hasPermission(loggedUser.getName(), "doctor")) {
-            return userDAO.getAllUsers();
-        }
-        throw new NotAuthorizedException("Don't have permission!");
+        String[] roles = {"admin", "doctor"};
+        authorizer.checkAuthorization(loggedUser.getName(), roles);
+        return userDAO.getAllUsers();
     }
 }

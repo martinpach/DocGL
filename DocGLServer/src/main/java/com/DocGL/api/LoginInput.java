@@ -6,7 +6,7 @@ package com.docgl.api;
 public class LoginInput {
     private String username;
     private String password="";
-    private String subject;
+    //private String subject;
 
     public LoginInput(){
 
@@ -14,7 +14,7 @@ public class LoginInput {
 
     public LoginInput(String username, String subject){
         this.username=username;
-        this.subject=subject;
+        //this.subject=subject;
 
     }
 
@@ -28,6 +28,6 @@ public class LoginInput {
         return password;
     }
 
-    public String getSubject(){return subject;}
+   // public String getSubject(){return subject;}
 
 }

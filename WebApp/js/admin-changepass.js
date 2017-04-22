@@ -3,6 +3,7 @@ $(document).ready(function () {
         var newPass = $("#newPassword").val();
         var confirmPass = $("#confirmPassword").val();
         var regex = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])");
+        var token = 'Bearer ' + localStorage.getItem("token");
         console.log(localStorage.getItem("idadmin"));
         if (newPass == "") {
             $("#changePassMessage").toggleClass("errorMessage");
@@ -13,7 +14,10 @@ $(document).ready(function () {
             if (newPass == confirmPass) {
                 $("#changePassMessage").text("");
                 $.ajax({
-                    url: 'http://localhost:8085/admins/' + localStorage.getItem("idadmin") + '/profile/password'
+                    beforeSend: function (xhr) {
+                        xhr.setRequestHeader('Authorization', token);
+                    }
+                    ,url: 'http://localhost:8085/admins/' + localStorage.getItem("idadmin") + '/profile/password'
                     , type: 'PUT'
                     , contentType: 'application/json'
                     , data: JSON.stringify({

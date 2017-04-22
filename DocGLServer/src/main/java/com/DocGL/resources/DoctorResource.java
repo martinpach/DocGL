@@ -20,18 +20,17 @@ import java.util.List;
 
 public class DoctorResource {
     private DoctorDAO doctorDAO;
+    private Authorizer authorizer;
 
     public DoctorResource(DoctorDAO doctorDAO) {
         this.doctorDAO = doctorDAO;
+        this.authorizer = new Authorizer();
     }
 
     @GET
     @UnitOfWork
     public List<Doctor> getListOfAllDoctors(@Auth Principal loggedUser, @QueryParam("limit") int limit, @QueryParam("start") int start){
-        Authorizer authorizer = new Authorizer();
-        if(authorizer.hasPermission(loggedUser.getName(), "admin")){
-            return doctorDAO.getAllDoctors(limit, start);
-        }
-        throw new NotAuthorizedException("Don't have permission!");
+        authorizer.checkAuthorization(loggedUser.getName(), "admin");
+        return doctorDAO.getAllDoctors(limit, start);
     }
 }

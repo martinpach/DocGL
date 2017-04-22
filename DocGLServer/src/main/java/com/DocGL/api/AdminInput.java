@@ -1,11 +1,19 @@
 package com.docgl.api;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 /**
  * Created by Martin on 15.4.2017.
  */
 public class AdminInput {
+
+    @JsonProperty
     private String username;
+
+    @JsonProperty
     private String password;
+
+    @JsonProperty
     private String email;
 
     public AdminInput() {
