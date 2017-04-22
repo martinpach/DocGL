@@ -16,11 +16,11 @@ public class DoctorDAO extends AbstractDAO<Doctor> {
 
     public List<Doctor> getAllDoctors(int limit, int start){
         if(limit > 0 && start > 0){
-            return list(namedQuery("com.docgl.entities.Doctor.getFilteredDoctors")
+            return list(namedQuery("getFilteredDoctors")
                     .setParameter("start", start)
                     .setParameter("last", start + limit -1));
         }
-        return list(namedQuery("com.DocGL.api.getAllDoctors"));
+        return list(namedQuery("getAllDoctors"));
     }
 }
 

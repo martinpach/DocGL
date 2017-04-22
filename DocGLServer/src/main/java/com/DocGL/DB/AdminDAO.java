@@ -22,7 +22,7 @@ public class AdminDAO extends AbstractDAO<Admin> {
 
 
     public Admin getAdminInformation(String username, String password){
-        Query query= session.getNamedQuery("com.DocGL.api.getAdminInformation");
+        Query query= session.getNamedQuery("getAdminInformation");
         query.setParameter("username",username);
         query.setParameter("password", password);
         if(query.list().isEmpty()){
@@ -35,7 +35,7 @@ public class AdminDAO extends AbstractDAO<Admin> {
         boolean isChanged=false;
         try {
             tx = session.beginTransaction();
-            Query query = session.getNamedQuery("com.DocGL.api.setPassword");
+            Query query = session.getNamedQuery("setPassword");
             query.setParameter("password", password);
             query.setParameter("id", id);
             query.executeUpdate();
@@ -53,7 +53,7 @@ public class AdminDAO extends AbstractDAO<Admin> {
     public void updateProfile(String userName, String email, String password, int id){
         try {
             tx = session.beginTransaction();
-            Query query = session.getNamedQuery("com.DocGL.api.setProfile");
+            Query query = session.getNamedQuery("setProfile");
             query.setParameter("username", userName);
             query.setParameter("email", email);
             query.setParameter("password", password);
@@ -67,7 +67,7 @@ public class AdminDAO extends AbstractDAO<Admin> {
     }
 
     public Admin getAdminInformation(int id){
-        Query query = session.getNamedQuery("com.DocGL.api.getAdminInformationById");
+        Query query = session.getNamedQuery("getAdminInformationById");
         query.setParameter("id", id);
         if(query.list().isEmpty()){
             return null;

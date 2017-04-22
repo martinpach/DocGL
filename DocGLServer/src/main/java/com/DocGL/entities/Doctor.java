@@ -9,9 +9,9 @@ import java.io.Serializable;
 @Entity
 @Table(name = "Doctors")
 @NamedQueries({
-        @NamedQuery(name = "com.DocGL.api.getAllDoctors",
+        @NamedQuery(name = "getAllDoctors",
                 query = "from Doctor"),
-        @NamedQuery(name = "com.docgl.entities.Doctor.getFilteredDoctors",
+        @NamedQuery(name = "getFilteredDoctors",
                 query = "from Doctor where iddoctor between :start and :last")
 })
 public class Doctor implements Serializable{

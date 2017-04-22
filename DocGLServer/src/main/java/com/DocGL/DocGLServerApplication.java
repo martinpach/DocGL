@@ -1,16 +1,9 @@
 package com.docgl;
 
-import com.docgl.db.AdminDAO;
-import com.docgl.db.DoctorDAO;
-import com.docgl.db.UserDAO;
+import com.docgl.db.*;
 import com.docgl.api.LoggedUser;
-import com.docgl.entities.Admin;
-import com.docgl.entities.Doctor;
-import com.docgl.entities.User;
-import com.docgl.resources.AdminProfileResource;
-import com.docgl.resources.DoctorResource;
-import com.docgl.resources.AuthResource;
-import com.docgl.resources.UserResource;
+import com.docgl.entities.*;
+import com.docgl.resources.*;
 import com.github.toastshaman.dropwizard.auth.jwt.JwtAuthFilter;
 import io.dropwizard.Application;
 import io.dropwizard.auth.AuthDynamicFeature;
