@@ -43,4 +43,4 @@ insert into Doctors(first_name,last_name,email,user_name,password)
 values("Doctor", "Who", "doctor@who.sk", "who", AES_ENCRYPT('doc123', 'sovy2017'));	
 
 insert into Admins(first_name,last_name,email,user_name,password) 
-values("Rasto", "Button", "rasto@button.sk", "rastobutton", AES_ENCRYPT('rastobutton123', 'sovy2017'));
+values("Rasto", "Button", "rasto@button.sk", "admin1", AES_ENCRYPT('secret', 'sovy2017'));

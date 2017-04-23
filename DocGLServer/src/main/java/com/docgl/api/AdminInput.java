@@ -8,7 +8,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class AdminInput {
 
     @JsonProperty
-    private String username;
+    private String userName;
 
     @JsonProperty
     private String password;
@@ -19,14 +19,14 @@ public class AdminInput {
     public AdminInput() {
     }
 
-    public AdminInput(String username, String password, String email) {
-        this.username = username;
+    public AdminInput(String userName, String password, String email) {
+        this.userName = userName;
         this.password = password;
         this.email = email;
     }
 
     public String getUsername() {
-        return username;
+        return userName;
     }
 
     public String getPassword() {

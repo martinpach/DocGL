@@ -4,7 +4,7 @@ package com.docgl.api;
  * Created by Solanid on 11.4.2017.
  */
 public class LoginInput {
-    private String username;
+    private String userName;
     private String password;
     //private String subject;
 
@@ -12,8 +12,8 @@ public class LoginInput {
 
     }
 
-    public LoginInput(String username, String subject){
-        this.username=username;
+    public LoginInput(String userName, String subject){
+        this.userName=userName;
         //this.subject=subject;
 
     }
@@ -21,7 +21,7 @@ public class LoginInput {
 
 
     public String getUsername() {
-        return username;
+        return userName;
     }
 
     public String getPassword() {
