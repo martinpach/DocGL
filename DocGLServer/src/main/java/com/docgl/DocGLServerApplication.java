@@ -55,9 +55,10 @@ public class DocGLServerApplication extends Application<DocGLServerConfiguration
         final AdminDAO dao = new AdminDAO(hibernate.getSessionFactory());
         final DoctorDAO docDao = new DoctorDAO(hibernate.getSessionFactory());
         final UserDAO userDao = new UserDAO(hibernate.getSessionFactory());
-        environment.jersey().register(new AuthResource(dao,DocGLServerConfiguration.getJwtTokenSecret()));
-
         byte[] key = DocGLServerConfiguration.getJwtTokenSecret();
+        environment.jersey().register(new AuthResource(dao,key));
+
+
 
         final JwtConsumer consumer = new JwtConsumerBuilder()
                 .setAllowedClockSkewInSeconds(30)
