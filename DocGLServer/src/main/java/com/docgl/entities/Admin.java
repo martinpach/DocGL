@@ -11,17 +11,6 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "Admins")
-
-@NamedQueries({
-        @NamedQuery(name="getAdminInformationById",
-                    query = "from Admin where id = :id"),
-        @NamedQuery(name="getAdminInformation",
-                    query="from Admin where userName = :username and password = AES_ENCRYPT(:password, 'sovy2017')"),
-        @NamedQuery(name="setPassword",
-                query="update Admin set password = AES_ENCRYPT(:password, 'sovy2017'), passwordChanged = 1 where id = :id"),
-        @NamedQuery(name="setProfile",
-                query="update Admin set userName = :username, password = AES_ENCRYPT(:password, 'sovy2017'), email = :email where id = :id")
-})
 public class Admin {
 
     @Id
@@ -103,7 +92,7 @@ public class Admin {
         return passwordChanged;
     }
 
-    public void setPasswordChanged(char passwordChanged) {
+    public void setPasswordChanged(int passwordChanged) {
         this.passwordChanged = passwordChanged;
     }
 

@@ -1,6 +1,7 @@
 package com.docgl.resources;
 
 import com.docgl.Authorizer;
+import com.docgl.api.PasswordInput;
 import com.docgl.db.AdminDAO;
 import com.docgl.api.AdminInput;
 import com.docgl.entities.Admin;
@@ -31,9 +32,9 @@ public class AdminProfileResource {
     @Path("password")
     @PUT
     @UnitOfWork
-    public void changePassword(@Auth Principal loggedUser, @PathParam("id") int id, Admin admin){
+    public void changePassword(@Auth Principal loggedUser, @PathParam("id") int id, PasswordInput passwordInput){
         authorizer.checkAuthorization(loggedUser.getName(), "admin");
-        adminDAO.setPassword(admin.getPassword(), id);
+        adminDAO.setPassword(passwordInput.getPassword(), id);
     }
 
     @PUT
@@ -47,7 +48,7 @@ public class AdminProfileResource {
     @UnitOfWork
     public Admin getAdminProfile(@Auth Principal loggedUser, @PathParam("id") int id){
         authorizer.checkAuthorization(loggedUser.getName(), "admin");
-        return adminDAO.getAdminInformation(id);
+        return adminDAO.getLoggedAdminInformation(id);
     }
 
 }

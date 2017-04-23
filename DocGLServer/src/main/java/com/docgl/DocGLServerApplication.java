@@ -117,7 +117,4 @@ public class DocGLServerApplication extends Application<DocGLServerConfiguration
         }
     }
 
-
-
-
 }

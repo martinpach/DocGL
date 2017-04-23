@@ -48,7 +48,7 @@ public class AuthResource {
             throw new BadRequestException("Property 'password' is missing or not presented!");
         }
 
-        Admin adminInfo = adminDAO.getAdminInformation(username, password);
+        Admin adminInfo = adminDAO.getLoggedAdminInformation(username, password);
         if(adminInfo != null){
             return new AdminRepresentation(adminInfo, generateValidToken("admin", adminInfo.getId()));
         }

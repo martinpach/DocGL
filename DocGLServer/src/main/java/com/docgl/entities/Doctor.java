@@ -12,9 +12,7 @@ import java.io.Serializable;
 @Table(name = "Doctors")
 @NamedQueries({
         @NamedQuery(name = "getAllDoctors",
-                query = "from Doctor"),
-        @NamedQuery(name = "getFilteredDoctors",
-                query = "from Doctor where iddoctor between :start and :last")
+                query = "from Doctor")
 })
 public class Doctor implements Serializable{
 
