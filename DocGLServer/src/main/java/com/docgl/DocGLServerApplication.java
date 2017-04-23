@@ -59,7 +59,6 @@ public class DocGLServerApplication extends Application<DocGLServerConfiguration
         final AdminDAO dao = new AdminDAO(hibernate.getSessionFactory());
         final DoctorDAO docDao = new DoctorDAO(hibernate.getSessionFactory());
         final UserDAO userDao = new UserDAO(hibernate.getSessionFactory());
-        environment.jersey().register(new AuthResource(dao,DocGLServerConfiguration.getJwtTokenSecret()));
 
         final FilterRegistration.Dynamic cors = environment.servlets().addFilter("CORS", CrossOriginFilter.class);
         cors.setInitParameter(CrossOriginFilter.ALLOWED_ORIGINS_PARAM, "*");
@@ -67,8 +66,10 @@ public class DocGLServerApplication extends Application<DocGLServerConfiguration
         cors.setInitParameter(CrossOriginFilter.ALLOWED_METHODS_PARAM, "OPTIONS,GET,PUT,POST,DELETE,HEAD");
         cors.addMappingForUrlPatterns(EnumSet.allOf(DispatcherType.class), true, "/*");
 
-
         byte[] key = DocGLServerConfiguration.getJwtTokenSecret();
+        environment.jersey().register(new AuthResource(dao,key));
+
+
 
         final JwtConsumer consumer = new JwtConsumerBuilder()
                 .setAllowedClockSkewInSeconds(30)
