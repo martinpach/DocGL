@@ -13,6 +13,7 @@ import io.dropwizard.db.DataSourceFactory;
 import io.dropwizard.hibernate.HibernateBundle;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
+import org.eclipse.jetty.servlets.CrossOriginFilter;
 import org.glassfish.jersey.server.filter.RolesAllowedDynamicFeature;
 import org.jose4j.jwt.MalformedClaimException;
 import org.jose4j.jwt.consumer.JwtConsumer;
@@ -20,8 +21,11 @@ import org.jose4j.jwt.consumer.JwtConsumerBuilder;
 import org.jose4j.jwt.consumer.JwtContext;
 import org.jose4j.keys.HmacKey;
 
+import javax.servlet.DispatcherType;
+import javax.servlet.FilterRegistration;
 import java.io.UnsupportedEncodingException;
 import java.security.Principal;
+import java.util.EnumSet;
 import java.util.Optional;
 
 public class DocGLServerApplication extends Application<DocGLServerConfiguration> {
@@ -57,6 +61,13 @@ public class DocGLServerApplication extends Application<DocGLServerConfiguration
         final UserDAO userDao = new UserDAO(hibernate.getSessionFactory());
         environment.jersey().register(new AuthResource(dao,DocGLServerConfiguration.getJwtTokenSecret()));
 
+        final FilterRegistration.Dynamic cors = environment.servlets().addFilter("CORS", CrossOriginFilter.class);
+        cors.setInitParameter(CrossOriginFilter.ALLOWED_ORIGINS_PARAM, "*");
+        cors.setInitParameter(CrossOriginFilter.ALLOWED_HEADERS_PARAM, "X-Requested-With,Content-Type,Accept,Origin,Authorization");
+        cors.setInitParameter(CrossOriginFilter.ALLOWED_METHODS_PARAM, "OPTIONS,GET,PUT,POST,DELETE,HEAD");
+        cors.addMappingForUrlPatterns(EnumSet.allOf(DispatcherType.class), true, "/*");
+
+
         byte[] key = DocGLServerConfiguration.getJwtTokenSecret();
 
         final JwtConsumer consumer = new JwtConsumerBuilder()
@@ -66,8 +77,6 @@ public class DocGLServerApplication extends Application<DocGLServerConfiguration
                 .setVerificationKey(new HmacKey(key))
                 .setRelaxVerificationKeyValidation()
                 .build();
-
-        environment.jersey().register(CORSResponseFilter.class);
 
         environment.jersey().register(new AuthDynamicFeature(
                 new JwtAuthFilter.Builder<LoggedUser>()
@@ -82,6 +91,7 @@ public class DocGLServerApplication extends Application<DocGLServerConfiguration
         environment.jersey().register(new AdminProfileResource(dao));
         environment.jersey().register(new DoctorResource(docDao));
         environment.jersey().register(new UserResource(userDao));
+
     }
 
     private static class ExampleAuthenticator  implements Authenticator<JwtContext, LoggedUser> {
@@ -105,6 +115,8 @@ public class DocGLServerApplication extends Application<DocGLServerConfiguration
             catch (MalformedClaimException e) { return Optional.empty(); }
         }
     }
+
+
 
 
 }
