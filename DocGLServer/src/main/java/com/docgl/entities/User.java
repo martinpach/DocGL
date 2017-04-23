@@ -9,6 +9,7 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name = "Users")
+@Inheritance(strategy=InheritanceType.TABLE_PER_CLASS)
 @NamedQueries({
         @NamedQuery(name = "getAllUsers",
                 query = "from User")
@@ -17,7 +18,6 @@ import javax.persistence.*;
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @Column(name = "first_name", insertable = false, updatable = false)
@@ -70,5 +70,22 @@ public class User {
         this.email = email;
         this.userName = userName;
         this.password = password;
+    }
+
+    public User(String userName){
+        this.userName=userName;
+    }
+
+    @Override
+    public String toString(){
+
+        return "User{" +
+                "id='" + this.getId() + '\'' +
+                ", firstname='" + this.getFirstName() + '\'' +
+                ", lastname='" + this.getLastName() +'\''+
+                ", email='" + this.getEmail() +'\''+
+                ", username='"+this.getUserName()+'\''+
+                ", password='"+this.getPassword()+'\''+
+                '}';
     }
 }
