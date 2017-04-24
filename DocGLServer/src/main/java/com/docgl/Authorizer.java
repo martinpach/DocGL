@@ -12,19 +12,19 @@ public class Authorizer {
     public Authorizer() {
     }
 
-    public void checkAuthorization(String key, String[] roles){
+    public void checkAuthorization(String key, UserType[] roles){
         this.role = key.split(",")[1];
-        for(String role : roles) {
-            if (this.role.equals(role)) {
+        for(UserType role : roles) {
+            if (this.role.equals(role.toString())) {
                 return;
             }
         }
         throw new NotAuthorizedException("Don't have permission to do that!");
     }
 
-    public void checkAuthorization(String key, String role){
+    public void checkAuthorization(String key, UserType role){
         this.role = key.split(",")[1];
-        if(!this.role.equals(role)){
+        if(!this.role.equals(role.toString())){
             throw new NotAuthorizedException("Don't have permission to do that!");
         }
     }

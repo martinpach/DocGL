@@ -12,7 +12,7 @@ import javax.persistence.*;
 @Table(name = "Admins")
 public class Admin extends User{
 
-    @Column(name = "password_changed", columnDefinition = "boolean default true")
+    @Column(name = "password_changed", columnDefinition = "boolean default false")
     private boolean passwordChanged;
 
     public boolean getPasswordChanged() {
