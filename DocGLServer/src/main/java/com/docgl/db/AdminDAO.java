@@ -32,26 +32,18 @@ public class AdminDAO extends AbstractDAO<Admin> {
     }
 
     public void setPassword(String password, int id){
-        try {
-            Session session = currentSession();
-            Admin admin = session.find(Admin.class, id);
-            admin.setPassword(password);
-            admin.setPasswordChanged(true);
-        }catch(Exception ex){
-            System.out.println(ex);
-        }
+        Session session = currentSession();
+        Admin admin = session.find(Admin.class, id);
+        admin.setPassword(password);
+        admin.setPasswordChanged(true);
     }
 
     public void updateProfile(String userName, String password, String email, int id){
-        try {
-            Session session = currentSession();
-            Admin admin = session.find(Admin.class, id);
-            admin.setUserName(userName);
-            admin.setPassword(password);
-            admin.setEmail(email);
-        }catch(Exception ex) {
-            System.out.println(ex);
-        }
+        Session session = currentSession();
+        Admin admin = session.find(Admin.class, id);
+        admin.setUserName(userName);
+        admin.setPassword(password);
+        admin.setEmail(email);
     }
 
     public Admin getLoggedAdminInformation(int id){

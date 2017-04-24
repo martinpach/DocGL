@@ -33,6 +33,9 @@ public class AdminProfileResource {
     @PUT
     @UnitOfWork
     public void changePassword(@Auth Principal loggedUser, @PathParam("id") int id, PasswordInput passwordInput){
+        if(passwordInput.getPassword() == null || passwordInput.getPassword().isEmpty()){
+            throw new BadRequestException("Property 'password' is missing or not presented!");
+        }
         authorizer.checkAuthorization(loggedUser.getName(), "admin");
         adminDAO.setPassword(passwordInput.getPassword(), id);
     }

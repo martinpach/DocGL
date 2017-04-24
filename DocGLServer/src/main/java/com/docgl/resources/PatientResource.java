@@ -30,7 +30,7 @@ public class PatientResource {
 
     @GET
     @UnitOfWork
-    public List<Patient> getListOfAllUsers(@Auth Principal loggedUser) {
+    public List<Patient> getListOfAllPatients(@Auth Principal loggedUser) {
         String[] roles = {"admin", "doctor"};
         authorizer.checkAuthorization(loggedUser.getName(), roles);
         return patientDAO.getAllPatients();

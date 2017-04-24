@@ -67,7 +67,7 @@ public class DocGLServerApplication extends Application<DocGLServerConfiguration
         cors.addMappingForUrlPatterns(EnumSet.allOf(DispatcherType.class), true, "/*");
 
         byte[] key = DocGLServerConfiguration.getJwtTokenSecret();
-        environment.jersey().register(new AuthResource(dao,key));
+        environment.jersey().register(new AuthResource(dao,patientDao,key));
 
 
 
@@ -108,8 +108,8 @@ public class DocGLServerApplication extends Application<DocGLServerConfiguration
                 if("doctor".equals(subject)){
                     return Optional.of(new LoggedUser("doctor", id));
                 }
-                if("user".equals(subject)){
-                    return Optional.of(new LoggedUser("user", id));
+                if("patient".equals(subject)){
+                    return Optional.of(new LoggedUser("patient", id));
                 }
                 return Optional.empty();
             }

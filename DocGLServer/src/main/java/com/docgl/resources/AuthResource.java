@@ -1,5 +1,6 @@
 package com.docgl.resources;
 
+import com.docgl.api.PatientRepresentation;
 import com.docgl.db.AdminDAO;
 import com.docgl.api.AdminRepresentation;
 import com.docgl.api.LoginInput;
@@ -35,8 +36,9 @@ public class AuthResource {
     private PatientDAO patientDAO;
     private byte[] tokenSecret;
 
-    public AuthResource(AdminDAO adminDAO, byte[] tokenSecret) {
+    public AuthResource(AdminDAO adminDAO, PatientDAO patientDAO, byte[] tokenSecret) {
         this.adminDAO = adminDAO;
+        this.patientDAO = patientDAO;
         this.tokenSecret=tokenSecret;
     }
 
@@ -58,16 +60,16 @@ public class AuthResource {
             return new AdminRepresentation(adminInfo, generateValidToken("admin", adminInfo.getId()));
         }
 
-        /*Doctor doctorInfo = doctorDAO.getDoctorInformation(username, password);
+        /*Doctor doctorInfo = doctorDAO.getLoggedDoctorInformation(username, password);
         if(doctorInfo != null){
             return new DoctorRepresentation(doctorInfo, generateValidToken("doctor", doctorInfo.getId()));
+        }*/
+
+        Patient patientInfo = patientDAO.getLoggedPatientInformation(username, password);
+        if(patientInfo != null){
+            return new PatientRepresentation(patientInfo, generateValidToken("patient", patientInfo.getId()));
         }
 
-        Patient patientInfo = patientDAO.getPatientInformation(username, password);
-        if(patientInfo != null){
-            return new PatientRepresentation(patientInfo, generateValidToken("patient", userInfo.getIdpatient()));
-        }
-*/
         throw new NotAuthorizedException("Invalid credentials!");
     }
 
