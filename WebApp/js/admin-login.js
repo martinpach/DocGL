@@ -32,13 +32,13 @@ $(document).ready(function () {
                 , type: 'POST'
                 , contentType: 'application/json'
                 , data: JSON.stringify({
-                    "username": username
+                    "userName": username
                     , "password": password
                 })
                 , success: function (data) {
                     console.log(data);
                     var admin = data.admin;
-                    localStorage.setItem("idadmin", admin.idadmin);
+                    localStorage.setItem("id", admin.id);
                     localStorage.setItem("firstName", admin.firstName);
                     localStorage.setItem("lastName", admin.lastName);
                     localStorage.setItem("email", admin.email);

@@ -4,7 +4,7 @@ $(document).ready(function () {
         var confirmPass = $("#confirmPassword").val();
         var regex = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])");
         var token = 'Bearer ' + localStorage.getItem("token");
-        console.log(localStorage.getItem("idadmin"));
+        console.log(localStorage.getItem("id"));
         if (newPass == "") {
             $("#changePassMessage").toggleClass("errorMessage");
             $("#changePassMessage").text("Please type new password!");
@@ -17,7 +17,7 @@ $(document).ready(function () {
                     beforeSend: function (xhr) {
                         xhr.setRequestHeader('Authorization', token);
                     }
-                    ,url: 'http://localhost:8085/admins/' + localStorage.getItem("idadmin") + '/profile/password'
+                    ,url: 'http://localhost:8085/admins/' + localStorage.getItem("id") + '/profile/password'
                     , type: 'PUT'
                     , contentType: 'application/json'
                     , data: JSON.stringify({
