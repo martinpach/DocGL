@@ -17,10 +17,10 @@ public class DoctorDAO extends AbstractDAO<Doctor> {
     }
 
     public List<Doctor> getAllDoctors(int limit, int start){
-        if(limit > 0 && start > 0){
+        if(limit >= 0 && start >= 0){
             Criteria criteria = criteria()
-                    .add(Restrictions.eq("start", start))
-                    .add(Restrictions.eq("last", start + limit -1));
+                    .setFirstResult(start)
+                    .setMaxResults(limit);
             return list(criteria);
         }
         return list(namedQuery("getAllDoctors"));

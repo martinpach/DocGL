@@ -28,6 +28,14 @@ public class LoginInput {
         return password;
     }
 
-   // public String getSubject(){return subject;}
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    // public String getSubject(){return subject;}
 
 }
