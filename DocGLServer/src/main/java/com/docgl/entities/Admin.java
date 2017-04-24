@@ -1,6 +1,5 @@
 package com.docgl.entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 
@@ -13,21 +12,21 @@ import javax.persistence.*;
 @Table(name = "Admins")
 public class Admin extends User{
 
-    @Column(name = "password_changed")
-    private int passwordChanged;
+    @Column(name = "password_changed", columnDefinition = "boolean default true")
+    private boolean passwordChanged;
 
-    public int getPasswordChanged() {
+    public boolean getPasswordChanged() {
         return passwordChanged;
     }
 
-    public void setPasswordChanged(int passwordChanged) {
+    public void setPasswordChanged(boolean passwordChanged) {
         this.passwordChanged = passwordChanged;
     }
 
     public Admin() {
     }
 
-    public Admin(String firstName, String lastName, String email, String userName, String password, int passwordChanged) {
+    public Admin(String firstName, String lastName, String email, String userName, String password, boolean passwordChanged) {
         super(firstName,lastName,email,userName,password);
         this.passwordChanged=passwordChanged;
     }

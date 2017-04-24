@@ -7,17 +7,13 @@ import javax.persistence.*;
 /**
  * Created by Rasťo on 22.4.2017.
  */
-@Entity
-@Table(name = "Users")
-@Inheritance(strategy=InheritanceType.TABLE_PER_CLASS)
-@NamedQueries({
-        @NamedQuery(name = "getAllUsers",
-                query = "from User")
-})
 
-public class User {
+@Inheritance(strategy=InheritanceType.TABLE_PER_CLASS)
+@MappedSuperclass
+public abstract class User {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @Column(name = "first_name", insertable = false, updatable = false)

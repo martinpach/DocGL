@@ -1,8 +1,8 @@
 package com.docgl.resources;
 
 import com.docgl.Authorizer;
-import com.docgl.db.UserDAO;
-import com.docgl.entities.User;
+import com.docgl.db.PatientDAO;
+import com.docgl.entities.Patient;
 import io.dropwizard.auth.Auth;
 import io.dropwizard.hibernate.UnitOfWork;
 
@@ -16,23 +16,23 @@ import java.util.List;
 /**
  * Created by Rasťo on 22.4.2017.
  */
-@Path("/users")
+@Path("/patients")
 @Produces(MediaType.APPLICATION_JSON)
 
-public class UserResource {
-    private UserDAO userDAO;
+public class PatientResource {
+    private PatientDAO patientDAO;
     private Authorizer authorizer;
 
-    public UserResource(UserDAO userDAO) {
-        this.userDAO = userDAO;
+    public PatientResource(PatientDAO patientDAO) {
+        this.patientDAO = patientDAO;
         this.authorizer = new Authorizer();
     }
 
     @GET
     @UnitOfWork
-    public List<User> getListOfAllUsers(@Auth Principal loggedUser) {
+    public List<Patient> getListOfAllUsers(@Auth Principal loggedUser) {
         String[] roles = {"admin", "doctor"};
         authorizer.checkAuthorization(loggedUser.getName(), roles);
-        return userDAO.getAllUsers();
+        return patientDAO.getAllPatients();
     }
 }

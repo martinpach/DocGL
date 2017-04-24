@@ -1,8 +1,20 @@
 package com.docgl.entities;
 
+import javax.persistence.Entity;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
+
 /**
  * Created by D33 on 4/23/2017.
  */
+
+@Entity
+@Table(name="Patients")
+@NamedQueries({
+        @NamedQuery(name = "getAllPatients",
+                query = "from Patient")
+})
 public class Patient extends User {
 
     public Patient(){}

@@ -30,7 +30,7 @@ import java.util.Optional;
 
 public class DocGLServerApplication extends Application<DocGLServerConfiguration> {
 
-    private final HibernateBundle<DocGLServerConfiguration> hibernate = new HibernateBundle<DocGLServerConfiguration>(Admin.class, Doctor.class, User.class) {
+    private final HibernateBundle<DocGLServerConfiguration> hibernate = new HibernateBundle<DocGLServerConfiguration>(Admin.class, Doctor.class, User.class, Patient.class) {
         @Override
         public DataSourceFactory getDataSourceFactory(DocGLServerConfiguration configuration) {
             return configuration.getDataSourceFactory();
@@ -58,7 +58,7 @@ public class DocGLServerApplication extends Application<DocGLServerConfiguration
 
         final AdminDAO dao = new AdminDAO(hibernate.getSessionFactory());
         final DoctorDAO docDao = new DoctorDAO(hibernate.getSessionFactory());
-        final UserDAO userDao = new UserDAO(hibernate.getSessionFactory());
+        final PatientDAO patientDao = new PatientDAO(hibernate.getSessionFactory());
 
         final FilterRegistration.Dynamic cors = environment.servlets().addFilter("CORS", CrossOriginFilter.class);
         cors.setInitParameter(CrossOriginFilter.ALLOWED_ORIGINS_PARAM, "*");
@@ -91,7 +91,7 @@ public class DocGLServerApplication extends Application<DocGLServerConfiguration
         environment.jersey().register(RolesAllowedDynamicFeature.class);
         environment.jersey().register(new AdminProfileResource(dao));
         environment.jersey().register(new DoctorResource(docDao));
-        environment.jersey().register(new UserResource(userDao));
+        environment.jersey().register(new PatientResource(patientDao));
 
     }
 

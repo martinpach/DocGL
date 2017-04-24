@@ -8,6 +8,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.query.Query;
+import org.hibernate.type.StringType;
 
 import java.util.List;
 
@@ -26,6 +27,7 @@ public class AdminDAO extends AbstractDAO<Admin> {
         Criteria criteria = criteria()
                 .add(Restrictions.eq("userName", username))
                 .add(Restrictions.eq("password", password));
+        Admin admin = (Admin) criteria.uniqueResult();
         return (Admin) criteria.uniqueResult();
     }
 
@@ -34,7 +36,7 @@ public class AdminDAO extends AbstractDAO<Admin> {
             Session session = currentSession();
             Admin admin = session.find(Admin.class, id);
             admin.setPassword(password);
-            admin.setPasswordChanged(1);
+            admin.setPasswordChanged(true);
         }catch(Exception ex){
             System.out.println(ex);
         }

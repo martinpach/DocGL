@@ -3,7 +3,11 @@ package com.docgl.resources;
 import com.docgl.db.AdminDAO;
 import com.docgl.api.AdminRepresentation;
 import com.docgl.api.LoginInput;
+import com.docgl.db.DoctorDAO;
+import com.docgl.db.PatientDAO;
 import com.docgl.entities.Admin;
+import com.docgl.entities.Doctor;
+import com.docgl.entities.Patient;
 import io.dropwizard.hibernate.UnitOfWork;
 import jersey.repackaged.com.google.common.base.Throwables;
 import org.jose4j.jws.JsonWebSignature;
@@ -27,7 +31,8 @@ import static org.jose4j.jws.AlgorithmIdentifiers.HMAC_SHA256;
 @Produces(MediaType.APPLICATION_JSON)
 public class AuthResource {
     private AdminDAO adminDAO;
-    //private DoctorDAO doctorDAO;
+    private DoctorDAO doctorDAO;
+    private PatientDAO patientDAO;
     private byte[] tokenSecret;
 
     public AuthResource(AdminDAO adminDAO, byte[] tokenSecret) {
@@ -58,11 +63,11 @@ public class AuthResource {
             return new DoctorRepresentation(doctorInfo, generateValidToken("doctor", doctorInfo.getId()));
         }
 
-        User userInfo = userDAO.getUserInformation(username, password);
+        Patient patientInfo = patientDAO.getPatientInformation(username, password);
         if(patientInfo != null){
-            return new UserRepresentation(userInfo, generateValidToken("patient", userInfo.getIdpatient()));
-        }*/
-
+            return new PatientRepresentation(patientInfo, generateValidToken("patient", userInfo.getIdpatient()));
+        }
+*/
         throw new NotAuthorizedException("Invalid credentials!");
     }
 
