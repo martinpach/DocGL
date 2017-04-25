@@ -7,30 +7,30 @@ import javax.ws.rs.NotAuthorizedException;
  */
 public class Authorizer {
     private int id;
-    private String role;
+    private UserType role;
 
     public Authorizer() {
     }
 
-    public void checkAuthorization(String key, UserType[] roles){
-        this.role = key.split(",")[1];
+    public void checkAuthorization(UserType userRole, UserType[] roles){
+        this.role = userRole;
         for(UserType role : roles) {
-            if (this.role.equals(role.getValue())) {
+            if (this.role.equals(role)) {
                 return;
             }
         }
         throw new NotAuthorizedException("Don't have permission to do that!");
     }
 
-    public void checkAuthorization(String key, UserType role){
-        this.role = key.split(",")[1];
-        if(!this.role.equals(role.getValue())){
+    public void checkAuthorization(UserType userRole, UserType role){
+        this.role = userRole;
+        if(!this.role.equals(role)){
             throw new NotAuthorizedException("Don't have permission to do that!");
         }
     }
 
-    public void checkAuthentication(String key, int id){
-        this.id = Integer.parseInt(key.split(",")[0]);
+    public void checkAuthentication(int userId, int id){
+        this.id = userId;
         if(this.id != id){
             throw new NotAuthorizedException("Don't have authentication to do that!");
         }

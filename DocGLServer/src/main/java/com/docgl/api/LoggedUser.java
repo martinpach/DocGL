@@ -17,9 +17,16 @@ public class LoggedUser implements Principal {
         this.id = id;
     }
 
+    public int getId(){
+        return id;
+    }
+
+    public UserType getUserType(){
+        return role;
+    }
+
     @Override
     public String getName() {
-        System.out.println(id + "," + role + "       tu sooooooooooooooooooooooooom");
         return id + "," + role;
     }
 

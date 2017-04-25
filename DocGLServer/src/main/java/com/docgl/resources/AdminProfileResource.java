@@ -2,6 +2,7 @@ package com.docgl.resources;
 
 import com.docgl.Authorizer;
 import com.docgl.UserType;
+import com.docgl.api.LoggedUser;
 import com.docgl.api.PasswordInput;
 import com.docgl.db.AdminDAO;
 import com.docgl.api.AdminInput;
@@ -33,25 +34,25 @@ public class AdminProfileResource {
     @Path("password")
     @PUT
     @UnitOfWork
-    public void changePassword(@Auth Principal loggedUser, @PathParam("id") int id, PasswordInput passwordInput){
+    public void changePassword(@Auth LoggedUser loggedUser, @PathParam("id") int id, PasswordInput passwordInput){
         if(passwordInput.getPassword() == null || passwordInput.getPassword().isEmpty()){
             throw new BadRequestException("Property 'password' is missing or not presented!");
         }
-        authorizer.checkAuthorization(loggedUser.getName(), UserType.ADMIN);
+        authorizer.checkAuthorization(loggedUser.getUserType(), UserType.ADMIN);
         adminDAO.setPassword(passwordInput.getPassword(), id);
     }
 
     @PUT
     @UnitOfWork
-    public void updateProfile(@Auth Principal loggedUser, @PathParam("id") int id, AdminInput admin){
-        authorizer.checkAuthorization(loggedUser.getName(), UserType.ADMIN);
+    public void updateProfile(@Auth LoggedUser loggedUser, @PathParam("id") int id, AdminInput admin){
+        authorizer.checkAuthorization(loggedUser.getUserType(), UserType.ADMIN);
         adminDAO.updateProfile(admin.getUsername(), admin.getPassword(), admin.getEmail(), id);
     }
 
     @GET
     @UnitOfWork
-    public Admin getAdminProfile(@Auth Principal loggedUser, @PathParam("id") int id){
-        authorizer.checkAuthorization(loggedUser.getName(), UserType.ADMIN);
+    public Admin getAdminProfile(@Auth LoggedUser loggedUser, @PathParam("id") int id){
+        authorizer.checkAuthorization(loggedUser.getUserType(), UserType.ADMIN);
         return adminDAO.getLoggedAdminInformation(id);
     }
 

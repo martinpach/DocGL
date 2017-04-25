@@ -2,6 +2,7 @@ package com.docgl.resources;
 
 import com.docgl.Authorizer;
 import com.docgl.UserType;
+import com.docgl.api.LoggedUser;
 import com.docgl.db.PatientDAO;
 import com.docgl.entities.Patient;
 import io.dropwizard.auth.Auth;
@@ -31,9 +32,9 @@ public class PatientResource {
 
     @GET
     @UnitOfWork
-    public List<Patient> getListOfAllPatients(@Auth Principal loggedUser) {
+    public List<Patient> getListOfAllPatients(@Auth LoggedUser loggedUser) {
         UserType[] roles = {UserType.ADMIN, UserType.DOCTOR};
-        authorizer.checkAuthorization(loggedUser.getName(), roles);
+        authorizer.checkAuthorization(loggedUser.getUserType(), roles);
         return patientDAO.getAllPatients();
     }
 }

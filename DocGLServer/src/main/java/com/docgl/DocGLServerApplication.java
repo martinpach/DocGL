@@ -87,7 +87,7 @@ public class DocGLServerApplication extends Application<DocGLServerConfiguration
                         .setAuthenticator( new ExampleAuthenticator())
                         .buildAuthFilter()));
 
-        environment.jersey().register(new AuthValueFactoryProvider.Binder<>(Principal.class));
+        environment.jersey().register(new AuthValueFactoryProvider.Binder<>(LoggedUser.class));
         environment.jersey().register(RolesAllowedDynamicFeature.class);
         environment.jersey().register(new AdminProfileResource(dao));
         environment.jersey().register(new DoctorResource(docDao));

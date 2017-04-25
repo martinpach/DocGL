@@ -2,6 +2,7 @@ package com.docgl.resources;
 
 import com.docgl.Authorizer;
 import com.docgl.UserType;
+import com.docgl.api.LoggedUser;
 import com.docgl.db.DoctorDAO;
 import com.docgl.entities.Doctor;
 import io.dropwizard.auth.Auth;
@@ -30,8 +31,8 @@ public class DoctorResource {
 
     @GET
     @UnitOfWork
-    public List<Doctor> getListOfAllDoctors(@Auth Principal loggedUser, @QueryParam("limit") int limit, @QueryParam("start") int start){
-        authorizer.checkAuthorization(loggedUser.getName(), UserType.ADMIN);
+    public List<Doctor> getListOfAllDoctors(@Auth LoggedUser loggedUser, @QueryParam("limit") int limit, @QueryParam("start") int start){
+        authorizer.checkAuthorization(loggedUser.getUserType(), UserType.ADMIN);
         return doctorDAO.getAllDoctors(limit, start);
     }
 }
