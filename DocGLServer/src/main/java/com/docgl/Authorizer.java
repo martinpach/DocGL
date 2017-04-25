@@ -15,7 +15,7 @@ public class Authorizer {
     public void checkAuthorization(String key, UserType[] roles){
         this.role = key.split(",")[1];
         for(UserType role : roles) {
-            if (this.role.equals(role.toString())) {
+            if (this.role.equals(role.getValue())) {
                 return;
             }
         }
@@ -24,7 +24,7 @@ public class Authorizer {
 
     public void checkAuthorization(String key, UserType role){
         this.role = key.split(",")[1];
-        if(!this.role.equals(role.toString())){
+        if(!this.role.equals(role.getValue())){
             throw new NotAuthorizedException("Don't have permission to do that!");
         }
     }

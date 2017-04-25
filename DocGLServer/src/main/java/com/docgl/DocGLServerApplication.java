@@ -103,13 +103,13 @@ public class DocGLServerApplication extends Application<DocGLServerConfiguration
                 final String subject = context.getJwtClaims().getSubject();
                 final int id = Integer.parseInt(context.getJwtClaims().getClaimValue("id").toString());
                 if ("admin".equals(subject)) {
-                    return Optional.of(new LoggedUser(UserType.ADMIN.toString(), id));
+                    return Optional.of(new LoggedUser(UserType.ADMIN, id));
                 }
                 if("doctor".equals(subject)){
-                    return Optional.of(new LoggedUser(UserType.DOCTOR.toString(), id));
+                    return Optional.of(new LoggedUser(UserType.DOCTOR, id));
                 }
                 if("patient".equals(subject)){
-                    return Optional.of(new LoggedUser(UserType.PATIENT.toString(), id));
+                    return Optional.of(new LoggedUser(UserType.PATIENT, id));
                 }
                 return Optional.empty();
             }

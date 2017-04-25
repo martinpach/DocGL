@@ -4,22 +4,15 @@ package com.docgl;
  * Created by Martin on 24.4.2017.
  */
 public enum UserType {
-    ADMIN{
-        @Override
-        public String toString() {
-            return "admin";
-        }
-    },
-    PATIENT{
-        @Override
-        public String toString() {
-            return "patient";
-        }
-    },
-    DOCTOR{
-        @Override
-        public String toString() {
-            return "doctor";
-        }
+    ADMIN("ADMIN"), DOCTOR("DOCTOR"), PATIENT("PATIENT");
+
+    private final String value;
+
+    UserType(String value) {
+        this.value = value;
+    }
+
+    public String getValue(){
+        return value;
     }
 }
