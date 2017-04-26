@@ -11,7 +11,7 @@ $(document).ready(function () {
     function submit() {
         var newPass = $("#newPassword").val();
         var confirmPass = $("#confirmPassword").val();
-        var regex = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])");
+        var regex = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])");
         var token = 'Bearer ' + localStorage.getItem("token");
         if (newPass == "") {
             $("#changePassMessage").addClass("errorMessage");
