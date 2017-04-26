@@ -43,6 +43,10 @@ body{
 	background-color:#B5DFFD;
 }
 
+.selected{
+	background-color:#B5DFFD;
+}
+
 .menuIcon{
 	margin-right:10px;
 }
@@ -103,8 +107,18 @@ body{
 	color:#034F84!important;
 	width:100%;
 	padding:30px;
+	padding-bottom:50px;
 }
 
+.table > tbody > tr > th {
+	border:none;
+    border-bottom: 2px solid #B5DFFD;
+}
+
+.table > tbody > tr > td{
+	border:none;
+    border-bottom: 1px solid #B5DFFD;
+}
 /*profile*/
 .lbl{
 	font-size:15px;
@@ -119,6 +133,9 @@ body{
 }
 
 .profileDiv{
-	margin-bottom:15px;
+	padding:20px;
 }
+
+
+
 

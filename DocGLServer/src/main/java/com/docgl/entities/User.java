@@ -24,7 +24,7 @@ public abstract class User {
 
     @Column(name = "email")
     private String email;
-    
+
     @Column(name = "user_name")
     private String userName;
 
