@@ -8,5 +8,8 @@
     <color name="color3">#B5DFFD</color>
     <color name="color4">#FF7B95</color>
     <color name="color5">#FFFFFF</color>
-
+    <color name="errorText">#D8000C</color>
+    <color name="errorBackground">#FFBABA</color>
+    <color name="successText">#4F8A10</color>
+    <color name="successBackground">#DFF2BF</color>
 </resources>

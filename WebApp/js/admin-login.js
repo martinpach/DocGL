@@ -1,4 +1,6 @@
 $(document).ready(function () {
+    var username;
+    var password;
     $("#username").on("input", function () {
         checkInput($(this));
     });
@@ -24,8 +26,8 @@ $(document).ready(function () {
 
     function logIn() {
         $("#errorMsg").hide();
-        var username = $("#username").val();
-        var password = $("#password").val();
+        username = $("#username").val();
+        password = $("#password").val();
         if (username.length > 2 && password.length > 2) {
             $.ajax({
                 url: 'http://localhost:8085/auth/login'
@@ -36,7 +38,6 @@ $(document).ready(function () {
                     , "password": password
                 })
                 , success: function (data) {
-                    console.log(data);
                     var admin = data.admin;
                     localStorage.setItem("id", admin.id);
                     localStorage.setItem("firstName", admin.firstName);
@@ -45,6 +46,7 @@ $(document).ready(function () {
                     localStorage.setItem("userName", admin.userName);
                     localStorage.setItem("passwordChanged", admin.passwordChanged);
                     localStorage.setItem("token", data.token);
+                    if (admin.passwordChanged == 0) localStorage.setItem("password", password);
                     if (data.admin.passwordChanged == 0) {
                         window.location.href = "changepass.html";
                     }

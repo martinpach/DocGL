@@ -3,14 +3,13 @@ package com.docgl.resources;
 import com.docgl.Authorizer;
 import com.docgl.UserType;
 import com.docgl.api.LoggedUser;
+import com.docgl.api.RegistrationInput;
 import com.docgl.db.PatientDAO;
 import com.docgl.entities.Patient;
 import io.dropwizard.auth.Auth;
 import io.dropwizard.hibernate.UnitOfWork;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.security.Principal;
 import java.util.List;
@@ -20,6 +19,7 @@ import java.util.List;
  */
 @Path("/patients")
 @Produces(MediaType.APPLICATION_JSON)
+@Consumes(MediaType.APPLICATION_JSON)
 
 public class PatientResource {
     private PatientDAO patientDAO;

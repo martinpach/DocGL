@@ -31,8 +31,13 @@ public class DoctorResource {
 
     @GET
     @UnitOfWork
-    public List<Doctor> getListOfAllDoctors(@Auth LoggedUser loggedUser, @QueryParam("limit") int limit, @QueryParam("start") int start){
+    public List<Doctor> getListOfAllDoctors(@Auth LoggedUser loggedUser,
+                                            @QueryParam("limit") int limit,
+                                            @QueryParam("start") int start,
+                                            @QueryParam("sortBy") String sortBy,
+                                            @QueryParam("way") String way
+                                            ){
         authorizer.checkAuthorization(loggedUser.getUserType(), UserType.ADMIN);
-        return doctorDAO.getAllDoctors(limit, start);
+        return doctorDAO.getAllDoctors(limit, start, sortBy, way);
     }
 }
