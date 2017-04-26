@@ -6,6 +6,7 @@ import com.docgl.entities.User;
 import io.dropwizard.hibernate.AbstractDAO;
 import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Restrictions;
 
 import java.util.List;
@@ -40,9 +41,10 @@ public class PatientDAO extends AbstractDAO<Patient> {
     }
 
     public boolean isUserNameAndEmailUnique(String userName, String email){
+        Criterion userNameCondition = Restrictions.eq("userName", userName);
+        Criterion emailCondtition = Restrictions.eq("email", email);
         Criteria criteria = criteria()
-                .add(Restrictions.eq("userName", userName))
-                .add(Restrictions.eq("email", email));
+                .add(Restrictions.or(userNameCondition, emailCondtition));
         Patient patient = (Patient) criteria.uniqueResult();
         return patient == null;
     }
