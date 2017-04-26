@@ -1,6 +1,9 @@
 package com.docgl.resources;
 
+import com.docgl.UserType;
+import com.docgl.ValidationException;
 import com.docgl.api.PatientRepresentation;
+import com.docgl.api.RegistrationInput;
 import com.docgl.db.AdminDAO;
 import com.docgl.api.AdminRepresentation;
 import com.docgl.api.LoginInput;
@@ -81,6 +84,25 @@ public class AuthResource {
         return Response.noContent().build();
     }
 
+
+    @POST
+    @UnitOfWork
+    @Path("registration")
+    public Object registerPatient(RegistrationInput registrationInput){
+        if(registrationInput.getUserType().equals(UserType.ADMIN)){
+            throw new ValidationException("Parameter userType should be 'DOCTOR' or 'PATIENT'");
+        }
+        if(registrationInput.getUserType().equals(UserType.PATIENT)){
+            if(patientDAO.isUserNameAndEmailUnique(registrationInput.getUserName(), registrationInput.getEmail())) {
+                patientDAO.registerPatient(registrationInput);
+                Patient patientInfo = patientDAO.getLoggedPatientInformation(registrationInput.getUserName(), registrationInput.getPassword());
+                return new PatientRepresentation(patientInfo, generateValidToken("patient", patientInfo.getId()));
+            }
+            else
+                throw new ValidationException("Username or email is taken");
+        }
+        return null;
+    }
 
     private String generateValidToken(String role, int id) {
         final JwtClaims claims = new JwtClaims();
