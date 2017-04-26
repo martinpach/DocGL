@@ -18,12 +18,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 
-
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
-
 
 
 public class AppLogin extends AppCompatActivity {
@@ -53,46 +51,40 @@ public class AppLogin extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         if (checkUsername() && checkUPassword()) {
-                            String jsonParams = "{\"userName\":\""+username.getText().toString().trim() +"\",\"password\":\""+password.getText().toString().trim()+"\"}";
+                            String jsonParams = "{\"userName\":\"" + username.getText().toString().trim() + "\",\"password\":\"" + password.getText().toString().trim() + "\"}";
                             RequestBody body = null;
                             try {
 
-                                body = RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"),(new JSONObject(jsonParams)).toString());
+                                body = RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"), (new JSONObject(jsonParams)).toString());
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
-                            Call<ResponseBody> response = mAPIService.userLogin( body);
-                            response.enqueue(new Callback<ResponseBody>(){
-
+                            Call<ResponseBody> response = mAPIService.userLogin(body);
+                            response.enqueue(new Callback<ResponseBody>() {
 
 
                                 @Override
-                                public void onResponse(Call<ResponseBody> call, retrofit2.Response<ResponseBody> rawResponse)
-                                {
-                                    try
-                                    {
-                                        if(rawResponse.isSuccessful()){
-                                        errorMessagePassword.setText("");
-                                        successMessage.setText("Login success!");
-                                       // Intent intent = new Intent(AppLogin.this, Home.class);
-                                       // intent.putExtra("PATIENT_RESPONSE", rawResponse.body().string());
-                                       // startActivity(intent);
-                                        }else{
+                                public void onResponse(Call<ResponseBody> call, retrofit2.Response<ResponseBody> rawResponse) {
+                                    try {
+                                        if (rawResponse.isSuccessful()) {
+                                            errorMessagePassword.setText("");
+                                            successMessage.setText("Login success!");
+                                            // Intent intent = new Intent(AppLogin.this, Home.class);
+                                            // intent.putExtra("PATIENT_RESPONSE", rawResponse.body().string());
+                                            // startActivity(intent);
+                                        } else {
                                             errorMessagePassword.setText("Incorrect username or password!");
                                             successMessage.setText("");
                                         }
 
-                                    }
-                                    catch (Exception e)
-                                    {
+                                    } catch (Exception e) {
                                         errorMessagePassword.setText("Server not responding!");
                                         e.printStackTrace();
                                     }
                                 }
 
                                 @Override
-                                public void onFailure(Call<ResponseBody> call, Throwable throwable)
-                                {
+                                public void onFailure(Call<ResponseBody> call, Throwable throwable) {
                                     errorMessagePassword.setText("Server not responding!");
                                 }
 
@@ -106,7 +98,6 @@ public class AppLogin extends AppCompatActivity {
                 }
         );
     }
-
 
 
     private boolean checkUsername() {
@@ -124,7 +115,7 @@ public class AppLogin extends AppCompatActivity {
         if (password.getText().length() == 0) {
             errorMessagePassword.setText("Please type your password.");
             return false;
-        } else if (password.getText().length() < 8) {
+        } else if (password.getText().length() < 6) {
             errorMessagePassword.setText("Invalid password.");
             return false;
         } else {
