@@ -3,14 +3,14 @@ package com.wdfeww.docgl.data.model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class UserLogin {
+public class Login {
 
     @SerializedName("user")
     @Expose
-    private User user;
+    public User user;
     @SerializedName("token")
     @Expose
-    private String token;
+    public String token;
 
     public User getUser() {
         return user;
@@ -30,7 +30,7 @@ public class UserLogin {
 
     @Override
     public String toString() {
-        return "UserLogin{" +
+        return "Login{" +
                 "user=" + user.toString() +
                 ", token='" + token + '\'' +
                 '}';

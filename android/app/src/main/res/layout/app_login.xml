@@ -79,6 +79,15 @@
                 android:textAllCaps="false"
                 android:textColor="@drawable/btn_text_color" />
 
+            <Button
+                android:id="@+id/sign_up"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:background="@drawable/btn_transparent_background"
+                android:text="@string/btn_sign_up"
+                android:textAllCaps="false"
+                android:textColor="@drawable/btn_transparent_text_color" />
 
 
         </LinearLayout>
