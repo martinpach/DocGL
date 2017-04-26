@@ -25,5 +25,5 @@
         <item name="android:textColor">@drawable/success_message_text_color</item>
         <item name="android:background">@drawable/success_message_background</item>
     </style>
-    <dimen name="text_size">30sp</dimen>
+    <dimen name="text_size">18sp</dimen>
 </resources>

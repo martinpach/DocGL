@@ -24,8 +24,7 @@ public abstract class User {
 
     @Column(name = "email")
     private String email;
-
-    @JsonIgnore
+    
     @Column(name = "user_name")
     private String userName;
 
