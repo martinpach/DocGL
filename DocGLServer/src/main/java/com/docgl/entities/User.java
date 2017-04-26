@@ -16,7 +16,7 @@ public abstract class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(name = "first_name", insertable = false, updatable = false)
+    @Column(name = "first_name")
     private String firstName;
 
     @Column(name = "last_name")

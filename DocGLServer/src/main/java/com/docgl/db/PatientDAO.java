@@ -1,5 +1,6 @@
 package com.docgl.db;
 
+import com.docgl.api.RegistrationInput;
 import com.docgl.entities.Patient;
 import com.docgl.entities.User;
 import io.dropwizard.hibernate.AbstractDAO;
@@ -25,7 +26,24 @@ public class PatientDAO extends AbstractDAO<Patient> {
         Criteria criteria = criteria()
                 .add(Restrictions.eq("userName", userName))
                 .add(Restrictions.eq("password", password));
-        Patient patient = (Patient) criteria.uniqueResult();
         return (Patient) criteria.uniqueResult();
+    }
+
+    public void registerPatient(RegistrationInput registrationInput){
+        currentSession().save(new Patient(
+                registrationInput.getFirstName(),
+                registrationInput.getLastName(),
+                registrationInput.getEmail(),
+                registrationInput.getUserName(),
+                registrationInput.getPassword()
+                ));
+    }
+
+    public boolean isUserNameAndEmailUnique(String userName, String email){
+        Criteria criteria = criteria()
+                .add(Restrictions.eq("userName", userName))
+                .add(Restrictions.eq("email", email));
+        Patient patient = (Patient) criteria.uniqueResult();
+        return patient == null;
     }
 }

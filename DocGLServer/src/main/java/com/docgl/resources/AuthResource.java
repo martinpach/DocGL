@@ -46,7 +46,7 @@ public class AuthResource {
     @UnitOfWork
     @Path("login")
     public Object login(LoginInput credentials){
-        String username=credentials.getUsername();
+        String username=credentials.getUserName();
         String password=credentials.getPassword();
         if(username == null || username.trim().isEmpty()){
             throw new BadRequestException("Property 'username' is missing or not presented!");
