@@ -1,7 +1,7 @@
 /*insert js here*/
 $(document).ready(function () {
     var data = {
-        idAdmin: localStorage.getItem("idadmin")
+        id: localStorage.getItem("id")
         , firstName: localStorage.getItem("firstName")
         , lastName: localStorage.getItem("lastName")
         , email: localStorage.getItem("email")
@@ -17,11 +17,22 @@ $(document).ready(function () {
     var html = Mustache.to_html(usernameTemplate, data);
     $("#userName").html(html);
 
+    //load profile
     $("#myProfile").on("click",function(){
-        $("#contentTab").load('templates/admin_profile.html',function(){
-
-        });
-
+        $("#container").load('templates/admin_profile.html',function(){
+            var template = "<p>{{userName}}'s</p>";
+            var templateUsername="<p>{{userName}}</p>";
+            var templateMail="<p>{{email}}</p>";
+            var templatePassword="<p>************</p>";
+            var html = Mustache.to_html(template, data);
+            $("#heading").html(html);
+            html=Mustache.to_html(templateUsername,data);
+            $("#username").html(html);
+            html=Mustache.to_html(templateMail,data);
+            $("#email").html(html);
+            html=Mustache.to_html(templatePassword,data);
+            $("#password").html(html);
+        });       
     });
 
     //logout

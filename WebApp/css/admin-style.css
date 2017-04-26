@@ -89,11 +89,36 @@ body{
   	color:#41CCB9!important;
 }
 
+.subHeading{
+	color:white!important;
+	font-size:20px;
+	font-weight:300;
+	margin-bottom:15px;
+}
+
+
 .contentTab{
 	position:relative;
 	background-color:white;
+	color:#034F84!important;
 	width:100%;
 	padding:30px;
 }
 
+/*profile*/
+.lbl{
+	font-size:15px;
+	font-weight:500;
+	color: #034F84!important;
+	margin:none;
+}
+
+#profileIcon{
+	color:#B5DFFD;
+	font-size:100px;
+}
+
+.profileDiv{
+	margin-bottom:15px;
+}
 
