@@ -15,7 +15,8 @@ public class Home extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.home);
-        responseText.setText("");
+
         String s = getIntent().getStringExtra("PATIENT_RESPONSE");
+        responseText.setText(s);
     }
 }

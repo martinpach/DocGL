@@ -69,9 +69,9 @@ public class AppLogin extends AppCompatActivity {
                                         if (rawResponse.isSuccessful()) {
                                             errorMessagePassword.setText("");
                                             successMessage.setText("Login success!");
-                                            // Intent intent = new Intent(AppLogin.this, Home.class);
-                                            // intent.putExtra("PATIENT_RESPONSE", rawResponse.body().string());
-                                            // startActivity(intent);
+                                            //Intent intent = new Intent(AppLogin.this, Home.class);
+                                            //intent.putExtra("PATIENT_RESPONSE", rawResponse.body().string());
+                                            //startActivity(intent);
                                         } else {
                                             errorMessagePassword.setText("Incorrect username or password!");
                                             successMessage.setText("");
