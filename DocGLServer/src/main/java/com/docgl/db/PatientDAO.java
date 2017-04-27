@@ -1,16 +1,14 @@
 package com.docgl.db;
 
-import com.docgl.ValidationException;
 import com.docgl.api.RegistrationInput;
 import com.docgl.entities.Patient;
-import com.docgl.entities.User;
 import io.dropwizard.hibernate.AbstractDAO;
 import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Criterion;
-import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -40,7 +38,8 @@ public class PatientDAO extends AbstractDAO<Patient> {
                 registrationInput.getLastName(),
                 registrationInput.getEmail(),
                 registrationInput.getUserName(),
-                registrationInput.getPassword()
+                registrationInput.getPassword(),
+                new Date()
                 ));
     }
 

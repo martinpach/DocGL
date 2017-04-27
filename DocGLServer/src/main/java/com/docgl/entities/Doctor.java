@@ -1,9 +1,11 @@
 package com.docgl.entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
 
 /**
  * Created by Rasťo on 15.4.2017.
@@ -11,6 +13,14 @@ import java.io.Serializable;
 @Entity
 @Table(name = "Doctors")
 public class Doctor extends User implements Serializable{
+
+    @OneToMany(mappedBy = "doctor")
+    private Collection<Appointment> appointments = new ArrayList<>();
+
+    @Column(name = "registration_date")
+    @Temporal(TemporalType.DATE)
+    @NotNull
+    private Date registrationDate;
 
     public Doctor(){
     }

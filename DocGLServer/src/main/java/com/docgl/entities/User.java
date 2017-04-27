@@ -3,6 +3,7 @@ package com.docgl.entities;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 /**
  * Created by Rasťo on 22.4.2017.
@@ -17,19 +18,24 @@ public abstract class User {
     private int id;
 
     @Column(name = "first_name")
+    @NotNull
     private String firstName;
 
     @Column(name = "last_name")
+    @NotNull
     private String lastName;
 
     @Column(name = "email")
+    @NotNull
     private String email;
 
     @Column(name = "user_name")
+    @NotNull
     private String userName;
 
     @JsonIgnore
     @Column(name = "password")
+    @NotNull
     private String password;
 
     public User() {

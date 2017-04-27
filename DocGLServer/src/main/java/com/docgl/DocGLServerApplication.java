@@ -30,7 +30,8 @@ import java.util.Optional;
 
 public class DocGLServerApplication extends Application<DocGLServerConfiguration> {
 
-    private final HibernateBundle<DocGLServerConfiguration> hibernate = new HibernateBundle<DocGLServerConfiguration>(Admin.class, Doctor.class, User.class, Patient.class) {
+    private final HibernateBundle<DocGLServerConfiguration> hibernate = new HibernateBundle<DocGLServerConfiguration>(Admin.class, Doctor.class,
+            User.class, Patient.class, Appointment.class, DoctorDetails.class) {
         @Override
         public DataSourceFactory getDataSourceFactory(DocGLServerConfiguration configuration) {
             return configuration.getDataSourceFactory();
