@@ -88,7 +88,7 @@ public class AuthResource {
     @POST
     @UnitOfWork
     @Path("registration")
-    public Object registerPatient(RegistrationInput registrationInput){
+    public Object register(RegistrationInput registrationInput){
         if(registrationInput.getUserType().equals(UserType.ADMIN)){
             throw new ValidationException("Parameter userType should be 'DOCTOR' or 'PATIENT'");
         }

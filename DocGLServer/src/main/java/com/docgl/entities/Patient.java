@@ -1,5 +1,7 @@
 package com.docgl.entities;
 
+import org.hibernate.annotations.CreationTimestamp;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
@@ -15,10 +17,11 @@ import java.util.Date;
 public class Patient extends User {
 
     @OneToMany(mappedBy = "doctor")
-    private Collection<Appointment> appointment = new ArrayList<>();
+    private Collection<Appointment> appointments = new ArrayList<>();
 
     @Column(name = "registration_date")
     @Temporal(TemporalType.DATE)
+    @CreationTimestamp
     @NotNull
     private Date registrationDate;
 
@@ -29,12 +32,12 @@ public class Patient extends User {
         this.registrationDate = registrationDate;
     }
 
-    public Collection<Appointment> getAppointment() {
-        return appointment;
+    public Collection<Appointment> getAppointments() {
+        return appointments;
     }
 
-    public void setAppointment(Collection<Appointment> appointment) {
-        this.appointment = appointment;
+    public void setAppointments(Collection<Appointment> appointments) {
+        this.appointments = appointments;
     }
 
     public Date getRegistrationDate() {

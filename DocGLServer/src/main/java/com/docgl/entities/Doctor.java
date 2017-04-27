@@ -1,5 +1,7 @@
 package com.docgl.entities;
 
+import org.hibernate.annotations.CreationTimestamp;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
@@ -19,8 +21,9 @@ public class Doctor extends User implements Serializable{
 
     @Column(name = "registration_date")
     @Temporal(TemporalType.DATE)
+    @CreationTimestamp
     @NotNull
-    private Date registrationDate;
+    private Date registrationDate = new Date();
 
     public Doctor(){
     }
