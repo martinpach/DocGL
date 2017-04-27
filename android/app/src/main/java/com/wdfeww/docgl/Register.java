@@ -142,7 +142,7 @@ public class Register extends AppCompatActivity {
             errorMessage.setText("Please type your password.");
             return false;
         } else if (!matcher.matches()) {
-            errorMessage.setText("Invalid password.");
+            errorMessage.setText("Password must contain of minimum: one lower case, one upper case character, one number, one special character and minimum length of password is six characters.");
             return false;
         } else {
             errorMessage.setText("");
@@ -160,7 +160,7 @@ public class Register extends AppCompatActivity {
             errorMessage.setText("Please type your email.");
             return false;
         } else if (!matcher.matches()) {
-            errorMessage.setText("Invalid email.");
+            errorMessage.setText("Wrong email.");
             return false;
         } else {
             errorMessage.setText("");
