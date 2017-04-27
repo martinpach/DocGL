@@ -1,5 +1,6 @@
 package com.docgl.db;
 
+import com.docgl.ValidationException;
 import com.docgl.api.RegistrationInput;
 import com.docgl.entities.Patient;
 import com.docgl.entities.User;
@@ -7,6 +8,7 @@ import io.dropwizard.hibernate.AbstractDAO;
 import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Criterion;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 
 import java.util.List;
@@ -19,8 +21,10 @@ public class PatientDAO extends AbstractDAO<Patient> {
         super(sessionFactory);
     }
 
-    public List<Patient> getAllPatients(){
-        return list(namedQuery("getAllPatients"));
+    public List<Patient> getAllPatients(int limit, int start, String sortBy, String way){
+        Criteria criteria = criteria();
+        criteria = new DatabaseCommonMethods().setPaginationAndSorting(criteria,limit,start,sortBy,way);
+        return list(criteria);
     }
 
     public Patient getLoggedPatientInformation(String userName, String password){

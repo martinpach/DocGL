@@ -32,9 +32,13 @@ public class PatientResource {
 
     @GET
     @UnitOfWork
-    public List<Patient> getListOfAllPatients(@Auth LoggedUser loggedUser) {
+    public List<Patient> getListOfAllPatients(@Auth LoggedUser loggedUser,
+                                              @QueryParam("limit") int limit,
+                                              @QueryParam("start") int start,
+                                              @QueryParam("sortBy") String sortBy,
+                                              @QueryParam("way") String way) {
         UserType[] roles = {UserType.ADMIN, UserType.DOCTOR};
         authorizer.checkAuthorization(loggedUser.getUserType(), roles);
-        return patientDAO.getAllPatients();
+        return patientDAO.getAllPatients(limit, start, sortBy, way);
     }
 }
