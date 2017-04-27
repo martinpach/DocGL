@@ -31,6 +31,7 @@ public class Register extends AppCompatActivity {
     private TextView errorMessage, successMessage;
     private APIService mAPIService;
     String res;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,7 +49,7 @@ public class Register extends AppCompatActivity {
         sign_up.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (checkUsername() && checkUPassword()) {
+                if (checkFirstname() && checkLastname() && checkEmail() && checkUsername() && checkUPassword()) {
                     String jsonParams = "{\"userName\":\"" + edit_txt_username.getText().toString().trim() + "\",\"password\":\"" + edit_txt_password.getText().toString().trim() + "\",\"firstName\":\""
                             + edit_txt_lastname.getText().toString().trim() + "\",\"lastName\":\"" + edit_txt_lastname.getText().toString().trim() + "\",\"email\":\"" + edit_txt_email.getText().toString().trim()
                             + "\",\"userType\":\"PATIENT\"}";
@@ -70,7 +71,7 @@ public class Register extends AppCompatActivity {
                                     res = rawResponse.body().string();
                                     login();
                                 } else {
-                                    errorMessage.setText("Username is already used!");
+                                    errorMessage.setText("Username or email is already used!");
                                     successMessage.setText("");
                                 }
 
@@ -101,6 +102,26 @@ public class Register extends AppCompatActivity {
         startActivity(intent);
     }
 
+    private boolean checkFirstname() {
+        if (edit_txt_firstname.getText().length() == 0) {
+            errorMessage.setText("Please type your firstname.");
+            return false;
+        } else {
+            errorMessage.setText("");
+            return true;
+        }
+    }
+
+    private boolean checkLastname() {
+        if (edit_txt_lastname.getText().length() == 0) {
+            errorMessage.setText("Please type your lastname.");
+            return false;
+        } else {
+            errorMessage.setText("");
+            return true;
+        }
+    }
+
     private boolean checkUsername() {
         if (edit_txt_username.getText().length() == 0) {
             errorMessage.setText("Please type your username.");
@@ -109,14 +130,13 @@ public class Register extends AppCompatActivity {
             errorMessage.setText("");
             return true;
         }
-
     }
 
     private boolean checkUPassword() {
-        String string_pattern ="(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{6,}";
+        String string_pattern = "(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{6,}";
         Pattern pattern = Pattern.compile(string_pattern);
         Matcher matcher = pattern.matcher(edit_txt_password.getText());
-        Log.i("DEBUG",""+matcher.matches());
+        Log.i("DEBUG", "" + matcher.matches());
 
         if (edit_txt_password.getText().length() == 0) {
             errorMessage.setText("Please type your password.");
@@ -128,6 +148,23 @@ public class Register extends AppCompatActivity {
             errorMessage.setText("");
             return true;
         }
+    }
 
+    private boolean checkEmail() {
+        String string_pattern = "(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+$)";
+        Pattern pattern = Pattern.compile(string_pattern);
+        Matcher matcher = pattern.matcher(edit_txt_email.getText());
+        Log.i("DEBUG", "" + matcher.matches());
+
+        if (edit_txt_email.getText().length() == 0) {
+            errorMessage.setText("Please type your email.");
+            return false;
+        } else if (!matcher.matches()) {
+            errorMessage.setText("Invalid email.");
+            return false;
+        } else {
+            errorMessage.setText("");
+            return true;
+        }
     }
 }
