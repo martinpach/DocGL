@@ -10,10 +10,6 @@ import java.io.Serializable;
  */
 @Entity
 @Table(name = "Doctors")
-@NamedQueries({
-        @NamedQuery(name = "getAllDoctors",
-                query = "from Doctor")
-})
 public class Doctor extends User implements Serializable{
 
     public Doctor(){

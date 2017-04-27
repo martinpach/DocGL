@@ -20,26 +20,9 @@ public class DoctorDAO extends AbstractDAO<Doctor> {
     }
 
     public List<Doctor> getAllDoctors(int limit, int start, String sortBy, String way){
-        if(limit > 0 && start >= 0){
-            Criteria criteria = criteria()
-                    .setFirstResult(start)
-                    .setMaxResults(limit);
-            if(!sortBy.equals("lastName")){
-                throw new ValidationException("Query param '"+ sortBy +"' is not valid");
-            }
-            if(way.equals("asc")){
-                criteria.addOrder(Order.asc(sortBy));
-            }
-            else if(way.equals("desc")){
-                criteria.addOrder(Order.desc(sortBy));
-            }
-            else{
-                throw new ValidationException("Query param '"+ way +"' is not valid. Use instead : 'asc' or 'desc'");
-            }
-
-            return list(criteria);
-        }
-        return list(namedQuery("getAllDoctors"));
+        Criteria criteria = criteria();
+        criteria = new DatabaseCommonMethods().setPaginationAndSorting(criteria,limit,start,sortBy,way);
+        return list(criteria);
     }
 }
 

@@ -11,10 +11,6 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name="Patients")
-@NamedQueries({
-        @NamedQuery(name = "getAllPatients",
-                query = "from Patient")
-})
 public class Patient extends User {
 
     public Patient(){}

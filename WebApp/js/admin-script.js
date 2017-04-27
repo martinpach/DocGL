@@ -67,18 +67,34 @@ $(document).ready(function () {
 
     function getDoctors (){
         ajaxRequest("/doctors","GET").done(function(){
-            console.log(ajaxData);
+            var icon='<i class="fa fa-user-md tableIcon"></i>';
+            generateTable($("#tableDoctors"),icon);
         });
-
     }
 
     function getUsers(){
         ajaxRequest("/patients","GET").done(function(){
-            console.log(ajaxData);
+            var icon='<i class="fa fa-user tableIcon"></i>';
+            generateTable($("#tableUsers"),icon);
+            
         });
 
     }
 
+    function generateTable(table,icon){
+        var i=0;
+        for(i=0;i<ajaxData.length;i++){
+            table.append('<tr>'+
+                '<td>'+icon+'</td>'+
+                '<td>'+ajaxData[i].id+'</td>'+
+                '<td>'+ajaxData[i].firstName+'</td>'+
+                '<td>'+ajaxData[i].lastName+'</td>'+
+                '<td>'+ajaxData[i].email+'</td>'+
+                '</tr>');
+            if(i=0)
+                console.log(ajaxData[i].id);            
+        }
+    }
     
     //ajax request function
     function ajaxRequest(url, requestType, dataToSend) {

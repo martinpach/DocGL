@@ -85,9 +85,11 @@ body{
     background-color: #B5DFFD;
 }
 
-
 .heading{
+	font-size:40px!important;
 	position:relative;
+	max-width:300px
+	margin-right:none;
 	font-family:Roboto;
   	font-weight: 500;
   	color:#41CCB9!important;
@@ -134,6 +136,53 @@ body{
 
 .profileDiv{
 	padding:20px;
+}
+
+/*user and doctor searchfield*/
+.searchfield{
+	width:250px!important;
+	height:38px !important;
+	border:1px solid white!important;
+	background-color:rgba(255,255,255,0.25)!important;
+	color:white !important;
+	position:relative;
+	float:right;
+	padding-left:20px;
+}
+
+.searchfield::placeholder{
+	color:white!important;
+}
+
+.fontAwesome {
+  font-family: 'Roboto', FontAwesome, sans-serif;
+}
+.searchfield-wrapper{
+	position: relative;
+    height: 100%;
+    margin-top: 10px;
+}
+
+/*table*/
+i.fa.fa-user.tableIcon,i.fa.fa-user-md.tableIcon {
+    font-size: 20px;
+    color: #41CCB9;
+    position:relative;
+    margin-left:40%;
+}
+
+/*pagination - to be filled*/
+
+.paginationBtn{
+
+}
+
+.paginationContainer{
+
+}
+
+.paginationText{
+
 }
 
 
