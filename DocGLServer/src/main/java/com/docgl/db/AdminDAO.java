@@ -1,5 +1,6 @@
 package com.docgl.db;
 
+import com.docgl.Cryptor;
 import com.docgl.entities.Admin;
 import io.dropwizard.hibernate.AbstractDAO;
 import org.hibernate.Criteria;
@@ -26,14 +27,14 @@ public class AdminDAO extends AbstractDAO<Admin> {
     public Admin getLoggedAdminInformation(String username, String password){
         Criteria criteria = criteria()
                 .add(Restrictions.like("userName", username))
-                .add(Restrictions.like("password", password));
+                .add(Restrictions.like("password", new Cryptor().encrypt(password)));
         return (Admin) criteria.uniqueResult();
     }
 
     public void setPassword(String password, int id){
         Session session = currentSession();
         Admin admin = session.find(Admin.class, id);
-        admin.setPassword(password);
+        admin.setPassword(new Cryptor().encrypt(password));
         admin.setPasswordChanged(true);
     }
 
@@ -41,7 +42,7 @@ public class AdminDAO extends AbstractDAO<Admin> {
         Session session = currentSession();
         Admin admin = session.find(Admin.class, id);
         admin.setUserName(userName);
-        admin.setPassword(password);
+        admin.setPassword(new Cryptor().encrypt(password));
         admin.setEmail(email);
     }
 

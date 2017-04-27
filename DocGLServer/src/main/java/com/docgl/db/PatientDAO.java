@@ -1,5 +1,7 @@
 package com.docgl.db;
 
+import com.docgl.Cryptor;
+import com.docgl.ValidationException;
 import com.docgl.api.RegistrationInput;
 import com.docgl.entities.Patient;
 import io.dropwizard.hibernate.AbstractDAO;
@@ -28,7 +30,7 @@ public class PatientDAO extends AbstractDAO<Patient> {
     public Patient getLoggedPatientInformation(String userName, String password){
         Criteria criteria = criteria()
                 .add(Restrictions.eq("userName", userName))
-                .add(Restrictions.eq("password", password));
+                .add(Restrictions.eq("password", new Cryptor().encrypt(password)));
         return (Patient) criteria.uniqueResult();
     }
 
@@ -38,7 +40,7 @@ public class PatientDAO extends AbstractDAO<Patient> {
                 registrationInput.getLastName(),
                 registrationInput.getEmail(),
                 registrationInput.getUserName(),
-                registrationInput.getPassword(),
+                new Cryptor().encrypt(registrationInput.getPassword()),
                 new Date()
                 ));
     }

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout  xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="@drawable/gradient_background"
+    android:orientation="vertical"
     tools:context="com.wdfeww.docgl.Home">
 
     <ScrollView
@@ -16,10 +16,63 @@
             android:layout_height="match_parent"
             android:gravity="center"
             android:orientation="vertical">
+
+
+
             <TextView
+                android:gravity="center"
+                android:id="@+id/txt_1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/responseText"/>
+                android:layout_marginTop="50dp"
+                android:text="@string/home_txt1"
+                android:textColor="@color/color1"
+                android:textSize="@dimen/text_size"
+                android:clickable="true"
+                android:textStyle="bold"
+                />
+            <TextView
+                android:gravity="center"
+                android:layout_below="@+id/txt_1"
+                android:id="@+id/txt_2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="50dp"
+                android:text="@string/home_txt2"
+                android:textColor="@drawable/text_button"
+                android:textSize="@dimen/text_size"
+                android:clickable="true"/>
+            <TextView
+                android:gravity="center"
+                android:layout_below="@+id/txt_3"
+                android:id="@+id/txt_3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="50dp"
+                android:text="@string/home_txt3"
+                android:textColor="@drawable/text_button"
+                android:textSize="@dimen/text_size"
+                android:clickable="true"/>
+            <TextView
+                android:gravity="center"
+                android:layout_below="@+id/txt_3"
+                android:id="@+id/txt_4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="50dp"
+                android:text="@string/home_txt4"
+                android:textColor="@drawable/text_button"
+                android:textSize="@dimen/text_size"
+                android:clickable="true"/>
+
+
+
+            <TextView
+                android:id="@+id/responseText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/txt_4" />
+
 
         </LinearLayout>
     </ScrollView>

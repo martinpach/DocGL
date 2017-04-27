@@ -9,4 +9,10 @@
     <string name="email">Email</string>
     <string name="username">Username</string>
     <string name="password">Password</string>
+    <string name="home_txt1">You have no \nappointments yet</string>
+    <string name="home_txt2">Make an appointment</string>
+    <string name="home_txt3">Update your profile</string>
+    <string name="home_txt4">Customize \nyour settings</string>
+
+
 </resources>
