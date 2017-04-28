@@ -1,5 +1,7 @@
 package com.docgl.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
@@ -19,11 +21,13 @@ public class Appointment {
     @ManyToOne
     @JoinColumn(name = "doctor_id")
     @NotNull
+    @JsonIgnore
     private Doctor doctor;
 
     @ManyToOne
     @JoinColumn(name = "patient_id")
     @NotNull
+    @JsonIgnore
     private Patient patient;
 
     @Column(name = "datetime", columnDefinition="DATETIME")

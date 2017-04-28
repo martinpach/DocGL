@@ -1,5 +1,7 @@
 package com.docgl;
 
+import com.docgl.enums.UserType;
+
 import javax.ws.rs.NotAuthorizedException;
 
 /**

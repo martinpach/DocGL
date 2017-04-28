@@ -1,4 +1,4 @@
-package com.docgl;
+package com.docgl.enums;
 
 /**
  * Created by Martin on 24.4.2017.

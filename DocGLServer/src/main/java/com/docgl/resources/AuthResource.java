@@ -1,6 +1,6 @@
 package com.docgl.resources;
 
-import com.docgl.UserType;
+import com.docgl.enums.UserType;
 import com.docgl.ValidationException;
 import com.docgl.api.PatientRepresentation;
 import com.docgl.api.RegistrationInput;
@@ -10,7 +10,6 @@ import com.docgl.api.LoginInput;
 import com.docgl.db.DoctorDAO;
 import com.docgl.db.PatientDAO;
 import com.docgl.entities.Admin;
-import com.docgl.entities.Doctor;
 import com.docgl.entities.Patient;
 import io.dropwizard.hibernate.UnitOfWork;
 import jersey.repackaged.com.google.common.base.Throwables;

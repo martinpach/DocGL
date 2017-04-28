@@ -16,7 +16,7 @@ import java.util.Date;
 @Table(name="Patients")
 public class Patient extends User {
 
-    @OneToMany(mappedBy = "doctor")
+    @OneToMany(mappedBy = "patient")
     private Collection<Appointment> appointments = new ArrayList<>();
 
     @Column(name = "registration_date")

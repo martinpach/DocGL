@@ -4,10 +4,14 @@ import com.docgl.Cryptor;
 import com.docgl.ValidationException;
 import com.docgl.api.RegistrationInput;
 import com.docgl.entities.Patient;
+import com.docgl.enums.SortableDoctorColumns;
+import com.docgl.enums.SortablePatientColumns;
+import com.docgl.enums.SortingWays;
 import io.dropwizard.hibernate.AbstractDAO;
 import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Criterion;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 
 import java.util.Date;
@@ -21,9 +25,23 @@ public class PatientDAO extends AbstractDAO<Patient> {
         super(sessionFactory);
     }
 
-    public List<Patient> getAllPatients(int limit, int start, String sortBy, String way){
+    public List<Patient> getAllPatients(int limit, int start, SortablePatientColumns sortBy, SortingWays way){
         Criteria criteria = criteria();
-        criteria = new DatabaseCommonMethods().setPaginationAndSorting(criteria,limit,start,sortBy,way);
+        if(limit > 0 && start >= 0) {
+            criteria.setFirstResult(start)
+                    .setMaxResults(limit);
+        }
+        if(sortBy != null) {
+            if (way != null) {
+                if (way.getValue().equals("asc")) {
+                    criteria.addOrder(Order.asc(sortBy.getValue()));
+                } else if (way.getValue().equals("desc")) {
+                    criteria.addOrder(Order.desc(sortBy.getValue()));
+                }
+            } else {
+                throw new ValidationException("In case of sorting use 'way' query parameter with sortBy parameter");
+            }
+        }
         return list(criteria);
     }
 

@@ -1,7 +1,9 @@
 package com.docgl.resources;
 
 import com.docgl.Authorizer;
-import com.docgl.UserType;
+import com.docgl.enums.SortableDoctorColumns;
+import com.docgl.enums.SortingWays;
+import com.docgl.enums.UserType;
 import com.docgl.api.LoggedUser;
 import com.docgl.db.DoctorDAO;
 import com.docgl.entities.Doctor;
@@ -10,7 +12,6 @@ import io.dropwizard.hibernate.UnitOfWork;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
-import java.security.Principal;
 import java.util.List;
 
 /**
@@ -34,8 +35,8 @@ public class DoctorResource {
     public List<Doctor> getListOfAllDoctors(@Auth LoggedUser loggedUser,
                                             @QueryParam("limit") int limit,
                                             @QueryParam("start") int start,
-                                            @QueryParam("sortBy") String sortBy,
-                                            @QueryParam("way") String way
+                                            @QueryParam("sortBy") SortableDoctorColumns sortBy,
+                                            @QueryParam("way") SortingWays way
                                             ){
         authorizer.checkAuthorization(loggedUser.getUserType(), UserType.ADMIN);
         return doctorDAO.getAllDoctors(limit, start, sortBy, way);

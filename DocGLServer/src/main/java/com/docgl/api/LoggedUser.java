@@ -1,6 +1,6 @@
 package com.docgl.api;
 
-import com.docgl.UserType;
+import com.docgl.enums.UserType;
 
 import java.security.Principal;
 import java.util.Objects;

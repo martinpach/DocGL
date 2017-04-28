@@ -3,6 +3,8 @@ package com.docgl;
 import com.docgl.db.*;
 import com.docgl.api.LoggedUser;
 import com.docgl.entities.*;
+import com.docgl.entities.Specializations;
+import com.docgl.enums.UserType;
 import com.docgl.resources.*;
 import com.github.toastshaman.dropwizard.auth.jwt.JwtAuthFilter;
 import io.dropwizard.Application;
@@ -24,14 +26,13 @@ import org.jose4j.keys.HmacKey;
 import javax.servlet.DispatcherType;
 import javax.servlet.FilterRegistration;
 import java.io.UnsupportedEncodingException;
-import java.security.Principal;
 import java.util.EnumSet;
 import java.util.Optional;
 
 public class DocGLServerApplication extends Application<DocGLServerConfiguration> {
 
     private final HibernateBundle<DocGLServerConfiguration> hibernate = new HibernateBundle<DocGLServerConfiguration>(Admin.class, Doctor.class,
-            User.class, Patient.class, Appointment.class, DoctorDetails.class) {
+            User.class, Patient.class, Appointment.class, Specializations.class) {
         @Override
         public DataSourceFactory getDataSourceFactory(DocGLServerConfiguration configuration) {
             return configuration.getDataSourceFactory();

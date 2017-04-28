@@ -1,9 +1,11 @@
 package com.docgl.resources;
 
 import com.docgl.Authorizer;
-import com.docgl.UserType;
+import com.docgl.enums.SortableDoctorColumns;
+import com.docgl.enums.SortablePatientColumns;
+import com.docgl.enums.SortingWays;
+import com.docgl.enums.UserType;
 import com.docgl.api.LoggedUser;
-import com.docgl.api.RegistrationInput;
 import com.docgl.db.PatientDAO;
 import com.docgl.entities.Patient;
 import io.dropwizard.auth.Auth;
@@ -11,7 +13,6 @@ import io.dropwizard.hibernate.UnitOfWork;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
-import java.security.Principal;
 import java.util.List;
 
 /**
@@ -35,8 +36,8 @@ public class PatientResource {
     public List<Patient> getListOfAllPatients(@Auth LoggedUser loggedUser,
                                               @QueryParam("limit") int limit,
                                               @QueryParam("start") int start,
-                                              @QueryParam("sortBy") String sortBy,
-                                              @QueryParam("way") String way) {
+                                              @QueryParam("sortBy") SortablePatientColumns sortBy,
+                                              @QueryParam("way") SortingWays way) {
         UserType[] roles = {UserType.ADMIN, UserType.DOCTOR};
         authorizer.checkAuthorization(loggedUser.getUserType(), roles);
         return patientDAO.getAllPatients(limit, start, sortBy, way);

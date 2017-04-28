@@ -1,7 +1,7 @@
 package com.docgl.resources;
 
 import com.docgl.Authorizer;
-import com.docgl.UserType;
+import com.docgl.enums.UserType;
 import com.docgl.api.LoggedUser;
 import com.docgl.api.PasswordInput;
 import com.docgl.db.AdminDAO;
@@ -12,7 +12,6 @@ import io.dropwizard.hibernate.UnitOfWork;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
-import java.security.Principal;
 
 /**
  * Created by wdfeww on 4/15/17.

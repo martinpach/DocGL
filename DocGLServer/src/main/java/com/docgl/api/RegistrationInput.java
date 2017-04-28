@@ -1,6 +1,6 @@
 package com.docgl.api;
 
-import com.docgl.UserType;
+import com.docgl.enums.UserType;
 
 /**
  * Created by Martin on 26.4.2017.
