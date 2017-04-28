@@ -22,10 +22,10 @@ database:
   user: root
 
   # the password
-  password:
+  password: SovyMysql350
 
   # the JDBC URL
-  url: jdbc:mysql://localhost/DocGL?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC&useSSL=false
+  url: jdbc:mysql://194.160.229.180/DocGL?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC&useSSL=false
 
   # any properties specific to your JDBC driver:
   properties:
