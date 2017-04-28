@@ -1,6 +1,6 @@
 package com.docgl.db;
 
-import com.docgl.ValidationException;
+import com.docgl.exceptions.ValidationException;
 import com.docgl.entities.Doctor;
 import com.docgl.enums.SortableDoctorColumns;
 import com.docgl.enums.SortingWays;

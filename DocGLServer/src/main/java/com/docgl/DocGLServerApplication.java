@@ -3,7 +3,6 @@ package com.docgl;
 import com.docgl.db.*;
 import com.docgl.api.LoggedUser;
 import com.docgl.entities.*;
-import com.docgl.entities.Specializations;
 import com.docgl.enums.UserType;
 import com.docgl.resources.*;
 import com.github.toastshaman.dropwizard.auth.jwt.JwtAuthFilter;
@@ -94,7 +93,7 @@ public class DocGLServerApplication extends Application<DocGLServerConfiguration
         environment.jersey().register(new AdminProfileResource(dao));
         environment.jersey().register(new DoctorResource(docDao));
         environment.jersey().register(new PatientResource(patientDao));
-        environment.jersey().getResourceConfig().register(new CustomExceptionMapper());
+        environment.jersey().getResourceConfig().register(new ValidationExceptionMapper());
 
     }
 

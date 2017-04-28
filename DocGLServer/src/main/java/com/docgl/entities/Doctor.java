@@ -29,14 +29,8 @@ public class Doctor extends User{
     @NotNull
     private int likes;
 
-    //@ManyToOne
-    //@JoinColumn(name = "specialization_id")
     @NotNull
-    //@JsonIgnore
     private SpecializationsEnum specialization;
-
-    /*@Column(name = "specialization_id", insertable = false, updatable = false)
-    private SpecializationsEnum specializationId;*/
 
     public Collection<Appointment> getAppointments() {
         return appointments;
@@ -69,14 +63,6 @@ public class Doctor extends User{
     public void setSpecialization(SpecializationsEnum specialization) {
         this.specialization = specialization;
     }
-
-    /*public SpecializationsEnum getSpecializationId() {
-        return specializationId;
-    }
-
-    public void setSpecializationId(SpecializationsEnum specializationId) {
-        this.specializationId = specializationId;
-    }*/
 
     public Doctor(){
     }

@@ -1,5 +1,6 @@
 package com.docgl;
 
+import com.docgl.exceptions.ValidationException;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.ws.rs.core.MediaType;
@@ -9,7 +10,7 @@ import javax.ws.rs.ext.ExceptionMapper;
 /**
  * Created by Martin on 26.4.2017.
  */
-public class CustomExceptionMapper implements ExceptionMapper<ValidationException> {
+public class ValidationExceptionMapper implements ExceptionMapper<ValidationException> {
     @Override
     public Response toResponse(final ValidationException ex) {
 

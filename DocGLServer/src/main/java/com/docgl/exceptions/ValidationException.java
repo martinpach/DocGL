@@ -1,4 +1,4 @@
-package com.docgl;
+package com.docgl.exceptions;
 
 /**
  * Created by Martin on 26.4.2017.

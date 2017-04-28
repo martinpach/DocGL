@@ -1,7 +1,7 @@
 package com.docgl.resources;
 
 import com.docgl.enums.UserType;
-import com.docgl.ValidationException;
+import com.docgl.exceptions.ValidationException;
 import com.docgl.api.PatientRepresentation;
 import com.docgl.api.RegistrationInput;
 import com.docgl.db.AdminDAO;

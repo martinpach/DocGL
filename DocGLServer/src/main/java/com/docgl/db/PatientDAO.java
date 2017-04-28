@@ -1,10 +1,9 @@
 package com.docgl.db;
 
 import com.docgl.Cryptor;
-import com.docgl.ValidationException;
+import com.docgl.exceptions.ValidationException;
 import com.docgl.api.RegistrationInput;
 import com.docgl.entities.Patient;
-import com.docgl.enums.SortableDoctorColumns;
 import com.docgl.enums.SortablePatientColumns;
 import com.docgl.enums.SortingWays;
 import io.dropwizard.hibernate.AbstractDAO;
