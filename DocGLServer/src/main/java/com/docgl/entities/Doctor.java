@@ -1,6 +1,7 @@
 package com.docgl.entities;
 
 import com.docgl.enums.SpecializationsEnum;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
@@ -16,8 +17,9 @@ import java.util.Date;
 @Table(name = "Doctors")
 public class Doctor extends User{
 
-    @OneToMany(mappedBy = "doctor")
-    private Collection<Appointment> appointments = new ArrayList<>();
+    @OneToMany(mappedBy = "doctor", fetch = FetchType.LAZY)
+    @JsonIgnore
+    private Collection<Appointment> appointments = new ArrayList<>(0);
 
     @Column(name = "registration_date")
     @Temporal(TemporalType.DATE)

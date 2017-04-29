@@ -22,10 +22,10 @@ database:
   user: root
 
   # the password
-  password: SovyMysql350
+  password:
 
   # the JDBC URL
-  url: jdbc:mysql://194.160.229.180/DocGL?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC&useSSL=false
+  url: jdbc:mysql://localhost/DocGL?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC&useSSL=false
 
   # any properties specific to your JDBC driver:
   properties:
@@ -34,7 +34,7 @@ database:
     hibernate.hbm2ddl.auto: create
     hibernate.hbm2ddl.import_files: import.sql
 
-  # the maximum amount of time to wait on an empty pool before throwing an exception
+  # the maximum amount of timePeriod to wait on an empty pool before throwing an exception
   maxWaitForConnection: 1s
 
   # the SQL query to run when validating a connection's liveness

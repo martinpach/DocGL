@@ -1,13 +1,16 @@
 package com.docgl.resources;
 
 import com.docgl.Authorizer;
-import com.docgl.enums.SortableDoctorColumns;
+import com.docgl.Views;
+import com.docgl.db.AppointmentDAO;
+import com.docgl.entities.Appointment;
 import com.docgl.enums.SortablePatientColumns;
 import com.docgl.enums.SortingWays;
 import com.docgl.enums.UserType;
 import com.docgl.api.LoggedUser;
 import com.docgl.db.PatientDAO;
 import com.docgl.entities.Patient;
+import com.fasterxml.jackson.annotation.JsonView;
 import io.dropwizard.auth.Auth;
 import io.dropwizard.hibernate.UnitOfWork;
 
@@ -24,10 +27,12 @@ import java.util.List;
 
 public class PatientResource {
     private PatientDAO patientDAO;
+    private AppointmentDAO appointmentDAO;
     private Authorizer authorizer;
 
-    public PatientResource(PatientDAO patientDAO) {
+    public PatientResource(PatientDAO patientDAO, AppointmentDAO appointmentDAO) {
         this.patientDAO = patientDAO;
+        this.appointmentDAO = appointmentDAO;
         this.authorizer = new Authorizer();
     }
 
@@ -41,5 +46,13 @@ public class PatientResource {
         UserType[] roles = {UserType.ADMIN, UserType.DOCTOR};
         authorizer.checkAuthorization(loggedUser.getUserType(), roles);
         return patientDAO.getAllPatients(limit, start, sortBy, way);
+    }
+
+    @GET
+    @Path("{id}/appointments")
+    @UnitOfWork
+    @JsonView(Views.PatientView.class)
+    public List<Appointment> getPatientAppointments(@PathParam("id") int id){
+        return appointmentDAO.getAppointments(id, UserType.PATIENT);
     }
 }

@@ -11,6 +11,7 @@ import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 
 import java.util.Date;
@@ -69,5 +70,12 @@ public class PatientDAO extends AbstractDAO<Patient> {
                 .add(Restrictions.or(userNameCondition, emailCondtition));
         Patient patient = (Patient) criteria.uniqueResult();
         return patient == null;
+    }
+
+    public long getNumberOfRegistrations(Date date){
+        return (long) criteria()
+                .add(Restrictions.eq("registrationDate", date))
+                .setProjection(Projections.rowCount())
+                .uniqueResult();
     }
 }

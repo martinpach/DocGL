@@ -57,9 +57,10 @@ public class DocGLServerApplication extends Application<DocGLServerConfiguration
     public void run(final DocGLServerConfiguration configuration,
                     final Environment environment) throws UnsupportedEncodingException {
 
-        final AdminDAO dao = new AdminDAO(hibernate.getSessionFactory());
+        final AdminDAO adminDAO = new AdminDAO(hibernate.getSessionFactory());
         final DoctorDAO docDao = new DoctorDAO(hibernate.getSessionFactory());
         final PatientDAO patientDao = new PatientDAO(hibernate.getSessionFactory());
+        final AppointmentDAO appointmentDAO = new AppointmentDAO(hibernate.getSessionFactory());
 
         final FilterRegistration.Dynamic cors = environment.servlets().addFilter("CORS", CrossOriginFilter.class);
         cors.setInitParameter(CrossOriginFilter.ALLOWED_ORIGINS_PARAM, "*");
@@ -67,16 +68,14 @@ public class DocGLServerApplication extends Application<DocGLServerConfiguration
         cors.setInitParameter(CrossOriginFilter.ALLOWED_METHODS_PARAM, "OPTIONS,GET,PUT,POST,DELETE,HEAD");
         cors.addMappingForUrlPatterns(EnumSet.allOf(DispatcherType.class), true, "/*");
 
-        byte[] key = DocGLServerConfiguration.getJwtTokenSecret();
-        environment.jersey().register(new AuthResource(dao,patientDao,key));
-
+        byte[] tokenSecret = DocGLServerConfiguration.getJwtTokenSecret();
 
 
         final JwtConsumer consumer = new JwtConsumerBuilder()
                 .setAllowedClockSkewInSeconds(30)
                 .setRequireExpirationTime()
                 .setRequireSubject()
-                .setVerificationKey(new HmacKey(key))
+                .setVerificationKey(new HmacKey(tokenSecret))
                 .setRelaxVerificationKeyValidation()
                 .build();
 
@@ -88,11 +87,15 @@ public class DocGLServerApplication extends Application<DocGLServerConfiguration
                         .setAuthenticator( new ExampleAuthenticator())
                         .buildAuthFilter()));
 
+        /* registering resources */
+        environment.jersey().register(new AuthResource(adminDAO,patientDao,tokenSecret));
         environment.jersey().register(new AuthValueFactoryProvider.Binder<>(LoggedUser.class));
         environment.jersey().register(RolesAllowedDynamicFeature.class);
-        environment.jersey().register(new AdminProfileResource(dao));
-        environment.jersey().register(new DoctorResource(docDao));
-        environment.jersey().register(new PatientResource(patientDao));
+        environment.jersey().register(new AdminProfileResource(adminDAO));
+        environment.jersey().register(new DoctorResource(docDao, appointmentDAO));
+        environment.jersey().register(new PatientResource(patientDao, appointmentDAO));
+        environment.jersey().register(new AppointmentsResource(appointmentDAO));
+        environment.jersey().register(new RegistrationResource(docDao, patientDao));
         environment.jersey().getResourceConfig().register(new ValidationExceptionMapper());
 
     }

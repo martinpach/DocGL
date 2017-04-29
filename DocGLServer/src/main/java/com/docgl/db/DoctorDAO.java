@@ -8,7 +8,10 @@ import io.dropwizard.hibernate.AbstractDAO;
 import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Restrictions;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -37,6 +40,18 @@ public class DoctorDAO extends AbstractDAO<Doctor> {
             }
         }
         return list(criteria);
+    }
+
+    public long getNumberOfOverallLikes(){
+        return (long) criteria()
+                .setProjection(Projections.sum("likes")).uniqueResult();
+    }
+
+    public long getNumberOfRegistrations(Date date){
+        return (long) criteria()
+                .add(Restrictions.eq("registrationDate", date))
+                .setProjection(Projections.rowCount())
+                .uniqueResult();
     }
 }
 

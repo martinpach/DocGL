@@ -1,5 +1,6 @@
 package com.docgl.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
@@ -16,7 +17,8 @@ import java.util.Date;
 @Table(name="Patients")
 public class Patient extends User {
 
-    @OneToMany(mappedBy = "patient")
+    @OneToMany(mappedBy = "patient", fetch = FetchType.LAZY)
+    @JsonIgnore
     private Collection<Appointment> appointments = new ArrayList<>();
 
     @Column(name = "registration_date")
