@@ -211,21 +211,26 @@ $(document).ready(function () {
     }
 
     //sorting, not ready yet
-    $(document).on("click" "#sortNameUsers",function(){
+    $(document).on("click", "#sortNameUsers",function(){
         event.preventDefault();
+        //alert("user names,yay!");
     });
 
-    $("sortJoinedUsers").on("click",function(){
-        alert("whee!");
+    $(document).on("click", "#sortJoinedUsers",function(){
+        event.preventDefault();
+         //alert("users joined,yay!");
     });
 
-    $("#sortNameDocs").on("click",function(){
-        alert("whee!");
+    $(document).on("click" ,"#sortNameDocs",function(){
+        event.preventDefault();
+         //alert("doc names,yay!");
     });
 
-    $("#sortRatingDocs").on("click",function(){
-        alert("whee!");
+    $(document).on("click", "#sortRatingDocs",function(){
+        event.preventDefault();
+         //alert("doc likes,yay!");
     });
+
 
     //get statistics
     function getAppointmentCount(){

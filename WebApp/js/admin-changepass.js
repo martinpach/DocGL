@@ -57,7 +57,7 @@ $(document).ready(function () {
             }
             else {
                 $("#changePassMessage").addClass("errorMessage");
-                $("#changePassMessage").text("Password must contain at: upper case letter, lower case letter and number.");
+                $("#changePassMessage").text("Password must contain at least one upper case letter,one lower case letter, one special character and a number.");
             }
         }
         else {
