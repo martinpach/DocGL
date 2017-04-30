@@ -171,19 +171,64 @@ i.fa.fa-user.tableIcon,i.fa.fa-user-md.tableIcon {
     margin-left:40%;
 }
 
+.like{
+	color:#FF7B95;
+}
+i.fa.fa-heart.heart::before{
+	margin-right:15px;
+}
+
 /*pagination - to be filled*/
 
 .paginationBtn{
+	margin:5px;
+	margin-top:15px;
+	float:right;
+	width:30px;
+	height:30px;
+	text-align:center;
+	border:1.5px solid white;
+	border-radius:5px;
+}
+
+.paginationBtn:hover{
+	cursor:pointer;
+	background-color:rgba(255,255,255,0.25)!important;
 
 }
 
-.paginationContainer{
+.disabledBtn{
+	opacity:0.3;
+	cursor:no-drop;
+	pointer-events: none;
+}
+
+#paginationContainer{
+	position:relative;
+	display:block;
+	float:right;
+	width:300px;
+	color:white;
+	text-align:center;
+	margin-right:10%;
 
 }
 
-.paginationText{
+#paginationText{
+    color: white;
+    display: inline;
+    position: relative;
+    float: right;
+    margin-top: 20px;
+    margin-right:10px;
 
 }
+
+.fa-arrow-right,.fa-arrow-left{
+	color:white;
+	vertical-align: middle;
+}
+
 
 
 
