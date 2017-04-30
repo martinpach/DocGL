@@ -214,7 +214,8 @@ $(document).ready(function () {
     function getAppointmentCount(){
         var dfd = $.Deferred();
         ajaxRequest("/appointments/count","GET").done(function(){
-            console.log(ajaxData);
+           var appointmentCount=ajaxData.count;
+            $("#countAppointments").html(appointmentCount);
             dfd.resolve();
         });
         return dfd.promise();
@@ -223,7 +224,8 @@ $(document).ready(function () {
     function getLikes(){
         var dfd=$.Deferred();
         ajaxRequest("/doctors/likes","GET").done(function(){
-            console.log(ajaxData);
+            var likeCount=ajaxData.likes;
+            $("#countLikes").html(likeCount);
             dfd.resolve();
         });
         return dfd.promise();

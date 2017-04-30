@@ -101,6 +101,12 @@ body{
 	font-weight:300;
 	margin-bottom:15px;
 }
+.subHeadingBlue{
+	color:#034F85 !important;
+	font-size:20px;
+	font-weight:300;
+	margin-bottom:15px;
+}
 
 
 .contentTab{
@@ -120,6 +126,21 @@ body{
 .table > tbody > tr > td{
 	border:none;
     border-bottom: 1px solid #B5DFFD;
+}
+
+/*home*/
+.homeNumbers{
+	color:#41CCB9!important;
+	font-size:70px;
+	font-weight:600;
+}
+
+.homeText{
+	font-size:25px;
+}
+
+#registrationStatistics{
+	margin-top:40px;
 }
 /*profile*/
 .lbl{
@@ -177,6 +198,8 @@ i.fa.fa-user.tableIcon,i.fa.fa-user-md.tableIcon {
 i.fa.fa-heart.heart::before{
 	margin-right:15px;
 }
+
+
 
 /*pagination - to be filled*/
 
