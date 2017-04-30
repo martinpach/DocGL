@@ -6,6 +6,7 @@ import com.docgl.db.AppointmentDAO;
 import com.docgl.entities.Appointment;
 import com.docgl.enums.SortableDoctorColumns;
 import com.docgl.enums.SortingWays;
+import com.docgl.enums.SpecializationsEnum;
 import com.docgl.enums.UserType;
 import com.docgl.api.LoggedUser;
 import com.docgl.db.DoctorDAO;
@@ -45,7 +46,7 @@ public class DoctorResource {
                                             @QueryParam("start") int start,
                                             @QueryParam("sortBy") SortableDoctorColumns sortBy,
                                             @QueryParam("way") SortingWays way
-                                            ){
+    ) {
         authorizer.checkAuthorization(loggedUser.getUserType(), UserType.ADMIN);
         return doctorDAO.getAllDoctors(limit, start, sortBy, way);
     }
@@ -54,19 +55,28 @@ public class DoctorResource {
     @Path("{id}/appointments")
     @UnitOfWork
     @JsonView(Views.DoctorView.class)
-    public List<Appointment> getDoctorAppointments(@PathParam("id") int id){
+    public List<Appointment> getDoctorAppointments(@PathParam("id") int id) {
         return appointmentDAO.getAppointments(id, UserType.DOCTOR);
     }
 
     @GET
     @Path("likes")
     @UnitOfWork
-    public LikesRepresentation getNumberOfOverallLikes(@Auth LoggedUser loggedUser){
+    public LikesRepresentation getNumberOfOverallLikes(@Auth LoggedUser loggedUser) {
         authorizer.checkAuthorization(loggedUser.getUserType(), UserType.ADMIN);
         return new LikesRepresentation(doctorDAO.getNumberOfOverallLikes());
     }
 
-    private class LikesRepresentation{
+    @GET
+    @Path("search")
+    @UnitOfWork
+    public List<Doctor> searchDoctorByName(@QueryParam("name") String string,
+                                           @QueryParam("spec") String spec) {
+        return doctorDAO.searchDoctorByName(string, spec);
+    }
+
+
+    private class LikesRepresentation {
         @JsonProperty
         private long likes;
 
