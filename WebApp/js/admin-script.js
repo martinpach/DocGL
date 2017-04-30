@@ -210,6 +210,23 @@ $(document).ready(function () {
 
     }
 
+    //sorting, not ready yet
+    $(document).on("click" "#sortNameUsers",function(){
+        event.preventDefault();
+    });
+
+    $("sortJoinedUsers").on("click",function(){
+        alert("whee!");
+    });
+
+    $("#sortNameDocs").on("click",function(){
+        alert("whee!");
+    });
+
+    $("#sortRatingDocs").on("click",function(){
+        alert("whee!");
+    });
+
     //get statistics
     function getAppointmentCount(){
         var dfd = $.Deferred();
