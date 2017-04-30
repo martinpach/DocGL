@@ -45,14 +45,14 @@ public class PatientDAO extends AbstractDAO<Patient> {
         return list(criteria);
     }
 
-    public Patient getLoggedPatientInformation(String userName, String password){
+    public Patient getLoggedPatientInformation(String userName, String password) {
         Criteria criteria = criteria()
                 .add(Restrictions.eq("userName", userName))
                 .add(Restrictions.eq("password", new Cryptor().encrypt(password)));
         return (Patient) criteria.uniqueResult();
     }
 
-    public void registerPatient(RegistrationInput registrationInput){
+    public void registerPatient(RegistrationInput registrationInput) {
         currentSession().save(new Patient(
                 registrationInput.getFirstName(),
                 registrationInput.getLastName(),
@@ -63,7 +63,7 @@ public class PatientDAO extends AbstractDAO<Patient> {
                 ));
     }
 
-    public boolean isUserNameAndEmailUnique(String userName, String email){
+    public boolean isUserNameAndEmailUnique(String userName, String email) {
         Criterion userNameCondition = Restrictions.eq("userName", userName);
         Criterion emailCondtition = Restrictions.eq("email", email);
         Criteria criteria = criteria()
@@ -72,10 +72,16 @@ public class PatientDAO extends AbstractDAO<Patient> {
         return patient == null;
     }
 
-    public long getNumberOfRegistrations(Date date){
+    public long getNumberOfRegistrations(Date date) {
         return (long) criteria()
                 .add(Restrictions.eq("registrationDate", date))
                 .setProjection(Projections.rowCount())
                 .uniqueResult();
+    }
+
+    public void blockPatient(boolean blocked, int id) {
+        currentSession();
+        Patient patient = currentSession().find(Patient.class, id);
+        patient.setBlocked(blocked);
     }
 }

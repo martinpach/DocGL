@@ -2,6 +2,7 @@ package com.docgl.resources;
 
 import com.docgl.Authorizer;
 import com.docgl.Views;
+import com.docgl.api.BlockedInput;
 import com.docgl.db.AppointmentDAO;
 import com.docgl.entities.Appointment;
 import com.docgl.enums.SortablePatientColumns;
@@ -54,5 +55,13 @@ public class PatientResource {
     @JsonView(Views.PatientView.class)
     public List<Appointment> getPatientAppointments(@PathParam("id") int id){
         return appointmentDAO.getAppointments(id, UserType.PATIENT);
+    }
+
+    @PUT
+    @Path("{id}/blocked")
+    @UnitOfWork
+    public void changeBlockingState(@Auth LoggedUser loggedUser, @PathParam("id") int id, BlockedInput blockedInput) {
+        authorizer.checkAuthorization(loggedUser.getUserType(), UserType.ADMIN);
+        patientDAO.blockPatient(blockedInput.isBlocked(), id);
     }
 }

@@ -34,6 +34,12 @@ public class Doctor extends User{
     @NotNull
     private SpecializationsEnum specialization;
 
+    @Column(name = "blocked", columnDefinition = "boolean default false")
+    private boolean blocked;
+
+    @Column(name = "approved", columnDefinition = "boolean default false")
+    private boolean approved;
+
     public Collection<Appointment> getAppointments() {
         return appointments;
     }
@@ -66,10 +72,37 @@ public class Doctor extends User{
         this.specialization = specialization;
     }
 
+    public boolean isBlocked() {
+        return blocked;
+    }
+
+    public void setBlocked(boolean blocked) {
+        this.blocked = blocked;
+    }
+
+    public boolean isApproved() {
+        return approved;
+    }
+
+    public void setApproved(boolean approved) {
+        this.approved = approved;
+    }
+
     public Doctor(){
     }
+
     public Doctor(String firstName, String lastName, String email, String userName, String password) {
         super(firstName,lastName,email,userName,password);
+    }
+
+    public Doctor(String firstName, String lastName, String email, String userName, String password, Collection<Appointment> appointments, @NotNull Date registrationDate, @NotNull int likes, @NotNull SpecializationsEnum specialization, boolean blocked, boolean approved) {
+        super(firstName, lastName, email, userName, password);
+        this.appointments = appointments;
+        this.registrationDate = registrationDate;
+        this.likes = likes;
+        this.specialization = specialization;
+        this.blocked = blocked;
+        this.approved = approved;
     }
 
     @Override
@@ -82,6 +115,8 @@ public class Doctor extends User{
                 ", email='" + this.getEmail() +'\''+
                 ", username='"+this.getUserName()+'\''+
                 ", password='"+this.getPassword()+'\''+
+                ", blocked='"+this.isBlocked()+'\''+
+                ", approved='"+this.isApproved()+'\''+
                 '}';
     }
 }

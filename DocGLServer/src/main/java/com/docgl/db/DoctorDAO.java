@@ -7,6 +7,7 @@ import com.docgl.enums.SortableDoctorColumns;
 import com.docgl.enums.SortingWays;
 import io.dropwizard.hibernate.AbstractDAO;
 import org.hibernate.Criteria;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Order;
@@ -56,6 +57,18 @@ public class DoctorDAO extends AbstractDAO<Doctor> {
                 .uniqueResult();
     }
 
+    public void blockDoctor(boolean blocked, int id) {
+        Session session = currentSession();
+        Doctor doctor = session.find(Doctor.class, id);
+        doctor.setBlocked(blocked);
+    }
+
+    public void approveDoctor(boolean approve, int id){
+        Session session = currentSession();
+        Doctor doctor = session.find(Doctor.class, id);
+        doctor.setApproved(approve);
+    }
+
     public List<Doctor> searchDoctorByName(String name, String spec) {
         Criteria criteria = criteria();
         if (name != null || spec != null) {
@@ -69,8 +82,7 @@ public class DoctorDAO extends AbstractDAO<Doctor> {
                     criteria.add(Restrictions.eq("specialization", SpecializationsEnum.valueOf(spec)));
                 } else if(spec.equals("")){
 
-                }
-                    else
+                } else
                     throw new ValidationException("Invalid specialization. Choose between: DENTIST, CARDIOLOGIST or ORTHOPEDIST");
             }
         } else

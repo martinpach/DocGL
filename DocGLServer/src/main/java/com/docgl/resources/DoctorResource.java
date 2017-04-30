@@ -2,11 +2,12 @@ package com.docgl.resources;
 
 import com.docgl.Authorizer;
 import com.docgl.Views;
+import com.docgl.api.ApprovedInput;
+import com.docgl.api.BlockedInput;
 import com.docgl.db.AppointmentDAO;
 import com.docgl.entities.Appointment;
 import com.docgl.enums.SortableDoctorColumns;
 import com.docgl.enums.SortingWays;
-import com.docgl.enums.SpecializationsEnum;
 import com.docgl.enums.UserType;
 import com.docgl.api.LoggedUser;
 import com.docgl.db.DoctorDAO;
@@ -16,7 +17,6 @@ import com.fasterxml.jackson.annotation.JsonView;
 import io.dropwizard.auth.Auth;
 import io.dropwizard.hibernate.UnitOfWork;
 
-import javax.annotation.security.PermitAll;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
@@ -49,6 +49,22 @@ public class DoctorResource {
     ) {
         authorizer.checkAuthorization(loggedUser.getUserType(), UserType.ADMIN);
         return doctorDAO.getAllDoctors(limit, start, sortBy, way);
+    }
+
+    @PUT
+    @Path("{id}/blocked")
+    @UnitOfWork
+    public void changeBlockingState(@Auth LoggedUser loggedUser, @PathParam("id") int id, BlockedInput blockedInput) {
+        authorizer.checkAuthorization(loggedUser.getUserType(), UserType.ADMIN);
+        doctorDAO.blockDoctor(blockedInput.isBlocked(), id);
+    }
+
+    @PUT
+    @Path("{id}/approved")
+    @UnitOfWork
+    public void changeApprovedStatus(@Auth LoggedUser loggedUser, @PathParam("id") int id, ApprovedInput approvedInput) {
+        authorizer.checkAuthorization(loggedUser.getUserType(), UserType.ADMIN);
+        doctorDAO.approveDoctor(approvedInput.isApproved(), id);
     }
 
     @GET
@@ -84,4 +100,5 @@ public class DoctorResource {
             this.likes = likes;
         }
     }
+
 }

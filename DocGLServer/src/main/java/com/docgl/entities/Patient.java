@@ -27,7 +27,11 @@ public class Patient extends User {
     @NotNull
     private Date registrationDate;
 
-    public Patient(){}
+    @Column(name = "blocked", columnDefinition = "boolean default false")
+    private boolean blocked;
+
+    public Patient(){
+    }
 
     public Patient (String firstName, String lastName, String email, String userName, String password, Date registrationDate){
         super(firstName,lastName,email,userName,password);
@@ -50,6 +54,14 @@ public class Patient extends User {
         this.registrationDate = registrationDate;
     }
 
+    public boolean isBlocked() {
+        return blocked;
+    }
+
+    public void setBlocked(boolean blocked) {
+        this.blocked = blocked;
+    }
+
     @Override
     public String toString(){
 
@@ -60,6 +72,7 @@ public class Patient extends User {
                 ", email='" + this.getEmail() +'\''+
                 ", username='"+this.getUserName()+'\''+
                 ", password='"+this.getPassword()+'\''+
+                ", blocked='"+this.isBlocked()+'\''+
                 '}';
     }
 }
