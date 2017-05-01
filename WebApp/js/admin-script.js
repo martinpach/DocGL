@@ -10,8 +10,13 @@ $(document).ready(function () {
         , token: localStorage.getItem("token")
     };
     var ajaxData;
+
     var start=0;
     var limit=4;
+    var sortByDocs="id";
+    var wayDocs="asc";
+    var sortByUsers="id";
+    var wayUsers="asc";
     var countUsers;
     var countDocs;
     getCountOfDoctors();
@@ -56,8 +61,9 @@ $(document).ready(function () {
     $("#doctors").on("click",function(){
         $(this).addClass("selected");
         $("#users, #home").removeClass("selected");
-        $("#container").load('templates/admin_doctors.html');  
-        getDoctors(start,5);
+        $("#container").load('templates/admin_doctors.html'); 
+        getCountOfDoctors(); 
+        getDoctors(start,5,sortByDocs,wayDocs);
         setText(countDocs);
         setButtons(countDocs);
         $("#paginationContainer").show();      
@@ -67,7 +73,8 @@ $(document).ready(function () {
         $(this).addClass("selected");
         $("#home, #doctors").removeClass("selected");
         $("#container").load('templates/admin_users.html');
-        getUsers(start,5);
+        getCountOfUsers();
+        getUsers(start,5,sortByUsers,wayUsers);
         setText(countUsers);
         setButtons(countUsers); 
         $("#paginationContainer").show();
@@ -85,9 +92,9 @@ $(document).ready(function () {
     });
 
     //get doctor list
-    function getDoctors (){
+    function getDoctors (start,limit,sortBy,way){
         var dfd= $.Deferred();
-        ajaxRequest("/doctors?limit="+limit+"&start="+start,"GET").done(function(){
+        ajaxRequest("/doctors?limit="+limit+"&start="+start+"&sortBy="+sortByDocs+"&way="+wayDocs,"GET").done(function(){
             var icon='<i class="fa fa-user-md tableIcon"></i>';
             generateDoctorTable();
             dfd.resolve();
@@ -97,7 +104,7 @@ $(document).ready(function () {
     //count of items for pagination purpose
     function getCountOfDoctors(){
         var dfd=$.Deferred();
-        ajaxRequest("/doctors?limit="+limit+"&start="+start,"GET").done(function(){
+        ajaxRequest("/doctors?limit="+limit+"&start="+start+"&sortBy="+sortByDocs+"&way="+wayDocs,"GET").done(function(){
             countDocs=ajaxData.length;
             console.log(countDocs);
             dfd.resolve();
@@ -108,7 +115,7 @@ $(document).ready(function () {
     //get user list
     function getUsers(start,limit){
         var dfd= $.Deferred();
-        ajaxRequest("/patients?limit="+limit+"&start="+start,"GET").done(function(){
+        ajaxRequest("/patients?limit="+limit+"&start="+start+"&sortBy="+sortByUsers+"&way="+wayUsers,"GET").done(function(){
             generateUserTable();
             dfd.resolve();            
         });
@@ -117,7 +124,7 @@ $(document).ready(function () {
     //count of items for pagination purpose
     function getCountOfUsers(){
         var dfd=$.Deferred();
-        ajaxRequest("/patients?limit="+limit+"&start="+start,"GET").done(function(){
+        ajaxRequest("/patients?limit="+limit+"&start="+start+"&sortBy="+sortByUsers+"&way="+wayUsers,"GET").done(function(){
             countUsers=ajaxData.length;
             dfd.resolve();
         });
@@ -143,10 +150,10 @@ $(document).ready(function () {
         else{
             var from=start+1;
             var to;
-            if(start+4>count)
+            if(start+5>count)
                 to=count;
             else
-                to=start+4;
+                to=start+5;
         }
 
         var paginationText= "Showing "+from+" - "+to+" from " +count;
@@ -156,35 +163,40 @@ $(document).ready(function () {
 
     $("#arrowLeft").on("click",function(){
         start -=5;
-        if($("#doctors").hasClass("selected"))
-            getDoctors(start,5);
+        if($("#doctors").hasClass("selected")){
+            getDoctors(start,5,sortByDocs,wayDocs);
             setText(countDocs);
             setButtons(countDocs);
-        if($("#users").hasClass("selected"))
-            getUsers(start,5);
+        }
+        if($("#users").hasClass("selected")){
+            getUsers(start,5,sortByUsers,wayUsers);
             setText(countUsers);
             setButtons(countUsers);
+        }
     });
 
     $("#arrowRight").on("click", function(){
         console.log("click");
         start +=5;
-        if($("#doctors").hasClass("selected"))
-            getDoctors(start,5);
+        if($("#doctors").hasClass("selected")){
+            getDoctors(start,5,sortByDocs,way);
             setText(countDocs);
             setButtons(countDocs);
-        if($("#users").hasClass("selected"))
-            getUsers(start,5);
+        }
+        if($("#users").hasClass("selected")){
+            getUsers(start,5,sortByUsers,way);
             setText(countUsers);
             setButtons(countUsers);
+        }
     });
 
-    //generate table for users/docs
+    
     function generateDoctorTable(){
         var i=0;
         var icon='<i class="fa fa-user-md tableIcon"></i>';
+        $(".tableRow").remove();
         for(i=0;i<ajaxData.length;i++){
-            $("#tableDoctors").append('<tr>'+
+            $("#tableDoctors").append('<tr class="tableRow">'+
                 '<td>'+icon+'</td>'+
                 '<td>'+ajaxData[i].id+'</td>'+
                 '<td>'+ajaxData[i].firstName+" "+ajaxData[i].lastName+'</td>'+
@@ -198,8 +210,9 @@ $(document).ready(function () {
     function generateUserTable(){
         var i=0;
         var icon='<i class="fa fa-user tableIcon"></i>';
+        $(".tableRow").remove();
         for(i=0;i<ajaxData.length;i++){
-            $("#tableUsers").append('<tr>'+
+            $("#tableUsers").append('<tr class="tableRow">'+
                 '<td>'+icon+'</td>'+
                 '<td>'+ajaxData[i].id+'</td>'+
                 '<td>'+ajaxData[i].firstName+" "+ajaxData[i].lastName+'</td>'+
@@ -210,27 +223,59 @@ $(document).ready(function () {
 
     }
 
-    //sorting, not ready yet
+    //sorting, not ready yet - id, joined date, name, spec,likes
+
+    $(document).on("click", "#sortIdUsers",function(){//not done
+        event.preventDefault();
+        sortByUsers="id";
+        wayUsers=wayUsers=="desc"?"asc":"desc";
+        getUsers(start,5,sortByUsers,wayUsers);
+        $(this).find("i").toggleClass("fa-sort-asc");
+
+    });
+
     $(document).on("click", "#sortNameUsers",function(){
         event.preventDefault();
-        //alert("user names,yay!");
+        sortByUsers="lastName";
+        wayUsers=wayUsers=="desc"?"asc":"desc";
+        getUsers(start,5,sortByUsers,wayUsers);
+        $(this).find("i").toggleClass("fa-sort-asc");
+
     });
 
     $(document).on("click", "#sortJoinedUsers",function(){
         event.preventDefault();
-         //alert("users joined,yay!");
+        sortByUsers="registration_date";
+        wayUsers=wayUsers=="desc"?"asc":"desc";
+        getUsers(start,5,sortByUsers,wayUsers);
+        $(this).find("i").toggleClass("fa-sort-asc");
+    });
+
+    $(document).on("click", "#sortIdDocs",function(){//not done
+        event.preventDefault();
+        sortByDocs="id";
+        wayDocs=wayDocs=="desc"?"asc":"desc";
+        getDoctors(start,5,sortByDocs,wayDocs);
+        $(this).find("i").toggleClass("fa-sort-asc");
+
     });
 
     $(document).on("click" ,"#sortNameDocs",function(){
         event.preventDefault();
-         //alert("doc names,yay!");
+        sortByDocs="lastName";
+        wayDocs=wayDocs=="desc"?"asc":"desc";
+        getDoctors(start,5,sortByDocs,wayDocs);
+        $(this).find("i").toggleClass("fa-sort-asc");
     });
 
     $(document).on("click", "#sortRatingDocs",function(){
         event.preventDefault();
-         //alert("doc likes,yay!");
+        sortByDocs="likes";
+        wayDocs=wayDocs=="desc"?"asc":"desc";
+        getDoctors(start,5,sortByDocs,wayDocs);
+        $(this).find("i").toggleClass("fa-sort-asc");
+        
     });
-
 
     //get statistics
     function getAppointmentCount(){
