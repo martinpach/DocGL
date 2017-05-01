@@ -62,9 +62,9 @@ public class DoctorResource {
     @PUT
     @Path("{id}/approved")
     @UnitOfWork
-    public void changeApprovedStatus(@Auth LoggedUser loggedUser, @PathParam("id") int id, ApprovedInput approvedInput) {
+    public void changeApprovedStatus(@Auth LoggedUser loggedUser, @PathParam("id") int id) {
         authorizer.checkAuthorization(loggedUser.getUserType(), UserType.ADMIN);
-        doctorDAO.approveDoctor(approvedInput.isApproved(), id);
+        doctorDAO.approveDoctor(id);
     }
 
     @GET

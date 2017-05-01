@@ -14,6 +14,7 @@ import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 
+import javax.ws.rs.BadRequestException;
 import java.util.Date;
 import java.util.List;
 
@@ -63,10 +64,13 @@ public class DoctorDAO extends AbstractDAO<Doctor> {
         doctor.setBlocked(blocked);
     }
 
-    public void approveDoctor(boolean approve, int id){
+    public void approveDoctor(int id){
         Session session = currentSession();
         Doctor doctor = session.find(Doctor.class, id);
-        doctor.setApproved(approve);
+        if (doctor.isApproved()==true) {
+            throw new BadRequestException("Doctor is already approved!");
+        }
+        doctor.setApproved(true);
     }
 
     public List<Doctor> searchDoctorByName(String name, String spec) {
