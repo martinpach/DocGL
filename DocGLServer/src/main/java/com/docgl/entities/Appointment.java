@@ -1,6 +1,7 @@
 package com.docgl.entities;
 
 import com.docgl.Views;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonView;
 import org.hibernate.annotations.CreationTimestamp;
@@ -29,6 +30,7 @@ public class Appointment {
     private Doctor doctor;
 
     @Column(name = "doctor_id", insertable = false, updatable = false)
+    @JsonIgnore
     private int doctorId;
 
     @ManyToOne
@@ -38,6 +40,7 @@ public class Appointment {
     private Patient patient;
 
     @Column(name = "patient_id", insertable = false, updatable = false)
+    @JsonIgnore
     private int patientId;
 
     @Temporal(TemporalType.TIME)
