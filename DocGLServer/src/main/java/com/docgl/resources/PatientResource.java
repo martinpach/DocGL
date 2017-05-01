@@ -11,6 +11,7 @@ import com.docgl.enums.UserType;
 import com.docgl.api.LoggedUser;
 import com.docgl.db.PatientDAO;
 import com.docgl.entities.Patient;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonView;
 import io.dropwizard.auth.Auth;
 import io.dropwizard.hibernate.UnitOfWork;
@@ -63,5 +64,21 @@ public class PatientResource {
     public void changeBlockingState(@Auth LoggedUser loggedUser, @PathParam("id") int id, BlockedInput blockedInput) {
         authorizer.checkAuthorization(loggedUser.getUserType(), UserType.ADMIN);
         patientDAO.blockPatient(blockedInput.isBlocked(), id);
+    }
+
+    @GET
+    @Path("count")
+    @UnitOfWork
+    public PatientCountRepresentation getNumberOfAllPatients(){
+        return new PatientCountRepresentation(patientDAO.getNumberOfAllPatients());
+    }
+
+    private class PatientCountRepresentation{
+        @JsonProperty
+        private long count;
+
+        PatientCountRepresentation(long count) {
+            this.count = count;
+        }
     }
 }

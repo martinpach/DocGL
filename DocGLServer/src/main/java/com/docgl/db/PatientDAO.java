@@ -84,4 +84,10 @@ public class PatientDAO extends AbstractDAO<Patient> {
         Patient patient = currentSession().find(Patient.class, id);
         patient.setBlocked(blocked);
     }
+
+    public long getNumberOfAllPatients(){
+        return (long)criteria()
+                .setProjection(Projections.rowCount())
+                .uniqueResult();
+    }
 }

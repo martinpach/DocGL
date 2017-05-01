@@ -87,12 +87,28 @@ public class DoctorResource {
         return new LikesRepresentation(doctorDAO.getNumberOfOverallLikes());
     }
 
+    @GET
+    @Path("count")
+    @UnitOfWork
+    public PatientCountRepresentation getNumberOfAllDoctors(){
+        return new PatientCountRepresentation(doctorDAO.getNumberOfAllDoctors());
+    }
+
     private class LikesRepresentation {
         @JsonProperty
         private long likes;
 
         public LikesRepresentation(long likes) {
             this.likes = likes;
+        }
+    }
+
+    private class PatientCountRepresentation{
+        @JsonProperty
+        private long count;
+
+        PatientCountRepresentation(long count) {
+            this.count = count;
         }
     }
 

@@ -113,5 +113,11 @@ public class DoctorDAO extends AbstractDAO<Doctor> {
         }
         return list(criteria);
     }
+
+    public long getNumberOfAllDoctors(){
+        return (long)criteria()
+                .setProjection(Projections.rowCount())
+                .uniqueResult();
+    }
 }
 
