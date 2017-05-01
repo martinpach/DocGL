@@ -151,6 +151,10 @@ body{
 	margin:none;
 }
 
+.editProfileI{
+	margin-left:10px;
+}
+
 #profileIcon{
 	color:#B5DFFD;
 	font-size:100px;
@@ -158,6 +162,40 @@ body{
 
 .profileDiv{
 	padding:20px;
+}
+
+.editProfileInput{
+	position: relative;
+    width: 70% !important;
+    border: none !important;
+    font-family: roboto;
+    background-color: #B5DFFD !important;
+    color: #034F84 !important;
+    height: 50px !important;
+    margin-bottom: 20px !important;
+    padding-left: 20px !important;
+}
+
+.submitIcon{
+	color:#B5DFFD;
+	font-size: 30px;
+	float:right;
+}
+
+.submitIcon:hover{
+	color:#034F85;
+}
+
+#changeUsernameDiv{
+	display:none;
+}
+
+#changeEmailDiv{
+	display:none;
+}
+
+#changePasswordDiv{
+	display:none;
 }
 
 /*user and doctor searchfield*/

@@ -61,9 +61,10 @@ $(document).ready(function () {
     $("#doctors").on("click",function(){
         $(this).addClass("selected");
         $("#users, #home").removeClass("selected");
-        $("#container").load('templates/admin_doctors.html'); 
+        $("#container").load('templates/admin_doctors.html');
+        start=0;
         getCountOfDoctors(); 
-        getDoctors(start,5,sortByDocs,wayDocs);
+        getDoctors(start,limit,sortByDocs,wayDocs);
         setText(countDocs);
         setButtons(countDocs);
         $("#paginationContainer").show();      
@@ -73,8 +74,9 @@ $(document).ready(function () {
         $(this).addClass("selected");
         $("#home, #doctors").removeClass("selected");
         $("#container").load('templates/admin_users.html');
+        start=0;
         getCountOfUsers();
-        getUsers(start,5,sortByUsers,wayUsers);
+        getUsers(start,limit,sortByUsers,wayUsers);
         setText(countUsers);
         setButtons(countUsers); 
         $("#paginationContainer").show();
@@ -94,7 +96,7 @@ $(document).ready(function () {
     //get doctor list
     function getDoctors (start,limit,sortBy,way){
         var dfd= $.Deferred();
-        ajaxRequest("/doctors?limit="+limit+"&start="+start+"&sortBy="+sortByDocs+"&way="+wayDocs,"GET").done(function(){
+        ajaxRequest("/doctors?limit="+limit+"&start="+start+"&sortBy="+sortByDocs+"&way="+wayDocs+"&name=","GET").done(function(){
             var icon='<i class="fa fa-user-md tableIcon"></i>';
             generateDoctorTable();
             dfd.resolve();
@@ -104,11 +106,10 @@ $(document).ready(function () {
     //count of items for pagination purpose
     function getCountOfDoctors(){
         var dfd=$.Deferred();
-        ajaxRequest("/doctors?limit="+limit+"&start="+start+"&sortBy="+sortByDocs+"&way="+wayDocs,"GET").done(function(){
+        ajaxRequest("/doctors?name=","GET").done(function(){
             countDocs=ajaxData.length;
-            console.log(countDocs);
             dfd.resolve();
-        })
+        });
         return dfd.promise();
     }
 
@@ -124,7 +125,7 @@ $(document).ready(function () {
     //count of items for pagination purpose
     function getCountOfUsers(){
         var dfd=$.Deferred();
-        ajaxRequest("/patients?limit="+limit+"&start="+start+"&sortBy="+sortByUsers+"&way="+wayUsers,"GET").done(function(){
+        ajaxRequest("/patients","GET").done(function(){
             countUsers=ajaxData.length;
             dfd.resolve();
         });
@@ -137,56 +138,58 @@ $(document).ready(function () {
             $("#arrowRight").removeClass("disabledBtn");
         else
             $("#arrowRight").addClass("disabledBtn");
-        if(start>=6)
+        if(start>=4)
             $("#arrowLeft").removeClass("disabledBtn");
         else
             $("#arrowLeft").addClass("disabledBtn");
     }
 
     function setText(count){
-        if(count<0){
+        if(count<=0){
             $("#paginationText").hide();
         }
         else{
             var from=start+1;
             var to;
             if(start+5>count)
-                to=count;
+                to=limit;
             else
                 to=start+5;
+            var paginationText= "Showing "+from+" - "+to+" from " +count;
+            $("#paginationText").html(paginationText);
         }
-
-        var paginationText= "Showing "+from+" - "+to+" from " +count;
-        $("#paginationText").html(paginationText);
-
     }
 
     $("#arrowLeft").on("click",function(){
-        start -=5;
+        start -=4;
         if($("#doctors").hasClass("selected")){
-            getDoctors(start,5,sortByDocs,wayDocs);
+            getDoctors(start,limit,sortByDocs,wayDocs);
             setText(countDocs);
             setButtons(countDocs);
+            generateDoctorTable();
         }
         if($("#users").hasClass("selected")){
-            getUsers(start,5,sortByUsers,wayUsers);
+            getUsers(start,limit,sortByUsers,wayUsers);
             setText(countUsers);
             setButtons(countUsers);
+            generateUserTable();
         }
     });
 
     $("#arrowRight").on("click", function(){
         console.log("click");
-        start +=5;
+        start +=4;
         if($("#doctors").hasClass("selected")){
-            getDoctors(start,5,sortByDocs,way);
+            getDoctors(start,limit,sortByDocs,wayDocs);
             setText(countDocs);
             setButtons(countDocs);
+            generateDoctorTable();
         }
         if($("#users").hasClass("selected")){
-            getUsers(start,5,sortByUsers,way);
+            getUsers(start,limit,sortByUsers,wayUsers);
             setText(countUsers);
             setButtons(countUsers);
+            generateUserTable();
         }
     });
 
@@ -229,7 +232,7 @@ $(document).ready(function () {
         event.preventDefault();
         sortByUsers="id";
         wayUsers=wayUsers=="desc"?"asc":"desc";
-        getUsers(start,5,sortByUsers,wayUsers);
+        getUsers(start,limit,sortByUsers,wayUsers);
         $(this).find("i").toggleClass("fa-sort-asc");
 
     });
@@ -238,7 +241,7 @@ $(document).ready(function () {
         event.preventDefault();
         sortByUsers="lastName";
         wayUsers=wayUsers=="desc"?"asc":"desc";
-        getUsers(start,5,sortByUsers,wayUsers);
+        getUsers(start,limit,sortByUsers,wayUsers);
         $(this).find("i").toggleClass("fa-sort-asc");
 
     });
@@ -247,7 +250,7 @@ $(document).ready(function () {
         event.preventDefault();
         sortByUsers="registration_date";
         wayUsers=wayUsers=="desc"?"asc":"desc";
-        getUsers(start,5,sortByUsers,wayUsers);
+        getUsers(start,limit,sortByUsers,wayUsers);
         $(this).find("i").toggleClass("fa-sort-asc");
     });
 
@@ -255,7 +258,7 @@ $(document).ready(function () {
         event.preventDefault();
         sortByDocs="id";
         wayDocs=wayDocs=="desc"?"asc":"desc";
-        getDoctors(start,5,sortByDocs,wayDocs);
+        getDoctors(start,limit,sortByDocs,wayDocs);
         $(this).find("i").toggleClass("fa-sort-asc");
 
     });
@@ -264,7 +267,7 @@ $(document).ready(function () {
         event.preventDefault();
         sortByDocs="lastName";
         wayDocs=wayDocs=="desc"?"asc":"desc";
-        getDoctors(start,5,sortByDocs,wayDocs);
+        getDoctors(start,limit,sortByDocs,wayDocs);
         $(this).find("i").toggleClass("fa-sort-asc");
     });
 
@@ -272,7 +275,7 @@ $(document).ready(function () {
         event.preventDefault();
         sortByDocs="likes";
         wayDocs=wayDocs=="desc"?"asc":"desc";
-        getDoctors(start,5,sortByDocs,wayDocs);
+        getDoctors(start,limit,sortByDocs,wayDocs);
         $(this).find("i").toggleClass("fa-sort-asc");
         
     });
@@ -298,19 +301,44 @@ $(document).ready(function () {
         return dfd.promise();
     }
 
+    //edit profile
 
+    //toggle edit fields
+    $(document).on("click","#editUsername",function(){
+        event.preventDefault();
+        $("#username").toggle();
+        $("#changeUsernameDiv").toggle();
+    });
 
-    function editUsername(){
+    $(document).on("click","#editEmail",function(){
+        event.preventDefault();
+        $("#email").toggle();
+        $("#changeEmailDiv").toggle();
 
-    }
-    
-    function editPassword(){
+    });
 
-    }
+    $(document).on("click","#editPassword",function(){
+        event.preventDefault();
+        $("#password").toggle();
+        $("#changePasswordDiv").toggle();
+    });
 
-    function editEmail(){
+    //send changed info to the server,to be finished
+    $(document).on("click","#submitUsername",function(){
+        var newUsername=$("#editUsernameInput").val();
 
-    }
+    });
+
+    $(document).on("click","#submitEmail",function(){
+        var newEmail=$("#editEmailInput").val();
+
+    });
+
+    $(document).on("click","#submitPassword",function(){
+        var newPwd=$("#editPwd1").val();
+        var newPwd2=$("#editPwd2").val();
+
+    });
 
     //ajax request function
     function ajaxRequest(url, requestType, dataToSend) {
