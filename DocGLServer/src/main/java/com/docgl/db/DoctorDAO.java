@@ -26,8 +26,13 @@ public class DoctorDAO extends AbstractDAO<Doctor> {
         super(factory);
     }
 
-    public List<Doctor> getAllDoctors(int limit, int start, SortableDoctorColumns sortBy, SortingWays way) {
+    public List<Doctor> getAllDoctors(int limit, int start, SortableDoctorColumns sortBy, SortingWays way, String name, SpecializationsEnum spec) {
         Criteria criteria = criteria();
+        if (name != null || spec != null)
+            searchDoctor(name, spec);
+        else
+            throw new ValidationException("Url must contain of parameter name or spec");
+
         if (limit > 0 && start >= 0) {
             criteria.setFirstResult(start)
                     .setMaxResults(limit);
@@ -43,6 +48,7 @@ public class DoctorDAO extends AbstractDAO<Doctor> {
                 throw new ValidationException("In case of sorting use 'way' query parameter with sortBy parameter");
             }
         }
+
         return list(criteria);
     }
 
@@ -64,10 +70,10 @@ public class DoctorDAO extends AbstractDAO<Doctor> {
         doctor.setBlocked(blocked);
     }
 
-    public void approveDoctor(int id){
+    public void approveDoctor(int id) {
         Session session = currentSession();
         Doctor doctor = session.find(Doctor.class, id);
-        if (doctor.isApproved()==true) {
+        if (doctor.isApproved() == true) {
             throw new BadRequestException("Doctor is already approved!");
         }
         doctor.setApproved(true);
@@ -84,7 +90,7 @@ public class DoctorDAO extends AbstractDAO<Doctor> {
             if (spec != null) {
                 if (spec.equals("DENTIST") || spec.equals("CARDIOLOGIST") || spec.equals("ORTHOPEDIST")) {
                     criteria.add(Restrictions.eq("specialization", SpecializationsEnum.valueOf(spec)));
-                } else if(spec.equals("")){
+                } else if (spec.equals("")) {
 
                 } else
                     throw new ValidationException("Invalid specialization. Choose between: DENTIST, CARDIOLOGIST or ORTHOPEDIST");
@@ -92,6 +98,19 @@ public class DoctorDAO extends AbstractDAO<Doctor> {
         } else
             throw new ValidationException("Search must contain of parameter name or spec");
 
+        return list(criteria);
+    }
+
+    public List<Doctor> searchDoctor(String name, SpecializationsEnum spec) {
+        Criteria criteria = criteria();
+        if (name != null) {
+            Criterion firstname = Restrictions.ilike("firstName", "%" + name + "%");
+            Criterion lastname = Restrictions.ilike("lastName", "%" + name + "%");
+            criteria.add(Restrictions.or(firstname, lastname));
+        }
+        if (spec != null) {
+            criteria.add(Restrictions.eq("specialization", spec));
+        }
         return list(criteria);
     }
 }
