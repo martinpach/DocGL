@@ -38,6 +38,7 @@ public class AdminProfileResource {
             throw new BadRequestException("Property 'password' is missing or not presented!");
         }
         authorizer.checkAuthorization(loggedUser.getUserType(), UserType.ADMIN);
+        authorizer.checkAuthentication(loggedUser.getId(), id);
         adminDAO.setPassword(passwordInput.getPassword(), id);
     }
 
@@ -45,6 +46,7 @@ public class AdminProfileResource {
     @UnitOfWork
     public void updateProfile(@Auth LoggedUser loggedUser, @PathParam("id") int id, AdminInput admin){
         authorizer.checkAuthorization(loggedUser.getUserType(), UserType.ADMIN);
+        authorizer.checkAuthentication(loggedUser.getId(), id);
         adminDAO.updateProfile(admin.getUserName(), admin.getPassword(), admin.getEmail(), id);
     }
 
@@ -52,6 +54,7 @@ public class AdminProfileResource {
     @UnitOfWork
     public Admin getAdminProfile(@Auth LoggedUser loggedUser, @PathParam("id") int id){
         authorizer.checkAuthorization(loggedUser.getUserType(), UserType.ADMIN);
+        authorizer.checkAuthentication(loggedUser.getId(), id);
         return adminDAO.getLoggedAdminInformation(id);
     }
 

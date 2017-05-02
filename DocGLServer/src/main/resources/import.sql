@@ -8,4 +8,4 @@ insert into Patients(email, first_name, last_name, password, user_name, registra
 insert into Patients(email, first_name, last_name, password, user_name, registration_date) values("anakin@skywalker.com", "Anakin", "Skywalker", "71dfd7af6d2ae6abf10b62b719e6600f", "anakin", CURDATE());
 insert into Patients(email, first_name, last_name, password, user_name, registration_date) values("yoda@master.com", "Yoda", "Master", "71dfd7af6d2ae6abf10b62b719e6600f", "yoda", CURDATE());
 insert into Patients(email, first_name, last_name, password, user_name, registration_date) values("darth@tyranus.sk", "Darth", "Tyranus", "71dfd7af6d2ae6abf10b62b719e6600f", "tyranus", CURDATE());
-insert into Appointments(datetime, note, doctor_id, patient_id) values(CURRENT_TIMESTAMP, "test", 1, 2);
+insert into Appointments(date, time, note, doctor_id, patient_id) values(CURDATE(), CURTIME(), "test", 1, 2);

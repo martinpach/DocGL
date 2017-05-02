@@ -1,5 +1,6 @@
 package db;
 
+import com.docgl.Cryptor;
 import com.docgl.db.AbstractDAO;
 import com.docgl.db.AdminDAO;
 import com.docgl.entities.Admin;
@@ -20,6 +21,27 @@ public class AdminDAOTest extends AbstractDAO {
 
         assertEquals(1, admin.getId());
         assertEquals("rasto@button.sk", admin.getEmail());
+        assertEquals("rastobutton", admin.getUserName());
+        assertEquals("rasto", admin.getFirstName());
+
+        admin = dao.getLoggedAdminInformation("rasto","badpassword");
+        assertEquals(null, admin);
+    }
+
+    @Test
+    public void setPasswordTest(){
+        dao.setPassword("testpassword", 1);
+        Admin admin = dao.getLoggedAdminInformation(1);
+        assertEquals("testpassword", Cryptor.decrypt(admin.getPassword()));
+    }
+
+    @Test
+    public void updateProfileTest(){
+        dao.updateProfile("rastobuttontest", "rastobutton123test", "rasto@buttontest.sk", 1);
+        Admin admin = dao.getLoggedAdminInformation(1);
+        assertEquals("rastobuttontest", admin.getUserName());
+        assertEquals("rastobutton123test", Cryptor.decrypt(admin.getPassword()));
+        assertEquals("rasto@buttontest.sk", admin.getEmail());
     }
 
 }
