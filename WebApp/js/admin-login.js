@@ -30,14 +30,14 @@ $(document).ready(function () {
         password = $("#password").val();
         if (username.length > 2 && password.length > 2) {
             $.ajax({
-                url: 'http://localhost:8085/auth/login'
-                , type: 'POST'
-                , contentType: 'application/json'
-                , data: JSON.stringify({
-                    "userName": username
-                    , "password": password
-                })
-                , success: function (data) {
+                url: 'http://localhost:8085/api/auth/login',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    "userName": username,
+                    "password": password
+                }),
+                success: function (data) {
                     var admin = data.admin;
                     localStorage.setItem("id", admin.id);
                     localStorage.setItem("firstName", admin.firstName);
@@ -49,16 +49,14 @@ $(document).ready(function () {
                     if (admin.passwordChanged == 0) localStorage.setItem("password", password);
                     if (data.admin.passwordChanged == 0) {
                         window.location.href = "changepass.html";
-                    }
-                    else window.location.href = "home.html";
-                }
-                , error: function () {
+                    } else window.location.href = "home.html";
+                },
+                error: function () {
                     $("#errorMsg").html("Incorrect username or password.");
                     $("#errorMsg").show();
                 }
             });
-        }
-        else {
+        } else {
             $("#errorMsg").html("Please enter username and password.");
             $("#errorMsg").show();
         }

@@ -16,8 +16,7 @@ $(document).ready(function () {
         if (newPass == "") {
             $("#changePassMessage").addClass("errorMessage");
             $("#changePassMessage").text("Please type new password!");
-        }
-        else
+        } else
         if (newPass.length > 5) {
             if (regex.test(newPass)) {
                 $("#changePassMessage").text("");
@@ -27,40 +26,36 @@ $(document).ready(function () {
                         $.ajax({
                             beforeSend: function (xhr) {
                                 xhr.setRequestHeader('Authorization', token);
-                            }
-                            , url: 'http://localhost:8085/admins/' + localStorage.getItem("id") + '/profile/password'
-                            , type: 'PUT'
-                            , contentType: 'application/json'
-                            , data: JSON.stringify({
+                            },
+                            url: 'http://localhost:8085/api/admins/' + localStorage.getItem("id") + '/profile/password',
+                            type: 'PUT',
+                            contentType: 'application/json',
+                            data: JSON.stringify({
                                 "password": newPass
-                            })
-                            , success: function (data) {
+                            }),
+                            success: function (data) {
                                 $("#changePassMessage").toggleClass("successMessage");
                                 $("#changePassMessage").html("Password was changed.");
                                 window.location.href = "home.html";
-                            }
-                            , error: function () {
+                            },
+                            error: function () {
                                 $("#changePassMessage").addClass("errorMessage");
                                 $("#changePassMessage").html("Error! Password was not changed!");
                             }
                         });
-                    }
-                    else {
+                    } else {
                         $("#changePassMessage").addClass("errorMessage");
                         $("#changePassMessage").text("Password cannot be same as your old password!")
                     }
-                }
-                else {
+                } else {
                     $("#changePassMessage").addClass("errorMessage");
                     $("#changePassMessage").text("Passwords are not same!");
                 }
-            }
-            else {
+            } else {
                 $("#changePassMessage").addClass("errorMessage");
                 $("#changePassMessage").text("Password must contain at least one upper case letter,one lower case letter, one special character and a number.");
             }
-        }
-        else {
+        } else {
             $("#changePassMessage").addClass("errorMessage");
             $("#changePassMessage").text("Password must be of minimum 6 characters length.");
         }
