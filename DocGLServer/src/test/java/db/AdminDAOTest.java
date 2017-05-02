@@ -38,6 +38,12 @@ public class AdminDAOTest extends AbstractDAO {
     }
 
     @Test
+    public void getLoggedIncorrectUserNameTest(){
+        Admin admin = dao.getLoggedAdminInformation("rastObutton", "rastobutton123");
+        assertEquals(null, admin);
+    }
+
+    @Test
     public void setPasswordTest(){
         dao.setPassword("testpassword", 1);
         Admin admin = dao.getLoggedAdminInformation(1);
