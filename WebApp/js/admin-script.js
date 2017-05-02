@@ -303,58 +303,66 @@ $(document).ready(function () {
     //edit profile
 
     //toggle edit fields
-    $(document).on("click", "#editUsername", function () {
+    $(document).on("click", "#editProfile", function () {
         event.preventDefault();
         $("#username").toggle();
         $("#changeUsernameDiv").toggle();
-    });
-
-    $(document).on("click", "#editEmail", function () {
-        event.preventDefault();
+        $("#editUsernameInput").val(data.userName);
         $("#email").toggle();
         $("#changeEmailDiv").toggle();
-
-    });
-
-    $(document).on("click", "#editPassword", function () {
-        event.preventDefault();
+        $("#editEmailInput").val(data.email);
         $("#password").toggle();
         $("#changePasswordDiv").toggle();
     });
 
     //send changed info to the server,to be finished
-    $(document).on("click", "#submitUsername", function () {
-        var newUsername = $("#editUsernameInput").val();
-
-    });
-
-    $(document).on("click", "#submitEmail", function () {
-        var newEmail = $("#editEmailInput").val();
-
-    });
-
-    $(document).on("click", "#submitPassword", function () {
+    $(document).on("click", "#submitProfile", function () {
         event.preventDefault();
-        var newPwd = $("#editPwd1").val();
-        var newPwd2 = $("#editPwd2").val();
-        var regex = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])");
-        var ok;
-        if (newPwd == "")
-            $("#pwdErrorMsg").html("Please enter something.");
-        else {
-            if (newPwd.length > 5 && regex.test(newPwd) && newPwd == newPwd2) {
-                $("#pwdErrorMsg").html("");
-                ok = true;
-                newPwd = JSON.stringify({
-                    "password": newPwd
-                });
-            }
-
-            ajaxRequest("admins/" + data.id + "/profile/password", "PUT", newPwd).done(function () {
-                $("#pwdErrorMsg").html("Password changed successfully.");
-            });
-            //not working yet
+        var newData={
+            username:$("#editPwd1").val(),
+            email:$("#editPwd1").val(),
+            password:$("#editPwd1").val(),
+            password2:$("#editPwd2").val()
         }
+        var updatedProfile={
+            username : data.username,
+            email:data.email,
+            password:""
+        };
+        var regex={
+            username:new RegExp("/^[a-zA-Z0-9.\-_$@*!]{3,20}$/"),
+            password:new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])"),
+            email:new RegExp("/^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()\.,;\s@\"]+\.{0,1})+[^<>()\.,;:\s@\"]{2,})$/")
+        };
+        
+        if(regex.username.test(newData.username))
+            updatedProfile.username=newData.username;
+        else{
+            //alert user to enter a valid username
+        }
+        if(regex.email.test(newData.email))
+            updatedProfile.email=newData.email;
+        else{
+            //alert user to pick a valid email;
+        }
+        if(regex.password.test(newData.password)&&newData.password==newData.password2)
+            updatedProfile.password=newData.password;
+        else{
+            //send empty password to the server.
+            //if you don't enter anything,password stays the same.
+        }
+        var dataToSend=JSON.stringify({
+            "username":updatedProfile.username,
+            "password":updatedProfile.password,
+            "email":updatedProfile.email
+        });
+        
+        
+        ajaxRequest("/admins/" + data.id + "/profile/password", "PUT", dataToSend).done(function () {
+            $("#pwdErrorMsg").html("Password changed successfully.");
+        });
+            //finish error messages and test with backend!
+        
     });
 
     //ajax request function
@@ -364,7 +372,7 @@ $(document).ready(function () {
             beforeSend: function (xhr) {
                 xhr.setRequestHeader('Authorization', 'Bearer ' + data.token);
             },
-            url: 'http://localhost:8085/api/' + url,
+            url: 'http://localhost:8085/api' + url,
             type: requestType,
             data: dataToSend,
             contentType: 'application/json',

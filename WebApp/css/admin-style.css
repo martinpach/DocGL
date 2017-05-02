@@ -153,6 +153,10 @@ body{
 
 .editProfileI{
 	margin-left:10px;
+	cursor:pointer;
+}
+.editProfileI:hover{
+	color:#B5DFFD;
 }
 
 #profileIcon{
@@ -180,6 +184,8 @@ body{
 	color:#B5DFFD;
 	font-size: 30px;
 	float:right;
+	margin:15px;
+	cursor:pointer;
 }
 
 .submitIcon:hover{
