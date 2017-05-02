@@ -26,8 +26,8 @@ public class AdminDAO extends AbstractDAO<Admin> {
 
     public Admin getLoggedAdminInformation(String username, String password){
         Criteria criteria = criteria()
-                .add(Restrictions.like("userName", username))
-                .add(Restrictions.like("password", new Cryptor().encrypt(password)));
+                .add(Restrictions.eq("userName", username))
+                .add(Restrictions.eq("password", new Cryptor().encrypt(password)));
         return (Admin) criteria.uniqueResult();
     }
 
