@@ -106,8 +106,8 @@ $(document).ready(function () {
     //count of items for pagination purpose
     function getCountOfDoctors(){
         var dfd=$.Deferred();
-        ajaxRequest("/doctors?name=","GET").done(function(){
-            countDocs=ajaxData.length;
+        ajaxRequest("/doctors/count","GET").done(function(){
+            countDocs=ajaxData.count;
             dfd.resolve();
         });
         return dfd.promise();
@@ -125,8 +125,8 @@ $(document).ready(function () {
     //count of items for pagination purpose
     function getCountOfUsers(){
         var dfd=$.Deferred();
-        ajaxRequest("/patients","GET").done(function(){
-            countUsers=ajaxData.length;
+        ajaxRequest("/patients/count","GET").done(function(){
+            countUsers=ajaxData.count;
             dfd.resolve();
         });
         return dfd.promise();
@@ -335,9 +335,25 @@ $(document).ready(function () {
     });
 
     $(document).on("click","#submitPassword",function(){
+        event.preventDefault();
         var newPwd=$("#editPwd1").val();
         var newPwd2=$("#editPwd2").val();
+        var regex = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])");
+        var ok;
+        if(newPwd=="")
+            $("#pwdErrorMsg").html("Please enter something.");
+        else{
+            if(newPwd.length>5&&regex.test(newPwd)&&newPwd==newPwd2){
+                $("#pwdErrorMsg").html("");
+                ok=true;
+                newPwd=JSON.stringify({"password":newPwd});
+            }
 
+            ajaxRequest("admins/"+data.id+"/profile/password","PUT",newPwd).done(function(){
+                    $("#pwdErrorMsg").html("Password changed successfully.");
+            });
+            //not working yet
+        }
     });
 
     //ajax request function
