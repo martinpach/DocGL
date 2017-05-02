@@ -16,15 +16,30 @@ public class AdminDAOTest extends AbstractDAO {
     private final AdminDAO dao = new AdminDAO(sessionFactory);
 
     @Test
-    public void getLoggedAdminInformationTest() {
+    public void getLoggedByIdTest() {
         Admin admin = dao.getLoggedAdminInformation(1);
 
         assertEquals(1, admin.getId());
         assertEquals("rasto@button.sk", admin.getEmail());
         assertEquals("rastobutton", admin.getUserName());
         assertEquals("rasto", admin.getFirstName());
+    }
 
-        admin = dao.getLoggedAdminInformation("rasto","badpassword");
+    @Test
+    public void getLoggedIncorrectPasswordTest(){
+        Admin admin = dao.getLoggedAdminInformation("rastobutton","badpassword");
+        assertEquals(null, admin);
+    }
+
+    @Test
+    public void getLoggedCorrectPasswordTest(){
+        Admin admin = dao.getLoggedAdminInformation("rastobutton", "rastobutton123");
+        assertEquals(1, admin.getId());
+    }
+
+    @Test
+    public void getLoggedIncorrectUserNameTest(){
+        Admin admin = dao.getLoggedAdminInformation("rastObutton", "rastobutton123");
         assertEquals(null, admin);
     }
 
