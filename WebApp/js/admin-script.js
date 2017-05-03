@@ -325,7 +325,7 @@ $(document).ready(function () {
             password2:$("#editPwd2").val()
         }
         var updatedProfile={
-            username : data.username,
+            username : data.userName,
             email:data.email,
             password:""
         };
@@ -339,30 +339,36 @@ $(document).ready(function () {
             updatedProfile.username=newData.username;
         else{
             //alert user to enter a valid username
+            $("#usernameErrorMsg").val("Choose a different username.");
         }
         if(regex.email.test(newData.email))
             updatedProfile.email=newData.email;
         else{
             //alert user to pick a valid email;
+            $("#emailErrorMsg").val("Choose a valid email.");
         }
         if(regex.password.test(newData.password)&&newData.password==newData.password2)
             updatedProfile.password=newData.password;
         else{
-            //send empty password to the server.
-            //if you don't enter anything,password stays the same.
+            if(updatedProfile.password==""){
+                $("#pwdErrorMsg").val("Password won't change if you don't enter a new one.");
+                updatedProfile.password ="";
+            }
+            else
+                $("#pwdErrorMsg").val("Password must be 6 chars long and include upper/lowercase letters, digits and a special character");
         }
         var dataToSend=JSON.stringify({
-            "username":updatedProfile.username,
+            "userName":updatedProfile.username,
             "password":updatedProfile.password,
             "email":updatedProfile.email
         });
-        
-        
-        ajaxRequest("/admins/" + data.id + "/profile/password", "PUT", dataToSend).done(function () {
-            $("#pwdErrorMsg").html("Password changed successfully.");
+        console.log(dataToSend);
+        ajaxRequest("/admins/" + data.id + "/profile", "PUT", dataToSend).done(function () {
+            $("#pwdErrorMsg").html("Profile changed successfully.");
+            localStorage.setItem("userName",data.userName);
+            localStorage.setItem("email",data.email);
         });
             //finish error messages and test with backend!
-        
     });
 
     //ajax request function
