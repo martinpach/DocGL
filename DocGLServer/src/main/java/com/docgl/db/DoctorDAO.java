@@ -1,5 +1,6 @@
 package com.docgl.db;
 
+import com.docgl.Cryptor;
 import com.docgl.enums.SpecializationsEnum;
 import com.docgl.exceptions.ValidationException;
 import com.docgl.entities.Doctor;
@@ -118,6 +119,13 @@ public class DoctorDAO extends AbstractDAO<Doctor> {
         return (long)criteria()
                 .setProjection(Projections.rowCount())
                 .uniqueResult();
+    }
+
+    public Doctor getLoggedDoctorInformation(String username, String password) {
+        Criteria criteria = criteria()
+                .add(Restrictions.eq("userName", username))
+                .add(Restrictions.eq("password", Cryptor.encrypt(password)));
+        return (Doctor) criteria.uniqueResult();
     }
 }
 

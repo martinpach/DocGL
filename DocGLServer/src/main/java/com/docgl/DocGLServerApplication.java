@@ -88,7 +88,7 @@ public class DocGLServerApplication extends Application<DocGLServerConfiguration
                         .buildAuthFilter()));
 
         /* registering resources */
-        environment.jersey().register(new AuthResource(adminDAO,patientDao,tokenSecret));
+        environment.jersey().register(new AuthResource(adminDAO,patientDao,docDao,tokenSecret));
         environment.jersey().register(new AuthValueFactoryProvider.Binder<>(LoggedUser.class));
         environment.jersey().register(RolesAllowedDynamicFeature.class);
         environment.jersey().register(new AdminProfileResource(adminDAO));

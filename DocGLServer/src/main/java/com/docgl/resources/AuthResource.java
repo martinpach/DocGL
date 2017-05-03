@@ -1,12 +1,11 @@
 package com.docgl.resources;
 
+import com.docgl.Cryptor;
+import com.docgl.api.*;
+import com.docgl.entities.Doctor;
 import com.docgl.enums.UserType;
 import com.docgl.exceptions.ValidationException;
-import com.docgl.api.PatientRepresentation;
-import com.docgl.api.RegistrationInput;
 import com.docgl.db.AdminDAO;
-import com.docgl.api.AdminRepresentation;
-import com.docgl.api.LoginInput;
 import com.docgl.db.DoctorDAO;
 import com.docgl.db.PatientDAO;
 import com.docgl.entities.Admin;
@@ -38,9 +37,10 @@ public class AuthResource {
     private PatientDAO patientDAO;
     private byte[] tokenSecret;
 
-    public AuthResource(AdminDAO adminDAO, PatientDAO patientDAO, byte[] tokenSecret) {
+    public AuthResource(AdminDAO adminDAO, PatientDAO patientDAO, DoctorDAO doctorDAO, byte[] tokenSecret) {
         this.adminDAO = adminDAO;
         this.patientDAO = patientDAO;
+        this.doctorDAO = doctorDAO;
         this.tokenSecret=tokenSecret;
     }
 
@@ -50,6 +50,7 @@ public class AuthResource {
     public Object login(LoginInput credentials){
         String username=credentials.getUserName();
         String password=credentials.getPassword();
+
         if(username == null || username.trim().isEmpty()){
             throw new BadRequestException("Property 'username' is missing or not presented!");
         }
@@ -62,14 +63,14 @@ public class AuthResource {
             return new AdminRepresentation(adminInfo, generateValidToken("admin", adminInfo.getId()));
         }
 
-        /*Doctor doctorInfo = doctorDAO.getLoggedDoctorInformation(username, password);
-        if(doctorInfo != null){
-            return new DoctorRepresentation(doctorInfo, generateValidToken("doctor", doctorInfo.getId()));
-        }*/
-
         Patient patientInfo = patientDAO.getLoggedPatientInformation(username, password);
         if(patientInfo != null){
             return new PatientRepresentation(patientInfo, generateValidToken("patient", patientInfo.getId()));
+        }
+
+        Doctor doctorInfo = doctorDAO.getLoggedDoctorInformation(username, password);
+        if(doctorInfo != null){
+            return new DoctorRepresentation(doctorInfo, generateValidToken("doctor", doctorInfo.getId()));
         }
 
         throw new NotAuthorizedException("Invalid credentials!");
