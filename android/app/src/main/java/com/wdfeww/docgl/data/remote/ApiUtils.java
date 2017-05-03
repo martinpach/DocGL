@@ -4,7 +4,7 @@ public class ApiUtils {
 
     private ApiUtils() {}
 
-    public static final String BASE_URL = "http://192.168.0.30:8085/";
+    public static final String BASE_URL = "http://wdfeww.myqnapcloud.com:8085/api/";
 
     public static APIService getAPIService() {
 
