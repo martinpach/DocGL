@@ -1,6 +1,7 @@
 /*insert js here*/
 $(document).ready(function () {
-    var data = {
+    var adminData
+     = {
         id: localStorage.getItem("id"),
         firstName: localStorage.getItem("firstName"),
         lastName: localStorage.getItem("lastName"),
@@ -9,7 +10,8 @@ $(document).ready(function () {
         passwordChanged: localStorage.getItem("passwordChanged"),
         token: localStorage.getItem("token")
     };
-    var ajaxData;
+    var ajaxData
+    ;
 
     var start = 0;
     var limit = 4;
@@ -25,7 +27,8 @@ $(document).ready(function () {
 
     //loads name to the page
     var usernameTemplate = "<p>{{firstName}} {{lastName}}</p>";
-    var html = Mustache.to_html(usernameTemplate, data);
+    var html = Mustache.to_html(usernameTemplate, adminData
+        );
     $("#userName").html(html);
 
     //load profile
@@ -35,13 +38,17 @@ $(document).ready(function () {
             var templateUsername = "<p>{{userName}}</p>";
             var templateMail = "<p>{{email}}</p>";
             var templatePassword = "<p>************</p>";
-            var html = Mustache.to_html(template, data);
+            var html = Mustache.to_html(template, adminData
+                );
             $("#heading").html(html);
-            html = Mustache.to_html(templateUsername, data);
+            html = Mustache.to_html(templateUsername, adminData
+                );
             $("#username").html(html);
-            html = Mustache.to_html(templateMail, data);
+            html = Mustache.to_html(templateMail, adminData
+                );
             $("#email").html(html);
-            html = Mustache.to_html(templatePassword, data);
+            html = Mustache.to_html(templatePassword, adminData
+                );
             $("#password").html(html);
         });
     });
@@ -307,10 +314,10 @@ $(document).ready(function () {
         event.preventDefault();
         $("#username").toggle();
         $("#changeUsernameDiv").toggle();
-        $("#editUsernameInput").val(data.userName);
+        $("#editUsernameInput").val(adminData.userName);
         $("#email").toggle();
         $("#changeEmailDiv").toggle();
-        $("#editEmailInput").val(data.email);
+        $("#editEmailInput").val(adminData.email);
         $("#password").toggle();
         $("#changePasswordDiv").toggle();
     });
@@ -318,57 +325,70 @@ $(document).ready(function () {
     //send changed info to the server,to be finished
     $(document).on("click", "#submitProfile", function () {
         event.preventDefault();
+        var dfd=$.Deferred();
         var newData={
-            username:$("#editPwd1").val(),
-            email:$("#editPwd1").val(),
+            username:$("#editUsernameInput").val(),
+            email:$("#editEmailInput").val(),
             password:$("#editPwd1").val(),
             password2:$("#editPwd2").val()
         }
-        var updatedProfile={
-            username : data.userName,
-            email:data.email,
-            password:""
-        };
         var regex={
-            username:new RegExp("/^[a-zA-Z0-9.\-_$@*!]{3,20}$/"),
-            password:new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])"),
-            email:new RegExp("/^(([^<>()\[\]\.,;:\s@\"]+(\.[^<>()\[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()\.,;\s@\"]+\.{0,1})+[^<>()\.,;:\s@\"]{2,})$/")
+            username:/^[a-zA-Z0-9_\-]*$/,
+            password:/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])/,
+            email:/^[a-zA-Z0-9.!#$%&’*+\/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
         };
+        var isUsernameValid=false;
+        var isEmailValid=false;
+        var isPasswordValid=false;
         
-        if(regex.username.test(newData.username))
-            updatedProfile.username=newData.username;
+        if(regex.username.test(newData.username)){
+            isUsernameValid=true;
+            console.log(isUsernameValid);
+        }
         else{
             //alert user to enter a valid username
+            console.log("invalid username!");
             $("#usernameErrorMsg").val("Choose a different username.");
         }
-        if(regex.email.test(newData.email))
-            updatedProfile.email=newData.email;
+        if(regex.email.test(newData.email)){
+            isEmailValid=true;
+        }
         else{
-            //alert user to pick a valid email;
             $("#emailErrorMsg").val("Choose a valid email.");
         }
-        if(regex.password.test(newData.password)&&newData.password==newData.password2)
-            updatedProfile.password=newData.password;
-        else{
-            if(updatedProfile.password==""){
-                $("#pwdErrorMsg").val("Password won't change if you don't enter a new one.");
-                updatedProfile.password ="";
-            }
-            else
-                $("#pwdErrorMsg").val("Password must be 6 chars long and include upper/lowercase letters, digits and a special character");
+        if((regex.password.test(newData.password)&&newData.password==newData.password2)||newData.password==""){
+            isPasswordValid=true;
         }
-        var dataToSend=JSON.stringify({
-            "userName":updatedProfile.username,
-            "password":updatedProfile.password,
-            "email":updatedProfile.email
-        });
-        console.log(dataToSend);
-        ajaxRequest("/admins/" + data.id + "/profile", "PUT", dataToSend).done(function () {
+        else{
+            $("#pwdErrorMsg").val("Choose a valid password.");
+        }
+        if(isPasswordValid&&isUsernameValid&&isEmailValid){
+            var dataToSend=JSON.stringify({
+                "userName":newData.username,
+                "password":newData.password,
+                "email":newData.email
+            });
+        //console.log(dataToSend);
+        ajaxRequest("/admins/" + adminData.id + "/profile", "PUT", dataToSend).done(function () {
             $("#pwdErrorMsg").html("Profile changed successfully.");
-            localStorage.setItem("userName",data.userName);
-            localStorage.setItem("email",data.email);
+            console.log(ajaxData);
+            localStorage.setItem("userName",ajaxData.userName);
+            localStorage.setItem("email",ajaxData.email);
+            console.log(localStorage.getItem("userName")+" "+localStorage.getItem("email"));
+            $("#editUsernameInput").val(ajaxData.userName);
+            $("#editEmailInput").val(ajaxData.email);
+            var template = "<p>{{userName}}'s</p>";
+            html = Mustache.to_html(template, ajaxData);
+            $("#heading").html(html);
+
+            dfd.resolve();
         });
             //finish error messages and test with backend!
+        return dfd.promise();
+        }
+        else{
+            console.log("couldn't change password. inputs invalid");
+        }
     });
 
     //ajax request function
@@ -376,7 +396,7 @@ $(document).ready(function () {
         var dfd = $.Deferred();
         $.ajax({
             beforeSend: function (xhr) {
-                xhr.setRequestHeader('Authorization', 'Bearer ' + data.token);
+                xhr.setRequestHeader('Authorization', 'Bearer ' + adminData.token);
             },
             url: 'http://localhost:8085/api' + url,
             type: requestType,
