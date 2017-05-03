@@ -48,8 +48,9 @@ public class AuthResource {
     @UnitOfWork
     @Path("login")
     public Object login(LoginInput credentials){
-        String username=credentials.getUserName();
-        String password=credentials.getPassword();
+        String username = credentials.getUserName();
+        String password = credentials.getPassword();
+        UserType userType = credentials.getUserType();
 
         if(username == null || username.trim().isEmpty()){
             throw new BadRequestException("Property 'username' is missing or not presented!");
@@ -57,20 +58,29 @@ public class AuthResource {
         if(password == null || password.trim().isEmpty()) {
             throw new BadRequestException("Property 'password' is missing or not presented!");
         }
-
-        Admin adminInfo = adminDAO.getLoggedAdminInformation(username, password);
-        if(adminInfo != null){
-            return new AdminRepresentation(adminInfo, generateValidToken("admin", adminInfo.getId()));
+        if(userType == null) {
+            throw new BadRequestException("Property 'userType' is missing or not presented!");
         }
 
-        Patient patientInfo = patientDAO.getLoggedPatientInformation(username, password);
-        if(patientInfo != null){
-            return new PatientRepresentation(patientInfo, generateValidToken("patient", patientInfo.getId()));
+        if (userType.equals(UserType.ADMIN)) {
+            Admin adminInfo = adminDAO.getLoggedAdminInformation(username, password);
+            if(adminInfo != null){
+                return new AdminRepresentation(adminInfo, generateValidToken("admin", adminInfo.getId()));
+            }
         }
 
-        Doctor doctorInfo = doctorDAO.getLoggedDoctorInformation(username, password);
-        if(doctorInfo != null){
-            return new DoctorRepresentation(doctorInfo, generateValidToken("doctor", doctorInfo.getId()));
+        if (userType.equals(UserType.DOCTOR)) {
+            Doctor doctorInfo = doctorDAO.getLoggedDoctorInformation(username, password);
+            if(doctorInfo != null){
+                return new DoctorRepresentation(doctorInfo, generateValidToken("doctor", doctorInfo.getId()));
+            }
+        }
+
+        if (userType.equals(UserType.PATIENT)) {
+            Patient patientInfo = patientDAO.getLoggedPatientInformation(username, password);
+            if(patientInfo != null){
+                return new PatientRepresentation(patientInfo, generateValidToken("patient", patientInfo.getId()));
+            }
         }
 
         throw new NotAuthorizedException("Invalid credentials!");
@@ -101,6 +111,9 @@ public class AuthResource {
             else
                 throw new ValidationException("Username or email is taken");
         }
+        /*if (registrationInput.getUserType().equals(UserType.DOCTOR)){
+
+        }*/
         return null;
     }
 
