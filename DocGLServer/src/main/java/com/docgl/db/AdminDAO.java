@@ -27,23 +27,29 @@ public class AdminDAO extends AbstractDAO<Admin> {
     public Admin getLoggedAdminInformation(String username, String password){
         Criteria criteria = criteria()
                 .add(Restrictions.eq("userName", username))
-                .add(Restrictions.eq("password", new Cryptor().encrypt(password)));
+                .add(Restrictions.eq("password", Cryptor.encrypt(password)));
         return (Admin) criteria.uniqueResult();
     }
 
     public void setPassword(String password, int id){
         Session session = currentSession();
         Admin admin = session.find(Admin.class, id);
-        admin.setPassword(new Cryptor().encrypt(password));
+        admin.setPassword(Cryptor.encrypt(password));
         admin.setPasswordChanged(true);
     }
 
     public void updateProfile(String userName, String password, String email, int id){
         Session session = currentSession();
         Admin admin = session.find(Admin.class, id);
-        admin.setUserName(userName);
-        admin.setPassword(new Cryptor().encrypt(password));
-        admin.setEmail(email);
+        if(!userName.equals("")) {
+            admin.setUserName(userName);
+        }
+        if(!password.equals("")) {
+            admin.setPassword(Cryptor.encrypt(password));
+        }
+        if(!email.equals("")) {
+            admin.setEmail(email);
+        }
     }
 
     public Admin getLoggedAdminInformation(int id){
