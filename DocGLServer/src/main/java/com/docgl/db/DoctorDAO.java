@@ -1,6 +1,7 @@
 package com.docgl.db;
 
 import com.docgl.Cryptor;
+import com.docgl.api.RegistrationInput;
 import com.docgl.enums.SpecializationsEnum;
 import com.docgl.exceptions.ValidationException;
 import com.docgl.entities.Doctor;
@@ -126,6 +127,27 @@ public class DoctorDAO extends AbstractDAO<Doctor> {
                 .add(Restrictions.eq("userName", username))
                 .add(Restrictions.eq("password", Cryptor.encrypt(password)));
         return (Doctor) criteria.uniqueResult();
+    }
+
+    public boolean isUserNameAndEmailUnique(String userName, String email) {
+        Criterion userNameCondition = Restrictions.eq("userName", userName);
+        Criterion emailCondtition = Restrictions.eq("email", email);
+        Criteria criteria = criteria()
+                .add(Restrictions.or(userNameCondition, emailCondtition));
+        Doctor doctor = (Doctor) criteria.uniqueResult();
+        return doctor == null;
+    }
+
+    public void registerDoctor(RegistrationInput registrationInput) {
+        currentSession().save(new Doctor(
+            registrationInput.getFirstName(),
+            registrationInput.getLastName(),
+            registrationInput.getEmail(),
+            registrationInput.getUserName(),
+            registrationInput.getSpecialization(),
+            new Cryptor().encrypt(registrationInput.getPassword()),
+            new Date()
+            ));
     }
 }
 

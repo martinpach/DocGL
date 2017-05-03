@@ -95,6 +95,12 @@ public class Doctor extends User{
         super(firstName,lastName,email,userName,password);
     }
 
+    public Doctor(String firstName, String lastName, String email, String userName, SpecializationsEnum specialization, String password, Date registrationDate) {
+        super(firstName,lastName,email,userName,password);
+        this.registrationDate = registrationDate;
+        this.specialization = specialization;
+    }
+
     public Doctor(String firstName, String lastName, String email, String userName, String password, Collection<Appointment> appointments, @NotNull Date registrationDate, @NotNull int likes, @NotNull SpecializationsEnum specialization, boolean blocked, boolean approved) {
         super(firstName, lastName, email, userName, password);
         this.appointments = appointments;

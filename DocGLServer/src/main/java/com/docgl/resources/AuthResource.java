@@ -68,14 +68,12 @@ public class AuthResource {
                 return new AdminRepresentation(adminInfo, generateValidToken("admin", adminInfo.getId()));
             }
         }
-
         if (userType.equals(UserType.DOCTOR)) {
             Doctor doctorInfo = doctorDAO.getLoggedDoctorInformation(username, password);
             if(doctorInfo != null){
                 return new DoctorRepresentation(doctorInfo, generateValidToken("doctor", doctorInfo.getId()));
             }
         }
-
         if (userType.equals(UserType.PATIENT)) {
             Patient patientInfo = patientDAO.getLoggedPatientInformation(username, password);
             if(patientInfo != null){
@@ -98,22 +96,35 @@ public class AuthResource {
     @POST
     @UnitOfWork
     @Path("registration")
-    public Object register(RegistrationInput registrationInput){
-        if(registrationInput.getUserType().equals(UserType.ADMIN)){
+    public Object register(RegistrationInput registrationInput) {
+        String userName = registrationInput.getUserName();
+        String email = registrationInput.getEmail();
+        UserType userType = registrationInput.getUserType();
+
+        if(userType.equals(UserType.ADMIN)) {
             throw new ValidationException("Parameter userType should be 'DOCTOR' or 'PATIENT'");
         }
-        if(registrationInput.getUserType().equals(UserType.PATIENT)){
-            if(patientDAO.isUserNameAndEmailUnique(registrationInput.getUserName(), registrationInput.getEmail())) {
+        if(userType.equals(UserType.PATIENT)) {
+            if (patientDAO.isUserNameAndEmailUnique(userName, email)) {
                 patientDAO.registerPatient(registrationInput);
-                Patient patientInfo = patientDAO.getLoggedPatientInformation(registrationInput.getUserName(), registrationInput.getPassword());
+                Patient patientInfo = patientDAO.getLoggedPatientInformation(userName, registrationInput.getPassword());
                 return new PatientRepresentation(patientInfo, generateValidToken("patient", patientInfo.getId()));
             }
             else
                 throw new ValidationException("Username or email is taken");
         }
-        /*if (registrationInput.getUserType().equals(UserType.DOCTOR)){
-
-        }*/
+        if (userType.equals(UserType.DOCTOR)) {
+            if (registrationInput.getSpecialization() == null) {
+                throw new BadRequestException("Property 'specialization' is missing or not presented!");
+            }
+            if (doctorDAO.isUserNameAndEmailUnique(userName, email)) {
+                doctorDAO.registerDoctor(registrationInput);
+                Doctor doctorInfo = doctorDAO.getLoggedDoctorInformation(userName, registrationInput.getPassword());
+                return new DoctorRepresentation(doctorInfo, generateValidToken("doctor", doctorInfo.getId()));
+            }
+            else
+                throw new ValidationException("Username or email is taken");
+        }
         return null;
     }
 

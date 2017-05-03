@@ -1,5 +1,6 @@
 package com.docgl.api;
 
+import com.docgl.enums.SpecializationsEnum;
 import com.docgl.enums.UserType;
 
 /**
@@ -10,16 +11,18 @@ public class RegistrationInput extends Input{
     private String lastName;
     private String email;
     private UserType userType;
+    private SpecializationsEnum specialization;
 
     public RegistrationInput() {
     }
 
-    public RegistrationInput(String userName, String password, String firstName, String lastName, String email, UserType userType) {
+    public RegistrationInput(String userName, String password, String firstName, String lastName, String email, UserType userType, SpecializationsEnum specialization) {
         super(userName, password);
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.userType = userType;
+        this.specialization = specialization;
     }
 
     public String getFirstName() {
@@ -38,4 +41,7 @@ public class RegistrationInput extends Input{
         return userType;
     }
 
+    public SpecializationsEnum getSpecialization() {
+        return specialization;
+    }
 }
