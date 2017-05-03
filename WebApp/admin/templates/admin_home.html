@@ -14,10 +14,77 @@
 	</div>
 </div>
 <div class="row" id="registrationStatistics">
-	<div class="col-md-12 text-center">
-	<h2 class="subHeadingBlue">Calculating registration data...</h2>
-	<h1 class="subHeadingBlue"><i class="fa fa-spinner" aria-hidden="true"></i></h1>
-
+	<div class="col-md-12 text-center chartBox">
+		<div id="chartContainer"></div>
 	</div>
 </div>
 </div>
+
+<script>
+	var ajaxData;
+	var token = localStorage.getItem("token");
+	var weekday = ["sun","mon","tue","wed","thu","fri","sat"];
+    var dataPoints = [];
+
+	function initRegistrationsChart () {
+		var dfd = $.Deferred();
+		ajaxRequest('/registrations?timePeriod=WEEK').done(function () {
+	    	CanvasJS.addColorSet("greenShades", ["rgb(181, 223, 253)", "rgb(150, 221, 255)"]);
+	        var chart = new CanvasJS.Chart("chartContainer", {
+	        	colorSet: "greenShades",
+	            title: {
+		            text: "Registrations this week",
+		            fontColor: "#41CCB9"
+		        },
+		        axisX:{
+		            labelFontColor: "rgb(3, 79, 132)",
+		            gridThickness: 0,
+		            lineThickness: 0,
+		            tickThickness: 0
+		        },
+		        axisY: {
+		            labelFontColor: "rgb(3, 79, 132)",
+		            gridThickness: 0,
+		            lineThickness: 0,
+		            tickThickness: 0
+		        },
+		        data: [{
+		            type: "column",
+		            showInLegend: true,
+		            legendMarkerType: "none",
+		            dataPoints : dataPoints
+		        }]
+	        });
+	        for (i=0; i<7; i++) {
+		        dataPoints[i]={
+		            label: weekday[new Date(ajaxData[6-i].date).getDay()],
+		            y: ajaxData[6-i].count
+		        };
+		    }
+	        chart.render();
+			dfd.resolve();
+		});
+		return dfd.promise();
+	}
+
+	initRegistrationsChart();
+
+	function ajaxRequest(ajaxUrl) {
+        var dfd = $.Deferred();
+        $.ajax({
+            url: 'http://localhost:8085/api' + ajaxUrl,
+            type: "GET",
+            dataType: "json",
+            success: function (data) {
+                if (data != null) ajaxData = data;
+                dfd.resolve();
+            },
+            error: function () {
+                dfd.reject();
+                console.log("Error");
+            }
+        });
+        return dfd.promise();
+    }
+
+</script>

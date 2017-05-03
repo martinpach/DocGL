@@ -90,6 +90,7 @@ body{
 	position:relative;
 	max-width:300px
 	margin-right:none;
+	padding-left: 10px;
 	font-family:Roboto;
   	font-weight: 500;
   	color:#41CCB9!important;
@@ -100,12 +101,14 @@ body{
 	font-size:20px;
 	font-weight:300;
 	margin-bottom:15px;
+	padding-left: 10px;
 }
 .subHeadingBlue{
 	color:#034F85 !important;
 	font-size:20px;
 	font-weight:300;
 	margin-bottom:15px;
+	padding-left: 10px;
 }
 
 
@@ -114,7 +117,7 @@ body{
 	background-color:white;
 	color:#034F84!important;
 	width:100%;
-	padding:30px;
+	padding:2%;
 	padding-bottom:50px;
 }
 
@@ -304,7 +307,51 @@ i.fa.fa-heart.heart::before{
 	vertical-align: middle;
 }
 
+/* Chart section */
+#chartContainer {
+    max-width: 80%;
+    margin: 0 auto;
+}
+.chartBox {
+    max-width: 100%;
+    height: 400px;
+    margin: 0 auto;
+    margin-bottom: 50px;
+    padding: 0 !important;
+}
 
+/*Responsive*/
+@media screen and (max-width: 1300px) {
+	#chartContainer {
+		max-width: 90%;
+	}
+	.contentWrapper{
+		width: 100%;
+		padding-left: 20px;
+		padding-right: 20px;
+	}
+}
+
+@media screen and (max-width: 995px) {
+	.mainPage{
+        padding-left:0 !important;
+        padding-right:0 !important;
+	} 
+	#chartContainer {
+		max-width: 95%;
+	}
+	#logo{
+		width: 25%;
+	}
+	.contentWrapper{
+		padding-left: 0px;
+		padding-right: 0px;
+	}
+}
+
+/* * {
+ outline: 1px solid red;
+} */
 
 
 
