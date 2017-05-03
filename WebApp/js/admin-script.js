@@ -94,7 +94,7 @@ $(document).ready(function () {
         var dfd = $.Deferred();
         ajaxRequest('/auth/logout', 'POST').done(function () {
             localStorage.removeItem("token");
-            window.location.href = 'index.html';
+            window.location.href = '../index.html';
             dfd.resolve();
         });
         return dfd.promise();
