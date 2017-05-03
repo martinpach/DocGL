@@ -44,10 +44,11 @@ public class AdminProfileResource {
 
     @PUT
     @UnitOfWork
-    public void updateProfile(@Auth LoggedUser loggedUser, @PathParam("id") int id, AdminInput admin){
+    public Admin updateProfile(@Auth LoggedUser loggedUser, @PathParam("id") int id, AdminInput admin){
         authorizer.checkAuthorization(loggedUser.getUserType(), UserType.ADMIN);
         authorizer.checkAuthentication(loggedUser.getId(), id);
         adminDAO.updateProfile(admin.getUserName(), admin.getPassword(), admin.getEmail(), id);
+        return adminDAO.getLoggedAdminInformation(1);
     }
 
     @GET
