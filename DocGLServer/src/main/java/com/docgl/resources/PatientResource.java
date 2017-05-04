@@ -55,10 +55,12 @@ public class PatientResource {
                                               @QueryParam("limit") int limit,
                                               @QueryParam("start") int start,
                                               @QueryParam("sortBy") SortablePatientColumns sortBy,
-                                              @QueryParam("way") SortingWays way) {
+                                              @QueryParam("way") SortingWays way,
+                                              @QueryParam("name") String name)
+    {
         UserType[] roles = {UserType.ADMIN, UserType.DOCTOR};
         authorizer.checkAuthorization(loggedUser.getUserType(), roles);
-        return patientDAO.getAllPatients(limit, start, sortBy, way);
+        return patientDAO.getAllPatients(limit, start, sortBy, way, name);
     }
 
 

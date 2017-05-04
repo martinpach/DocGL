@@ -17,11 +17,11 @@ public class Home extends AppCompatActivity {
 
         responseText = (TextView) findViewById(R.id.responseText);
 
-        Intent intent = getIntent();
+        //Intent intent = getIntent();
         //responseText.setText("id: "+intent.getStringExtra("id")+" firstname: "+intent.getStringExtra("firstName")+ " lastname: "+intent.getStringExtra("lastName")+ " email: "+intent.getStringExtra("email")+
         //" token: "+intent.getStringExtra("token"));
 
-        responseText.setText(intent.getStringExtra("JSON_RESPONSE"));
+        //responseText.setText(intent.getStringExtra("JSON_RESPONSE"));
 
     }
 }

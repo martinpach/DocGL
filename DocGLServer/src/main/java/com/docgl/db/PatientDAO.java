@@ -33,8 +33,12 @@ public class PatientDAO extends AbstractDAO<Patient> {
      * @param way sorted ascending or descending (asc,desc)
      * @return list of patients filtered by entered params. If no params are presented, all patients will be returned
      */
-    public List<Patient> getAllPatients(int limit, int start, SortablePatientColumns sortBy, SortingWays way){
+    public List<Patient> getAllPatients(int limit, int start, SortablePatientColumns sortBy, SortingWays way, String name){
         Criteria criteria = criteria();
+        if (name != null) {
+            criteria = searchPatient(name);
+
+        }
         if(limit > 0 && start >= 0) {
             criteria.setFirstResult(start)
                     .setMaxResults(limit);
@@ -122,5 +126,13 @@ public class PatientDAO extends AbstractDAO<Patient> {
         return (long)criteria()
                 .setProjection(Projections.rowCount())
                 .uniqueResult();
+    }
+    public Criteria searchPatient(String name) {
+        Criteria criteria = criteria();
+            Criterion firstname = Restrictions.ilike("firstName", "%" + name + "%");
+            Criterion lastname = Restrictions.ilike("lastName", "%" + name + "%");
+            Criterion email = Restrictions.ilike("email", "%" + name + "%");
+            criteria.add(Restrictions.or(firstname, lastname, email));
+        return criteria;
     }
 }

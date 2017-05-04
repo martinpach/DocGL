@@ -69,7 +69,7 @@ public class Register extends AppCompatActivity {
                                     errorMessage.setText("");
                                     successMessage.setText("Registration success!");
                                     res = rawResponse.body().string();
-                                    login();
+                                    submit();
                                 } else {
                                     errorMessage.setText("Username or email is already used!");
                                     successMessage.setText("");
@@ -96,9 +96,9 @@ public class Register extends AppCompatActivity {
         });
     }
 
-    private void login() {
+    private void submit() {
         Intent intent = new Intent(getApplicationContext(), Home.class);
-        intent.putExtra("JSON_RESPONSE", res);
+       // intent.putExtra("JSON_RESPONSE", res);
         startActivity(intent);
     }
 

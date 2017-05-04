@@ -58,7 +58,7 @@ public class AppLogin extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         if (checkUsername() && checkUPassword()) {
-                            String jsonParams = "{\"userName\":\"" + username.getText().toString().trim() + "\",\"password\":\"" + password.getText().toString().trim() + "\"}";
+                            String jsonParams = "{\"userName\":\"" + username.getText().toString().trim() + "\",\"password\":\"" + password.getText().toString().trim() + "\",\"userType\":\"PATIENT\"}";
                             RequestBody body = null;
                             try {
 
@@ -125,7 +125,7 @@ public class AppLogin extends AppCompatActivity {
        // intent.putExtra("email", userLogin.getUser().getEmail());
        // intent.putExtra("id", userLogin.getUser().getId());
        // intent.putExtra("token", userLogin.getToken());
-        intent.putExtra("JSON_RESPONSE", res);
+       // intent.putExtra("JSON_RESPONSE", res);
         startActivity(intent);
     }
 
