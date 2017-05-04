@@ -235,7 +235,7 @@ $(document).ready(function () {
     //sorting, not ready yet - id, joined date, name, spec,likes
 
     $(document).on("click", "#sortIdUsers", function () { //not done
-        event.preventDefault();
+        event.preventDefault(event);
         sortByUsers = "id";
         wayUsers = wayUsers == "desc" ? "asc" : "desc";
         getUsers(start, limit, sortByUsers, wayUsers);
@@ -244,7 +244,7 @@ $(document).ready(function () {
     });
 
     $(document).on("click", "#sortNameUsers", function () {
-        event.preventDefault();
+        event.preventDefault(event);
         sortByUsers = "lastName";
         wayUsers = wayUsers == "desc" ? "asc" : "desc";
         getUsers(start, limit, sortByUsers, wayUsers);
@@ -253,7 +253,7 @@ $(document).ready(function () {
     });
 
     $(document).on("click", "#sortJoinedUsers", function () {
-        event.preventDefault();
+        event.preventDefault(event);
         sortByUsers = "registration_date";
         wayUsers = wayUsers == "desc" ? "asc" : "desc";
         getUsers(start, limit, sortByUsers, wayUsers);
@@ -261,7 +261,7 @@ $(document).ready(function () {
     });
 
     $(document).on("click", "#sortIdDocs", function () { //not done
-        event.preventDefault();
+        event.preventDefault(event);
         sortByDocs = "id";
         wayDocs = wayDocs == "desc" ? "asc" : "desc";
         getDoctors(start, limit, sortByDocs, wayDocs);
@@ -270,7 +270,7 @@ $(document).ready(function () {
     });
 
     $(document).on("click", "#sortNameDocs", function () {
-        event.preventDefault();
+        event.preventDefault(event);
         sortByDocs = "lastName";
         wayDocs = wayDocs == "desc" ? "asc" : "desc";
         getDoctors(start, limit, sortByDocs, wayDocs);
@@ -278,7 +278,7 @@ $(document).ready(function () {
     });
 
     $(document).on("click", "#sortRatingDocs", function () {
-        event.preventDefault();
+        event.preventDefault(event);
         sortByDocs = "likes";
         wayDocs = wayDocs == "desc" ? "asc" : "desc";
         getDoctors(start, limit, sortByDocs, wayDocs);
@@ -311,7 +311,7 @@ $(document).ready(function () {
 
     //toggle edit fields
     $(document).on("click", "#editProfile", function () {
-        event.preventDefault();
+        event.preventDefault(event);
         $("#username").toggle();
         $("#changeUsernameDiv").toggle();
         $("#editUsernameInput").val(adminData.userName);
@@ -324,7 +324,7 @@ $(document).ready(function () {
 
     //send changed info to the server,to be finished
     $(document).on("click", "#submitProfile", function () {
-        event.preventDefault();
+        event.preventDefault(event);
         var dfd=$.Deferred();
         var newData={
             username:$("#editUsernameInput").val(),
@@ -374,6 +374,8 @@ $(document).ready(function () {
             console.log(ajaxData);
             localStorage.setItem("userName",ajaxData.userName);
             localStorage.setItem("email",ajaxData.email);
+            adminData.userName=ajaxData.userName;
+            adminData.email=ajaxData.email
             console.log(localStorage.getItem("userName")+" "+localStorage.getItem("email"));
             $("#editUsernameInput").val(ajaxData.userName);
             $("#editEmailInput").val(ajaxData.email);
