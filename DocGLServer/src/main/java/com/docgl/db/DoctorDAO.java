@@ -86,7 +86,8 @@ public class DoctorDAO extends AbstractDAO<Doctor> {
         if (name != null) {
             Criterion firstname = Restrictions.ilike("firstName", "%" + name + "%");
             Criterion lastname = Restrictions.ilike("lastName", "%" + name + "%");
-            criteria.add(Restrictions.or(firstname, lastname));
+            Criterion email = Restrictions.ilike("email", "%" + name + "%");
+            criteria.add(Restrictions.or(firstname, lastname, email));
         }
         if (spec != null) {
             criteria.add(Restrictions.eq("specialization", spec));
@@ -94,8 +95,8 @@ public class DoctorDAO extends AbstractDAO<Doctor> {
         return criteria;
     }
 
-    public long getNumberOfAllDoctors(){
-        return (long)criteria()
+    public long getNumberOfAllDoctors() {
+        return (long) criteria()
                 .setProjection(Projections.rowCount())
                 .uniqueResult();
     }
@@ -118,14 +119,14 @@ public class DoctorDAO extends AbstractDAO<Doctor> {
 
     public void registerDoctor(RegistrationInput registrationInput) {
         currentSession().save(new Doctor(
-            registrationInput.getFirstName(),
-            registrationInput.getLastName(),
-            registrationInput.getEmail(),
-            registrationInput.getUserName(),
-            registrationInput.getSpecialization(),
-            new Cryptor().encrypt(registrationInput.getPassword()),
-            new Date()
-            ));
+                registrationInput.getFirstName(),
+                registrationInput.getLastName(),
+                registrationInput.getEmail(),
+                registrationInput.getUserName(),
+                registrationInput.getSpecialization(),
+                new Cryptor().encrypt(registrationInput.getPassword()),
+                new Date()
+        ));
     }
 }
 
