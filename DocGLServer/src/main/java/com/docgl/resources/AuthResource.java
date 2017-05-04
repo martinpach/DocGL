@@ -71,13 +71,15 @@ public class AuthResource {
         if (userType.equals(UserType.DOCTOR)) {
             Doctor doctorInfo = doctorDAO.getLoggedDoctorInformation(username, password);
             if(doctorInfo != null){
-                return new DoctorRepresentation(doctorInfo, generateValidToken("doctor", doctorInfo.getId()));
+                String token = (!doctorInfo.isApproved() || doctorInfo.isBlocked()) ? "" : generateValidToken("doctor", doctorInfo.getId());
+                return new DoctorRepresentation(doctorInfo, token);
             }
         }
         if (userType.equals(UserType.PATIENT)) {
             Patient patientInfo = patientDAO.getLoggedPatientInformation(username, password);
             if(patientInfo != null){
-                return new PatientRepresentation(patientInfo, generateValidToken("patient", patientInfo.getId()));
+                String token = patientInfo.isBlocked() ? "" : generateValidToken("patient", patientInfo.getId());
+                return new PatientRepresentation(patientInfo, token);
             }
         }
 
