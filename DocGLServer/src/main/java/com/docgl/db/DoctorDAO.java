@@ -31,7 +31,7 @@ public class DoctorDAO extends AbstractDAO<Doctor> {
     public List<Doctor> getAllDoctors(int limit, int start, SortableDoctorColumns sortBy, SortingWays way, String name, SpecializationsEnum spec) {
         Criteria criteria = criteria();
         if (name != null || spec != null)
-            searchDoctor(name, spec);
+            criteria = searchDoctor(name, spec);
         else
             throw new ValidationException("Url must contain of parameter name or spec");
 
@@ -81,29 +81,7 @@ public class DoctorDAO extends AbstractDAO<Doctor> {
         doctor.setApproved(true);
     }
 
-    public List<Doctor> searchDoctorByName(String name, String spec) {
-        Criteria criteria = criteria();
-        if (name != null || spec != null) {
-            if (name != null) {
-                Criterion firstname = Restrictions.ilike("firstName", "%" + name + "%");
-                Criterion lastname = Restrictions.ilike("lastName", "%" + name + "%");
-                criteria.add(Restrictions.or(firstname, lastname));
-            }
-            if (spec != null) {
-                if (spec.equals("DENTIST") || spec.equals("CARDIOLOGIST") || spec.equals("ORTHOPEDIST")) {
-                    criteria.add(Restrictions.eq("specialization", SpecializationsEnum.valueOf(spec)));
-                } else if (spec.equals("")) {
-
-                } else
-                    throw new ValidationException("Invalid specialization. Choose between: DENTIST, CARDIOLOGIST or ORTHOPEDIST");
-            }
-        } else
-            throw new ValidationException("Search must contain of parameter name or spec");
-
-        return list(criteria);
-    }
-
-    public List<Doctor> searchDoctor(String name, SpecializationsEnum spec) {
+    public Criteria searchDoctor(String name, SpecializationsEnum spec) {
         Criteria criteria = criteria();
         if (name != null) {
             Criterion firstname = Restrictions.ilike("firstName", "%" + name + "%");
@@ -113,7 +91,7 @@ public class DoctorDAO extends AbstractDAO<Doctor> {
         if (spec != null) {
             criteria.add(Restrictions.eq("specialization", spec));
         }
-        return list(criteria);
+        return criteria;
     }
 
     public long getNumberOfAllDoctors(){

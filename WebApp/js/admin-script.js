@@ -75,6 +75,7 @@ $(document).ready(function () {
         setText(countDocs);
         setButtons(countDocs);
         $("#paginationContainer").show();
+        setActionToDoctorsSearchBox();
     });
 
     $("#users").on("click", function () {
@@ -87,6 +88,7 @@ $(document).ready(function () {
         setText(countUsers);
         setButtons(countUsers);
         $("#paginationContainer").show();
+        setActionToUsersSearchBox();
     });
 
     //logout
@@ -393,6 +395,52 @@ $(document).ready(function () {
         }
     });
 
+        var searchString;
+
+    function getDoctorsSearch() {
+        console.log("search doctors begins");
+        var dfd = $.Deferred();
+        ajaxRequest("/doctors?name=" + searchString, "GET").done(function () {
+            var icon = '<i class="fa fa-user-md tableIcon"></i>';
+            generateDoctorTable();
+            dfd.resolve();
+        });
+        return dfd.promise();
+    }
+
+    function getUsersSearch() {
+        console.log("user search not working yet.")
+            // var dfd = $.Deferred();
+            // ajaxRequest("/doctors?name=" + searchString, //"GET").done(function () {
+            //    var icon = '<i class="fa fa-user-md tableIcon"></i>';
+            //   generateDoctorTable();
+            //   dfd.resolve();
+            // });
+            // return dfd.promise();
+    }
+
+    function setActionToUsersSearchBox() {
+        $(document).on("keydown","#searchFieldUsers",function (event) {
+            searchString = $("#searchFieldUsers").val();
+            if (event.keyCode == 13) {
+                if ($("#users").hasClass("selected")) {
+                    getUsersSearch();
+                }
+            }
+        });
+    }
+    
+     function setActionToDoctorsSearchBox() {
+       $(document).on("keydown","#searchFieldDoctors",function (event) {
+           searchString = $("#searchFieldDoctors").val();
+            if (event.keyCode == 13) {
+                if ($("#doctors").hasClass("selected")) {
+                    getDoctorsSearch();
+                }
+            }
+        });
+    }
+    
     //ajax request function
     function ajaxRequest(url, requestType, dataToSend) {
         var dfd = $.Deferred();

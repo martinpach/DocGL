@@ -1,8 +1,6 @@
-package db;
+package com.docgl.db;
 
 import com.docgl.Cryptor;
-import com.docgl.db.AbstractDAO;
-import com.docgl.db.AdminDAO;
 import com.docgl.entities.Admin;
 import org.junit.Test;
 
