@@ -16,6 +16,16 @@ public class RegistrationInput extends Input{
     public RegistrationInput() {
     }
 
+    /**
+     * This class represent deserialized json input when using registration resource
+     * @param userName entered userName
+     * @param password entered password
+     * @param firstName entered firstName
+     * @param lastName entered lastName
+     * @param email entered email
+     * @param userType entered userType
+     * @param specialization entered specialization
+     */
     public RegistrationInput(String userName, String password, String firstName, String lastName, String email, UserType userType, SpecializationsEnum specialization) {
         super(userName, password);
         this.firstName = firstName;

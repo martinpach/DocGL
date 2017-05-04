@@ -20,12 +20,20 @@ public class AppointmentDAO extends AbstractDAO<Appointment> {
         super(sessionFactory);
     }
 
+    /**
+     * @return number of appointemnts for today
+     */
     public long getNumberOfAppointments(){
         Criteria criteria = criteria();
         criteria.add(Restrictions.eq("date", new Date()));
         return (long) criteria().setProjection(Projections.rowCount()).uniqueResult();
     }
 
+    /**
+     * @param id user identificator
+     * @param userType represents type: doctor, patient
+     * @return list of all appointments for unique doctor or patient
+     */
     public List<Appointment> getAppointments(int id, UserType userType){
         Criteria criteria = criteria();
         if(userType.getValue().equals("DOCTOR")){

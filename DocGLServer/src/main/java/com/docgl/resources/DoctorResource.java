@@ -4,6 +4,7 @@ import com.docgl.Authorizer;
 import com.docgl.Views;
 import com.docgl.api.ApprovedInput;
 import com.docgl.api.BlockedInput;
+import com.docgl.api.CountRepresentation;
 import com.docgl.db.AppointmentDAO;
 import com.docgl.entities.Appointment;
 import com.docgl.enums.SortableDoctorColumns;
@@ -40,6 +41,15 @@ public class DoctorResource {
         this.authorizer = new Authorizer();
     }
 
+    /**
+     * Resource for getting doctors.
+     * @param loggedUser is user that is sending a request
+     * @param limit is number of returned doctors
+     * @param start is first doctor to be returned
+     * @param sortBy column to sort results by
+     * @param way ascending or descending (asc, desc)
+     * @return List of filtered doctors. If no params are presented then all doctors are returned.
+     */
     @GET
     @UnitOfWork
     public List<Doctor> getListOfAllDoctors(@Auth LoggedUser loggedUser,
@@ -55,6 +65,12 @@ public class DoctorResource {
         return doctorDAO.getAllDoctors(limit, start, sortBy, way, name, spec);
     }
 
+    /**
+     * Resource for block/unblock doctor
+     * @param loggedUser user that is sending a request
+     * @param id selected doctor
+     * @param blockedInput json input with one property -> blocked : true/false
+     */
     @PUT
     @Path("{id}/blocked")
     @UnitOfWork
@@ -63,6 +79,11 @@ public class DoctorResource {
         doctorDAO.blockDoctor(blockedInput.isBlocked(), id);
     }
 
+    /**
+     * Resource for approve doctor
+     * @param loggedUser user that is sending a request
+     * @param id selected doctor
+     */
     @PUT
     @Path("{id}/approved")
     @UnitOfWork
@@ -71,6 +92,11 @@ public class DoctorResource {
         doctorDAO.approveDoctor(id);
     }
 
+    /**
+     * Resource for getting all appointments of doctor
+     * @param id selected doctor
+     * @return list of all appointments
+     */
     @GET
     @Path("{id}/appointments")
     @UnitOfWork
@@ -79,37 +105,27 @@ public class DoctorResource {
         return appointmentDAO.getAppointments(id, UserType.DOCTOR);
     }
 
+    /**
+     * Resource for getting number of all likes
+     * @param loggedUser user that is sending a request
+     * @return Number of likes in json representation -> count : {numberOfLikes}
+     */
     @GET
     @Path("likes")
     @UnitOfWork
-    public LikesRepresentation getNumberOfOverallLikes(@Auth LoggedUser loggedUser) {
+    public CountRepresentation getNumberOfOverallLikes(@Auth LoggedUser loggedUser) {
         authorizer.checkAuthorization(loggedUser.getUserType(), UserType.ADMIN);
-        return new LikesRepresentation(doctorDAO.getNumberOfOverallLikes());
+        return new CountRepresentation(doctorDAO.getNumberOfOverallLikes());
     }
 
+    /**
+     * Resource for getting number of all doctors
+     * @return number of all doctors in json representation -> count : {numberOfDoctors}
+     */
     @GET
     @Path("count")
     @UnitOfWork
-    public PatientCountRepresentation getNumberOfAllDoctors(){
-        return new PatientCountRepresentation(doctorDAO.getNumberOfAllDoctors());
+    public CountRepresentation getNumberOfAllDoctors(){
+        return new CountRepresentation(doctorDAO.getNumberOfAllDoctors());
     }
-
-    private class LikesRepresentation {
-        @JsonProperty
-        private long likes;
-
-        public LikesRepresentation(long likes) {
-            this.likes = likes;
-        }
-    }
-
-    private class PatientCountRepresentation{
-        @JsonProperty
-        private long count;
-
-        PatientCountRepresentation(long count) {
-            this.count = count;
-        }
-    }
-
 }

@@ -9,6 +9,9 @@ public class ApprovedInput {
     public ApprovedInput(){
     }
 
+    /**
+     * @param approved represents input from json when using approve doctor resource
+     */
     public ApprovedInput(boolean approved) {
         this.approved = approved;
     }

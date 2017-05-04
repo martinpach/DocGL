@@ -300,7 +300,7 @@ $(document).ready(function () {
     function getLikes() {
         var dfd = $.Deferred();
         ajaxRequest("/doctors/likes", "GET").done(function () {
-            var likeCount = ajaxData.likes;
+            var likeCount = ajaxData.count;
             $("#countLikes").html(likeCount);
             dfd.resolve();
         });

@@ -32,6 +32,11 @@ public class RegistrationResource {
         this.patientDAO = patientDAO;
     }
 
+    /**
+     * Resource for getting number of registrations.
+     * @param timePeriod how many days to return
+     * @return array of objects with date and number of registrations
+     */
     @GET
     @UnitOfWork
     public List<RegistrationCountRepresentation> getNumberOfRegistration(@QueryParam("timePeriod") TimePeriod timePeriod){

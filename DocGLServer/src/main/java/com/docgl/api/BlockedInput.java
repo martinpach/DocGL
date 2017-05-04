@@ -9,6 +9,9 @@ public class BlockedInput {
     public BlockedInput() {
     }
 
+    /**
+     * @param blocked represents json input when using block user or patient resource
+     */
     public BlockedInput(boolean blocked) {
         this.blocked = blocked;
     }

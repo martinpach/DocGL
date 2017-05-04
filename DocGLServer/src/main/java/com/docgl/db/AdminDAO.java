@@ -23,7 +23,12 @@ public class AdminDAO extends AbstractDAO<Admin> {
         super(factory);
     }
 
-
+    /**
+     * This function is called during login. If credentials are incorrect function return null.
+     * @param username login username
+     * @param password login password
+     * @return Admin entity object with entered username and password
+     */
     public Admin getLoggedAdminInformation(String username, String password){
         Criteria criteria = criteria()
                 .add(Restrictions.eq("userName", username))
@@ -31,6 +36,11 @@ public class AdminDAO extends AbstractDAO<Admin> {
         return (Admin) criteria.uniqueResult();
     }
 
+    /**
+     * This function sets admin password and encrypt it. It also sets password_changed property in database to true
+     * @param password new password
+     * @param id admin id in database
+     */
     public void setPassword(String password, int id){
         Session session = currentSession();
         Admin admin = session.find(Admin.class, id);
@@ -38,6 +48,12 @@ public class AdminDAO extends AbstractDAO<Admin> {
         admin.setPasswordChanged(true);
     }
 
+    /**
+     * @param userName new userName
+     * @param password new password
+     * @param email new email
+     * @param id represents unique admin
+     */
     public void updateProfile(String userName, String password, String email, int id){
         Session session = currentSession();
         Admin admin = session.find(Admin.class, id);
@@ -52,6 +68,10 @@ public class AdminDAO extends AbstractDAO<Admin> {
         }
     }
 
+    /**
+     * @param id represents unique admin
+     * @return Admin entity object based on entered id
+     */
     public Admin getLoggedAdminInformation(int id){
         Criteria criteria = criteria()
                 .add(Restrictions.eq("id", id));

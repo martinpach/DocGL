@@ -14,6 +14,11 @@ public class Authorizer {
     public Authorizer() {
     }
 
+    /**
+     * Check if logged user has required role
+     * @param userRole actual role from token
+     * @param roles expected roles
+     */
     public void checkAuthorization(UserType userRole, UserType[] roles){
         this.role = userRole;
         for(UserType role : roles) {
@@ -31,6 +36,11 @@ public class Authorizer {
         }
     }
 
+    /**
+     * Check if logged user is not trying to see other users information
+     * @param userId actual userId from token
+     * @param id expected id
+     */
     public void checkAuthentication(int userId, int id){
         this.id = userId;
         if(this.id != id){

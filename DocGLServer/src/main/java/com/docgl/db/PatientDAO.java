@@ -25,6 +25,14 @@ public class PatientDAO extends AbstractDAO<Patient> {
         super(sessionFactory);
     }
 
+    /**
+     * This function provides formatted return of patients.
+     * @param limit number of returned doctors
+     * @param start first selected doctor
+     * @param sortBy column that table will be sorted by
+     * @param way sorted ascending or descending (asc,desc)
+     * @return list of patients filtered by entered params. If no params are presented, all patients will be returned
+     */
     public List<Patient> getAllPatients(int limit, int start, SortablePatientColumns sortBy, SortingWays way){
         Criteria criteria = criteria();
         if(limit > 0 && start >= 0) {
@@ -45,6 +53,12 @@ public class PatientDAO extends AbstractDAO<Patient> {
         return list(criteria);
     }
 
+    /**
+     * This function is called during login. If credentials are incorrect function return null.
+     * @param userName login username
+     * @param password login password
+     * @return Patient entity object with entered username and password
+     */
     public Patient getLoggedPatientInformation(String userName, String password) {
         Criteria criteria = criteria()
                 .add(Restrictions.eq("userName", userName))
@@ -52,6 +66,10 @@ public class PatientDAO extends AbstractDAO<Patient> {
         return (Patient) criteria.uniqueResult();
     }
 
+    /**
+     * Save new patient to the database
+     * @param registrationInput object with all registration values
+     */
     public void registerPatient(RegistrationInput registrationInput) {
         currentSession().save(new Patient(
                 registrationInput.getFirstName(),
@@ -63,6 +81,9 @@ public class PatientDAO extends AbstractDAO<Patient> {
                 ));
     }
 
+    /**
+     * This function checked if selected userName and email are unique
+     */
     public boolean isUserNameAndEmailUnique(String userName, String email) {
         Criterion userNameCondition = Restrictions.eq("userName", userName);
         Criterion emailCondtition = Restrictions.eq("email", email);
@@ -72,6 +93,11 @@ public class PatientDAO extends AbstractDAO<Patient> {
         return patient == null;
     }
 
+
+    /**
+     * @param date selected date
+     * @return number of patient registration per selected date
+     */
     public long getNumberOfRegistrations(Date date) {
         return (long) criteria()
                 .add(Restrictions.eq("registrationDate", date))
@@ -79,12 +105,19 @@ public class PatientDAO extends AbstractDAO<Patient> {
                 .uniqueResult();
     }
 
+    /**
+     * @param blocked true = block, false = unblock
+     * @param id selected patient
+     */
     public void blockPatient(boolean blocked, int id) {
         currentSession();
         Patient patient = currentSession().find(Patient.class, id);
         patient.setBlocked(blocked);
     }
 
+    /**
+     * @return number of all patients
+     */
     public long getNumberOfAllPatients(){
         return (long)criteria()
                 .setProjection(Projections.rowCount())

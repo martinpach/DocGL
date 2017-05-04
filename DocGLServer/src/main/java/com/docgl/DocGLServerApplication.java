@@ -101,6 +101,11 @@ public class DocGLServerApplication extends Application<DocGLServerConfiguration
     }
 
     private static class ExampleAuthenticator  implements Authenticator<JwtContext, LoggedUser> {
+        /**
+         * This method is called on each request.
+         * @param context request token context
+         * @return LoggedUser object with user type and id from token
+         */
         @Override
         public Optional<LoggedUser> authenticate(JwtContext context) {
 

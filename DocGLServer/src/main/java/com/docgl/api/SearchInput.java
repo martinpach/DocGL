@@ -7,6 +7,9 @@ public class SearchInput {
 
     private String string;
 
+    /**
+     * @param string searched keyword
+     */
     public SearchInput(String string) {
         this.string = string;
     }

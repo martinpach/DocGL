@@ -30,6 +30,12 @@ public class AdminProfileResource {
         this.authorizer=new Authorizer();
     }
 
+    /**
+     * Resource for changing admin password
+     * @param loggedUser is logged user that is sending request
+     * @param id chosen admin
+     * @param passwordInput new password
+     */
     @Path("password")
     @PUT
     @UnitOfWork
@@ -42,6 +48,13 @@ public class AdminProfileResource {
         adminDAO.setPassword(passwordInput.getPassword(), id);
     }
 
+    /**
+     * Resource for updating admin profile
+     * @param loggedUser is logged user that is sending request
+     * @param id chosen admin
+     * @param admin AdminInput object with values to update
+     * @return updated Admin object
+     */
     @PUT
     @UnitOfWork
     public Admin updateProfile(@Auth LoggedUser loggedUser, @PathParam("id") int id, AdminInput admin){
@@ -51,6 +64,12 @@ public class AdminProfileResource {
         return adminDAO.getLoggedAdminInformation(1);
     }
 
+    /**
+     * Resource for getting selected admin profile
+     * @param loggedUser is logged user that is sending request
+     * @param id chosen admin
+     * @return chosen admin
+     */
     @GET
     @UnitOfWork
     public Admin getAdminProfile(@Auth LoggedUser loggedUser, @PathParam("id") int id){

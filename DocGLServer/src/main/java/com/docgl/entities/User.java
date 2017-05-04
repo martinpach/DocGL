@@ -7,6 +7,7 @@ import javax.validation.constraints.NotNull;
 
 /**
  * Created by Rasťo on 22.4.2017.
+ * Abstract class for all entities. Prevents from duplicated code.
  */
 
 @Inheritance(strategy=InheritanceType.TABLE_PER_CLASS)
