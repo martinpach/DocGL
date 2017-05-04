@@ -54,6 +54,8 @@ public class PatientDAO extends AbstractDAO<Patient> {
                 throw new ValidationException("In case of sorting use 'way' query parameter with sortBy parameter");
             }
         }
+        System.out.println("!!!!!!!!!!!!!!!"+list(criteria).size());
+
         return list(criteria);
     }
 
