@@ -11,6 +11,11 @@ public class LoginInput extends Input{
     public LoginInput() {
     }
 
+    /**
+     * @param userName represents input from json when using login resource
+     * @param password represents input from json when using login resource
+     * @param userType represents input from json and it is used to distinct what type of user is trying to log in
+     */
     public LoginInput(String userName, String password, UserType userType) {
         super(userName, password);
         this.userType = userType;

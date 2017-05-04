@@ -3,6 +3,7 @@ package com.docgl.resources;
 import com.docgl.Authorizer;
 import com.docgl.Views;
 import com.docgl.api.BlockedInput;
+import com.docgl.api.CountRepresentation;
 import com.docgl.db.AppointmentDAO;
 import com.docgl.entities.Appointment;
 import com.docgl.enums.SortablePatientColumns;
@@ -38,6 +39,16 @@ public class PatientResource {
         this.authorizer = new Authorizer();
     }
 
+
+    /**
+     * Resource for getting patients.
+     * @param loggedUser is user that is sending a request
+     * @param limit is number of returned patients
+     * @param start is first patient to be returned
+     * @param sortBy column to sort results by
+     * @param way ascending or descending (asc, desc)
+     * @return List of filtered patients. If no params are presented then all patients are returned.
+     */
     @GET
     @UnitOfWork
     public List<Patient> getListOfAllPatients(@Auth LoggedUser loggedUser,
@@ -50,6 +61,12 @@ public class PatientResource {
         return patientDAO.getAllPatients(limit, start, sortBy, way);
     }
 
+
+    /**
+     * Resource for getting all appointments of patient
+     * @param id selected patient
+     * @return list of all appointments
+     */
     @GET
     @Path("{id}/appointments")
     @UnitOfWork
@@ -58,6 +75,12 @@ public class PatientResource {
         return appointmentDAO.getAppointments(id, UserType.PATIENT);
     }
 
+    /**
+     * Resource for block/unblock patient
+     * @param loggedUser user that is sending a request
+     * @param id selected patient
+     * @param blockedInput json input with one property -> blocked : true/false
+     */
     @PUT
     @Path("{id}/blocked")
     @UnitOfWork
@@ -66,19 +89,14 @@ public class PatientResource {
         patientDAO.blockPatient(blockedInput.isBlocked(), id);
     }
 
+    /**
+     * Resource for getting number of all patients
+     * @return number of all patients in json representation -> count : {numberOfPatients}
+     */
     @GET
     @Path("count")
     @UnitOfWork
-    public PatientCountRepresentation getNumberOfAllPatients(){
-        return new PatientCountRepresentation(patientDAO.getNumberOfAllPatients());
-    }
-
-    private class PatientCountRepresentation{
-        @JsonProperty
-        private long count;
-
-        PatientCountRepresentation(long count) {
-            this.count = count;
-        }
+    public CountRepresentation getNumberOfAllPatients(){
+        return new CountRepresentation(patientDAO.getNumberOfAllPatients());
     }
 }

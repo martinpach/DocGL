@@ -28,10 +28,18 @@ public class DoctorDAO extends AbstractDAO<Doctor> {
         super(factory);
     }
 
+    /**
+     * This function provides formatted return of doctors.
+     * @param limit number of returned doctors
+     * @param start first selected doctor
+     * @param sortBy column that table will be sorted by
+     * @param way sorted ascending or descending (asc,desc)
+     * @return list of doctors filtered by entered params. If no params are presented, all doctors will be returned
+     */
     public List<Doctor> getAllDoctors(int limit, int start, SortableDoctorColumns sortBy, SortingWays way, String name, SpecializationsEnum spec) {
         Criteria criteria = criteria();
         if (name != null || spec != null)
-            searchDoctor(name, spec);
+            criteria = searchDoctor(name, spec);
         else
             throw new ValidationException("Url must contain of parameter name or spec");
 
@@ -54,11 +62,18 @@ public class DoctorDAO extends AbstractDAO<Doctor> {
         return list(criteria);
     }
 
+    /**
+     * @return all likes
+     */
     public long getNumberOfOverallLikes() {
         return (long) criteria()
                 .setProjection(Projections.sum("likes")).uniqueResult();
     }
 
+    /**
+     * @param date selected date
+     * @return number of doctor registration per selected date
+     */
     public long getNumberOfRegistrations(Date date) {
         return (long) criteria()
                 .add(Restrictions.eq("registrationDate", date))
@@ -66,12 +81,20 @@ public class DoctorDAO extends AbstractDAO<Doctor> {
                 .uniqueResult();
     }
 
+    /**
+     * @param blocked true = block, false = unblock
+     * @param id selected doctor
+     */
     public void blockDoctor(boolean blocked, int id) {
         Session session = currentSession();
         Doctor doctor = session.find(Doctor.class, id);
         doctor.setBlocked(blocked);
     }
 
+    /**
+     * By default doctor is not approved. Admin has to approve him to use application.
+     * @param id selected doctor to be approved
+     */
     public void approveDoctor(int id) {
         Session session = currentSession();
         Doctor doctor = session.find(Doctor.class, id);
@@ -81,47 +104,35 @@ public class DoctorDAO extends AbstractDAO<Doctor> {
         doctor.setApproved(true);
     }
 
-    public List<Doctor> searchDoctorByName(String name, String spec) {
-        Criteria criteria = criteria();
-        if (name != null || spec != null) {
-            if (name != null) {
-                Criterion firstname = Restrictions.ilike("firstName", "%" + name + "%");
-                Criterion lastname = Restrictions.ilike("lastName", "%" + name + "%");
-                criteria.add(Restrictions.or(firstname, lastname));
-            }
-            if (spec != null) {
-                if (spec.equals("DENTIST") || spec.equals("CARDIOLOGIST") || spec.equals("ORTHOPEDIST")) {
-                    criteria.add(Restrictions.eq("specialization", SpecializationsEnum.valueOf(spec)));
-                } else if (spec.equals("")) {
-
-                } else
-                    throw new ValidationException("Invalid specialization. Choose between: DENTIST, CARDIOLOGIST or ORTHOPEDIST");
-            }
-        } else
-            throw new ValidationException("Search must contain of parameter name or spec");
-
-        return list(criteria);
-    }
-
-    public List<Doctor> searchDoctor(String name, SpecializationsEnum spec) {
+    public Criteria searchDoctor(String name, SpecializationsEnum spec) {
         Criteria criteria = criteria();
         if (name != null) {
             Criterion firstname = Restrictions.ilike("firstName", "%" + name + "%");
             Criterion lastname = Restrictions.ilike("lastName", "%" + name + "%");
-            criteria.add(Restrictions.or(firstname, lastname));
+            Criterion email = Restrictions.ilike("email", "%" + name + "%");
+            criteria.add(Restrictions.or(firstname, lastname, email));
         }
         if (spec != null) {
             criteria.add(Restrictions.eq("specialization", spec));
         }
-        return list(criteria);
+        return criteria;
     }
-
+    
+    /**
+     * @return number of all doctors
+     */
     public long getNumberOfAllDoctors(){
         return (long)criteria()
                 .setProjection(Projections.rowCount())
                 .uniqueResult();
     }
 
+    /**
+     * This function is called during login. If credentials are incorrect function return null.
+     * @param username login username
+     * @param password login password
+     * @return Doctor entity object with entered username and password
+     */
     public Doctor getLoggedDoctorInformation(String username, String password) {
         Criteria criteria = criteria()
                 .add(Restrictions.eq("userName", username))
@@ -129,6 +140,9 @@ public class DoctorDAO extends AbstractDAO<Doctor> {
         return (Doctor) criteria.uniqueResult();
     }
 
+    /**
+     * This function checked if selected userName and email are unique
+     */
     public boolean isUserNameAndEmailUnique(String userName, String email) {
         Criterion userNameCondition = Restrictions.eq("userName", userName);
         Criterion emailCondtition = Restrictions.eq("email", email);
@@ -138,16 +152,20 @@ public class DoctorDAO extends AbstractDAO<Doctor> {
         return doctor == null;
     }
 
+    /**
+     * Save new doctor to the database
+     * @param registrationInput object with all registration values
+     */
     public void registerDoctor(RegistrationInput registrationInput) {
         currentSession().save(new Doctor(
-            registrationInput.getFirstName(),
-            registrationInput.getLastName(),
-            registrationInput.getEmail(),
-            registrationInput.getUserName(),
-            registrationInput.getSpecialization(),
-            new Cryptor().encrypt(registrationInput.getPassword()),
-            new Date()
-            ));
+                registrationInput.getFirstName(),
+                registrationInput.getLastName(),
+                registrationInput.getEmail(),
+                registrationInput.getUserName(),
+                registrationInput.getSpecialization(),
+                new Cryptor().encrypt(registrationInput.getPassword()),
+                new Date()
+        ));
     }
 }
 

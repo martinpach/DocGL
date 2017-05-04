@@ -1,3 +1,5 @@
+package com.docgl;
+
 import com.docgl.Cryptor;
 import org.junit.Test;
 

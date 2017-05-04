@@ -7,6 +7,8 @@ import java.util.Objects;
 
 /**
  * Created by Martin on 20.4.2017.
+ * Class to represent loggedUser
+ * Purpose: for authorization and authentication stuff
  */
 public class LoggedUser implements Principal {
     private UserType role;

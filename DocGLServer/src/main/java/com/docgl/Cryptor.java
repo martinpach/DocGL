@@ -14,6 +14,9 @@ public class Cryptor  {
     private static final String PASSWORD = "sovy2017";
     private static byte[] FINAL_KEY = new byte[16];
 
+    /**
+     * creating bit key
+     */
     static {
         int i = 0;
         try {
@@ -23,6 +26,10 @@ public class Cryptor  {
             e.printStackTrace();
         }}
 
+    /**
+     * @param text value to encrypt
+     * @return encrypted string
+     */
     public static String encrypt(String text) {
         String encriptedtText = null;
         final Cipher encryptCipher;
@@ -36,6 +43,10 @@ public class Cryptor  {
         return encriptedtText;
     }
 
+    /**
+     * @param text value to decrypt
+     * @return decrypted string
+     */
     public static String decrypt(String text)  {
         String decriptedText = null;
         final Cipher decryptCipher;

@@ -10,6 +10,11 @@ public class AdminInput extends Input{
     public AdminInput() {
     }
 
+    /**
+     * @param userName input from json when using updateProfile resource
+     * @param password input from json when using updateProfile resource
+     * @param email input from json when using updateProfile resource
+     */
     public AdminInput(String userName, String password, String email) {
         super(userName, password);
         this.email = email;

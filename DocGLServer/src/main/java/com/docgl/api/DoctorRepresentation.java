@@ -9,6 +9,11 @@ public class DoctorRepresentation {
     private Doctor doctor;
     private String token;
 
+    /**
+     * This class represents response after successful login
+     * @param doctor represents logged doctor entity object
+     * @param token represents generated token
+     */
     public DoctorRepresentation(Doctor doctor, String token) {
         this.doctor = doctor;
         this.token = token;

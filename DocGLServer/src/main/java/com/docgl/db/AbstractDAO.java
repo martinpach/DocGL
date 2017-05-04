@@ -13,6 +13,7 @@ import org.junit.Before;
 
 /**
  * Created by Martin on 1.5.2017.
+ * This class sets up h2 database (database for testing)
  */
 public class AbstractDAO {
     protected final SessionFactory sessionFactory;

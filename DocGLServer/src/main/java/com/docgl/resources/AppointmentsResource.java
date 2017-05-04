@@ -31,6 +31,11 @@ public class AppointmentsResource {
         this.authorizer = new Authorizer();
     }
 
+    /**
+     * Resource for getting number of appointments for today
+     * @param loggedUser is user that is sending request
+     * @return number of appointments in json representation
+     */
     @GET
     @Path("count")
     @UnitOfWork

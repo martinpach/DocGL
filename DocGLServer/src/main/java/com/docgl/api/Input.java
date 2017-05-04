@@ -2,6 +2,7 @@ package com.docgl.api;
 
 /**
  * Created by Martin on 26.4.2017.
+ * This class is just as super class for all Input classes to prevent duplicated code
  */
 public abstract class Input {
     private String userName;

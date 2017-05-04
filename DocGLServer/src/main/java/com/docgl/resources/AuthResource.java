@@ -1,6 +1,5 @@
 package com.docgl.resources;
 
-import com.docgl.Cryptor;
 import com.docgl.api.*;
 import com.docgl.entities.Doctor;
 import com.docgl.enums.UserType;
@@ -44,6 +43,11 @@ public class AuthResource {
         this.tokenSecret=tokenSecret;
     }
 
+    /**
+     * Resource for log in.
+     * @param credentials LoginInput object with user type and credentials
+     * @return If credentials are correct, token and selected user type object are returned. If doctor, patient are not approved or are blocked token will be empty
+     */
     @POST
     @UnitOfWork
     @Path("login")
@@ -71,13 +75,15 @@ public class AuthResource {
         if (userType.equals(UserType.DOCTOR)) {
             Doctor doctorInfo = doctorDAO.getLoggedDoctorInformation(username, password);
             if(doctorInfo != null){
-                return new DoctorRepresentation(doctorInfo, generateValidToken("doctor", doctorInfo.getId()));
+                String token = (!doctorInfo.isApproved() || doctorInfo.isBlocked()) ? "" : generateValidToken("doctor", doctorInfo.getId());
+                return new DoctorRepresentation(doctorInfo, token);
             }
         }
         if (userType.equals(UserType.PATIENT)) {
             Patient patientInfo = patientDAO.getLoggedPatientInformation(username, password);
             if(patientInfo != null){
-                return new PatientRepresentation(patientInfo, generateValidToken("patient", patientInfo.getId()));
+                String token = patientInfo.isBlocked() ? "" : generateValidToken("patient", patientInfo.getId());
+                return new PatientRepresentation(patientInfo, token);
             }
         }
 
@@ -93,6 +99,11 @@ public class AuthResource {
     }
 
 
+    /**
+     * Resource for registering new user
+     * @param registrationInput values for new user
+     * @return If registration is successful the registered user and token are returned. In case of doctor no token is returned (because he is not approved by default)
+     */
     @POST
     @UnitOfWork
     @Path("registration")
@@ -120,7 +131,7 @@ public class AuthResource {
             if (doctorDAO.isUserNameAndEmailUnique(userName, email)) {
                 doctorDAO.registerDoctor(registrationInput);
                 Doctor doctorInfo = doctorDAO.getLoggedDoctorInformation(userName, registrationInput.getPassword());
-                return new DoctorRepresentation(doctorInfo, generateValidToken("doctor", doctorInfo.getId()));
+                return new DoctorRepresentation(doctorInfo, "");
             }
             else
                 throw new ValidationException("Username or email is taken");
@@ -128,6 +139,12 @@ public class AuthResource {
         return null;
     }
 
+    /**
+     * Generating valid token.
+     * @param role is user type of logged user (admin, patient, doctor)
+     * @param id logged user id
+     * @return
+     */
     private String generateValidToken(String role, int id) {
         final JwtClaims claims = new JwtClaims();
         claims.setSubject(role);
