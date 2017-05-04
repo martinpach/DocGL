@@ -234,7 +234,7 @@ $(document).ready(function () {
 
     //sorting, not ready yet - id, joined date, name, spec,likes
 
-    $(document).on("click", "#sortIdUsers", function () { //not done
+    $(document).on("click", "#sortIdUsers", function (event) { //not done
         event.preventDefault(event);
         sortByUsers = "id";
         wayUsers = wayUsers == "desc" ? "asc" : "desc";
@@ -243,7 +243,7 @@ $(document).ready(function () {
 
     });
 
-    $(document).on("click", "#sortNameUsers", function () {
+    $(document).on("click", "#sortNameUsers", function (event) {
         event.preventDefault(event);
         sortByUsers = "lastName";
         wayUsers = wayUsers == "desc" ? "asc" : "desc";
@@ -252,7 +252,7 @@ $(document).ready(function () {
 
     });
 
-    $(document).on("click", "#sortJoinedUsers", function () {
+    $(document).on("click", "#sortJoinedUsers", function (event) {
         event.preventDefault(event);
         sortByUsers = "registration_date";
         wayUsers = wayUsers == "desc" ? "asc" : "desc";
@@ -260,7 +260,7 @@ $(document).ready(function () {
         $(this).find("i").toggleClass("fa-sort-asc");
     });
 
-    $(document).on("click", "#sortIdDocs", function () { //not done
+    $(document).on("click", "#sortIdDocs", function (event) { //not done
         event.preventDefault(event);
         sortByDocs = "id";
         wayDocs = wayDocs == "desc" ? "asc" : "desc";
@@ -269,7 +269,7 @@ $(document).ready(function () {
 
     });
 
-    $(document).on("click", "#sortNameDocs", function () {
+    $(document).on("click", "#sortNameDocs", function (event) {
         event.preventDefault(event);
         sortByDocs = "lastName";
         wayDocs = wayDocs == "desc" ? "asc" : "desc";
@@ -277,7 +277,7 @@ $(document).ready(function () {
         $(this).find("i").toggleClass("fa-sort-asc");
     });
 
-    $(document).on("click", "#sortRatingDocs", function () {
+    $(document).on("click", "#sortRatingDocs", function (event) {
         event.preventDefault(event);
         sortByDocs = "likes";
         wayDocs = wayDocs == "desc" ? "asc" : "desc";
@@ -310,7 +310,7 @@ $(document).ready(function () {
     //edit profile
 
     //toggle edit fields
-    $(document).on("click", "#editProfile", function () {
+    $(document).on("click", "#editProfile", function (event) {
         event.preventDefault(event);
         $("#username").toggle();
         $("#changeUsernameDiv").toggle();
@@ -323,7 +323,7 @@ $(document).ready(function () {
     });
 
     //send changed info to the server,to be finished
-    $(document).on("click", "#submitProfile", function () {
+    $(document).on("click", "#submitProfile", function (event) {
         event.preventDefault(event);
         var dfd=$.Deferred();
         var newData={
