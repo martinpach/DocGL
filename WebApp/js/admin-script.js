@@ -1,7 +1,6 @@
 /*insert js here*/
 $(document).ready(function () {
-    var adminData
-     = {
+    var adminData = {
         id: localStorage.getItem("id"),
         firstName: localStorage.getItem("firstName"),
         lastName: localStorage.getItem("lastName"),
@@ -26,8 +25,7 @@ $(document).ready(function () {
 
     //loads name to the page
     var usernameTemplate = "<p>{{firstName}} {{lastName}}</p>";
-    var html = Mustache.to_html(usernameTemplate, adminData
-        );
+    var html = Mustache.to_html(usernameTemplate, adminData);
     $("#userName").html(html);
 
     //load profile
@@ -37,17 +35,13 @@ $(document).ready(function () {
             var templateUsername = "<p>{{userName}}</p>";
             var templateMail = "<p>{{email}}</p>";
             var templatePassword = "<p>************</p>";
-            var html = Mustache.to_html(template, adminData
-                );
+            var html = Mustache.to_html(template, adminData);
             $("#heading").html(html);
-            html = Mustache.to_html(templateUsername, adminData
-                );
+            html = Mustache.to_html(templateUsername, adminData);
             $("#username").html(html);
-            html = Mustache.to_html(templateMail, adminData
-                );
+            html = Mustache.to_html(templateMail, adminData);
             $("#email").html(html);
-            html = Mustache.to_html(templatePassword, adminData
-                );
+            html = Mustache.to_html(templatePassword, adminData);
             $("#password").html(html);
         });
     });
@@ -204,16 +198,16 @@ $(document).ready(function () {
     function generateDoctorTable() {
         var i = 0;
         var icon = '<i class="fa fa-user-md tableIcon"></i>';
-        var approvedStatus=ajaxData[i].approved;
-        var blockedStatus=ajaxData[i].blocked;
-        var statusIcon='<i class="fa fa-circle-o tableIcon statusIcon" aria-hidden="true"  data-toggle="modal" data-target="#docStatusModal"></i>';
-        if(approvedStatus==true)
-            statusIcon='<i class="fa fa-check-circle-o tableIcon statusIcon approvedIcon" aria-hidden="true"  data-toggle="modal" data-target="#docStatusModal"></i>';
-        if(blockedStatus==true)
-            statusIcon='<i class="fa fa-ban tableIcon statusIcon blockedIcon" aria-hidden="true"  data-toggle="modal" data-target="#docStatusModal"></i>';
+        var approvedStatus = ajaxData[i].approved;
+        var blockedStatus = ajaxData[i].blocked;
+        var statusIcon = '<i class="fa fa-circle-o tableIcon statusIcon" aria-hidden="true"  data-toggle="modal" data-target="#docStatusModal"></i>';
+        if (approvedStatus == true)
+            statusIcon = '<i class="fa fa-check-circle-o tableIcon statusIcon approvedIcon" aria-hidden="true"  data-toggle="modal" data-target="#docStatusModal"></i>';
+        if (blockedStatus == true)
+            statusIcon = '<i class="fa fa-ban tableIcon statusIcon blockedIcon" aria-hidden="true"  data-toggle="modal" data-target="#docStatusModal"></i>';
         $(".tableRow").remove();
         for (i = 0; i < ajaxData.length; i++) {
-            $("#tableDoctors").append('<tr class="tableRow" data-id="'+i+'">' +
+            $("#tableDoctors").append('<tr class="tableRow" data-id="' + i + '">' +
                 '<td>' + icon + '</td>' +
                 '<td>' + ajaxData[i].id + '</td>' +
                 '<td>' + ajaxData[i].firstName + " " + ajaxData[i].lastName + '</td>' +
@@ -228,16 +222,16 @@ $(document).ready(function () {
     function generateUserTable() {
         var i = 0;
         var icon = '<i class="fa fa-user tableIcon"></i>';
-        var approvedStatus=ajaxData[i].approved;
-        var blockedStatus=ajaxData[i].blocked;
-        var statusIcon='<i class="fa fa-circle-o tableIcon statusIcon" aria-hidden="true"  data-toggle="modal" data-target="#userStatusModal"></i>';
-        if(approvedStatus==true)
-            statusIcon='<i class="fa fa-check-circle-o tableIcon statusIcon approvedIcon" aria-hidden="true"  data-toggle="modal" data-target="#docStatusModal"></i>';
-        if(blockedStatus==true)
-            statusIcon='<i class="fa fa-ban tableIcon statusIcon blockedIcon" aria-hidden="true"  data-toggle="modal" data-target="#docStatusModal"></i>';
+        var approvedStatus = ajaxData[i].approved;
+        var blockedStatus = ajaxData[i].blocked;
+        var statusIcon = '<i class="fa fa-circle-o tableIcon statusIcon" aria-hidden="true"  data-toggle="modal" data-target="#userStatusModal"></i>';
+        if (approvedStatus == true)
+            statusIcon = '<i class="fa fa-check-circle-o tableIcon statusIcon approvedIcon" aria-hidden="true"  data-toggle="modal" data-target="#docStatusModal"></i>';
+        if (blockedStatus == true)
+            statusIcon = '<i class="fa fa-ban tableIcon statusIcon blockedIcon" aria-hidden="true"  data-toggle="modal" data-target="#docStatusModal"></i>';
         $(".tableRow").remove();
         for (i = 0; i < ajaxData.length; i++) {
-            $("#tableUsers").append('<tr class="tableRow" id="'+i+'">' +
+            $("#tableUsers").append('<tr class="tableRow" id="' + i + '">' +
                 '<td>' + icon + '</td>' +
                 '<td>' + ajaxData[i].id + '</td>' +
                 '<td>' + ajaxData[i].firstName + " " + ajaxData[i].lastName + '</td>' +
@@ -307,23 +301,23 @@ $(document).ready(function () {
     //change user/doctor status
     var selectedDoc;
     var selectedUser;
-    $(document).on("click","tr",function(event) {
+    $(document).on("click", "tr", function (event) {
         var id = $(this).attr("data-id");
         console.log(id);
-        if($("#doctors").hasClass("selected")){
-            selectedDoc=parseInt(id)+1;
+        if ($("#doctors").hasClass("selected")) {
+            selectedDoc = parseInt(id) + 1;
         }
-        if($("#users").hasClass("selected")){
-            selectedUser=parseInt(id)+1;
+        if ($("#users").hasClass("selected")) {
+            selectedUser = parseInt(id) + 1;
         }
     });
 
-    $("#approveDoc").on("click",function(){
-        var dfd=$.Deferred();
-        var approved=JSON.stringify({
-            "approved":true
+    $("#approveDoc").on("click", function () {
+        var dfd = $.Deferred();
+        var approved = JSON.stringify({
+            "approved": true
         });
-        ajaxRequest("/api/doctors/"+id+"/blocked","PUT",approved).done(
+        ajaxRequest("/api/doctors/" + id + "/blocked", "PUT", approved).done(
             getDoctors();
 
         );
@@ -368,78 +362,73 @@ $(document).ready(function () {
     //send changed info to the server,to be finished
     $(document).on("click", "#submitProfile", function (event) {
         event.preventDefault(event);
-        var dfd=$.Deferred();
-        var newData={
-            username:$("#editUsernameInput").val(),
-            email:$("#editEmailInput").val(),
-            password:$("#editPwd1").val(),
-            password2:$("#editPwd2").val()
+        var dfd = $.Deferred();
+        var newData = {
+            username: $("#editUsernameInput").val(),
+            email: $("#editEmailInput").val(),
+            password: $("#editPwd1").val(),
+            password2: $("#editPwd2").val()
         }
-        var regex={
-            username:/^[a-zA-Z0-9_\-]*$/,
-            password:/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\/\^&\*])/,
-            email:/^[a-zA-Z0-9.!#$%&’*+\/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
+        var regex = {
+            username: /^[a-zA-Z0-9_\-]*$/,
+            password: /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\/\^&\*])/,
+            email: /^[a-zA-Z0-9.!#$%&’*+\/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
         };
-        var isUsernameValid=false;
-        var isEmailValid=false;
-        var isPasswordValid=false;
-        
-        if(regex.username.test(newData.username)){
-            isUsernameValid=true;
+        var isUsernameValid = false;
+        var isEmailValid = false;
+        var isPasswordValid = false;
+
+        if (regex.username.test(newData.username)) {
+            isUsernameValid = true;
             console.log(isUsernameValid);
-        }
-        else{
+        } else {
             //alert user to enter a valid username
             console.log("invalid username!");
             $("#usernameErrorMsg").val("Choose a different username.");
         }
-        if(regex.email.test(newData.email)){
-            isEmailValid=true;
-        }
-        else{
+        if (regex.email.test(newData.email)) {
+            isEmailValid = true;
+        } else {
             $("#emailErrorMsg").val("Choose a valid email.");
         }
-        if((regex.password.test(newData.password)&&newData.password==newData.password2)||newData.password==""){
-            isPasswordValid=true;
-        }
-        else{
+        if ((regex.password.test(newData.password) && newData.password == newData.password2) || newData.password == "") {
+            isPasswordValid = true;
+        } else {
             $("#pwdErrorMsg").val("Choose a valid password.");
         }
-        if(isPasswordValid&&isUsernameValid&&isEmailValid){
-            var dataToSend=JSON.stringify({
-                "userName":newData.username,
-                "password":newData.password,
-                "email":newData.email
+        if (isPasswordValid && isUsernameValid && isEmailValid) {
+            var dataToSend = JSON.stringify({
+                "userName": newData.username,
+                "password": newData.password,
+                "email": newData.email
             });
-        //console.log(dataToSend);
-        ajaxRequest("/admins/" + adminData.id + "/profile", "PUT", dataToSend).done(function () {
-            $("#pwdErrorMsg").html("Profile changed successfully.");
-            console.log(ajaxData);
-            localStorage.setItem("userName",ajaxData.userName);
-            localStorage.setItem("email",ajaxData.email);
-            adminData.userName=ajaxData.userName;
-            adminData.email=ajaxData.email
-            console.log(localStorage.getItem("userName")+" "+localStorage.getItem("email"));
-            $("#editUsernameInput").val(ajaxData.userName);
-            $("#editEmailInput").val(ajaxData.email);
-            var template = "<p>{{userName}}'s</p>";
-            html = Mustache.to_html(template, ajaxData);
-            $("#heading").html(html);
+            //console.log(dataToSend);
+            ajaxRequest("/admins/" + adminData.id + "/profile", "PUT", dataToSend).done(function () {
+                $("#pwdErrorMsg").html("Profile changed successfully.");
+                console.log(ajaxData);
+                localStorage.setItem("userName", ajaxData.userName);
+                localStorage.setItem("email", ajaxData.email);
+                adminData.userName = ajaxData.userName;
+                adminData.email = ajaxData.email
+                console.log(localStorage.getItem("userName") + " " + localStorage.getItem("email"));
+                $("#editUsernameInput").val(ajaxData.userName);
+                $("#editEmailInput").val(ajaxData.email);
+                var template = "<p>{{userName}}'s</p>";
+                html = Mustache.to_html(template, ajaxData);
+                $("#heading").html(html);
 
-            dfd.resolve();
-        });
+                dfd.resolve();
+            });
             //finish error messages and test with backend!
-        return dfd.promise();
-        }
-        else{
+            return dfd.promise();
+        } else {
             console.log("couldn't change password. inputs invalid");
         }
     });
 
-        var searchString;
+    var searchString;
 
     function getDoctorsSearch() {
-        console.log("search doctors begins");
         var dfd = $.Deferred();
         ajaxRequest("/doctors?name=" + searchString, "GET").done(function () {
             var icon = '<i class="fa fa-user-md tableIcon"></i>';
@@ -450,18 +439,17 @@ $(document).ready(function () {
     }
 
     function getUsersSearch() {
-        console.log("user search not working yet.")
-            // var dfd = $.Deferred();
-            // ajaxRequest("/doctors?name=" + searchString, //"GET").done(function () {
-            //    var icon = '<i class="fa fa-user-md tableIcon"></i>';
-            //   generateDoctorTable();
-            //   dfd.resolve();
-            // });
-            // return dfd.promise();
+        var dfd = $.Deferred();
+        ajaxRequest("/patients?name=" + searchString, "GET").done(function () {
+            var icon = '<i class="fa fa-user-md tableIcon"></i>';
+            generateDoctorTable();
+            dfd.resolve();
+        });
+        return dfd.promise();
     }
 
     function setActionToUsersSearchBox() {
-        $(document).on("keydown","#searchFieldUsers",function (event) {
+        $(document).on("keydown", "#searchFieldUsers", function (event) {
             searchString = $("#searchFieldUsers").val();
             if (event.keyCode == 13) {
                 if ($("#users").hasClass("selected")) {
@@ -470,10 +458,10 @@ $(document).ready(function () {
             }
         });
     }
-    
-     function setActionToDoctorsSearchBox() {
-       $(document).on("keydown","#searchFieldDoctors",function (event) {
-           searchString = $("#searchFieldDoctors").val();
+
+    function setActionToDoctorsSearchBox() {
+        $(document).on("keydown", "#searchFieldDoctors", function (event) {
+            searchString = $("#searchFieldDoctors").val();
             if (event.keyCode == 13) {
                 if ($("#doctors").hasClass("selected")) {
                     getDoctorsSearch();
@@ -481,7 +469,7 @@ $(document).ready(function () {
             }
         });
     }
-    
+
     //ajax request function
     function ajaxRequest(url, requestType, dataToSend) {
         var dfd = $.Deferred();
