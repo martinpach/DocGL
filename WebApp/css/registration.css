@@ -20,7 +20,7 @@ body{
 }
 
 main{
-	margin-top: 8%;
+	margin-top: 5%;
 	background-color: white;
 }
 
@@ -66,8 +66,8 @@ h1{
 	margin-bottom: 0;
 }
 
-label{
-	padding-left: 10px;
+.lbl-input{
+	padding-left: 5px;
 	color: #034f84;
 	font-size: 16px;
 }

@@ -21,6 +21,8 @@ import io.dropwizard.hibernate.UnitOfWork;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -127,5 +129,17 @@ public class DoctorResource {
     @UnitOfWork
     public CountRepresentation getNumberOfAllDoctors(){
         return new CountRepresentation(doctorDAO.getNumberOfAllDoctors());
+    }
+    /**
+     * Resource for getting doctor specializations
+     * @return list of all specializations
+     */
+    @GET
+    @Path("specializations")
+    @UnitOfWork
+    public List<SpecializationsEnum> getSpecializations(){
+        SpecializationsEnum[] array = SpecializationsEnum.values();
+        List<SpecializationsEnum> list = Arrays.asList(array);
+        return list;
     }
 }

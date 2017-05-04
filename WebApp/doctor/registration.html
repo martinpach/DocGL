@@ -11,6 +11,8 @@
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="../css/registration.css">
+    <script src="../js/jquery.validate.min.js"></script>
+    <script src="../js/registration.js"></script>
     <title>Not Approved</title>
 </head>
 
@@ -21,59 +23,66 @@
         </div>
         <div class="row">
             <div class="col-sm-12">
-                <form>
+                <!-- REGISTRATION FORM -->
+                <form id="registration-form">
                     <div class="row form-div">
                         <div class="col-sm-5 col-sm-offset-1">
+                            <!-- FIRST NAME -->
                             <div class="form-group">
-                                <label for="input-firstName">Name</label>
-                                <input type="text" class="input-form" id="input-firstName" placeholder="Enter Name" required="required">
+                                <label for="firstname" class="lbl-input">First Name</label>
+                                <input type="text" class="input-form" id="firstname" name="firstname" placeholder="Enter Name" required="required">
                             </div>
+                            <!-- LAST NAME -->
                             <div class="form-group">
-                                <label for="input-lastName">Surname</label>
-                                <input type="text" class="input-form" id="input-lastName" placeholder="Enter Surname" required="required">
+                                <label for="lastname" class="lbl-input">Last Name</label>
+                                <input type="text" class="input-form" id="lastname" name="lastname" placeholder="Enter Surname" required="required">
                             </div>
+                            <!-- WORKPLACE -->
                             <div class="form-group">
-                                <label for="input-workplace">Workplace</label>
-                                <input type="text" class="input-form" id="input-workplace" placeholder="Enter Workplace" required="required">
+                                <label for="username" class="lbl-input">User Name</label>
+                                <input type="text" class="input-form" id="username" name="username" placeholder="Enter User Name" required="required">
                             </div>
                         </div>
                         <div class="col-sm-6 middle-col">
+                            <!-- SPECIALIZATION -->
                             <div class="form-group">
-                                <label for="input-specialization">Specialization</label>
-                                <select class="input-form" id="input-specialization">
-                                    <option value="" selected>Choose Specialization</option>
+                                <label for="specialization" class="lbl-input">Specialization</label>
+                                <select class="input-form" id="specialization" name="specialization">
+                                    <option value="">Choose Specialization</option>
                                 </select>
                             </div>
+                            <!-- EMAIL -->
                             <div class="form-group">
-                                <label for="input-email">Email address</label>
-                                <input type="text" class="input-form" id="input-email" placeholder="Enter Email" required="required">
+                                <label for="email" class="lbl-input">Email address</label>
+                                <input type="email" class="input-form" id="email" name="email" placeholder="Enter Email" required="required">
                             </div>
+                            <!-- PHONE -->
                             <div class="form-group">
-                                <label for="input-phone">Phone</label>
-                                <input type="text" class="input-form" id="input-phone" placeholder="Enter Phone" required="required">
+                                <label for="phone" class="lbl-input">Phone</label>
+                                <input type="text" class="input-form" id="phone" name="phone" placeholder="Enter Phone" required="required">
                             </div>
                         </div>
                     </div>
                     <div class="row form-div">
                         <div class="col-sm-5 col-sm-offset-1">
+                            <!-- PASSWORD -->
                             <div class="form-group">
-                                <label for="input-password">Password</label>
-                                <input type="text" class="input-form" id="input-password" placeholder="Enter Password" required="required">
+                                <label for="password" class="lbl-input">Password</label>
+                                <input type="password" class="input-form" id="password" name="password" placeholder="Enter Password" required="required">
                             </div>
+                            <!-- CONFIRM PASSWORD -->
                             <div class="form-group">
-                                <input type="text" class="input-form" id="input-lastName" placeholder="ReEnter Password" required="required">
+                                <input type="password" class="input-form" id="confirm_password" name="confirm_password" placeholder="ReEnter Password" required="required">
                             </div>
                         </div>
                     </div>
                     <div class="row footer-div">
                         <div class="col-sm-5 col-sm-offset-1 ">
-                            <button id="btn-register">Create account</button>
+                            <button type="submit" id="btn-register">Create account</button>
                         </div>
                         <div class="col-sm-6">
                             <img src="../img/docGL_logo.png" alt="docgl_logo" class="docgl-logo">
                         </div>
-                        
-                        
                     </div>    
                 </form>
             </div>

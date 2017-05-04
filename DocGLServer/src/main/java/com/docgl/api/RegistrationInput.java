@@ -12,6 +12,7 @@ public class RegistrationInput extends Input{
     private String email;
     private UserType userType;
     private SpecializationsEnum specialization;
+    private String phone;
 
     public RegistrationInput() {
     }
@@ -25,14 +26,16 @@ public class RegistrationInput extends Input{
      * @param email entered email
      * @param userType entered userType
      * @param specialization entered specialization
+     * @param phone entered phone
      */
-    public RegistrationInput(String userName, String password, String firstName, String lastName, String email, UserType userType, SpecializationsEnum specialization) {
+    public RegistrationInput(String userName, String password, String firstName, String lastName, String email, UserType userType, SpecializationsEnum specialization, String phone) {
         super(userName, password);
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.userType = userType;
         this.specialization = specialization;
+        this.phone = phone;
     }
 
     public String getFirstName() {
@@ -53,5 +56,9 @@ public class RegistrationInput extends Input{
 
     public SpecializationsEnum getSpecialization() {
         return specialization;
+    }
+
+    public String getPhone() {
+        return phone;
     }
 }

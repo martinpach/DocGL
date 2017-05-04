@@ -11,6 +11,9 @@ $(document).ready(function () {
         localStorage.setItem("userType", "DOCTOR");
         window.location.href = "login.html";
     });
+    $(document).on('click', '#btn-doctor-register', function() {
+        window.location.href = "doctor/registration.html";
+    });
 
     $("#username").on("input", function () {
         checkInput($(this));
@@ -70,11 +73,12 @@ $(document).ready(function () {
                         localStorage.setItem("firstName", doctor.firstName);
                         localStorage.setItem("lastName", doctor.lastName);
                         localStorage.setItem("email", doctor.email);
+                        localStorage.setItem("phone", doctor.phone);
                         localStorage.setItem("userName", doctor.userName);
                         localStorage.setItem("passwordChanged", doctor.passwordChanged);
                         localStorage.setItem("token", data.token);
                         if (doctor.approved == false) {
-                            window.location.href = "doctor/approval-wating.html"
+                            window.location.href = "doctor/approval-wating.html";
                         } else {
                             //window.location.href = "../doctor/home.html"
                         }

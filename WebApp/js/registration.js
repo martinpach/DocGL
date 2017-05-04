@@ -1,0 +1,126 @@
+$(document).ready(function() {
+	var ajaxData;
+
+	fillSpecializations ();
+
+	$.validator.setDefaults({
+		submitHandler: function() {
+			registerDoctor ()
+		}
+	});
+
+	$("#registration-form").validate({
+		rules: {
+			firstname: "required",
+			lastname: "required",
+			workplace: "required",
+			specialization: "required",
+			email: {
+				required: true,
+				email: true
+			},
+			phone: {
+				required: true,
+				number: true
+			},
+			password: {
+				required: true,
+				minlength: 5,
+				passwordRestrictions: true
+			},
+			confirm_password: {
+				required: true,
+				minlength: 5,
+				equalTo: "#password"
+			},
+		},
+		messages: {
+			firstname: "Please enter your firstname",
+			lastname: "Please enter your lastname",
+			workplace: "Please enter a workplace location",
+			specialization: "Please choose your specialization",
+			email: "Please enter a valid email address",
+			phone: "Please enter your phone number",
+			password: {
+				required: "Please provide a password",
+				minlength: "Your password must be at least 5 characters long"
+			},
+			confirm_password: {
+				required: "Please provide a password",
+				minlength: "Your password must be at least 5 characters long",
+				equalTo: "Please enter the same password as above"
+			},
+		}
+	});
+
+	/*Method for password validation*/
+	$.validator.addMethod("passwordRestrictions", function(value, element) {
+		return this.optional(element) || /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\/\^&\*])/.test(value);
+	}, 'Password must contains lowercase, uppercase, number and special character');
+
+	/*Function for fill select options with specializations*/
+	function fillSpecializations () {
+		var dfd = $.Deferred();
+		ajaxRequest('/doctors/specializations', "GET").done(function () {
+			for (var i = 0; i < ajaxData.length; i++) {
+	            var text = ajaxData[i].toLowerCase().replace(/\b[a-z]/g, function (letter) {
+                    return letter.toUpperCase();
+                });
+	            $('<option />', {
+	                "class": 'specialization'
+	            }).text(text).appendTo("#specialization").val(text.toLowerCase().slice(0, 4));
+	        }
+	        dfd.resolve();
+		});
+		return dfd.promise();
+	}
+
+	/*Function that register new doctor*/
+	function registerDoctor () {
+		var dfd = $.Deferred();
+		var dataToSend = JSON.stringify({
+            "firstName": $("#username").val(),
+		    "lastName": $("#username").val(),
+		    "email": $("#username").val(),
+		    "userType": "DOCTOR",
+		    "userName": $("#username").val(),
+		    "password": $("#username").val(),
+		    "specialization": $("#specialization option:selected").text().toUpperCase(),
+		    "phone": $("#username").val()
+        });
+		ajaxRequest('/auth/registration', "POST", dataToSend).done(function () {
+			var doctor = ajaxData.doctor;
+            localStorage.setItem("id", doctor.id);
+            localStorage.setItem("firstName", doctor.firstName);
+            localStorage.setItem("lastName", doctor.lastName);
+            localStorage.setItem("email", doctor.email);
+            localStorage.setItem("phone", doctor.phone);
+            localStorage.setItem("userName", doctor.userName);
+            localStorage.setItem("passwordChanged", doctor.passwordChanged);
+            localStorage.setItem("token", ajaxData.token);
+            window.location.href = "approval-wating.html";
+	        dfd.resolve();
+		});
+		return dfd.promise();
+	}
+	
+
+	function ajaxRequest(ajaxUrl, requestType, dataToSend) {
+        var dfd = $.Deferred();
+        $.ajax({
+            url: 'http://localhost:8085/api' + ajaxUrl,
+            type: requestType,
+            data: dataToSend,
+            contentType: 'application/json',
+            success: function (data) {
+                if (data != null) ajaxData = data;
+                dfd.resolve();
+            },
+            error: function () {
+                dfd.reject();
+                console.log("Error");
+            }
+        });
+        return dfd.promise();
+    }
+});

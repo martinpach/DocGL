@@ -34,6 +34,10 @@ public class Doctor extends User{
     @NotNull
     private SpecializationsEnum specialization;
 
+    @Column(name = "phone")
+    @NotNull
+    private String phone;
+
     @Column(name = "blocked", columnDefinition = "boolean default false")
     private boolean blocked;
 
@@ -72,6 +76,14 @@ public class Doctor extends User{
         this.specialization = specialization;
     }
 
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
     public boolean isBlocked() {
         return blocked;
     }
@@ -95,18 +107,20 @@ public class Doctor extends User{
         super(firstName,lastName,email,userName,password);
     }
 
-    public Doctor(String firstName, String lastName, String email, String userName, SpecializationsEnum specialization, String password, Date registrationDate) {
+    public Doctor(String firstName, String lastName, String email, String userName, SpecializationsEnum specialization, String phone, String password, Date registrationDate) {
         super(firstName,lastName,email,userName,password);
         this.registrationDate = registrationDate;
         this.specialization = specialization;
+        this.phone = phone;
     }
 
-    public Doctor(String firstName, String lastName, String email, String userName, String password, Collection<Appointment> appointments, @NotNull Date registrationDate, @NotNull int likes, @NotNull SpecializationsEnum specialization, boolean blocked, boolean approved) {
+    public Doctor(String firstName, String lastName, String email, String userName, String password, Collection<Appointment> appointments, @NotNull Date registrationDate, @NotNull int likes, @NotNull SpecializationsEnum specialization, String phone, boolean blocked, boolean approved) {
         super(firstName, lastName, email, userName, password);
         this.appointments = appointments;
         this.registrationDate = registrationDate;
         this.likes = likes;
         this.specialization = specialization;
+        this.phone = phone;
         this.blocked = blocked;
         this.approved = approved;
     }
@@ -119,10 +133,13 @@ public class Doctor extends User{
                 ", firstname='" + this.getFirstName() + '\'' +
                 ", lastname='" + this.getLastName() +'\''+
                 ", email='" + this.getEmail() +'\''+
+                ", phone='" + this.getPhone() +'\''+
                 ", username='"+this.getUserName()+'\''+
                 ", password='"+this.getPassword()+'\''+
                 ", blocked='"+this.isBlocked()+'\''+
                 ", approved='"+this.isApproved()+'\''+
                 '}';
     }
+
+
 }
