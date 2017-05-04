@@ -297,6 +297,11 @@ th{
 	font-size:50px;
 }
 
+.modalIconSelected{
+	opacity:0.5;
+	cursor:not-allowed;
+}
+
 .headingModal{
 	color:white;
 	font-size:30px;
