@@ -11,12 +11,41 @@
 	<table class="table" id="tableDoctors">
 		<tr>
 			<th></th>
-			<th>ID<span id="sortIdDocs"><i class="fa fa-sort-desc sortArrow" aria-hidden="true"></i></span></th>
+			<th>ID<span id="sortIdDocs"><i class="fa fa-sort-asc sortArrow" aria-hidden="true"></i></span></th>
 			<th>Name<span id="sortNameDocs"> <i class="fa fa-sort-desc sortArrow" aria-hidden="true" ></i></span></th>
 			<th>Specialization</th>
 			<th>Email address</th>
 			<th>Rating<span id="sortRatingDocs"> <i class="fa fa-sort-desc sortArrow" aria-hidden="true"></i></span></th>
+			<th class="text-center">Status</th>
 		</tr>
 	</table>
 </div>
+</div>
+
+<div id="docStatusModal" class="modal fade" role="dialog">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header text-center">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title headingModal">Edit doctor status</h4>
+			</div>
+			<div class="modal-body">
+				<div class='row'>
+					<div class="col-md-6 text-center">
+						<i class="fa fa-check-circle-o modalIcon statusIcon approvedIcon" id="approveDoc"></i>
+						<br>
+						<p class="approvedIcon">Approve</p>
+					</div>
+					<div class="col-md-6 text-center">
+						<i class="fa fa-ban modalIcon statusIcon blockedIcon" id="blockDoc"></i>
+						<br>
+						<p class="blockedIcon">Block</p>
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Done</button>
+			</div>
+		</div>
+	</div>
 </div>

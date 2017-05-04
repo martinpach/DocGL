@@ -10,8 +10,7 @@ $(document).ready(function () {
         passwordChanged: localStorage.getItem("passwordChanged"),
         token: localStorage.getItem("token")
     };
-    var ajaxData
-    ;
+    var ajaxData;
 
     var start = 0;
     var limit = 4;
@@ -203,15 +202,23 @@ $(document).ready(function () {
     function generateDoctorTable() {
         var i = 0;
         var icon = '<i class="fa fa-user-md tableIcon"></i>';
+        var approvedStatus=ajaxData[i].approved;
+        var blockedStatus=ajaxData[i].blocked;
+        var statusIcon='<i class="fa fa-circle-o tableIcon statusIcon" aria-hidden="true"  data-toggle="modal" data-target="#docStatusModal"></i>';
+        if(approvedStatus==true)
+            statusIcon='<i class="fa fa-check-circle-o tableIcon statusIcon approvedIcon" aria-hidden="true"  data-toggle="modal" data-target="#docStatusModal"></i>';
+        if(blockedStatus==true)
+            statusIcon='<i class="fa fa-ban tableIcon statusIcon blockedIcon" aria-hidden="true"  data-toggle="modal" data-target="#docStatusModal"></i>';
         $(".tableRow").remove();
         for (i = 0; i < ajaxData.length; i++) {
-            $("#tableDoctors").append('<tr class="tableRow">' +
+            $("#tableDoctors").append('<tr class="tableRow" data-id="'+i+'">' +
                 '<td>' + icon + '</td>' +
                 '<td>' + ajaxData[i].id + '</td>' +
                 '<td>' + ajaxData[i].firstName + " " + ajaxData[i].lastName + '</td>' +
                 '<td>' + ajaxData[i].specialization + '</td>' +
                 '<td>' + ajaxData[i].email + '</td>' +
                 '<td><p class="like"><i class="fa fa-heart heart"></i>' + ajaxData[i].likes + '</p></td>' +
+                '<td class="text-center">' + statusIcon + '</td>' +
                 '</tr>');
         }
     }
@@ -219,18 +226,27 @@ $(document).ready(function () {
     function generateUserTable() {
         var i = 0;
         var icon = '<i class="fa fa-user tableIcon"></i>';
+        var approvedStatus=ajaxData[i].approved;
+        var blockedStatus=ajaxData[i].blocked;
+        var statusIcon='<i class="fa fa-circle-o tableIcon statusIcon" aria-hidden="true"  data-toggle="modal" data-target="#userStatusModal"></i>';
+        if(approvedStatus==true)
+            statusIcon='<i class="fa fa-check-circle-o tableIcon statusIcon approvedIcon" aria-hidden="true"  data-toggle="modal" data-target="#docStatusModal"></i>';
+        if(blockedStatus==true)
+            statusIcon='<i class="fa fa-ban tableIcon statusIcon blockedIcon" aria-hidden="true"  data-toggle="modal" data-target="#docStatusModal"></i>';
         $(".tableRow").remove();
         for (i = 0; i < ajaxData.length; i++) {
-            $("#tableUsers").append('<tr class="tableRow">' +
+            $("#tableUsers").append('<tr class="tableRow" id="'+i+'">' +
                 '<td>' + icon + '</td>' +
                 '<td>' + ajaxData[i].id + '</td>' +
                 '<td>' + ajaxData[i].firstName + " " + ajaxData[i].lastName + '</td>' +
                 '<td>' + ajaxData[i].email + '</td>' +
                 '<td>' + ajaxData[i].registrationDate + '</td>' +
+                '<td class="text-center">' + statusIcon + '</td>' +
                 '</tr>');
         }
 
     }
+
 
     //sorting, not ready yet - id, joined date, name, spec,likes
 
@@ -286,6 +302,31 @@ $(document).ready(function () {
 
     });
 
+    //change user/doctor status
+    var selectedDoc;
+    var selectedUser;
+    $(document).on("click","tr",function(event) {
+        var id = $(this).attr("data-id");
+        console.log(id);
+        if($("#doctors").hasClass("selected")){
+            selectedDoc=parseInt(id)+1;
+        }
+        if($("#users").hasClass("selected")){
+            selectedUser=parseInt(id)+1;
+        }
+    });
+
+    $("#approveDoc").on("click",function(){
+        var dfd=$.Deferred();
+        var approved=JSON.stringify({
+            "approved":true
+        });
+        ajaxRequest("/api/doctors/"+id+"/blocked","PUT",approved).done(
+            getDoctors();
+
+        );
+
+    });
     //get statistics
     function getAppointmentCount() {
         var dfd = $.Deferred();
@@ -334,7 +375,7 @@ $(document).ready(function () {
         }
         var regex={
             username:/^[a-zA-Z0-9_\-]*$/,
-            password:/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])/,
+            password:/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\/\^&\*])/,
             email:/^[a-zA-Z0-9.!#$%&’*+\/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
         };
         var isUsernameValid=false;

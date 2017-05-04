@@ -254,6 +254,65 @@ i.fa.fa-heart.heart::before{
 	cursor:pointer;
 }
 
+.statusIcon{
+	cursor:pointer;
+	font-size:20px;
+	color:#B5DFFD;
+}
+
+.approvedIcon{
+	color:#41CCB9;
+}
+
+.blockedIcon{
+	color:#990000;
+}
+
+th{
+	cursor:pointer;
+}
+
+#sortIdUsers{
+	display:none;
+}
+#sortNameUsers{
+	display:none;
+}
+#sortJoinedUsers{
+	display:none;
+}
+
+#sortIdDocs{
+	display:none;
+}
+#sortNameDocs{
+	display:none;
+}
+#sortRatingUsers{
+	display:none;
+}
+
+/*modal*/
+.modalIcon{
+	font-size:50px;
+}
+
+.headingModal{
+	color:white;
+	font-size:30px;
+	font-weight:400;
+
+}
+
+.modal-header{
+	background: #034F84 !important;
+    background: -moz-linear-gradient(bottom, rgba(46, 166, 158, 1) 0%, rgba(10, 60, 113, 1) 100%) !important;
+    background: -webkit-gradient(right top, left top, color-stop(0%, rgba(46, 166, 158, 1)), color-stop(100%, rgba(10, 60, 113, 1))) !important;
+    background: -webkit-linear-gradient(bottom, rgba(46, 166, 158, 1) 0%, rgba(10, 60, 113, 1) 100%) !important;
+    background: -o-linear-gradient(bottom, rgba(46, 166, 158, 1) 0%, rgba(10, 60, 113, 1) 100%) !important;
+    background: -ms-linear-gradient(bottom, rgba(46, 166, 158, 1) 0%, rgba(10, 60, 113, 1) 100%) !important;
+    background: linear-gradient(to top, rgba(46, 166, 158, 1) 0%, rgba(10, 60, 113, 1) 100%) !important;
+}
 
 
 /*pagination - to be filled*/
