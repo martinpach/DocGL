@@ -23,9 +23,7 @@ body {
 }
 
 .loginContainer {
-    width: 50%;
-    background-color: white;
-    position: relative;
+    background-color: white;    
     margin: 0 auto;
     margin-top: 5%;
 }
