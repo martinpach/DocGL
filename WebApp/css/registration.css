@@ -105,14 +105,13 @@ select{
     font-size: 16px;
     height: 35px;
     background-color: #B5DFFD !important;
-    color: #034F84 !important;
     margin-bottom: 10px !important;
     padding-left: 20px !important;
     color: white !important;
 }
 
 .select-checked{
-	color: #034F84;
+	color: #034F84 !important;
 }
 
 option{

@@ -3,6 +3,13 @@ $(document).ready(function() {
 
 	fillSpecializations ();
 
+	$(document).on('blur', "#specialization", function () {
+		console.log("ahoj");
+        if ($("#specialization :selected").text() != "Choose Specialization") {
+            $("#specialization").addClass('select-checked');
+        } else $("#specialization").removeClass('select-checked');
+    });
+
 	$.validator.setDefaults({
 		submitHandler: function() {
 			registerDoctor ()
