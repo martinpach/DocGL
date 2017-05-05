@@ -69,7 +69,7 @@ public class PatientDAO extends AbstractDAO<Patient> {
     public Patient getLoggedPatientInformation(String userName, String password) {
         Criteria criteria = criteria()
                 .add(Restrictions.eq("userName", userName))
-                .add(Restrictions.eq("password", new Cryptor().encrypt(password)));
+                .add(Restrictions.eq("password", Cryptor.encrypt(password)));
         return (Patient) criteria.uniqueResult();
     }
 
@@ -83,7 +83,7 @@ public class PatientDAO extends AbstractDAO<Patient> {
                 registrationInput.getLastName(),
                 registrationInput.getEmail(),
                 registrationInput.getUserName(),
-                new Cryptor().encrypt(registrationInput.getPassword()),
+                Cryptor.encrypt(registrationInput.getPassword()),
                 new Date()
                 ));
     }

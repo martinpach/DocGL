@@ -169,7 +169,7 @@ public class DoctorDAO extends AbstractDAO<Doctor> {
                 registrationInput.getUserName(),
                 registrationInput.getSpecialization(),
                 registrationInput.getPhone(),
-                new Cryptor().encrypt(registrationInput.getPassword()),
+                Cryptor.encrypt(registrationInput.getPassword()),
                 new Date()
         ));
     }
