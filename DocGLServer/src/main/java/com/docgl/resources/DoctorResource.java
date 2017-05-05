@@ -50,6 +50,8 @@ public class DoctorResource {
      * @param start is first doctor to be returned
      * @param sortBy column to sort results by
      * @param way ascending or descending (asc, desc)
+     * @param name searched doctor name
+     * @param spec searched doctor specialization
      * @return List of filtered doctors. If no params are presented then all doctors are returned.
      */
     @GET
@@ -71,7 +73,7 @@ public class DoctorResource {
      * Resource for block/unblock doctor
      * @param loggedUser user that is sending a request
      * @param id selected doctor
-     * @param blockedInput json input with one property -> blocked : true/false
+     * @param blockedInput json input with one property (blocked : true/false)
      */
     @PUT
     @Path("{id}/blocked")
@@ -110,7 +112,7 @@ public class DoctorResource {
     /**
      * Resource for getting number of all likes
      * @param loggedUser user that is sending a request
-     * @return Number of likes in json representation -> count : {numberOfLikes}
+     * @return Number of likes in json representation (count : {numberOfLikes})
      */
     @GET
     @Path("likes")
@@ -122,7 +124,7 @@ public class DoctorResource {
 
     /**
      * Resource for getting number of all doctors
-     * @return number of all doctors in json representation -> count : {numberOfDoctors}
+     * @return number of all doctors in json representation (count : {numberOfDoctors})
      */
     @GET
     @Path("count")

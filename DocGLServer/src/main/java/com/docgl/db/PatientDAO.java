@@ -31,6 +31,7 @@ public class PatientDAO extends AbstractDAO<Patient> {
      * @param start first selected doctor
      * @param sortBy column that table will be sorted by
      * @param way sorted ascending or descending (asc,desc)
+     * @param name searched patient name
      * @return list of patients filtered by entered params. If no params are presented, all patients will be returned
      */
     public List<Patient> getAllPatients(int limit, int start, SortablePatientColumns sortBy, SortingWays way, String name){
@@ -89,6 +90,9 @@ public class PatientDAO extends AbstractDAO<Patient> {
 
     /**
      * This function checked if selected userName and email are unique
+     * @param userName to test if it is unique
+     * @param email to test if it is unique
+     * @return true if both params are unique
      */
     public boolean isUserNameAndEmailUnique(String userName, String email) {
         Criterion userNameCondition = Restrictions.eq("userName", userName);

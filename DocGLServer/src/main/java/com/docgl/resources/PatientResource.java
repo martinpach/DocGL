@@ -47,6 +47,7 @@ public class PatientResource {
      * @param start is first patient to be returned
      * @param sortBy column to sort results by
      * @param way ascending or descending (asc, desc)
+     * @param name searched patient name
      * @return List of filtered patients. If no params are presented then all patients are returned.
      */
     @GET
@@ -81,7 +82,7 @@ public class PatientResource {
      * Resource for block/unblock patient
      * @param loggedUser user that is sending a request
      * @param id selected patient
-     * @param blockedInput json input with one property -> blocked : true/false
+     * @param blockedInput json input with one property (blocked : true/false)
      */
     @PUT
     @Path("{id}/blocked")
@@ -93,7 +94,7 @@ public class PatientResource {
 
     /**
      * Resource for getting number of all patients
-     * @return number of all patients in json representation -> count : {numberOfPatients}
+     * @return number of all patients in json representation (count : {numberOfPatients})
      */
     @GET
     @Path("count")
