@@ -128,9 +128,9 @@ public class AuthResource {
             if (registrationInput.getSpecialization() == null) {
                 throw new BadRequestException("Property 'specialization' is missing or not presented!");
             }
-            /*if (registrationInput.getPhone() == null) {
+            if (registrationInput.getPhone() == null) {
                 throw new BadRequestException("Property 'phone' is missing or not presented!");
-            }*/
+            }
             if (doctorDAO.isUserNameAndEmailUnique(userName, email)) {
                 doctorDAO.registerDoctor(registrationInput);
                 Doctor doctorInfo = doctorDAO.getLoggedDoctorInformation(userName, registrationInput.getPassword());
