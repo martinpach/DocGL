@@ -228,14 +228,12 @@ $(document).ready(function () {
     function generateUserTable() {
         var i = 0;
         var icon = '<i class="fa fa-user tableIcon"></i>';
-        var approvedStatus;
         var blockedStatus;
         var statusIcon='<i class="fa fa-circle-o tableIcon statusIcon" aria-hidden="true"  data-toggle="modal" data-target="#userStatusModal"></i>';
         $(".tableRow").remove();
         for (i = 0; i < ajaxData.length; i++) {
-            approvedStatus=ajaxData[i].approved;
             blockedStatus=ajaxData[i].blocked;
-            if(approvedStatus==true)
+            if(blockedStatus==false)
                 statusIcon='<i class="fa fa-check-circle-o tableIcon statusIcon approvedIcon" aria-hidden="true"  data-toggle="modal" data-target="#userStatusModal"></i>';
             if(blockedStatus==true)
                 statusIcon='<i class="fa fa-ban tableIcon statusIcon blockedIcon" aria-hidden="true"  data-toggle="modal" data-target="#userStatusModal"></i>';
@@ -369,23 +367,11 @@ $(document).ready(function () {
     $(document).on("click","#approveUser",function(event){
         event.preventDefault();
         var dfd=$.Deferred();
-        var approved=JSON.stringify({
-            "approved":true
-        });
         var blocked=JSON.stringify({
             "blocked":false
         });
-        if(userList[selectedUser].approved==false){
-        ajaxRequest("/patients/"+(selectedUser+1)+"/approved?name=","PUT",approved).done(function(){
-            $("#approveUser").addClass("modalIconSelected");
-            $("#blockUser").removeClass("modalIconSelected");
-            console.log(ajaxData);
-            getUsers(start, limit, sortUsers, wayUsers);
-            dfd.resolve();
-        });
-        }
-        else{
-            ajaxRequest("/patients/"+(selectedUser+1)+"/blocked?name=","PUT",blocked).done(function(){
+        if(userList[selectedUser].blocked==true){
+        ajaxRequest("/patients/"+(selectedUser+1)+"/blocked?name=","PUT",blocked).done(function(){
             $("#approveUser").addClass("modalIconSelected");
             $("#blockUser").removeClass("modalIconSelected");
             console.log(ajaxData);

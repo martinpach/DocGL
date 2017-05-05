@@ -271,7 +271,7 @@ i.fa.fa-heart.heart::before{
 th{
 	cursor:pointer;
 }
-
+/*
 #sortIdUsers{
 	display:none;
 }
@@ -291,7 +291,7 @@ th{
 #sortRatingUsers{
 	display:none;
 }
-
+*/
 /*modal*/
 .modalIcon{
 	font-size:50px;
