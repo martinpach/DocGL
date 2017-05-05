@@ -7,7 +7,7 @@ public class Patient {
 
     @SerializedName("id")
     @Expose
-    private int id;
+    private Integer id;
     @SerializedName("firstName")
     @Expose
     private String firstName;
@@ -17,12 +17,21 @@ public class Patient {
     @SerializedName("email")
     @Expose
     private String email;
+    @SerializedName("userName")
+    @Expose
+    private String userName;
+    @SerializedName("registrationDate")
+    @Expose
+    private String registrationDate;
+    @SerializedName("blocked")
+    @Expose
+    private Boolean blocked;
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -48,6 +57,30 @@ public class Patient {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public String getRegistrationDate() {
+        return registrationDate;
+    }
+
+    public void setRegistrationDate(String registrationDate) {
+        this.registrationDate = registrationDate;
+    }
+
+    public Boolean getBlocked() {
+        return blocked;
+    }
+
+    public void setBlocked(Boolean blocked) {
+        this.blocked = blocked;
     }
 
 }

@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 
+import com.wdfeww.docgl.data.model.User;
 import com.wdfeww.docgl.data.remote.APIService;
 import com.wdfeww.docgl.data.remote.ApiUtils;
 
@@ -24,18 +25,17 @@ import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
+import retrofit2.Response;
 
 
 public class AppLogin extends AppCompatActivity {
 
-    private Button login,sign_up;
+    private Button login, sign_up;
     private EditText password, username;
     private TextView errorMessageUsername, errorMessagePassword, successMessage;
     private APIService mAPIService;
-    String res;
-    //private Login userLogin;
-
-
+    private User user;
+    private String usernameTxt, passwordTxt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,49 +58,7 @@ public class AppLogin extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         if (checkUsername() && checkUPassword()) {
-                            String jsonParams = "{\"userName\":\"" + username.getText().toString().trim() + "\",\"password\":\"" + password.getText().toString().trim() + "\",\"userType\":\"PATIENT\"}";
-                            RequestBody body = null;
-                            try {
-
-                                body = RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"), (new JSONObject(jsonParams)).toString());
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                            }
-
-                            final Call<ResponseBody> response = mAPIService.userLogin(body);
-                            response.enqueue(new Callback<ResponseBody>() {
-                                @Override
-                                public void onResponse(Call<ResponseBody> call, retrofit2.Response<ResponseBody> rawResponse) {
-                                    try {
-                                        if (rawResponse.isSuccessful()) {
-                                            errorMessagePassword.setText("");
-                                            successMessage.setText("Login success!");
-                                               res = rawResponse.body().string();
-
-                                                //Gson gson = new GsonBuilder().create();
-                                                //JsonParser jsonParser = new JsonParser();
-                                                //JsonObject jsonResp = jsonParser.parse(rawResponse.body().string()).getAsJsonObject();
-                                                //userLogin = gson.fromJson(jsonResp, Login.class);
-
-                                            login();
-                                        } else {
-                                            errorMessagePassword.setText("Incorrect username or password!");
-                                            successMessage.setText("");
-                                        }
-
-                                    } catch (Exception e) {
-                                        errorMessagePassword.setText("Server not responding!");
-                                        e.printStackTrace();
-                                    }
-                                }
-
-                                @Override
-                                public void onFailure(Call<ResponseBody> call, Throwable throwable) {
-                                    errorMessagePassword.setText("Server not responding!");
-                                }
-
-
-                            });
+                            login();
                         }
                     }
                 }
@@ -119,14 +77,53 @@ public class AppLogin extends AppCompatActivity {
 
 
     private void login() {
-        Intent intent = new Intent(getApplicationContext(), Home.class);
-       // intent.putExtra("firstName", userLogin.getUser().getFirstName());
-       // intent.putExtra("lastName", userLogin.getUser().getLastName());
-       // intent.putExtra("email", userLogin.getUser().getEmail());
-       // intent.putExtra("id", userLogin.getUser().getId());
-       // intent.putExtra("token", userLogin.getToken());
-       // intent.putExtra("JSON_RESPONSE", res);
+        usernameTxt = username.getText().toString().trim();
+        passwordTxt = password.getText().toString().trim();
+        JSONObject json = getJson(usernameTxt, passwordTxt);
+        RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"), (json.toString()));
+
+        final Call<User> call = mAPIService.userLogin(body);
+        call.enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+                if (response.isSuccessful()) {
+                    errorMessagePassword.setText("");
+                    successMessage.setText("Login success!");
+                    user = response.body();
+                    redirectToHome();
+                } else {
+                    errorMessagePassword.setText("Incorrect username or password!");
+                    successMessage.setText("");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<User> call, Throwable t) {
+                errorMessagePassword.setText("Server not responding!");
+            }
+        });
+    }
+
+    private void redirectToHome() {
+        Intent intent = new Intent(getBaseContext(), Home.class);
+        intent.putExtra("firstName", user.getPatient().getFirstName());
+        intent.putExtra("lastName", user.getPatient().getLastName());
+        intent.putExtra("email", user.getPatient().getEmail());
+        intent.putExtra("id", user.getPatient().getId());
+        intent.putExtra("token", user.getToken());
         startActivity(intent);
+    }
+
+    private JSONObject getJson(String username, String password) {
+        JSONObject json = new JSONObject();
+        try {
+            json.put("userName", username);
+            json.put("password", password);
+            json.put("userType", "PATIENT");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return json;
     }
 
     private boolean checkUsername() {

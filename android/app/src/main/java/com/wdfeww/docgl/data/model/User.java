@@ -5,58 +5,27 @@ import com.google.gson.annotations.SerializedName;
 
 public class User {
 
-    @SerializedName("id")
+    @SerializedName("patient")
     @Expose
-    private int id;
-    @SerializedName("firstName")
+    private Patient patient;
+    @SerializedName("token")
     @Expose
-    private String firstName;
-    @SerializedName("lastName")
-    @Expose
-    private String lastName;
-    @SerializedName("email")
-    @Expose
-    private String email;
+    private String token;
 
-    public int getId() {
-        return id;
+    public Patient getPatient() {
+        return patient;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setPatient(Patient patient) {
+        this.patient = patient;
     }
 
-    public String getFirstName() {
-        return firstName;
+    public String getToken() {
+        return token;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
+    public void setToken(String token) {
+        this.token = token;
     }
 
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", email='" + email + '\'' +
-                '}';
-    }
 }
