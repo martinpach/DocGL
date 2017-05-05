@@ -34,6 +34,8 @@ public class DoctorDAO extends AbstractDAO<Doctor> {
      * @param start first selected doctor
      * @param sortBy column that table will be sorted by
      * @param way sorted ascending or descending (asc,desc)
+     * @param name name to search
+     * @param spec specialization to search
      * @return list of doctors filtered by entered params. If no params are presented, all doctors will be returned
      */
     public List<Doctor> getAllDoctors(int limit, int start, SortableDoctorColumns sortBy, SortingWays way, String name, SpecializationsEnum spec) {
@@ -142,6 +144,9 @@ public class DoctorDAO extends AbstractDAO<Doctor> {
 
     /**
      * This function checked if selected userName and email are unique
+     * @param userName to test if it is unique
+     * @param email to test if it is unique
+     * @return true if both params are unique
      */
     public boolean isUserNameAndEmailUnique(String userName, String email) {
         Criterion userNameCondition = Restrictions.eq("userName", userName);

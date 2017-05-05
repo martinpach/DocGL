@@ -16,6 +16,69 @@
 
     <name>DocGLServer</name>
 
+    <developers>
+        <developer>
+            <id>dfric</id>
+            <name>Dominika Fric</name>
+            <url>https://www.facebook.com/domi.lee.3?fref=ts</url>
+            <organization>SOVY Academy</organization>
+            <organizationUrl>http://www.akademiasovy.sk/</organizationUrl>
+            <roles>
+                <role>architect</role>
+                <role>developer</role>
+            </roles>
+            <timezone>Europe/Kosice</timezone>
+        </developer>
+        <developer>
+            <id>vuram</id>
+            <name>Vladimir Uram</name>
+            <url>https://www.facebook.com/vladimir.uram?fref=ts</url>
+            <organization>SOVY Academy</organization>
+            <organizationUrl>http://www.akademiasovy.sk/</organizationUrl>
+            <roles>
+                <role>architect</role>
+                <role>developer</role>
+            </roles>
+            <timezone>Europe/Kosice</timezone>
+        </developer>
+        <developer>
+            <id>rruscak</id>
+            <name>Rastislav Ruscak</name>
+            <url>https://www.facebook.com/rasto.ruscak?fref=ts</url>
+            <organization>SOVY Academy</organization>
+            <organizationUrl>http://www.akademiasovy.sk/</organizationUrl>
+            <roles>
+                <role>architect</role>
+                <role>developer</role>
+            </roles>
+            <timezone>Europe/Kosice</timezone>
+        </developer>
+        <developer>
+            <id>jbalint</id>
+            <name>Jozef Balint</name>
+            <url>https://www.facebook.com/balint.jozef?fref=ts</url>
+            <organization>SOVY Academy</organization>
+            <organizationUrl>http://www.akademiasovy.sk/</organizationUrl>
+            <roles>
+                <role>architect</role>
+                <role>developer</role>
+            </roles>
+            <timezone>Europe/Kosice</timezone>
+        </developer>
+        <developer>
+            <id>mpach</id>
+            <name>Martin Pach</name>
+            <url>https://www.facebook.com/pach.martin97?fref=ts</url>
+            <organization>SOVY Academy</organization>
+            <organizationUrl>http://www.akademiasovy.sk/</organizationUrl>
+            <roles>
+                <role>architect</role>
+                <role>developer</role>
+            </roles>
+            <timezone>Europe/Kosice</timezone>
+        </developer>
+    </developers>
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -172,7 +235,7 @@
             </plugin>
             <plugin>
                 <artifactId>maven-site-plugin</artifactId>
-                <version>3.0</version>
+                <version>3.3</version>
                 <configuration>
                     <reportPlugins>
                         <plugin>
@@ -186,6 +249,20 @@
                         <plugin>
                             <artifactId>maven-javadoc-plugin</artifactId>
                             <version>2.8.1</version>
+                        </plugin>
+                        <plugin>
+                            <groupId>org.codehaus.mojo</groupId>
+                            <artifactId>cobertura-maven-plugin</artifactId>
+                            <version>2.7</version>
+                        </plugin>
+                        <plugin>
+                            <groupId>org.codehaus.mojo</groupId>
+                            <artifactId>findbugs-maven-plugin</artifactId>
+                            <version>3.0.4</version>
+                            <configuration>
+                                <xmlOutput>true</xmlOutput>
+                                <xmlOutputDirectory>target/site</xmlOutputDirectory>
+                            </configuration>
                         </plugin>
                     </reportPlugins>
                 </configuration>
