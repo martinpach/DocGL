@@ -57,13 +57,13 @@ public class AdminDAO extends AbstractDAO<Admin> {
     public void updateProfile(String userName, String password, String email, int id){
         Session session = currentSession();
         Admin admin = session.find(Admin.class, id);
-        if(userName != null) {
+        if(userName != null && !userName.trim().isEmpty()) {
             admin.setUserName(userName);
         }
-        if(password != null) {
+        if(password != null && !password.trim().isEmpty()) {
             admin.setPassword(Cryptor.encrypt(password));
         }
-        if(email != null) {
+        if(email != null && !email.trim().isEmpty()) {
             admin.setEmail(email);
         }
     }
