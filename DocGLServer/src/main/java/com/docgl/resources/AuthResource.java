@@ -115,6 +115,16 @@ public class AuthResource {
         if(userType.equals(UserType.ADMIN)) {
             throw new ValidationException("Parameter userType should be 'DOCTOR' or 'PATIENT'");
         }
+        if(registrationInput.getFirstName() == null)
+            throw new BadRequestException("Property 'firstName' is missing or not presented!");
+        if(registrationInput.getLastName() == null)
+            throw new BadRequestException("Property 'lastName' is missing or not presented!");
+        if(registrationInput.getEmail() == null)
+            throw new BadRequestException("Property 'email' is missing or not presented!");
+        if(registrationInput.getUserName() == null)
+            throw new BadRequestException("Property 'userName' is missing or not presented!");
+        if(registrationInput.getPassword() == null)
+            throw new BadRequestException("Property 'password' is missing or not presented!");
         if(userType.equals(UserType.PATIENT)) {
             if (patientDAO.isUserNameAndEmailUnique(userName, email)) {
                 patientDAO.registerPatient(registrationInput);
