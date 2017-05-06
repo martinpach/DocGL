@@ -38,7 +38,6 @@ public class DocGLServerApplication extends Application<DocGLServerConfiguration
         }
     };
 
-
     public static void main(final String[] args) throws Exception {
         new DocGLServerApplication().run(args);
     }

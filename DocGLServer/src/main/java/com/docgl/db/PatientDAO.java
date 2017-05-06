@@ -55,8 +55,6 @@ public class PatientDAO extends AbstractDAO<Patient> {
                 throw new ValidationException("In case of sorting use 'way' query parameter with sortBy parameter");
             }
         }
-        System.out.println("!!!!!!!!!!!!!!!"+list(criteria).size());
-
         return list(criteria);
     }
 
@@ -133,6 +131,12 @@ public class PatientDAO extends AbstractDAO<Patient> {
                 .setProjection(Projections.rowCount())
                 .uniqueResult();
     }
+
+    /**
+     * This function search patients by theirs name.
+     * @param name name to search
+     * @return Criteria
+     */
     public Criteria searchPatient(String name) {
         Criteria criteria = criteria();
             Criterion firstname = Restrictions.ilike("firstName", "%" + name + "%");

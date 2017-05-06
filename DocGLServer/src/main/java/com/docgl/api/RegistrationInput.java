@@ -38,6 +38,14 @@ public class RegistrationInput extends Input{
         this.phone = phone;
     }
 
+    public RegistrationInput(String userName, String password, String firstName, String lastName, String email, UserType userType) {
+        super(userName, password);
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.userType = userType;
+    }
+
     public String getFirstName() {
         return firstName;
     }
