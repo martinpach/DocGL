@@ -106,6 +106,12 @@ public class DoctorDAO extends AbstractDAO<Doctor> {
         doctor.setApproved(true);
     }
 
+    /**
+     * This function search doctors by theirs name and specialization.
+     * @param name name to search
+     * @param spec specialization to search
+     * @return Criteria
+     */
     public Criteria searchDoctor(String name, SpecializationsEnum spec) {
         Criteria criteria = criteria();
         if (name != null) {
