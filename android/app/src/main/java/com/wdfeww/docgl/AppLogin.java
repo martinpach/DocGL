@@ -12,6 +12,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 
+import com.wdfeww.docgl.data.methods.Checker;
+import com.wdfeww.docgl.data.methods.JsonReqestBody;
 import com.wdfeww.docgl.data.model.User;
 import com.wdfeww.docgl.data.remote.APIService;
 import com.wdfeww.docgl.data.remote.ApiUtils;
@@ -35,7 +37,6 @@ public class AppLogin extends AppCompatActivity {
     private TextView errorMessageUsername, errorMessagePassword, successMessage;
     private APIService mAPIService;
     private User user;
-    private String usernameTxt, passwordTxt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,8 +58,15 @@ public class AppLogin extends AppCompatActivity {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if (checkUsername() && checkUPassword()) {
-                            login();
+                        if (Checker.isNameValid(username.getText().toString().trim())) {
+                            errorMessageUsername.setText("");
+                            if (Checker.isPasswordValid(password.getText().toString().trim())) {
+                                login();
+                            } else {
+                                errorMessageUsername.setText("Invalid password.");
+                            }
+                        } else {
+                            errorMessageUsername.setText("Please type your username.");
                         }
                     }
                 }
@@ -77,9 +85,7 @@ public class AppLogin extends AppCompatActivity {
 
 
     private void login() {
-        usernameTxt = username.getText().toString().trim();
-        passwordTxt = password.getText().toString().trim();
-        JSONObject json = getJson(usernameTxt, passwordTxt);
+        JSONObject json = JsonReqestBody.login(username.getText().toString().trim(), password.getText().toString().trim());
         RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"), (json.toString()));
 
         final Call<User> call = mAPIService.userLogin(body);
@@ -114,40 +120,4 @@ public class AppLogin extends AppCompatActivity {
         startActivity(intent);
     }
 
-    private JSONObject getJson(String username, String password) {
-        JSONObject json = new JSONObject();
-        try {
-            json.put("userName", username);
-            json.put("password", password);
-            json.put("userType", "PATIENT");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return json;
-    }
-
-    private boolean checkUsername() {
-        if (username.getText().length() == 0) {
-            errorMessageUsername.setText("Please type your username.");
-            return false;
-        } else {
-            errorMessageUsername.setText("");
-            return true;
-        }
-
-    }
-
-    private boolean checkUPassword() {
-        if (password.getText().length() == 0) {
-            errorMessagePassword.setText("Please type your password.");
-            return false;
-        } else if (password.getText().length() < 6) {
-            errorMessagePassword.setText("Invalid password.");
-            return false;
-        } else {
-            errorMessagePassword.setText("");
-            return true;
-        }
-
-    }
 }

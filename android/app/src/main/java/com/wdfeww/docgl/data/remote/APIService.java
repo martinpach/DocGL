@@ -15,5 +15,5 @@ public interface APIService {
     Call<User> userLogin(@Body RequestBody params);
 
     @POST("auth/registration")
-    Call<ResponseBody> userRegister(@Body RequestBody params);
+    Call<User> userRegister(@Body RequestBody params);
 }

@@ -10,6 +10,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.wdfeww.docgl.data.methods.Checker;
+import com.wdfeww.docgl.data.methods.JsonReqestBody;
+import com.wdfeww.docgl.data.model.User;
 import com.wdfeww.docgl.data.remote.APIService;
 import com.wdfeww.docgl.data.remote.ApiUtils;
 
@@ -23,6 +26,7 @@ import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
+import retrofit2.Response;
 
 
 public class Register extends AppCompatActivity {
@@ -30,7 +34,7 @@ public class Register extends AppCompatActivity {
     private EditText edit_txt_firstname, edit_txt_lastname, edit_txt_email, edit_txt_username, edit_txt_password;
     private TextView errorMessage, successMessage;
     private APIService mAPIService;
-    String res;
+    private User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,122 +53,68 @@ public class Register extends AppCompatActivity {
         sign_up.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (checkFirstname() && checkLastname() && checkEmail() && checkUsername() && checkUPassword()) {
-                    String jsonParams = "{\"userName\":\"" + edit_txt_username.getText().toString().trim() + "\",\"password\":\"" + edit_txt_password.getText().toString().trim() + "\",\"firstName\":\""
-                            + edit_txt_lastname.getText().toString().trim() + "\",\"lastName\":\"" + edit_txt_lastname.getText().toString().trim() + "\",\"email\":\"" + edit_txt_email.getText().toString().trim()
-                            + "\",\"userType\":\"PATIENT\"}";
-                    RequestBody body = null;
-                    try {
-
-                        body = RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"), (new JSONObject(jsonParams)).toString());
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                    final Call<ResponseBody> response = mAPIService.userRegister(body);
-                    response.enqueue(new Callback<ResponseBody>() {
-                        @Override
-                        public void onResponse(Call<ResponseBody> call, retrofit2.Response<ResponseBody> rawResponse) {
-                            try {
-                                if (rawResponse.isSuccessful()) {
-                                    errorMessage.setText("");
-                                    successMessage.setText("Registration success!");
-                                    res = rawResponse.body().string();
-                                    submit();
+                if (Checker.isNameValid(edit_txt_firstname.getText().toString().trim())) {
+                    if (Checker.isNameValid(edit_txt_lastname.getText().toString().trim())) {
+                        if (Checker.isEmailValid(edit_txt_email.getText().toString().trim())) {
+                            if (Checker.isNameValid(edit_txt_username.getText().toString().trim())) {
+                                if (Checker.isPasswordValid(edit_txt_password.getText().toString().trim())) {
+                                    register();
                                 } else {
-                                    errorMessage.setText("Username or email is already used!");
-                                    successMessage.setText("");
+                                    errorMessage.setText("Password must contain of minimum: one lower case, one upper case character, one number, one special character and minimum length of password is six characters");
                                 }
-
-                            } catch (Exception e) {
-                                errorMessage.setText("Server not responding!");
-                                e.printStackTrace();
+                            } else {
+                                errorMessage.setText("Please type your username name.");
                             }
+                        } else {
+                            errorMessage.setText("Please type valid email.");
                         }
-
-                        @Override
-                        public void onFailure(Call<ResponseBody> call, Throwable throwable) {
-                            errorMessage.setText("Server not responding!");
-                        }
-
-
-                    });
+                    } else {
+                        errorMessage.setText("Please type your lastname name.");
+                    }
+                } else {
+                    errorMessage.setText("Please type your first name.");
                 }
 
             }
-
-
         });
     }
 
-    private void submit() {
-        Intent intent = new Intent(getApplicationContext(), Home.class);
-       // intent.putExtra("JSON_RESPONSE", res);
+    private void register() {
+        JSONObject json = JsonReqestBody.register(edit_txt_username.getText().toString().trim(), edit_txt_password.getText().toString().trim(),
+                edit_txt_firstname.getText().toString().trim(), edit_txt_lastname.getText().toString().trim(),
+                edit_txt_email.getText().toString().trim());
+        RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"), (json.toString()));
+        final Call<User> call = mAPIService.userRegister(body);
+
+        call.enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+                if (response.isSuccessful()) {
+                    errorMessage.setText("");
+                    successMessage.setText("Register success!");
+                    user = response.body();
+                    redirectToHome();
+                } else {
+                    errorMessage.setText("Username or email is already used!");
+                    successMessage.setText("");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<User> call, Throwable t) {
+                errorMessage.setText("Server not responding!");
+            }
+        });
+    }
+
+    private void redirectToHome() {
+        Intent intent = new Intent(getBaseContext(), Home.class);
+        intent.putExtra("firstName", user.getPatient().getFirstName());
+        intent.putExtra("lastName", user.getPatient().getLastName());
+        intent.putExtra("email", user.getPatient().getEmail());
+        intent.putExtra("id", user.getPatient().getId());
+        intent.putExtra("token", user.getToken());
         startActivity(intent);
     }
 
-    private boolean checkFirstname() {
-        if (edit_txt_firstname.getText().length() == 0) {
-            errorMessage.setText("Please type your firstname.");
-            return false;
-        } else {
-            errorMessage.setText("");
-            return true;
-        }
-    }
-
-    private boolean checkLastname() {
-        if (edit_txt_lastname.getText().length() == 0) {
-            errorMessage.setText("Please type your lastname.");
-            return false;
-        } else {
-            errorMessage.setText("");
-            return true;
-        }
-    }
-
-    private boolean checkUsername() {
-        if (edit_txt_username.getText().length() == 0) {
-            errorMessage.setText("Please type your username.");
-            return false;
-        } else {
-            errorMessage.setText("");
-            return true;
-        }
-    }
-
-    private boolean checkUPassword() {
-        String string_pattern = "(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{6,}";
-        Pattern pattern = Pattern.compile(string_pattern);
-        Matcher matcher = pattern.matcher(edit_txt_password.getText());
-        Log.i("DEBUG", "" + matcher.matches());
-
-        if (edit_txt_password.getText().length() == 0) {
-            errorMessage.setText("Please type your password.");
-            return false;
-        } else if (!matcher.matches()) {
-            errorMessage.setText("Password must contain of minimum: one lower case, one upper case character, one number, one special character and minimum length of password is six characters.");
-            return false;
-        } else {
-            errorMessage.setText("");
-            return true;
-        }
-    }
-
-    private boolean checkEmail() {
-        String string_pattern = "(^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+$)";
-        Pattern pattern = Pattern.compile(string_pattern);
-        Matcher matcher = pattern.matcher(edit_txt_email.getText());
-        Log.i("DEBUG", "" + matcher.matches());
-
-        if (edit_txt_email.getText().length() == 0) {
-            errorMessage.setText("Please type your email.");
-            return false;
-        } else if (!matcher.matches()) {
-            errorMessage.setText("Wrong email.");
-            return false;
-        } else {
-            errorMessage.setText("");
-            return true;
-        }
-    }
 }
