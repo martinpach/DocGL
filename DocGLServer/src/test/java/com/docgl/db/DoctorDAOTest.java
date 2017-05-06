@@ -14,6 +14,9 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import static junit.framework.TestCase.assertFalse;
+import static junit.framework.TestCase.assertNull;
+import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertEquals;
 
 /**
@@ -101,30 +104,30 @@ public class DoctorDAOTest extends AbstractDAO {
     @Test
     public void isUserNameAndEmailUniqueTest() {
         boolean isUnique = dao.isUserNameAndEmailUnique("hgfhfg", "doctor@who.sk");
-        assertEquals(false, isUnique);
+        assertFalse(isUnique);
     }
     //Not unique userName test
     @Test
     public void isUserNameAndEmailUniqueTest2() {
         boolean isUnique = dao.isUserNameAndEmailUnique("doctorwho", "docor@who.sk");
-        assertEquals(false, isUnique);
+        assertFalse(isUnique);
     }
     //Unique userName and email
     @Test
     public void isUserNameAndEmailUniqueTest3() {
         boolean isUnique = dao.isUserNameAndEmailUnique("asdafas", "docor@who.sk");
-        assertEquals(true, isUnique);
+        assertTrue(isUnique);
     }
     //Case sensitive tests
     @Test
     public void isUserNameAndEmailUniqueTest4() {
         boolean isUnique = dao.isUserNameAndEmailUnique("Doctorwho", "fgfdg@who.sk");
-        assertEquals(true, isUnique);
+        assertTrue(isUnique);
     }
     @Test
     public void isUserNameAndEmailUniqueTest5() {
         boolean isUnique = dao.isUserNameAndEmailUnique("hgfhfg", "Doctor@who.sk");
-        assertEquals(true, isUnique);
+        assertTrue(isUnique);
     }
     /**
      * getNumberOfOverallLikes tests
@@ -149,14 +152,14 @@ public class DoctorDAOTest extends AbstractDAO {
     public void blockDoctorTest() {
         dao.blockDoctor(true, 1);
         Doctor patient = dao.getLoggedDoctorInformation("doctorwho", "docwho123");
-        assertEquals(true, patient.isBlocked());
+        assertTrue(patient.isBlocked());
     }
     @Test
     public void blockDoctorTest2() {
         dao.blockDoctor(true, 1);
         dao.blockDoctor(false, 1);
         Doctor doctor = dao.getLoggedDoctorInformation("doctorwho", "docwho123");
-        assertEquals(false, doctor.isBlocked());
+        assertFalse(doctor.isBlocked());
     }
     /**
      * approveDoctor test
@@ -165,7 +168,7 @@ public class DoctorDAOTest extends AbstractDAO {
     public void approveDoctorTest() {
         dao.approveDoctor(1);
         Doctor doctor = dao.getLoggedDoctorInformation("doctorwho", "docwho123");
-        assertEquals(true, doctor.isApproved());
+        assertTrue(doctor.isApproved());
     }
     /**
      * getNumberOfAllDoctors test
@@ -181,18 +184,18 @@ public class DoctorDAOTest extends AbstractDAO {
     @Test
     public void getLoggedDoctorInformationTest() {
         Doctor doctor = dao.getLoggedDoctorInformation("dsdfsdwho", "docwho123");
-        assertEquals(null, doctor);
+        assertNull(doctor);
     }
     //Case sensitive tests
     @Test
     public void getLoggedDoctorInformationTest2() {
         Doctor doctor = dao.getLoggedDoctorInformation("doctorwho", "Docwho123");
-        assertEquals(null, doctor);
+        assertNull(doctor);
     }
     @Test
     public void getLoggedDoctorInformationTest3() {
         Doctor doctor = dao.getLoggedDoctorInformation("Doctorwho", "docwho123");
-        assertEquals(null, doctor);
+        assertNull(doctor);
     }
     //correct credentials test
     @Test
@@ -207,8 +210,8 @@ public class DoctorDAOTest extends AbstractDAO {
         assertEquals(10, doctor.getLikes());
         assertEquals(SpecializationsEnum.DENTIST, doctor.getSpecialization());
         assertEquals("0949473196", doctor.getPhone());
-        assertEquals(false, doctor.isBlocked());
-        assertEquals(false, doctor.isApproved());
+        assertFalse(doctor.isBlocked());
+        assertFalse(doctor.isApproved());
     }
     /**
      * registerDoctor test
@@ -229,8 +232,8 @@ public class DoctorDAOTest extends AbstractDAO {
         assertEquals(0, doctor.getLikes());
         assertEquals(SpecializationsEnum.ORTHOPEDIST, doctor.getSpecialization());
         assertEquals("0925648528", doctor.getPhone());
-        assertEquals(false, doctor.isBlocked());
-        assertEquals(false, doctor.isApproved());
+        assertFalse(doctor.isBlocked());
+        assertFalse(doctor.isApproved());
     }
 
 }

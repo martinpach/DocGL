@@ -4,6 +4,7 @@ import com.docgl.Cryptor;
 import com.docgl.entities.Admin;
 import org.junit.Test;
 
+import static junit.framework.TestCase.assertFalse;
 import static org.junit.Assert.*;
 
 /**
@@ -26,7 +27,7 @@ public class AdminDAOTest extends AbstractDAO {
     @Test
     public void getLoggedIncorrectPasswordTest(){
         Admin admin = dao.getLoggedAdminInformation("rastobutton","badpassword");
-        assertEquals(null, admin);
+        assertNull(admin);
     }
 
     @Test
@@ -38,7 +39,7 @@ public class AdminDAOTest extends AbstractDAO {
     @Test
     public void getLoggedIncorrectUserNameTest(){
         Admin admin = dao.getLoggedAdminInformation("rastObutton", "rastobutton123");
-        assertEquals(null, admin);
+        assertNull(null, admin);
     }
 
     @Test

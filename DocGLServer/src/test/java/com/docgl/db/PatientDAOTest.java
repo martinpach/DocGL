@@ -14,7 +14,11 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import static junit.framework.TestCase.assertFalse;
+import static junit.framework.TestCase.assertNull;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Created by wdfeww on 5/4/17.
@@ -32,43 +36,43 @@ public class PatientDAOTest extends AbstractDAO {
     @Test
     public void getLoggedIncorrectPasswordTest() {
         Patient patient = dao.getLoggedPatientInformation("patientwho", "badpassword");
-        assertEquals(null, patient);
+        assertNull(patient);
     }
 
     @Test
     public void getLoggedCorrectPasswordTest() {
         Patient patient = dao.getLoggedPatientInformation("patientwho", "patwho123");
-        assertEquals(1, patient.getId());
+        assertNotNull(patient.getId());
     }
 
     @Test
     public void getLoggedIncorrectUserNameTest() {
         Patient patient = dao.getLoggedPatientInformation("badLoginName", "patwho123");
-        assertEquals(null, patient);
+        assertNull(patient);
     }
 
     @Test
     public void isUserNameAndEmailUniqueTest() {
         boolean isUnique = dao.isUserNameAndEmailUnique("patientwho", "patient@who.cz");
-        assertEquals(false, isUnique);
+        assertFalse(isUnique);
     }
 
     @Test
     public void isUserNameAndEmailUniqueTest2() {
         boolean isUnique = dao.isUserNameAndEmailUnique("asdafas", "patient@who.cz");
-        assertEquals(false, isUnique);
+        assertFalse(isUnique);
     }
 
     @Test
     public void isUserNameAndEmailUniqueTest3() {
         boolean isUnique = dao.isUserNameAndEmailUnique("patientwho", "asd@asdd.sd");
-        assertEquals(false, isUnique);
+        assertFalse(isUnique);
     }
 
     @Test
     public void isUserNameAndEmailUniqueTest4() {
         boolean isUnique = dao.isUserNameAndEmailUnique("asdsafasd", "asd@asdd.sd");
-        assertEquals(true, isUnique);
+        assertTrue(isUnique);
     }
 
     @Test
@@ -81,7 +85,7 @@ public class PatientDAOTest extends AbstractDAO {
     public void blockPatientTest() {
         dao.blockPatient(true, 1);
         Patient patient = dao.getLoggedPatientInformation("patientwho", "patwho123");
-        assertEquals(true, patient.isBlocked());
+        assertTrue(patient.isBlocked());
     }
 
     @Test
@@ -89,7 +93,7 @@ public class PatientDAOTest extends AbstractDAO {
         dao.blockPatient(true, 1);
         dao.blockPatient(false, 1);
         Patient patient = dao.getLoggedPatientInformation("patientwho", "patwho123");
-        assertEquals(false, patient.isBlocked());
+        assertFalse(patient.isBlocked());
     }
 
     @Test
@@ -104,18 +108,18 @@ public class PatientDAOTest extends AbstractDAO {
     @Test
     public void getLoggedPatientInformationTest() {
         Patient patient = dao.getLoggedPatientInformation("dsdfsdwho", "patwho123");
-        assertEquals(null, patient);
+        assertNull(patient);
     }
     //Case sensitive tests
     @Test
     public void getLoggedPatientInformationTest2() {
         Patient patient = dao.getLoggedPatientInformation("patientwho", "Patwho123");
-        assertEquals(null, patient);
+        assertNull(patient);
     }
     @Test
     public void getLoggedPatientInformationTest3() {
         Patient patient = dao.getLoggedPatientInformation("Patientwho", "patwho123");
-        assertEquals(null, patient);
+        assertNull(patient);
     }
     //correct credentials test
     @Test
@@ -127,7 +131,7 @@ public class PatientDAOTest extends AbstractDAO {
         assertEquals("patientwho", patient.getUserName());
         java.sql.Date sqlDate = new java.sql.Date(Calendar.getInstance().getTimeInMillis());
         assertEquals(sqlDate.toString(), patient.getRegistrationDate().toString());
-        assertEquals(false, patient.isBlocked());
+        assertFalse(patient.isBlocked());
     }
     /**
      * registerPatient test
@@ -143,6 +147,6 @@ public class PatientDAOTest extends AbstractDAO {
         assertEquals("new.patient@who.cz", patient.getEmail());
         assertEquals("NewPat", patient.getUserName());
         assertEquals(new Date().toString(), patient.getRegistrationDate().toString());
-        assertEquals(false, patient.isBlocked());
+        assertFalse(patient.isBlocked());
     }
 }
