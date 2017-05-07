@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="../css/registration.css">
     <script src="../js/jquery.validate.min.js"></script>
     <script src="../js/registration.js"></script>
-    <title>Not Approved</title>
+    <title>Registration</title>
 </head>
 
 <body>
@@ -37,20 +37,27 @@
                                 <label for="lastname" class="lbl-input">Last Name</label>
                                 <input type="text" class="input-form" id="lastname" name="lastname" placeholder="Enter Surname" required="required">
                             </div>
-                            <!-- WORKPLACE -->
+                        </div>
+                        <div class="col-sm-6 middle-col">
+                            <!-- USERNAME -->
                             <div class="form-group">
                                 <label for="username" class="lbl-input">User Name</label>
                                 <input type="text" class="input-form" id="username" name="username" placeholder="Enter User Name" required="required">
                             </div>
-                        </div>
-                        <div class="col-sm-6 middle-col">
-                            <!-- SPECIALIZATION -->
+                            <!-- PASSWORD -->
                             <div class="form-group">
-                                <label for="specialization" class="lbl-input">Specialization</label>
-                                <select class="input-form" id="specialization" name="specialization">
-                                    <option value="">Choose Specialization</option>
-                                </select>
+                                <label for="password" class="lbl-input">Password</label>
+                                <input type="password" class="input-form" id="password" name="password" placeholder="Enter Password" required="required">
                             </div>
+                            <!-- CONFIRM PASSWORD -->
+                            <div class="form-group">
+                                <input type="password" class="input-form" id="confirm_password" name="confirm_password" placeholder="ReEnter Password" required="required">
+                            </div>
+                            
+                        </div>
+                    </div>
+                    <div class="row form-div">
+                        <div class="col-sm-5 col-sm-offset-1">
                             <!-- EMAIL -->
                             <div class="form-group">
                                 <label for="email" class="lbl-input">Email address</label>
@@ -61,18 +68,25 @@
                                 <label for="phone" class="lbl-input">Phone</label>
                                 <input type="text" class="input-form" id="phone" name="phone" placeholder="Enter Phone" required="required">
                             </div>
+
                         </div>
-                    </div>
-                    <div class="row form-div">
-                        <div class="col-sm-5 col-sm-offset-1">
-                            <!-- PASSWORD -->
+                        <div class="col-sm-6 middle-col">
+                            <!-- SPECIALIZATION -->
                             <div class="form-group">
-                                <label for="password" class="lbl-input">Password</label>
-                                <input type="password" class="input-form" id="password" name="password" placeholder="Enter Password" required="required">
+                                <label for="specialization" class="lbl-input">Specialization</label>
+                                <select class="input-form" id="specialization" name="specialization">
+                                    <option value="">Choose Specialization</option>
+                                </select>
                             </div>
-                            <!-- CONFIRM PASSWORD -->
+                            <!-- WORKPLACE -->
                             <div class="form-group">
-                                <input type="password" class="input-form" id="confirm_password" name="confirm_password" placeholder="ReEnter Password" required="required">
+                                <label for="workplace" class="lbl-input">Workplace</label>
+                                <input type="email" class="input-form" id="workplace" name="workplace" placeholder="Enter Workplace" required="required">
+                            </div>
+                            <!-- CITY -->
+                            <div class="form-group">
+                                <label for="city" class="lbl-input">City</label>
+                                <input type="text" class="input-form" id="city" name="city" placeholder="Enter City" required="required">
                             </div>
                         </div>
                     </div>
