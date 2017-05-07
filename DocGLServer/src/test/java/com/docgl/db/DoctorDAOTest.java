@@ -1,6 +1,7 @@
 package com.docgl.db;
 
 
+import com.docgl.Cryptor;
 import com.docgl.api.RegistrationInput;
 import com.docgl.entities.Doctor;
 import com.docgl.enums.SortableDoctorColumns;
@@ -239,5 +240,26 @@ public class DoctorDAOTest extends AbstractDAO {
         assertFalse(doctor.isBlocked());
         assertFalse(doctor.isApproved());
     }
-
+    /**
+     * isPasswordDifferent test
+     */
+    @Test
+    public void isPasswordDifferentTest() {
+        Boolean isUnique = dao.isPasswordDifferent("docwho123", 1);
+        assertEquals(false, isUnique);
+    }
+    @Test
+    public void isPasswordDifferentTest2() {
+        Boolean isUnique = dao.isPasswordDifferent("blablabla123", 1);
+        assertEquals(true, isUnique);
+    }
+    /**
+     * setPassword test
+     */
+    @Test
+    public void setPasswordTest() {
+        dao.setPassword("blablabla123", 1);
+        Doctor doctor = dao.getLoggedDoctorInformation("doctorwho","blablabla123");
+        assertEquals("blablabla123", Cryptor.decrypt(doctor.getPassword()));
+    }
 }

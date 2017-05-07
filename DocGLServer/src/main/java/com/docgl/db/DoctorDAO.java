@@ -181,5 +181,29 @@ public class DoctorDAO extends AbstractDAO<Doctor> {
                 registrationInput.getWorkplace()
         ));
     }
+    /**
+     * This function sets doctors password and encrypt it.
+     * @param password new password
+     * @param id doctor id in database
+     */
+    public void setPassword(String password, int id) {
+        Session session = currentSession();
+        Doctor doctor = session.find(Doctor.class, id);
+        doctor.setPassword(Cryptor.encrypt(password));
+    }
+    /**
+     * This function compare the new password with the old one.
+     * @param password new password
+     * @param id doctor id in database
+     * @return returns true if password are different, false if are not
+     */
+    public boolean isPasswordDifferent(String password, int id) {
+        Session session = currentSession();
+        Doctor doctor = session.find(Doctor.class, id);
+        if (Cryptor.encrypt(password).equals(doctor.getPassword()))
+            return false;
+        return true;
+    }
+
 }
 

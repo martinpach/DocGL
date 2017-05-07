@@ -2,16 +2,13 @@ package com.docgl.resources;
 
 import com.docgl.Authorizer;
 import com.docgl.Views;
-import com.docgl.api.ApprovedInput;
-import com.docgl.api.BlockedInput;
-import com.docgl.api.CountRepresentation;
+import com.docgl.api.*;
 import com.docgl.db.AppointmentDAO;
 import com.docgl.entities.Appointment;
 import com.docgl.enums.SortableDoctorColumns;
 import com.docgl.enums.SortingWays;
 import com.docgl.enums.SpecializationsEnum;
 import com.docgl.enums.UserType;
-import com.docgl.api.LoggedUser;
 import com.docgl.db.DoctorDAO;
 import com.docgl.entities.Doctor;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -144,4 +141,24 @@ public class DoctorResource {
         List<SpecializationsEnum> list = Arrays.asList(array);
         return list;
     }
+    /**
+     * Resource for changing doctors password
+     * @param loggedUser is logged user that is sending request
+     * @param id chosen admin
+     * @param passwordInput new password
+     */
+    @PUT
+    @Path("{id}/password")
+    @UnitOfWork
+    public void changePassword(@Auth LoggedUser loggedUser, @PathParam("id") int id, PasswordInput passwordInput) {
+        if(passwordInput.getPassword() == null || passwordInput.getPassword().trim().isEmpty()){
+            throw new BadRequestException("Property 'password' is missing or not presented!");
+        }
+        if (doctorDAO.isPasswordDifferent(passwordInput.getPassword(), id)==false)
+            throw new BadRequestException("New password must be different than the old one!");
+        authorizer.checkAuthorization(loggedUser.getUserType(), UserType.DOCTOR);
+        authorizer.checkAuthentication(loggedUser.getId(), id);
+        doctorDAO.setPassword(passwordInput.getPassword(), id);
+    }
+
 }
