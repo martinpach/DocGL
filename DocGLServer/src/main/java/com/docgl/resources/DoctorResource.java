@@ -151,7 +151,7 @@ public class DoctorResource {
     @Path("{id}/password")
     @UnitOfWork
     public void changePassword(@Auth LoggedUser loggedUser, @PathParam("id") int id, PasswordInput passwordInput) {
-        if(passwordInput.getPassword() == null || passwordInput.getPassword().trim().isEmpty()){
+        if (passwordInput.getPassword() == null || passwordInput.getPassword().trim().isEmpty()){
             throw new BadRequestException("Property 'password' is missing or not presented!");
         }
         if (doctorDAO.isPasswordDifferent(passwordInput.getPassword(), id)==false)
@@ -159,6 +159,22 @@ public class DoctorResource {
         authorizer.checkAuthorization(loggedUser.getUserType(), UserType.DOCTOR);
         authorizer.checkAuthentication(loggedUser.getId(), id);
         doctorDAO.setPassword(passwordInput.getPassword(), id);
+    }
+    /**
+     * Resource for changing appointments duration
+     * @param loggedUser is logged user that is sending request
+     * @param id chosen admin
+     * @param durationInput appointments duration in minutes
+     */
+    @PUT
+    @Path("{id}/duration")
+    @UnitOfWork
+    public void setAppointmentsDuration(@Auth LoggedUser loggedUser, @PathParam("id") int id, AppointmentsDurationInput durationInput) {
+        if (durationInput.getDuration() == 0)
+            throw  new BadRequestException("Property 'duration' is missing or not presented!");
+        authorizer.checkAuthorization(loggedUser.getUserType(), UserType.DOCTOR);
+        authorizer.checkAuthentication(loggedUser.getId(), id);
+        doctorDAO.setAppointmentsDuration(durationInput.getDuration(), id);
     }
 
 }

@@ -16,6 +16,7 @@ import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 
+import javax.print.Doc;
 import javax.ws.rs.BadRequestException;
 import java.util.Date;
 import java.util.List;
@@ -204,6 +205,15 @@ public class DoctorDAO extends AbstractDAO<Doctor> {
             return false;
         return true;
     }
-
+    /**
+     * This function set doctors appointments duration.
+     * @param minutes appointments duration in minutes
+     * @param id doctor id in database
+     */
+    public void setAppointmentsDuration(int minutes, int id) {
+        Session session = currentSession();
+        Doctor doctor = session.find(Doctor.class, id);
+        doctor.setAppointmentsDuration(minutes);
+    }
 }
 
