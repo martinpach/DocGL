@@ -3,12 +3,7 @@ package com.wdfeww.docgl.data.methods;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-/**
- * Created by wdfeww on 5/6/17.
- */
-
 public class JsonReqestBody {
-
     public static JSONObject login(String username, String password) {
         JSONObject json = new JSONObject();
         try {

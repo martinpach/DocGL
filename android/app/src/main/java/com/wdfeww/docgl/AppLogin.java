@@ -61,13 +61,15 @@ public class AppLogin extends AppCompatActivity {
                         if (Checker.isNameValid(username.getText().toString().trim())) {
                             errorMessageUsername.setText("");
                             if (Checker.isPasswordValid(password.getText().toString().trim())) {
+                                errorMessagePassword.setText("");
                                 login();
                             } else {
-                                errorMessageUsername.setText("Invalid password.");
+                                errorMessagePassword.setText("Invalid password.");
                             }
                         } else {
                             errorMessageUsername.setText("Please type your username.");
                         }
+
                     }
                 }
         );
@@ -87,16 +89,17 @@ public class AppLogin extends AppCompatActivity {
     private void login() {
         JSONObject json = JsonReqestBody.login(username.getText().toString().trim(), password.getText().toString().trim());
         RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"), (json.toString()));
-
         final Call<User> call = mAPIService.userLogin(body);
+
         call.enqueue(new Callback<User>() {
+
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
                 if (response.isSuccessful()) {
                     errorMessagePassword.setText("");
                     successMessage.setText("Login success!");
                     user = response.body();
-                    redirectToHome();
+                    redirect();
                 } else {
                     errorMessagePassword.setText("Incorrect username or password!");
                     successMessage.setText("");
@@ -110,13 +113,14 @@ public class AppLogin extends AppCompatActivity {
         });
     }
 
-    private void redirectToHome() {
+    private void redirect() {
         Intent intent = new Intent(getBaseContext(), Home.class);
         intent.putExtra("firstName", user.getPatient().getFirstName());
         intent.putExtra("lastName", user.getPatient().getLastName());
         intent.putExtra("email", user.getPatient().getEmail());
         intent.putExtra("id", user.getPatient().getId());
         intent.putExtra("token", user.getToken());
+        intent.putExtra("username", user.getPatient().getUserName());
         startActivity(intent);
     }
 

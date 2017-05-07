@@ -25,5 +25,22 @@
         <item name="android:textColor">@drawable/success_message_text_color</item>
         <item name="android:background">@drawable/success_message_background</item>
     </style>
+    <style name="home_text">
+        <item name="android:textSize">@dimen/text_size</item>
+        <item name="android:textColor">@color/color1</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+    <style name="home_error_text">
+        <item name="android:textSize">@dimen/text_size</item>
+        <item name="android:textColor">@color/errorText</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="home_clickable_text">
+        <item name="android:textSize">@dimen/text_size</item>
+        <item name="android:textColor">@drawable/text_button</item>
+        <item name="android:clickable">true</item>
+        <item name="android:onClick">makeAppointment</item>
+    </style>
     <dimen name="text_size">30sp</dimen>
 </resources>
