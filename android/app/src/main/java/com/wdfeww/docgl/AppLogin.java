@@ -121,6 +121,7 @@ public class AppLogin extends AppCompatActivity {
         intent.putExtra("id", user.getPatient().getId());
         intent.putExtra("token", user.getToken());
         intent.putExtra("username", user.getPatient().getUserName());
+        finish();
         startActivity(intent);
     }
 

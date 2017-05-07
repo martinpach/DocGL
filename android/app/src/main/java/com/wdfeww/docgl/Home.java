@@ -1,6 +1,7 @@
 package com.wdfeww.docgl;
 
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
@@ -12,6 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.wdfeww.docgl.data.methods.FontManager;
 import com.wdfeww.docgl.data.methods.JsonReqestBody;
 import com.wdfeww.docgl.data.model.Apointment;
 import com.wdfeww.docgl.data.model.User;
@@ -32,7 +34,7 @@ import retrofit2.Response;
 
 public class Home extends AppCompatActivity {
 
-    String firstName, lastName, email, token;
+    String firstName, lastName, email, token, username, medkit, calendar;
     private APIService mAPIService;
     int id;
     LinearLayout main_layout;
@@ -48,9 +50,11 @@ public class Home extends AppCompatActivity {
         email = getIntent().getStringExtra("email");
         token = getIntent().getStringExtra("token");
         id = getIntent().getIntExtra("id", id);
+        username = getIntent().getStringExtra("username");
         mAPIService = ApiUtils.getAPIService();
         checkApointments();
-
+        medkit = this.getResources().getString(R.string.fa_medkit);
+        calendar = this.getResources().getString(R.string.fa_calendar);
     }
 
     private void checkApointments() {
@@ -163,34 +167,45 @@ public class Home extends AppCompatActivity {
         tv.setTextAppearance(this, R.style.home_text);
         main_layout.addView(tv);
 
-        params = new LinearLayout.LayoutParams(getWindowManager().getDefaultDisplay().getWidth() - 40, LinearLayout.LayoutParams.WRAP_CONTENT);
-        params.setMargins(0, 30, 0, 0);
-
+        params = new LinearLayout.LayoutParams(getWindowManager().getDefaultDisplay().getWidth() - 60, LinearLayout.LayoutParams.WRAP_CONTENT);
+        params.topMargin = 40;
+        LinearLayout.LayoutParams txt_params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        txt_params.topMargin = 7;
         for (Apointment apointment : apointments) {
 
             LinearLayout linearLayout = new LinearLayout(this);
             linearLayout.setLayoutParams(params);
             linearLayout.setBackground(this.getResources().getDrawable(R.drawable.background_apointment));
             linearLayout.setClickable(true);
+            linearLayout.setOrientation(LinearLayout.VERTICAL);
             main_layout.addView(linearLayout);
 
-            linearLayout.setOrientation(LinearLayout.VERTICAL);
+
 
             SimpleDateFormat sdf1 = new SimpleDateFormat("MM/dd/yyyy");
             SimpleDateFormat sdf2 = new SimpleDateFormat("hh:mm a");
 
             TextView tv1 = new TextView(this);
-            tv1.setText(sdf1.format(new SimpleDateFormat("yyyy-MM-dd").parse(apointment.getDate())) + " " + sdf2.format(new SimpleDateFormat("hh:mm:ss").parse(apointment.getTime())));
+            tv1.setTypeface(FontManager.getTypeface(getApplicationContext(), FontManager.FONTAWESOME));
+            tv1.setTextSize(30.0f);
+            tv1.setLayoutParams(txt_params);
+            tv1.setText(calendar + " " + sdf1.format(new SimpleDateFormat("yyyy-MM-dd").parse(apointment.getDate())) + " " + sdf2.format(new SimpleDateFormat("hh:mm:ss").parse(apointment.getTime())));
             tv1.setGravity(Gravity.LEFT);
             linearLayout.addView(tv1);
 
             TextView tv2 = new TextView(this);
+            tv2.setTypeface(FontManager.getTypeface(getApplicationContext(), FontManager.FONTAWESOME));
+            tv2.setTextSize(20.0f);
+            tv2.setLayoutParams(txt_params);
             tv2.setText(apointment.getNote());
             tv2.setGravity(Gravity.LEFT);
             linearLayout.addView(tv2);
 
             TextView tv3 = new TextView(this);
-            tv3.setText("Doctor "+apointment.getDoctor().getFirstName()+ " " +apointment.getDoctor().getLastName());
+            tv3.setTypeface(FontManager.getTypeface(getApplicationContext(), FontManager.FONTAWESOME));
+            tv3.setTextSize(30.0f);
+            tv3.setLayoutParams(txt_params);
+            tv3.setText(medkit + " Doctor " + apointment.getDoctor().getFirstName() + " " + apointment.getDoctor().getLastName());
             tv3.setGravity(Gravity.LEFT);
             linearLayout.addView(tv3);
         }
@@ -202,7 +217,14 @@ public class Home extends AppCompatActivity {
     }
 
     public void updateProfile() {
-
+        Intent intent = new Intent(getBaseContext(), Profile.class);
+        intent.putExtra("firstName", firstName);
+        intent.putExtra("lastName", lastName);
+        intent.putExtra("email", email);
+        intent.putExtra("id", id);
+        intent.putExtra("token", token);
+        intent.putExtra("username", username);
+        startActivity(intent);
     }
 
     public void userSettings() {

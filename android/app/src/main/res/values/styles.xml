@@ -30,6 +30,15 @@
         <item name="android:textColor">@color/color1</item>
         <item name="android:textStyle">bold</item>
     </style>
+    <style name="profile_text">
+        <item name="android:textSize">@dimen/text_profile_size</item>
+        <item name="android:textColor">@color/color3</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+    <style name="profile_sub_text">
+        <item name="android:textSize">@dimen/sub_text_profile_size</item>
+        <item name="android:textColor">@color/color3</item>
+    </style>
     <style name="home_error_text">
         <item name="android:textSize">@dimen/text_size</item>
         <item name="android:textColor">@color/errorText</item>
@@ -42,5 +51,10 @@
         <item name="android:clickable">true</item>
         <item name="android:onClick">makeAppointment</item>
     </style>
+    <style name="btn_transparent">
+        <item name="android:textColor">@drawable/btn_transparent_text_color</item>
+    </style>
     <dimen name="text_size">30sp</dimen>
+    <dimen name="text_profile_size">20sp</dimen>
+    <dimen name="sub_text_profile_size">15sp</dimen>
 </resources>
