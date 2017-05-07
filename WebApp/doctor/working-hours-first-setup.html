@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="http://mdbootstrap.com/mdbcdn/mdbcdn/mdb.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/2.3.0/mustache.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.3.1/css/mdb.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="../css/doctor-working-hours-first-setup.css">
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <title>DocGL</title>
+</head>
+
+<body>
+    <div class="container">
+        <div class="row">
+            <main>
+                <form id="working-hours-form" class="form-inline">
+                    <h1>Please set up your working hours.</h1>
+                    <div class="form-group">
+                        <label for="from" class="myLabel">From</label>
+                        <input type="text" id="input-from" class="form-control timepicker">
+                    </div>
+                    <div class="form-group">
+                        <label for="to" class="myLabel">To</label>
+                        <input type="text" id="input-to" class="form-control timepicker">
+                    </div>
+                    <div class="form-group">
+                        <label for="day" class="myLabel">Day</label>
+                        <select id="input-day" class="form-control">
+                            <option value="mon">Monday</option>
+                            <option value="tue">Tuesday</option>
+                            <option value="wed">Wednesday</option>
+                            <option value="thu">Thursday</option>
+                            <option value="fri">Friday</option>
+                        </select>
+                    </div>
+                    <button type="button" id="add-button" class="btn btn-info">+</button>
+                    <p id="time-error"></p>
+                    <div id="entered-working-hours">
+                    </div>
+                    <h2>When can we start making appointments?</h2>
+                    <p>Day when you start taking care of your patients.</p>
+                    <input type="text" class="form-control datepicker">
+                    <h2>Also set duration of appointment</h2>
+                    <input type="number" class="form-control" placeholder="duration (default 20 min)" id="input-duration">
+                    <button type="button" id="btn-submit" class="btn btn-info">Submit</button>
+                    <p id="date-error"></p>
+                </form>
+                <img src="../img/docGL_logo.png" alt="logo">
+                <div class="clearfix"></div>
+            </main>
+        </div>
+    </div>
+    <script>
+    var workingHours = {
+        mon: [],
+        tue: [],
+        wed: [],
+        thu: [],
+        fri: [],
+        validity: null,
+        appointmentDuration : 20
+    }
+    $('.timepicker').timepicker({
+        timeFormat: 'h:mm p',
+        interval: 30,
+        minTime: '7',
+        maxTime: '6:00pm',
+        defaultTime: '8',
+        startTime: '7:00',
+        dynamic: false,
+        dropdown: true,
+        scrollbar: true
+    });
+
+    $(function() {
+        $(".datepicker").datepicker({
+            dateFormat: "yy-mm-dd",
+        });
+    });
+
+    $('#add-button').click(function() {
+        var fromValue = $('#input-from').val();
+        var toValue = $('#input-to').val();
+        var dayValue = $('select').val();
+        if (validateTime(fromValue, toValue) && checkNumberOfInput(dayValue)) {
+            var intervalBox = $('<div class="interval"></div>');
+            var intervalText = dayValue + ' ' + fromValue + ' - ' + toValue;
+            var workingHour = {
+                from: fromValue,
+                to: toValue
+            }
+            workingHours[dayValue].push(workingHour);
+            intervalBox.text(intervalText);
+            $('#entered-working-hours').append(intervalBox);
+        }
+    });
+
+    function validateTime(valueFrom, valueTo) {
+        if (valueFrom == "" || valueTo == "") {
+            $('#time-error').text('Time cannot be empty');
+            return false;
+        }
+        $('#time-error').text('');
+        return true;
+    }
+
+    function checkNumberOfInput(dayValue) {
+        if (workingHours[dayValue].length < 2) {
+            $('#time-rror').text('');
+            return true;
+        }
+        $('#time-error').text('You can add only 2 time intervals per day');
+        return false;
+    }
+
+    function validateDate(dateOfValidity) {
+        if (dateOfValidity == "") {
+            $('#date-error').text('Date cannot be empty!');
+            return false;
+        }
+        try {
+            $.datepicker.parseDate("yy-mm-dd", dateOfValidity);
+            $('#date-error').text('');
+            return true;
+        } catch (e) {
+            $('#date-error').text('Invalid date!');
+            return false;
+        }
+        return true;
+    }
+
+    function areWorkingHours() {
+        if (workingHours.mon.length > 0 ||
+            workingHours.tue.length > 0 ||
+            workingHours.wed.length > 0 ||
+            workingHours.thu.length > 0 ||
+            workingHours.fri.length > 0) {
+            $('#date-error').text('');
+            return true;
+        }
+        $('#date-error').text('Please set some working hours.');
+        return false;
+    }
+
+    function validateForm(valueFrom, valueTo, dateOfValidity) {
+        if (validateTime(valueFrom, valueTo) && validateDate(dateOfValidity) && areWorkingHours()) {
+            return true;
+        }
+        return false;
+    }
+
+    $('#btn-submit').click(function() {
+        var dateOfValidity = $('.datepicker').val();
+        var valueFrom = $('#input-from').val();
+        var valueTo = $('#input-to').val();
+        if (validateForm(valueFrom, valueTo, dateOfValidity)) {
+            workingHours.validity = dateOfValidity;
+            workingHours.appointmentDuration = $('#input-duration').val() == "" ? 20 : $('#input-duration').val();
+            console.log(workingHours.appointmentDuration);
+        }
+    });
+
+    $("#input-to, #input-from").on('click blur', function() {
+        var time = $('#input-from').val();
+        var getTime = time.split(":");
+        var hours = parseInt(getTime[0]) + 1;
+        hours = (hours == 13) ? 1 : hours;
+        var newTime = hours + ":" + getTime[1];
+        $("#input-to").timepicker('option', 'minTime', newTime);
+        $("#input-to").val(newTime);
+    });
+    </script>
+</body>
+
+</html>

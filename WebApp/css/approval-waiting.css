@@ -15,7 +15,7 @@ body{
 
 main{
 	margin-top: 8%;
-	padding: 10%;
+	padding: 2%;
 	background-color: white;
 }
 
@@ -41,39 +41,3 @@ img{
 	widht: auto;
 	margin: auto;
 }
-
-.userContainer{
-	color:white;
-	float:right;
-	padding:10px;	
-}
-.userIcon{
-	float:left;
-	margin-right:10px;
-	margin-top: 5px;
-}
-#userName{
-	float:left;
-	margin-right:10px;
-}
-#userMenu{
-	cursor:pointer;
-}
-
-.dropdown{
-	display:inline-block;
-}
-
-.dropdown-menu > li>a{
-	color: #034F84;
-}
-
-.dropdown-menu > li > a:hover {
-    background-color: #B5DFFD;
-}
-
-.row{
-	margin-left: 0;
-	margin-right: 0;
-}
-
