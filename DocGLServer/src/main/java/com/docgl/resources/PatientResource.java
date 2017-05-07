@@ -4,6 +4,7 @@ import com.docgl.Authorizer;
 import com.docgl.Views;
 import com.docgl.api.BlockedInput;
 import com.docgl.api.CountRepresentation;
+import com.docgl.api.PasswordInput;
 import com.docgl.db.AppointmentDAO;
 import com.docgl.entities.Appointment;
 import com.docgl.enums.SortablePatientColumns;
@@ -101,5 +102,25 @@ public class PatientResource {
     @UnitOfWork
     public CountRepresentation getNumberOfAllPatients(){
         return new CountRepresentation(patientDAO.getNumberOfAllPatients());
+    }
+
+    /**
+     * Resource for changing patients password
+     * @param loggedUser is logged user that is sending request
+     * @param id chosen admin
+     * @param passwordInput new password
+     */
+    @PUT
+    @Path("{id}/password")
+    @UnitOfWork
+    public void changePassword(@Auth LoggedUser loggedUser, @PathParam("id") int id, PasswordInput passwordInput) {
+        if(passwordInput.getPassword() == null || passwordInput.getPassword().trim().isEmpty()){
+            throw new BadRequestException("Property 'password' is missing or not presented!");
+        }
+        if (patientDAO.isPasswordDifferent(passwordInput.getPassword(), id)==false)
+            throw new BadRequestException("New password must be different than the old one!");
+        authorizer.checkAuthorization(loggedUser.getUserType(), UserType.PATIENT);
+        authorizer.checkAuthentication(loggedUser.getId(), id);
+        patientDAO.setPassword(passwordInput.getPassword(), id);
     }
 }

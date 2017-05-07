@@ -8,6 +8,7 @@ import com.docgl.enums.SortablePatientColumns;
 import com.docgl.enums.SortingWays;
 import io.dropwizard.hibernate.AbstractDAO;
 import org.hibernate.Criteria;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Order;
@@ -144,5 +145,29 @@ public class PatientDAO extends AbstractDAO<Patient> {
             Criterion email = Restrictions.ilike("email", "%" + name + "%");
             criteria.add(Restrictions.or(firstname, lastname, email));
         return criteria;
+    }
+
+    /**
+     * This function sets patients password and encrypt it.
+     * @param password new password
+     * @param id doctor id in database
+     */
+    public void setPassword(String password, int id) {
+        Session session = currentSession();
+        Patient patient = session.find(Patient.class, id);
+        patient.setPassword(Cryptor.encrypt(password));
+    }
+    /**
+     * This function compare the new password with the old one.
+     * @param password new password
+     * @param id doctor id in database
+     * @return returns true if password are different, false if are not
+     */
+    public boolean isPasswordDifferent(String password, int id) {
+        Session session = currentSession();
+        Patient patient = session.find(Patient.class, id);
+        if (Cryptor.encrypt(password).equals(patient.getPassword()))
+            return false;
+        return true;
     }
 }
