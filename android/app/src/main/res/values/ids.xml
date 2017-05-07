@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="tv1" type="id">tv1</item>
+    <item name="tv2" type="id">tv2</item>
+    <item name="tv3" type="id">tv3</item>
+    <item name="tv4" type="id">tv4</item>
+    <item name="tv5" type="id">tv5</item>
+    <item name="tv6" type="id">tv6</item>
+    <item name="tv7" type="id">tv7</item>
+    <item name="tv8" type="id">tv8</item>
+    <item name="tv9" type="id">tv9</item>
+</resources>

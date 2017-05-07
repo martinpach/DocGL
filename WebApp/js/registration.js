@@ -21,6 +21,7 @@ $(document).ready(function() {
 			firstname: "required",
 			lastname: "required",
 			workplace: "required",
+			city: "required",
 			specialization: "required",
 			email: {
 				required: true,
@@ -45,6 +46,7 @@ $(document).ready(function() {
 			firstname: "Please enter your firstname",
 			lastname: "Please enter your lastname",
 			workplace: "Please enter a workplace location",
+			city: "Please enter a City",
 			specialization: "Please choose your specialization",
 			email: "Please enter a valid email address",
 			phone: "Please enter your phone number",
@@ -93,7 +95,9 @@ $(document).ready(function() {
 		    "userName": $("#username").val(),
 		    "password": $("#username").val(),
 		    "specialization": $("#specialization option:selected").text().toUpperCase(),
-		    "phone": $("#username").val()
+		    "phone": $("#username").val(),
+		    "city": $("#city").val(),
+		    "workplace": $("#workplace").val()
         });
 		ajaxRequest('/auth/registration', "POST", dataToSend).done(function () {
 			var doctor = ajaxData.doctor;
@@ -102,6 +106,8 @@ $(document).ready(function() {
             localStorage.setItem("lastName", doctor.lastName);
             localStorage.setItem("email", doctor.email);
             localStorage.setItem("phone", doctor.phone);
+            localStorage.setItem("city", doctor.city);
+            localStorage.setItem("workplace", doctor.workplace);
             localStorage.setItem("userName", doctor.userName);
             localStorage.setItem("passwordChanged", doctor.passwordChanged);
             localStorage.setItem("token", ajaxData.token);

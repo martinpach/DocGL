@@ -13,6 +13,19 @@
     <string name="home_txt2">Make an appointment</string>
     <string name="home_txt3">Update your profile</string>
     <string name="home_txt4">Customize \nyour settings</string>
-
-
+    <string name="home_error_text">Server not responding!</string>
+    <string name="home_txt5">My Appointments</string>
+    <string name="myProfile">My Profile</string>
+    <string name="fa_medkit">&#xf0fa;</string>
+    <string name="fa_calendar">&#xf073;</string>
+    <string name="firstName">First name</string>
+    <string name="lastName">Last name</string>
+    <string name="changePassword">Change password</string>
+    <string name="editProfile">Edit profile</string>
+    <string name="save">Save</string>
+    <string name="oldPassword">Old Password</string>
+    <string name="newPassword">New Password</string>
+    <string name="confirm_new_password">confirm new password</string>
+    <string name="type_new_password">type new password</string>
+    <string name="type_old_password">type old password</string>
 </resources>

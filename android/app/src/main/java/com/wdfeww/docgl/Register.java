@@ -53,28 +53,33 @@ public class Register extends AppCompatActivity {
         sign_up.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 if (Checker.isNameValid(edit_txt_firstname.getText().toString().trim())) {
+                    errorMessage.setText("");
                     if (Checker.isNameValid(edit_txt_lastname.getText().toString().trim())) {
+                        errorMessage.setText("");
                         if (Checker.isEmailValid(edit_txt_email.getText().toString().trim())) {
+                            errorMessage.setText("");
                             if (Checker.isNameValid(edit_txt_username.getText().toString().trim())) {
+                                errorMessage.setText("");
                                 if (Checker.isPasswordValid(edit_txt_password.getText().toString().trim())) {
+                                    errorMessage.setText("");
                                     register();
                                 } else {
-                                    errorMessage.setText("Password must contain of minimum: one lower case, one upper case character, one number, one special character and minimum length of password is six characters");
+                                    errorMessage.setText("Password must contain of minimum: one lower case, one upper case character, one number, one special character and minimum length of password is six characters.");
                                 }
                             } else {
-                                errorMessage.setText("Please type your username name.");
+                                errorMessage.setText("Please type your username.");
                             }
                         } else {
                             errorMessage.setText("Please type valid email.");
                         }
                     } else {
-                        errorMessage.setText("Please type your lastname name.");
+                        errorMessage.setText("Please type your last name.");
                     }
                 } else {
                     errorMessage.setText("Please type your first name.");
                 }
-
             }
         });
     }
@@ -85,18 +90,15 @@ public class Register extends AppCompatActivity {
                 edit_txt_email.getText().toString().trim());
         RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"), (json.toString()));
         final Call<User> call = mAPIService.userRegister(body);
-
         call.enqueue(new Callback<User>() {
+
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
                 if (response.isSuccessful()) {
                     errorMessage.setText("");
-                    successMessage.setText("Register success!");
+                    successMessage.setText("Registration success!");
                     user = response.body();
                     redirectToHome();
-                } else {
-                    errorMessage.setText("Username or email is already used!");
-                    successMessage.setText("");
                 }
             }
 
@@ -114,6 +116,7 @@ public class Register extends AppCompatActivity {
         intent.putExtra("email", user.getPatient().getEmail());
         intent.putExtra("id", user.getPatient().getId());
         intent.putExtra("token", user.getToken());
+        intent.putExtra("username", user.getPatient().getUserName());
         startActivity(intent);
     }
 

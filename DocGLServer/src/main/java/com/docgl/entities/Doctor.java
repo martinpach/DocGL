@@ -38,6 +38,12 @@ public class Doctor extends User{
     @NotNull
     private String phone;
 
+    @NotNull
+    private String city;
+
+    @NotNull
+    private String workplace;
+
     @Column(name = "blocked", columnDefinition = "boolean default false")
     private boolean blocked;
 
@@ -100,6 +106,22 @@ public class Doctor extends User{
         this.approved = approved;
     }
 
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getWorkplace() {
+        return workplace;
+    }
+
+    public void setWorkplace(String workplace) {
+        this.workplace = workplace;
+    }
+
     public Doctor(){
     }
 
@@ -107,14 +129,16 @@ public class Doctor extends User{
         super(firstName,lastName,email,userName,password);
     }
 
-    public Doctor(String firstName, String lastName, String email, String userName, SpecializationsEnum specialization, String phone, String password, Date registrationDate) {
+    public Doctor(String firstName, String lastName, String email, String userName, SpecializationsEnum specialization, String phone, String password, Date registrationDate, String city, String workplace) {
         super(firstName,lastName,email,userName,password);
         this.registrationDate = registrationDate;
         this.specialization = specialization;
         this.phone = phone;
+        this.city = city;
+        this.workplace = workplace;
     }
 
-    public Doctor(String firstName, String lastName, String email, String userName, String password, Collection<Appointment> appointments, @NotNull Date registrationDate, @NotNull int likes, @NotNull SpecializationsEnum specialization, String phone, boolean blocked, boolean approved) {
+    public Doctor(String firstName, String lastName, String email, String userName, String password, Collection<Appointment> appointments, @NotNull Date registrationDate, @NotNull int likes, @NotNull SpecializationsEnum specialization, String phone, String city, String workplace, boolean blocked, boolean approved) {
         super(firstName, lastName, email, userName, password);
         this.appointments = appointments;
         this.registrationDate = registrationDate;
@@ -123,6 +147,8 @@ public class Doctor extends User{
         this.phone = phone;
         this.blocked = blocked;
         this.approved = approved;
+        this.city = city;
+        this.workplace = workplace;
     }
 
     @Override
@@ -134,6 +160,8 @@ public class Doctor extends User{
                 ", lastname='" + this.getLastName() +'\''+
                 ", email='" + this.getEmail() +'\''+
                 ", phone='" + this.getPhone() +'\''+
+                ", city='" + this.getCity() +'\''+
+                ", workplace='" + this.getWorkplace() +'\''+
                 ", username='"+this.getUserName()+'\''+
                 ", password='"+this.getPassword()+'\''+
                 ", blocked='"+this.isBlocked()+'\''+

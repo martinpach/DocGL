@@ -210,6 +210,8 @@ public class DoctorDAOTest extends AbstractDAO {
         assertEquals(10, doctor.getLikes());
         assertEquals(SpecializationsEnum.DENTIST, doctor.getSpecialization());
         assertEquals("0949473196", doctor.getPhone());
+        assertEquals("Kosice", doctor.getCity());
+        assertEquals("Kukucinova 5", doctor.getWorkplace());
         assertFalse(doctor.isBlocked());
         assertFalse(doctor.isApproved());
     }
@@ -220,7 +222,7 @@ public class DoctorDAOTest extends AbstractDAO {
     public void registerDoctorTest() {
         RegistrationInput registrationInput = new RegistrationInput("NewDoc", "doctor123",
                 "FirstDoctor", "LastDoctor", "doctor@new.com", UserType.DOCTOR,
-                SpecializationsEnum.ORTHOPEDIST, "0925648528");
+                SpecializationsEnum.ORTHOPEDIST, "0925648528", "Kosice", "Jarna 8");
         dao.registerDoctor(registrationInput);
         Doctor doctor = dao.getLoggedDoctorInformation("NewDoc", "doctor123");
         assertEquals("FirstDoctor", doctor.getFirstName());
@@ -232,6 +234,8 @@ public class DoctorDAOTest extends AbstractDAO {
         assertEquals(0, doctor.getLikes());
         assertEquals(SpecializationsEnum.ORTHOPEDIST, doctor.getSpecialization());
         assertEquals("0925648528", doctor.getPhone());
+        assertEquals("Kosice", doctor.getCity());
+        assertEquals("Jarna 8", doctor.getWorkplace());
         assertFalse(doctor.isBlocked());
         assertFalse(doctor.isApproved());
     }
