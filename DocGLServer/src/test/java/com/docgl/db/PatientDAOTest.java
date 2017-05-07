@@ -1,16 +1,14 @@
 package com.docgl.db;
 
-import com.docgl.Cryptor;
 import com.docgl.api.RegistrationInput;
-import com.docgl.entities.Admin;
 import com.docgl.entities.Patient;
 import com.docgl.enums.SortablePatientColumns;
 import com.docgl.enums.SortingWays;
 import com.docgl.enums.UserType;
+import org.apache.commons.lang3.time.DateUtils;
 import org.junit.Test;
 
 
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -129,8 +127,8 @@ public class PatientDAOTest extends AbstractDAO {
         assertEquals("who", patient.getLastName());
         assertEquals("patient@who.cz", patient.getEmail());
         assertEquals("patientwho", patient.getUserName());
-        java.sql.Date sqlDate = new java.sql.Date(Calendar.getInstance().getTimeInMillis());
-        assertEquals(sqlDate.toString(), patient.getRegistrationDate().toString());
+        Date today = DateUtils.truncate(new Date(), java.util.Calendar.DAY_OF_MONTH);
+        assertEquals(today.getTime(), patient.getRegistrationDate().getTime());
         assertFalse(patient.isBlocked());
     }
     /**
@@ -146,7 +144,9 @@ public class PatientDAOTest extends AbstractDAO {
         assertEquals("LastPatient", patient.getLastName());
         assertEquals("new.patient@who.cz", patient.getEmail());
         assertEquals("NewPat", patient.getUserName());
-        assertEquals(new Date().toString(), patient.getRegistrationDate().toString());
+        Date today = DateUtils.truncate(new Date(), java.util.Calendar.DAY_OF_MONTH);
+        Date registrationDate = DateUtils.truncate(patient.getRegistrationDate(), java.util.Calendar.DAY_OF_MONTH);
+        assertEquals(today.getTime(), registrationDate.getTime());
         assertFalse(patient.isBlocked());
     }
 }

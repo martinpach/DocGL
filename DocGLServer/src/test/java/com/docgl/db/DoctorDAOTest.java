@@ -7,10 +7,9 @@ import com.docgl.enums.SortableDoctorColumns;
 import com.docgl.enums.SortingWays;
 import com.docgl.enums.SpecializationsEnum;
 import com.docgl.enums.UserType;
+import org.apache.commons.lang3.time.DateUtils;
 import org.junit.Test;
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -205,8 +204,8 @@ public class DoctorDAOTest extends AbstractDAO {
         assertEquals("who", doctor.getLastName());
         assertEquals("doctor@who.sk", doctor.getEmail());
         assertEquals("doctorwho", doctor.getUserName());
-        java.sql.Date sqlDate = new java.sql.Date(Calendar.getInstance().getTimeInMillis());
-        assertEquals(sqlDate.toString(), doctor.getRegistrationDate().toString());
+        Date today = DateUtils.truncate(new Date(), java.util.Calendar.DAY_OF_MONTH);
+        assertEquals(today.getTime(), doctor.getRegistrationDate().getTime());
         assertEquals(10, doctor.getLikes());
         assertEquals(SpecializationsEnum.DENTIST, doctor.getSpecialization());
         assertEquals("0949473196", doctor.getPhone());
@@ -229,8 +228,9 @@ public class DoctorDAOTest extends AbstractDAO {
         assertEquals("LastDoctor", doctor.getLastName());
         assertEquals("doctor@new.com", doctor.getEmail());
         assertEquals("NewDoc", doctor.getUserName());
-        java.sql.Date sqlDate = new java.sql.Date(Calendar.getInstance().getTimeInMillis());
-        assertEquals(new Date().toString(), doctor.getRegistrationDate().toString());
+        Date today = DateUtils.truncate(new Date(), java.util.Calendar.DAY_OF_MONTH);
+        Date registrationDate = DateUtils.truncate(doctor.getRegistrationDate(), java.util.Calendar.DAY_OF_MONTH);
+        assertEquals(today.getTime(), registrationDate.getTime());
         assertEquals(0, doctor.getLikes());
         assertEquals(SpecializationsEnum.ORTHOPEDIST, doctor.getSpecialization());
         assertEquals("0925648528", doctor.getPhone());
