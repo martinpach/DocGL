@@ -2,6 +2,7 @@ package com.docgl.db;
 
 import com.docgl.Cryptor;
 import com.docgl.api.RegistrationInput;
+import com.docgl.entities.Doctor;
 import com.docgl.entities.Patient;
 import com.docgl.enums.SortablePatientColumns;
 import com.docgl.enums.SortingWays;
@@ -10,6 +11,7 @@ import org.apache.commons.lang3.time.DateUtils;
 import org.junit.Test;
 
 
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
@@ -25,6 +27,7 @@ import static org.junit.Assert.assertTrue;
 public class PatientDAOTest extends AbstractDAO {
 
     private final PatientDAO dao = new PatientDAO(sessionFactory);
+    private final DoctorDAO doctorDAO = new DoctorDAO(sessionFactory);
 
     @Test
     public void getAllPatientsTest() {
@@ -172,4 +175,42 @@ public class PatientDAOTest extends AbstractDAO {
         Patient patient = dao.getLoggedPatientInformation("patientwho","blablabla123");
         assertEquals("blablabla123", Cryptor.decrypt(patient.getPassword()));
     }
+    /**
+     * getFavouriteDoctors test
+     */
+    @Test
+    public void getFavouriteDoctorsTest() {
+        Collection<Doctor> favouriteDoctors = dao.getFavouriteDoctors(1);
+        assertEquals(2, favouriteDoctors.size());
+    }
+    @Test
+    public void getFavouriteDoctorsTest2() {
+        Collection<Doctor> favouriteDoctors = dao.getFavouriteDoctors(1);
+        Doctor doctor = doctorDAO.getDoctor(1);
+        assertTrue(favouriteDoctors.contains(doctor));
+    }
+    @Test
+    public void getFavouriteDoctorsTest3() {
+        Collection<Doctor> favouriteDoctors = dao.getFavouriteDoctors(1);
+        Doctor doctor = doctorDAO.getDoctor(3);
+        assertFalse(favouriteDoctors.contains(doctor));
+    }
+    /**
+     * addDoctorToFavourite test
+     */
+    @Test
+    public void addDoctorToFavouriteTest() {
+        dao.addDoctorToFavourite(1,3);
+        Collection<Doctor> favouriteDoctors = dao.getFavouriteDoctors(1);
+        Doctor doctor = doctorDAO.getDoctor(3);
+        assertTrue(favouriteDoctors.contains(doctor));
+    }
+    @Test
+    public void addDoctorToFavouriteTest2() {
+        dao.addDoctorToFavourite(1,10);
+        Collection<Doctor> favouriteDoctors = dao.getFavouriteDoctors(1);
+        assertNull(doctorDAO.getDoctor(10));
+    }
+
+
 }

@@ -151,6 +151,8 @@ public class PatientResource {
         authorizer.checkAuthorization(loggedUser.getUserType(), roles);
         authorizer.checkAuthentication(loggedUser.getId(), id);
         Doctor doctor = doctorDAO.getDoctor(doctorIdInput.getDoctorId());
+        if (doctorDAO.getDoctor(doctorIdInput.getDoctorId()) == null)
+            throw  new BadRequestException("Doctor with this id does not exists!");
         if (patientDAO.getFavouriteDoctors(id).contains(doctor))
             throw  new BadRequestException("Doctor is already in favourite list!");
         patientDAO.addDoctorToFavourite(id, doctorIdInput.getDoctorId());
