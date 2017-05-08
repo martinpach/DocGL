@@ -235,5 +235,24 @@ public class DoctorDAO extends AbstractDAO<Doctor> {
         Doctor doctor = session.find(Doctor.class, id);
         doctor.setDateOfValidity(date);
     }
+
+    /**
+     * This function gives one like to doctor.
+     * @param id doctors id
+     */
+    public void addLikeToDoctor(int id) {
+        Session session = currentSession();
+        Doctor doctor = session.find(Doctor.class, id);
+        doctor.setLikes(doctor.getLikes()+1);
+    }
+    /**
+     * This function remove one like from doctor.
+     * @param id doctors id
+     */
+    public void removeLikeFromDoctor(int id) {
+        Session session = currentSession();
+        Doctor doctor = session.find(Doctor.class, id);
+        doctor.setLikes(doctor.getLikes()-1);
+    }
 }
 

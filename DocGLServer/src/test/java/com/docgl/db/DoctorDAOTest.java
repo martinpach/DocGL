@@ -282,9 +282,27 @@ public class DoctorDAOTest extends AbstractDAO {
     }
 
     @Test
-    public void setDoctorsValidityTest(){
+    public void setDoctorsValidityTest() {
         dao.setDoctorsValidity(1, new Date());
         Doctor doctor = dao.getDoctor(1);
         assertNotNull(doctor.getDateOfValidity());
+    }
+    /**
+     * addLikeToDoctor test
+     */
+    @Test
+    public void addLikeToDoctorTest() {
+        dao.addLikeToDoctor(1);
+        Doctor doctor = dao.getDoctor(1);
+        assertEquals(11, doctor.getLikes());
+    }
+    /**
+     * removeLikeFromDoctor test
+     */
+    @Test
+    public void removeLikeFromDoctorTest() {
+        dao.removeLikeFromDoctor(1);
+        Doctor doctor = dao.getDoctor(1);
+        assertEquals(9, doctor.getLikes());
     }
 }
