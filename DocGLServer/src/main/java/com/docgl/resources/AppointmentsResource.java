@@ -3,16 +3,14 @@ package com.docgl.resources;
 import com.docgl.Authorizer;
 import com.docgl.api.LoggedUser;
 import com.docgl.db.AppointmentDAO;
+import com.docgl.entities.Appointment;
 import com.docgl.enums.TimePeriod;
 import com.docgl.enums.UserType;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.dropwizard.auth.Auth;
 import io.dropwizard.hibernate.UnitOfWork;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 
 /**
@@ -51,5 +49,39 @@ public class AppointmentsResource {
         AppointmentsCountRepresentation(long count) {
             this.count = count;
         }
+    }
+
+    /**
+     * Resource for getting appointment by ID
+     * @param loggedUser is user that is sending request
+     * @param id appointment ID
+     * @return appointment in json representation
+     */
+    @GET
+    @Path("{id}")
+    @UnitOfWork
+    public Appointment getAppointment(@Auth LoggedUser loggedUser, @PathParam("id") int id) {
+        authorizer.checkAuthentication(loggedUser.getId(), id);
+        Appointment appointment = appointmentDAO.getAppointment(id);
+        if (appointment == null)
+            throw new BadRequestException("Appointment with id like that does not exist!");
+        return appointmentDAO.getAppointment(id);
+    }
+    /**
+     * Resource for cancelling appointment by his ID
+     * @param loggedUser is user that is sending request
+     * @param id appointment id
+     * @return appointment in json representation
+     */
+    @PUT
+    @Path("{id}/canceled")
+    @UnitOfWork
+    public void cancelAppointment(@Auth LoggedUser loggedUser, @PathParam("id") int id) {
+        authorizer.checkAuthentication(loggedUser.getId(), id);
+        Appointment appointment = appointmentDAO.getAppointment(id);
+        if (appointment.isCanceled() == true) {
+            throw new BadRequestException("Appointment is already canceled!");
+        }
+        appointmentDAO.cancelAppointment(id);
     }
 }

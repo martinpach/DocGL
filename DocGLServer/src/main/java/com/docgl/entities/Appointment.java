@@ -23,6 +23,7 @@ public class Appointment {
     private int id;
 
     private String note;
+
     @ManyToOne
     @JoinColumn(name = "doctor_id")
     @NotNull
@@ -63,6 +64,10 @@ public class Appointment {
     @JsonView(Views.PublicView.class)
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String patientLastName;
+
+    @Column(name = "canceled", columnDefinition = "boolean default false")
+    @JsonView(Views.PublicView.class)
+    private boolean canceled;
 
     public Appointment() {
     }
@@ -145,5 +150,13 @@ public class Appointment {
 
     public void setPatientLastName(String patientLastName) {
         this.patientLastName = patientLastName;
+    }
+
+    public boolean isCanceled() {
+        return canceled;
+    }
+
+    public void setCanceled(boolean canceled) {
+        this.canceled = canceled;
     }
 }

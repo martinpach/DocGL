@@ -1,10 +1,10 @@
 package com.docgl.db;
 
 import com.docgl.entities.Appointment;
-import com.docgl.enums.TimePeriod;
 import com.docgl.enums.UserType;
 import io.dropwizard.hibernate.AbstractDAO;
 import org.hibernate.Criteria;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
@@ -43,5 +43,25 @@ public class AppointmentDAO extends AbstractDAO<Appointment> {
             criteria.add(Restrictions.eq("patientId", id));
         }
         return list(criteria);
+    }
+
+    /**
+     * This function search an appointment by his id
+     * @param id appointment id
+     * @return appointment
+     */
+    public Appointment getAppointment(int id) {
+        Session session = currentSession();
+        return session.find(Appointment.class, id);
+    }
+
+    /**
+     * This function cancel appointment, canceled appointment cannot be approved again
+     * @param id appointment id
+     */
+    public void cancelAppointment(int id) {
+        Session session = currentSession();
+        Appointment appointment = session.find(Appointment.class, id);
+        appointment.setCanceled(true);
     }
 }

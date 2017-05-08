@@ -132,7 +132,10 @@ public class PatientResource {
     @GET
     @Path("{id}/favourite")
     @UnitOfWork
-    public Collection<Doctor> getFavouriteDoctors(@PathParam("id") int id){
+    public Collection<Doctor> getFavouriteDoctors(@Auth LoggedUser loggedUser, @PathParam("id") int id){
+        UserType[] roles = {UserType.ADMIN, UserType.PATIENT};
+        authorizer.checkAuthorization(loggedUser.getUserType(), roles);
+        authorizer.checkAuthentication(loggedUser.getId(), id);
         return patientDAO.getFavouriteDoctors(id);
     }
     /**

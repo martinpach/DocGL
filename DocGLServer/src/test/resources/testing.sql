@@ -10,7 +10,18 @@ insert into Patients(email, first_name, last_name, password, user_name, registra
 insert into Patients(email, first_name, last_name, password, user_name, registration_date) values('anakin@skywalker.com', 'Anakin', 'Skywalker', '71dfd7af6d2ae6abf10b62b719e6600f', 'anakin', CURDATE());
 insert into Patients(email, first_name, last_name, password, user_name, registration_date) values('yoda@master.com', 'Yoda', 'Master', '71dfd7af6d2ae6abf10b62b719e6600f', 'yoda', CURDATE());
 insert into Patients(email, first_name, last_name, password, user_name, registration_date) values('darth@tyranus.sk', 'Darth', 'Tyranus', '71dfd7af6d2ae6abf10b62b719e6600f', 'tyranus', CURDATE());
+
 insert into Appointments(date, time, note, doctor_id, patient_id) values(CURDATE(), CURTIME(), 'test', 1, 1);
+insert into Appointments(date, time, note, doctor_id, patient_id) values(CURDATE(), CURTIME(), 'Grandma Anna', 1, 2);
+insert into Appointments(date, time, note, doctor_id, patient_id) values(CURDATE(), CURTIME(), 'Mother Erica', 1, 1);
+insert into Appointments(date, time, note, doctor_id, patient_id) values(CURDATE(), CURTIME(), 'Dad Joseph', 1, 1);
+insert into Appointments(date, time, note, doctor_id, patient_id) values(CURDATE(), CURTIME(), 'Brother John', 1, 1);
+insert into Appointments(date, time, note, doctor_id, patient_id) values(CURDATE(), CURTIME(), 'Friend Mark', 1, 1);
+insert into Appointments(date, time, note, doctor_id, patient_id) values(CURDATE(), CURTIME(), 'Friend Martin', 1, 1);
+insert into Appointments(date, time, note, doctor_id, patient_id) values(CURDATE(), CURTIME(), 'Friend Rasto', 1, 1);
+insert into Appointments(date, time, note, doctor_id, patient_id) values(CURDATE(), CURTIME(), 'Friend Dominika', 1, 1);
+insert into Appointments(date, time, note, doctor_id, patient_id) values(CURDATE(), CURTIME(), 'Friend Vladimir', 1, 1);
+
 insert into Working_Hours(friday_from, friday_to, monday_from, monday_to, thursday_from, thursday_to, doctor_id) values(CURTIME(), CURTIME(), CURTIME(), CURTIME(), CURTIME(), CURTIME(), 1);
 
 insert into favourite_doctors VALUES( 1, 1);

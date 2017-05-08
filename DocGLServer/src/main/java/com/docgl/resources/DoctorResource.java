@@ -81,6 +81,7 @@ public class DoctorResource {
     @UnitOfWork
     public void changeBlockingState(@Auth LoggedUser loggedUser, @PathParam("id") int id, BlockedInput blockedInput) {
         authorizer.checkAuthorization(loggedUser.getUserType(), UserType.ADMIN);
+        authorizer.checkAuthentication(loggedUser.getId(), id);
         doctorDAO.blockDoctor(blockedInput.isBlocked(), id);
     }
 
@@ -94,6 +95,7 @@ public class DoctorResource {
     @UnitOfWork
     public void changeApprovedStatus(@Auth LoggedUser loggedUser, @PathParam("id") int id) {
         authorizer.checkAuthorization(loggedUser.getUserType(), UserType.ADMIN);
+        authorizer.checkAuthentication(loggedUser.getId(), id);
         doctorDAO.approveDoctor(id);
     }
 
