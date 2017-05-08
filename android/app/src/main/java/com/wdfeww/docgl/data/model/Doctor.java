@@ -32,6 +32,12 @@ public class Doctor {
     @SerializedName("phone")
     @Expose
     private String phone;
+    @SerializedName("city")
+    @Expose
+    private String city;
+    @SerializedName("workplace")
+    @Expose
+    private String workplace;
     @SerializedName("blocked")
     @Expose
     private Boolean blocked;
@@ -109,6 +115,22 @@ public class Doctor {
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getWorkplace() {
+        return workplace;
+    }
+
+    public void setWorkplace(String workplace) {
+        this.workplace = workplace;
     }
 
     public Boolean getBlocked() {

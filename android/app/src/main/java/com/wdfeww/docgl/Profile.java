@@ -1,13 +1,19 @@
 package com.wdfeww.docgl;
 
+import android.content.Intent;
 import android.os.Build;
+import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.text.InputType;
 import android.text.method.PasswordTransformationMethod;
 import android.view.Gravity;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -16,8 +22,12 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.wdfeww.docgl.data.methods.Checker;
+import com.wdfeww.docgl.data.methods.NavigationMenu;
 
 public class Profile extends AppCompatActivity {
+    Toolbar toolbar;
+    DrawerLayout drawer_layout;
+    NavigationView nav_view;
     String firstName, lastName, email, token, username;
     Button btn2, btn1;
     TextView tv1, tv2, tv3, tv4, tv5, tv6, tv7, tv8, tv9, errorMessage, successMessage;
@@ -25,12 +35,17 @@ public class Profile extends AppCompatActivity {
     int id;
     LinearLayout.LayoutParams params, btn_params, text_params, sub_text_params;
     LinearLayout main_layout;
-
+    TextView logged_user;
+    Class className;
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.profile);
+
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
         errorMessage = new TextView(this);
         errorMessage.setTextAppearance(this, R.style.ErrorMessage);
         errorMessage.setBackground(this.getResources().getDrawable(R.drawable.error_message_background));
@@ -41,14 +56,26 @@ public class Profile extends AppCompatActivity {
         successMessage.setBackground(this.getResources().getDrawable(R.drawable.success_message_background));
         successMessage.setGravity(Gravity.CENTER);
         successMessage.setVisibility(View.GONE);
+
         main_layout = (LinearLayout) findViewById(R.id.main_layout);
+
         firstName = getIntent().getStringExtra("firstName");
         lastName = getIntent().getStringExtra("lastName");
         email = getIntent().getStringExtra("email");
         token = getIntent().getStringExtra("token");
         id = getIntent().getIntExtra("id", id);
         username = getIntent().getStringExtra("username");
+
+        className = getClass();
+        nav_view = (NavigationView) findViewById(R.id.nav_view);
+        drawer_layout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        logged_user = new TextView(this);
+        logged_user.setTextAppearance(this, R.style.profile_text);
+        NavigationMenu navigationMenu  = new NavigationMenu(id, firstName, lastName, email, token, username, getBaseContext(), toolbar, drawer_layout, nav_view, logged_user,className);
+        navigationMenu.initMenu();
+
         showProfile();
+
     }
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
@@ -252,17 +279,17 @@ public class Profile extends AppCompatActivity {
         btn1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(Checker.isPasswordValid(et6.getText().toString().trim())){
+                if (Checker.isPasswordValid(et6.getText().toString().trim())) {
                     errorMessage.setVisibility(View.GONE);
-                    if(et6.getText().toString().trim().equals(et7.getText().toString().trim())){
+                    if (et6.getText().toString().trim().equals(et7.getText().toString().trim())) {
                         errorMessage.setVisibility(View.GONE);
                         successMessage.setVisibility(View.VISIBLE);
                         successMessage.setText("Password was changed!");
-                    }else{
+                    } else {
                         errorMessage.setVisibility(View.VISIBLE);
                         errorMessage.setText("Passwords are not same!");
                     }
-                }else{
+                } else {
                     errorMessage.setVisibility(View.VISIBLE);
                     errorMessage.setText("New password must contain of minimum: one lower case, one upper case character, one number, one special character and minimum length of password is six characters.");
                 }

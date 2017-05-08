@@ -28,4 +28,6 @@
     <string name="confirm_new_password">confirm new password</string>
     <string name="type_new_password">type new password</string>
     <string name="type_old_password">type old password</string>
+    <string name="navigation_drawer_open">Menu Opened</string>
+    <string name="navigation_drawer_close">Menu Closed</string>
 </resources>
