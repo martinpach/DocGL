@@ -63,6 +63,10 @@ public class Doctor extends User{
     @JsonIgnore
     private Collection<Patient> patients = new ArrayList<>();
 
+    @Column(name = "validity_date")
+    @Temporal(TemporalType.DATE)
+    private Date dateOfValidity;
+
     public Collection<Appointment> getAppointments() {
         return appointments;
     }
@@ -77,6 +81,14 @@ public class Doctor extends User{
 
     public void setPatients(Collection<Patient> patients) {
         this.patients = patients;
+    }
+
+    public Date getDateOfValidity() {
+        return dateOfValidity;
+    }
+
+    public void setDateOfValidity(Date dateOfValidity) {
+        this.dateOfValidity = dateOfValidity;
     }
 
     public Date getRegistrationDate() {

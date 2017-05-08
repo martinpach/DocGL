@@ -130,7 +130,7 @@
                 to: toValue
             }
             workingHours[dayValue].push(workingHour);
-            if(workingHours[dayValue].length == 2){
+            if (workingHours[dayValue].length == 2) {
                 are2intervals = true;
             }
             intervalBox.text(intervalText);
@@ -248,7 +248,7 @@
             var finalObject = [];
             if (!are2intervals) {
                 setFirstInterval(workingHours);
-                finalObject.push(firstInterval);            
+                finalObject.push(firstInterval);
             } else {
                 setFirstInterval(workingHours);
                 setSecondInterval(workingHours);
@@ -256,20 +256,15 @@
                 finalObject.push(secondInterval);
                 console.log(finalObject);
             }
-            $.ajax({
-                url: 'http://localhost:8085/api/doctors/' + localStorage.getItem("id") + '/workingHours',
-                type: 'POST',
-                contentType: 'application/json',
-                data: JSON.stringify(
-                    finalObject                   
-                ),
-                success: function(data) {
-                    console.log("Yeaaaaaaaaaa");
-                },
-                error: function() {
-                    console.log("Hovno");
-                }
-            });
+
+            ajaxCall(localStorage.getItem("id"), "workingHours", finalObject, 'POST').done(
+                ajaxCall(localStorage.getItem("id"), "duration", {
+                    duration: workingHours.appointmentDuration
+                }, 'PUT'),
+                ajaxCall(localStorage.getItem("id"), "validity", {
+                    date: workingHours.validity
+                }, 'PUT')
+            );
         }
     });
 
@@ -282,6 +277,28 @@
         $("#input-to").timepicker('option', 'minTime', newTime);
         $("#input-to").val(newTime);
     });
+
+    function ajaxCall(id, sufix, dataToSend, type) {
+        var deferred = $.Deferred();
+        $.ajax({
+            beforeSend: function(xhr) {
+                xhr.setRequestHeader('Authorization', 'Bearer ' + localStorage.getItem("token"));
+            },
+            url: 'http://localhost:8085/api/doctors/' + id + '/' + sufix,
+            type: type,
+            contentType: 'application/json',
+            data: JSON.stringify(
+                dataToSend
+            ),
+            success: function(data) {
+                deferred.resolve();
+            },
+            error: function() {
+                deferred.reject();
+            }
+        });
+        return deferred.promise();
+    }
     </script>
 </body>
 

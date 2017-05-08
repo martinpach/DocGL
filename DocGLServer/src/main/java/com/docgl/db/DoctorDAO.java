@@ -1,6 +1,7 @@
 package com.docgl.db;
 
 import com.docgl.Cryptor;
+import com.docgl.api.DateOfValidityInput;
 import com.docgl.api.RegistrationInput;
 import com.docgl.entities.WorkingHours;
 import com.docgl.enums.SpecializationsEnum;
@@ -227,6 +228,12 @@ public class DoctorDAO extends AbstractDAO<Doctor> {
         Session session = currentSession();
         Doctor doctor = session.find(Doctor.class, id);
         doctor.setAppointmentsDuration(minutes);
+    }
+
+    public void setDoctorsValidity(int id, Date date){
+        Session session = currentSession();
+        Doctor doctor = session.find(Doctor.class, id);
+        doctor.setDateOfValidity(date);
     }
 }
 
