@@ -1,6 +1,7 @@
 package com.docgl.db;
 
 import com.docgl.Cryptor;
+import com.docgl.entities.Doctor;
 import com.docgl.exceptions.ValidationException;
 import com.docgl.api.RegistrationInput;
 import com.docgl.entities.Patient;
@@ -15,6 +16,8 @@ import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 
+import javax.print.Doc;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
@@ -170,4 +173,5 @@ public class PatientDAO extends AbstractDAO<Patient> {
             return false;
         return true;
     }
+
 }

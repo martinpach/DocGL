@@ -58,12 +58,25 @@ public class Doctor extends User{
     @Column(name = "approved", columnDefinition = "boolean default false")
     private boolean approved;
 
+    // favourite doctors
+    @ManyToMany(mappedBy = "doctors", fetch = FetchType.LAZY)
+    @JsonIgnore
+    private Collection<Patient> patients = new ArrayList<>();
+
     public Collection<Appointment> getAppointments() {
         return appointments;
     }
 
     public void setAppointments(Collection<Appointment> appointments) {
         this.appointments = appointments;
+    }
+
+    public Collection<Patient> getPatients() {
+        return patients;
+    }
+
+    public void setPatients(Collection<Patient> patients) {
+        this.patients = patients;
     }
 
     public Date getRegistrationDate() {

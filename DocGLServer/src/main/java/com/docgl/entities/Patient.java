@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
+import javax.print.Doc;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -30,12 +31,26 @@ public class Patient extends User {
     @Column(name = "blocked", columnDefinition = "boolean default false")
     private boolean blocked;
 
+    // favourite doctors
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "Favourite_doctors")
+    @JsonIgnore
+    private Collection<Doctor> doctors = new ArrayList<>();
+
     public Patient(){
     }
 
     public Patient (String firstName, String lastName, String email, String userName, String password, Date registrationDate){
         super(firstName,lastName,email,userName,password);
         this.registrationDate = registrationDate;
+    }
+
+    public Collection<Doctor> getDoctors() {
+        return doctors;
+    }
+
+    public void setDoctors(Collection<Doctor> doctors) {
+        this.doctors = doctors;
     }
 
     public Collection<Appointment> getAppointments() {
