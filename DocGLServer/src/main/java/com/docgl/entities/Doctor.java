@@ -2,6 +2,7 @@ package com.docgl.entities;
 
 import com.docgl.enums.SpecializationsEnum;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
@@ -20,6 +21,10 @@ public class Doctor extends User{
     @OneToMany(mappedBy = "doctor", fetch = FetchType.LAZY)
     @JsonIgnore
     private Collection<Appointment> appointments = new ArrayList<>(0);
+
+    @OneToMany(mappedBy = "doctor")
+    @JsonIgnore
+    private Collection<WorkingHours> workingHours = new ArrayList<>(0);
 
     @Column(name = "registration_date")
     @Temporal(TemporalType.DATE)
@@ -120,6 +125,14 @@ public class Doctor extends User{
 
     public void setWorkplace(String workplace) {
         this.workplace = workplace;
+    }
+
+    public Collection<WorkingHours> getWorkingHours() {
+        return workingHours;
+    }
+
+    public void setWorkingHours(Collection<WorkingHours> workingHours) {
+        this.workingHours = workingHours;
     }
 
     public Doctor(){

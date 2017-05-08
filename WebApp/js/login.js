@@ -80,7 +80,7 @@ $(document).ready(function () {
                         if (doctor.approved == false) {
                             window.location.href = "doctor/approval-wating.html";
                         } else {
-                            //window.location.href = "../doctor/home.html"
+                            window.location.href = "doctor/working-hours-first-setup.html"
                         }
                     }
                 },

@@ -1,9 +1,6 @@
 package com.docgl.db;
 
-import com.docgl.entities.Admin;
-import com.docgl.entities.Appointment;
-import com.docgl.entities.Doctor;
-import com.docgl.entities.Patient;
+import com.docgl.entities.*;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -25,6 +22,7 @@ public class AbstractDAO {
         config.addAnnotatedClass(Doctor.class);
         config.addAnnotatedClass(Patient.class);
         config.addAnnotatedClass(Appointment.class);
+        config.addAnnotatedClass(WorkingHours.class);
 
         config.setProperty("hibernate.connection.url", "jdbc:h2:mem:test");
         config.setProperty("hibernate.connection.username", "sa");

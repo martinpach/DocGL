@@ -63,6 +63,7 @@
         </div>
     </div>
     <script>
+    var are2intervals = false;
     var workingHours = {
         mon: [],
         tue: [],
@@ -70,8 +71,35 @@
         thu: [],
         fri: [],
         validity: null,
-        appointmentDuration : 20
+        appointmentDuration: 20
     }
+
+    var firstInterval = {
+        mondayFrom: null,
+        mondayTo: null,
+        tuesdayFrom: null,
+        tuesdayTo: null,
+        wednesdayFrom: null,
+        wednesdayTo: null,
+        thursdayFrom: null,
+        thursdayTo: null,
+        fridayFrom: null,
+        fridayTo: null
+    }
+
+    var secondInterval = {
+        mondayFrom: null,
+        mondayTo: null,
+        tuesdayFrom: null,
+        tuesdayTo: null,
+        wednesdayFrom: null,
+        wednesdayTo: null,
+        thursdayFrom: null,
+        thursdayTo: null,
+        fridayFrom: null,
+        fridayTo: null
+    }
+
     $('.timepicker').timepicker({
         timeFormat: 'h:mm p',
         interval: 30,
@@ -102,6 +130,9 @@
                 to: toValue
             }
             workingHours[dayValue].push(workingHour);
+            if(workingHours[dayValue].length == 2){
+                are2intervals = true;
+            }
             intervalBox.text(intervalText);
             $('#entered-working-hours').append(intervalBox);
         }
@@ -161,6 +192,52 @@
         return false;
     }
 
+    function setFirstInterval(workingHours) {
+        if (workingHours.mon[0] != undefined) {
+            firstInterval.mondayFrom = workingHours.mon[0].from;
+            firstInterval.mondayTo = workingHours.mon[0].to;
+        }
+        if (workingHours.tue[0] != undefined) {
+            firstInterval.tuesdayFrom = workingHours.tue[0].from;
+            firstInterval.tuesdayTo = workingHours.tue[0].to;
+        }
+        if (workingHours.wed[0] != undefined) {
+            firstInterval.wednesdayFrom = workingHours.wed[0].from;
+            firstInterval.wednesdayTo = workingHours.wed[0].to;
+        }
+        if (workingHours.thu[0] != undefined) {
+            firstInterval.thursdayFrom = workingHours.thu[0].from;
+            firstInterval.thursdayTo = workingHours.thu[0].to;
+        }
+        if (workingHours.fri[0] != undefined) {
+            firstInterval.fridayFrom = workingHours.fri[0].from;
+            firstInterval.fridayFrom = workingHours.fri[0].to;
+        }
+    }
+
+    function setSecondInterval(workingHours) {
+        if (workingHours.mon[1] != undefined) {
+            secondInterval.mondayFrom = workingHours.mon[1].from;
+            secondInterval.mondayTo = workingHours.mon[1].to;
+        }
+        if (workingHours.tue[1] != undefined) {
+            secondInterval.tuesdayFrom = workingHours.tue[1].from;
+            secondInterval.tuesdayTo = workingHours.tue[1].to;
+        }
+        if (workingHours.wed[1] != undefined) {
+            secondInterval.wednesdayFrom = workingHours.wed[1].from;
+            secondInterval.wednesdayTo = workingHours.wed[1].to;
+        }
+        if (workingHours.thu[1] != undefined) {
+            secondInterval.thursdayFrom = workingHours.thu[1].from;
+            secondInterval.thursdayTo = workingHours.thu[1].to;
+        }
+        if (workingHours.fri[1] != undefined) {
+            secondInterval.fridayFrom = workingHours.fri[1].from;
+            secondInterval.fridayFrom = workingHours.fri[1].to;
+        }
+    }
+
     $('#btn-submit').click(function() {
         var dateOfValidity = $('.datepicker').val();
         var valueFrom = $('#input-from').val();
@@ -168,7 +245,31 @@
         if (validateForm(valueFrom, valueTo, dateOfValidity)) {
             workingHours.validity = dateOfValidity;
             workingHours.appointmentDuration = $('#input-duration').val() == "" ? 20 : $('#input-duration').val();
-            console.log(workingHours.appointmentDuration);
+            var finalObject = [];
+            if (!are2intervals) {
+                setFirstInterval(workingHours);
+                finalObject.push(firstInterval);            
+            } else {
+                setFirstInterval(workingHours);
+                setSecondInterval(workingHours);
+                finalObject.push(firstInterval);
+                finalObject.push(secondInterval);
+                console.log(finalObject);
+            }
+            $.ajax({
+                url: 'http://localhost:8085/api/doctors/' + localStorage.getItem("id") + '/workingHours',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(
+                    finalObject                   
+                ),
+                success: function(data) {
+                    console.log("Yeaaaaaaaaaa");
+                },
+                error: function() {
+                    console.log("Hovno");
+                }
+            });
         }
     });
 

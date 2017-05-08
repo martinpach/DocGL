@@ -4,7 +4,9 @@ import com.docgl.Authorizer;
 import com.docgl.Views;
 import com.docgl.api.*;
 import com.docgl.db.AppointmentDAO;
+import com.docgl.db.WorkingHoursDAO;
 import com.docgl.entities.Appointment;
+import com.docgl.entities.WorkingHours;
 import com.docgl.enums.SortableDoctorColumns;
 import com.docgl.enums.SortingWays;
 import com.docgl.enums.SpecializationsEnum;
@@ -32,11 +34,13 @@ import java.util.List;
 public class DoctorResource {
     private DoctorDAO doctorDAO;
     private AppointmentDAO appointmentDAO;
+    private WorkingHoursDAO workingHoursDAO;
     private Authorizer authorizer;
 
-    public DoctorResource(DoctorDAO doctorDAO, AppointmentDAO appointmentDAO) {
+    public DoctorResource(DoctorDAO doctorDAO, AppointmentDAO appointmentDAO, WorkingHoursDAO workingHoursDAO) {
         this.doctorDAO = doctorDAO;
         this.appointmentDAO = appointmentDAO;
+        this.workingHoursDAO = workingHoursDAO;
         this.authorizer = new Authorizer();
     }
 
@@ -159,6 +163,39 @@ public class DoctorResource {
         authorizer.checkAuthorization(loggedUser.getUserType(), UserType.DOCTOR);
         authorizer.checkAuthentication(loggedUser.getId(), id);
         doctorDAO.setPassword(passwordInput.getPassword(), id);
+    }
+
+    /**
+     * Resource for getting working hours for exact doctor
+     * @param id chosen doctor
+     * @return working hours of doctor
+     */
+    @GET
+    @Path("{id}/workingHours")
+    @UnitOfWork
+    public List<WorkingHours> getDoctorsWorkingHours(@PathParam("id") int id){
+        return workingHoursDAO.getDoctorsWorkingHours(id);
+    }
+
+    /**
+     * Resource for setting working hours for exact doctor
+     * @param id chosen doctor
+     * @param workingHours working hours for whole week (if list has length 2 then second item represents second working time interval
+     */
+    @POST
+    @Path("{id}/workingHours")
+    @UnitOfWork
+    public void setDoctorsWokingHours(@PathParam("id") int id, List<WorkingHours> workingHours){
+        WorkingHours interval = workingHours.get(0);
+        Doctor doctor = doctorDAO.getDoctor(id);
+        interval.setDoctor(doctor);
+        workingHoursDAO.setDoctorsWorkingHours(interval);
+
+        if(workingHours.size() == 2){
+            interval = workingHours.get(1);
+            interval.setDoctor(doctor);
+            workingHoursDAO.setDoctorsWorkingHours(interval);
+        }
     }
 
 }

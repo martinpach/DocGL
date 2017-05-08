@@ -2,6 +2,7 @@ package com.docgl.db;
 
 import com.docgl.Cryptor;
 import com.docgl.api.RegistrationInput;
+import com.docgl.entities.WorkingHours;
 import com.docgl.enums.SpecializationsEnum;
 import com.docgl.exceptions.ValidationException;
 import com.docgl.entities.Doctor;
@@ -203,6 +204,12 @@ public class DoctorDAO extends AbstractDAO<Doctor> {
         if (Cryptor.encrypt(password).equals(doctor.getPassword()))
             return false;
         return true;
+    }
+
+    public Doctor getDoctor(int id){
+        return (Doctor) criteria()
+                .add(Restrictions.eq("id", id))
+                .uniqueResult();
     }
 
 }
