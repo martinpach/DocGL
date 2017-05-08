@@ -73,9 +73,15 @@ $(document).ready(function () {
                         localStorage.setItem("firstName", doctor.firstName);
                         localStorage.setItem("lastName", doctor.lastName);
                         localStorage.setItem("email", doctor.email);
+                        localStorage.setItem("registrationDate", doctor.registrationDate);
+                        localStorage.setItem("likes",doctor.likes);
+                        localStorage.setItem("specialization",doctor.specialization);
                         localStorage.setItem("phone", doctor.phone);
+                        localStorage.setItem("city",doctor.city);
+                        localStorage.setItem("workplace",doctor.workplace);
                         localStorage.setItem("userName", doctor.userName);
-                        localStorage.setItem("passwordChanged", doctor.passwordChanged);
+                        localStorage.setItem("appointmentsDuration",doctor.appointmentsDuration);
+                        localStorage.setItem("dateOfValidity",doctor.dateOfValidity);
                         localStorage.setItem("token", data.token);
                         if (doctor.approved == false) {
                             window.location.href = "doctor/approval-wating.html";
