@@ -49,6 +49,9 @@ public class Doctor extends User{
     @NotNull
     private String workplace;
 
+    @Column(name = "appointments_duration", columnDefinition = "int default 0")
+    private int appointmentsDuration;
+
     @Column(name = "blocked", columnDefinition = "boolean default false")
     private boolean blocked;
 
@@ -134,6 +137,13 @@ public class Doctor extends User{
     public void setWorkingHours(Collection<WorkingHours> workingHours) {
         this.workingHours = workingHours;
     }
+    public int getAppointmentsDuration() {
+        return appointmentsDuration;
+    }
+
+    public void setAppointmentsDuration(int appointmentsDuration) {
+        this.appointmentsDuration = appointmentsDuration;
+    }
 
     public Doctor(){
     }
@@ -151,7 +161,7 @@ public class Doctor extends User{
         this.workplace = workplace;
     }
 
-    public Doctor(String firstName, String lastName, String email, String userName, String password, Collection<Appointment> appointments, @NotNull Date registrationDate, @NotNull int likes, @NotNull SpecializationsEnum specialization, String phone, String city, String workplace, boolean blocked, boolean approved) {
+    public Doctor(String firstName, String lastName, String email, String userName, String password, Collection<Appointment> appointments, @NotNull Date registrationDate, @NotNull int likes, @NotNull SpecializationsEnum specialization, String phone, String city, String workplace,int appointmentsDuration, boolean blocked, boolean approved) {
         super(firstName, lastName, email, userName, password);
         this.appointments = appointments;
         this.registrationDate = registrationDate;
@@ -162,6 +172,7 @@ public class Doctor extends User{
         this.approved = approved;
         this.city = city;
         this.workplace = workplace;
+        this.appointmentsDuration = appointmentsDuration;
     }
 
     @Override
@@ -177,10 +188,10 @@ public class Doctor extends User{
                 ", workplace='" + this.getWorkplace() +'\''+
                 ", username='"+this.getUserName()+'\''+
                 ", password='"+this.getPassword()+'\''+
+                ", appointmentsDuration='"+this.getAppointmentsDuration()+'\''+
                 ", blocked='"+this.isBlocked()+'\''+
                 ", approved='"+this.isApproved()+'\''+
                 '}';
     }
-
 
 }

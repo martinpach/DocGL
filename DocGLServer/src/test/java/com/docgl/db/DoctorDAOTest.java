@@ -265,8 +265,18 @@ public class DoctorDAOTest extends AbstractDAO {
     }
 
     @Test
-    public void getDoctorTest(){
+    public void getDoctorTest() {
         Doctor doctor = dao.getDoctor(1);
         assertEquals(1, doctor.getId());
+    }
+
+    /**
+     * setAppointmentsDuration test
+     */
+    @Test
+    public void setAppointmentsDurationTest() {
+        dao.setAppointmentsDuration(30, 1);
+        Doctor doctor = dao.getLoggedDoctorInformation("doctorwho", "docwho123");
+        assertEquals(30, doctor.getAppointmentsDuration());
     }
 }
