@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.wdfeww.docgl.AppLogin;
 import com.wdfeww.docgl.Home;
 import com.wdfeww.docgl.Profile;
 import com.wdfeww.docgl.R;
@@ -22,7 +23,6 @@ import com.wdfeww.docgl.R;
  */
 
 public class NavigationMenu extends Activity {
-
     String firstName, lastName, email, token, username;
     int id;
     TextView logged_user;
@@ -31,9 +31,11 @@ public class NavigationMenu extends Activity {
     final DrawerLayout drawer_layout;
     NavigationView nav_view;
     Class className;
+
+
     public NavigationMenu(int id, String firstName, String lastName, String email, String token,
                           String username, Context context, Toolbar toolbar, DrawerLayout drawer_layout,
-                          NavigationView nav_view,TextView logged_user, Class className) {
+                          NavigationView nav_view, Class className) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -44,8 +46,8 @@ public class NavigationMenu extends Activity {
         this.toolbar = toolbar;
         this.drawer_layout = drawer_layout;
         this.nav_view = nav_view;
-        this.logged_user=logged_user;
         this.className=className;
+
     }
 
     public void initMenu(){
@@ -67,6 +69,8 @@ public class NavigationMenu extends Activity {
             }
         });
 
+        logged_user = new TextView(context);
+        logged_user.setTextAppearance(context, R.style.profile_text);
         logged_user.setText(username);
 
         nav_view.addHeaderView(logged_user);
@@ -95,6 +99,7 @@ public class NavigationMenu extends Activity {
                         break;
                     case R.id.nav_logout:
                         drawer_layout.closeDrawer(Gravity.RIGHT);
+                        logout();
                         break;
 
                 }
@@ -112,7 +117,17 @@ public class NavigationMenu extends Activity {
         intent.putExtra("username", username);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
+
     }
+
+    private void logout(){
+        Intent intent = new Intent(context, AppLogin.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        ((Activity)context).finish();
+        context.startActivity(intent);
+
+    }
+
 
     public void setFirstName(String firstName) {
         this.firstName = firstName;

@@ -1,28 +1,35 @@
 package com.wdfeww.docgl;
 
-import android.content.Intent;
 import android.os.Build;
-import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.NavigationView;
-import android.support.v4.app.NotificationCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.InputType;
 import android.text.method.PasswordTransformationMethod;
+import android.util.Log;
 import android.view.Gravity;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.wdfeww.docgl.data.methods.Checker;
+import com.wdfeww.docgl.data.methods.JsonReqestBody;
 import com.wdfeww.docgl.data.methods.NavigationMenu;
+import com.wdfeww.docgl.data.remote.Service;
+import com.wdfeww.docgl.data.remote.ServiceGenerator;
+
+import org.json.JSONObject;
+
+import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class Profile extends AppCompatActivity {
     Toolbar toolbar;
@@ -37,6 +44,9 @@ public class Profile extends AppCompatActivity {
     LinearLayout main_layout;
     TextView logged_user;
     Class className;
+
+    NavigationMenu navigationMenu;
+
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,12 +76,13 @@ public class Profile extends AppCompatActivity {
         id = getIntent().getIntExtra("id", id);
         username = getIntent().getStringExtra("username");
 
+
         className = getClass();
         nav_view = (NavigationView) findViewById(R.id.nav_view);
         drawer_layout = (DrawerLayout) findViewById(R.id.drawer_layout);
         logged_user = new TextView(this);
         logged_user.setTextAppearance(this, R.style.profile_text);
-        NavigationMenu navigationMenu  = new NavigationMenu(id, firstName, lastName, email, token, username, getBaseContext(), toolbar, drawer_layout, nav_view, logged_user,className);
+        navigationMenu = new NavigationMenu(id, firstName, lastName, email, token, username, this, toolbar, drawer_layout, nav_view,  className);
         navigationMenu.initMenu();
 
         showProfile();
@@ -239,16 +250,6 @@ public class Profile extends AppCompatActivity {
 
         tv1.setText(this.getResources().getString(R.string.changePassword));
         main_layout.addView(tv1);
-        tv2.setText(this.getResources().getString(R.string.oldPassword));
-        main_layout.addView(tv2);
-
-        et5 = new EditText(this);
-        et5.setHint(this.getResources().getString(R.string.type_old_password));
-        et5.setHintTextColor(this.getResources().getColor(R.color.color6));
-        et5.setLayoutParams(sub_text_params);
-        et5.setInputType(InputType.TYPE_TEXT_VARIATION_WEB_PASSWORD);
-        et5.setTransformationMethod(PasswordTransformationMethod.getInstance());
-        main_layout.addView(et5);
 
         tv4.setText(this.getResources().getString(R.string.newPassword));
         main_layout.addView(tv4);
@@ -283,8 +284,8 @@ public class Profile extends AppCompatActivity {
                     errorMessage.setVisibility(View.GONE);
                     if (et6.getText().toString().trim().equals(et7.getText().toString().trim())) {
                         errorMessage.setVisibility(View.GONE);
-                        successMessage.setVisibility(View.VISIBLE);
-                        successMessage.setText("Password was changed!");
+                        changePasswordCall(et7.getText().toString().trim());
+
                     } else {
                         errorMessage.setVisibility(View.VISIBLE);
                         errorMessage.setText("Passwords are not same!");
@@ -296,5 +297,36 @@ public class Profile extends AppCompatActivity {
             }
         });
         main_layout.addView(btn1);
+    }
+
+    private void changePasswordCall(String newPassword) {
+
+        JSONObject json = JsonReqestBody.changePass(newPassword);
+        RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"), (json.toString()));
+        Service loginService =
+                ServiceGenerator.createService(Service.class, token);
+        Call<ResponseBody> call = loginService.changePassword(id, body);
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if (response.isSuccessful()) {
+                    errorMessage.setVisibility(View.GONE);
+                    successMessage.setText("Password was changed!");
+                    successMessage.setVisibility(View.VISIBLE);
+                    navigationMenu.redirect(AppLogin.class);
+
+                } else {
+                    errorMessage.setVisibility(View.VISIBLE);
+                    errorMessage.setText("Password can not be same as old one!");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                errorMessage.setVisibility(View.VISIBLE);
+                errorMessage.setText("Server not responding!");
+                Log.d("Error", t.getMessage());
+            }
+        });
     }
 }

@@ -1,41 +1,31 @@
 package com.wdfeww.docgl;
 
-
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-
-
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-
 import com.wdfeww.docgl.data.methods.Checker;
 import com.wdfeww.docgl.data.methods.JsonReqestBody;
 import com.wdfeww.docgl.data.model.User;
-import com.wdfeww.docgl.data.remote.APIService;
-import com.wdfeww.docgl.data.remote.ApiUtils;
+import com.wdfeww.docgl.data.remote.Service;
+import com.wdfeww.docgl.data.remote.ServiceGenerator;
 
-
-import org.json.JSONException;
 import org.json.JSONObject;
 
-
 import okhttp3.RequestBody;
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-
 
 public class AppLogin extends AppCompatActivity {
 
     private Button login, sign_up;
     private EditText password, username;
     private TextView errorMessageUsername, errorMessagePassword, successMessage;
-    private APIService mAPIService;
     private User user;
 
     @Override
@@ -50,9 +40,6 @@ public class AppLogin extends AppCompatActivity {
         errorMessageUsername = (TextView) findViewById(R.id.errorMessageUsername);
         errorMessagePassword = (TextView) findViewById(R.id.errorMessagePassword);
         successMessage = (TextView) findViewById(R.id.successMessage);
-
-
-        mAPIService = ApiUtils.getAPIService();
 
         login.setOnClickListener(
                 new View.OnClickListener() {
@@ -89,7 +76,9 @@ public class AppLogin extends AppCompatActivity {
     private void login() {
         JSONObject json = JsonReqestBody.login(username.getText().toString().trim(), password.getText().toString().trim());
         RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"), (json.toString()));
-        final Call<User> call = mAPIService.userLogin(body);
+        Service loginService =
+                ServiceGenerator.createService(Service.class, "");
+        Call<User> call = loginService.userLogin(body);
 
         call.enqueue(new Callback<User>() {
 
@@ -121,7 +110,7 @@ public class AppLogin extends AppCompatActivity {
         intent.putExtra("id", user.getPatient().getId());
         intent.putExtra("token", user.getToken());
         intent.putExtra("username", user.getPatient().getUserName());
-        finish();
+        this.finish();
         startActivity(intent);
     }
 
