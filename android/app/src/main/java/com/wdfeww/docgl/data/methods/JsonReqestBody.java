@@ -29,4 +29,13 @@ public class JsonReqestBody {
         }
         return json;
     }
+    public static JSONObject changePass(String password) {
+        JSONObject json = new JSONObject();
+        try {
+            json.put("password", password);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return json;
+    }
 }

@@ -1,10 +1,8 @@
 package com.wdfeww.docgl;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -13,27 +11,20 @@ import android.widget.TextView;
 import com.wdfeww.docgl.data.methods.Checker;
 import com.wdfeww.docgl.data.methods.JsonReqestBody;
 import com.wdfeww.docgl.data.model.User;
-import com.wdfeww.docgl.data.remote.APIService;
-import com.wdfeww.docgl.data.remote.ApiUtils;
+import com.wdfeww.docgl.data.remote.Service;
+import com.wdfeww.docgl.data.remote.ServiceGenerator;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import okhttp3.RequestBody;
-import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-
 
 public class Register extends AppCompatActivity {
     private Button sign_up;
     private EditText edit_txt_firstname, edit_txt_lastname, edit_txt_email, edit_txt_username, edit_txt_password;
     private TextView errorMessage, successMessage;
-    private APIService mAPIService;
     private User user;
 
     @Override
@@ -48,7 +39,6 @@ public class Register extends AppCompatActivity {
         edit_txt_password = (EditText) findViewById(R.id.edit_txt_password);
         errorMessage = (TextView) findViewById(R.id.errorMessage);
         successMessage = (TextView) findViewById(R.id.successMessage);
-        mAPIService = ApiUtils.getAPIService();
 
         sign_up.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -89,7 +79,9 @@ public class Register extends AppCompatActivity {
                 edit_txt_firstname.getText().toString().trim(), edit_txt_lastname.getText().toString().trim(),
                 edit_txt_email.getText().toString().trim());
         RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"), (json.toString()));
-        final Call<User> call = mAPIService.userRegister(body);
+        Service loginService =
+                ServiceGenerator.createService(Service.class, "");
+        Call<User> call = loginService.userRegister(body);
         call.enqueue(new Callback<User>() {
 
             @Override

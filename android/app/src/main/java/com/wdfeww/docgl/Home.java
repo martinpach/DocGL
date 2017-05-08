@@ -1,57 +1,43 @@
 package com.wdfeww.docgl;
 
 import android.content.Intent;
-import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.AttributeSet;
 import android.view.Gravity;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.wdfeww.docgl.data.methods.FontManager;
-import com.wdfeww.docgl.data.methods.JsonReqestBody;
 import com.wdfeww.docgl.data.methods.NavigationMenu;
 import com.wdfeww.docgl.data.model.Apointment;
-import com.wdfeww.docgl.data.model.User;
-import com.wdfeww.docgl.data.remote.APIService;
-import com.wdfeww.docgl.data.remote.ApiUtils;
-
-import org.json.JSONObject;
+import com.wdfeww.docgl.data.remote.Service;
+import com.wdfeww.docgl.data.remote.ServiceGenerator;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
-import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-
 
 public class Home extends AppCompatActivity {
     Toolbar toolbar;
     DrawerLayout drawer_layout;
     NavigationView nav_view;
     String firstName, lastName, email, token, username, medkit, calendar;
-    private APIService mAPIService;
     int id;
     LinearLayout main_layout;
     List<Apointment> apointments;
-    TextView logged_user;
 
     Class className;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,27 +57,21 @@ public class Home extends AppCompatActivity {
         className = getClass();
         nav_view = (NavigationView) findViewById(R.id.nav_view);
         drawer_layout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        logged_user = new TextView(this);
-        logged_user.setTextAppearance(this, R.style.profile_text);
-        NavigationMenu navigationMenu = new NavigationMenu(id, firstName, lastName, email, token, username, getBaseContext(), toolbar, drawer_layout, nav_view, logged_user,className);
-        navigationMenu.initMenu();
 
-        mAPIService = ApiUtils.getAPIService();
+        NavigationMenu navigationMenu = new NavigationMenu(id, firstName, lastName, email, token, username, this, toolbar, drawer_layout, nav_view, className);
+        navigationMenu.initMenu();
 
         medkit = this.getResources().getString(R.string.fa_medkit);
         calendar = this.getResources().getString(R.string.fa_calendar);
 
         checkApointments();
-
-
-
     }
 
     private void checkApointments() {
-        final Call<List<Apointment>> call = mAPIService.getPatientAppointments(id);
 
+        Service service = ServiceGenerator.createService(Service.class, "");
+        Call<List<Apointment>> call = service.getPatientAppointments(id);
         call.enqueue(new Callback<List<Apointment>>() {
-
             @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
             @Override
             public void onResponse(Call<List<Apointment>> call, Response<List<Apointment>> response) {
