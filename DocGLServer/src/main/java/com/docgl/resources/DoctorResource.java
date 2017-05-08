@@ -182,6 +182,18 @@ public class DoctorResource {
     }
 
     /**
+     * Resource for setting date of validity for doctor
+     * @param id chosen doctor
+     * @param date chosen date
+     */
+    @PUT
+    @Path("{id}/validity")
+    @UnitOfWork
+    public void setDoctorsValidity(@PathParam("id") int id, DateOfValidityInput date){
+        doctorDAO.setDoctorsValidity(id, date.getDate());
+    }
+
+    /**
      * Resource for getting working hours for exact doctor
      * @param id chosen doctor
      * @return working hours of doctor

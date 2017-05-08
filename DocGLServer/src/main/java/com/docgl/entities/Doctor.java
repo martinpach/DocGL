@@ -58,12 +58,24 @@ public class Doctor extends User{
     @Column(name = "approved", columnDefinition = "boolean default false")
     private boolean approved;
 
+    @Column(name = "validity_date")
+    @Temporal(TemporalType.DATE)
+    private Date dateOfValidity;
+
     public Collection<Appointment> getAppointments() {
         return appointments;
     }
 
     public void setAppointments(Collection<Appointment> appointments) {
         this.appointments = appointments;
+    }
+
+    public Date getDateOfValidity() {
+        return dateOfValidity;
+    }
+
+    public void setDateOfValidity(Date dateOfValidity) {
+        this.dateOfValidity = dateOfValidity;
     }
 
     public Date getRegistrationDate() {

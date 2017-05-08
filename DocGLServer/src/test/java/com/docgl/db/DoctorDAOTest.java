@@ -19,6 +19,7 @@ import static junit.framework.TestCase.assertFalse;
 import static junit.framework.TestCase.assertNull;
 import static junit.framework.TestCase.assertTrue;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 /**
  * Created by Rasťo on 6.5.2017.
@@ -278,5 +279,12 @@ public class DoctorDAOTest extends AbstractDAO {
         dao.setAppointmentsDuration(30, 1);
         Doctor doctor = dao.getLoggedDoctorInformation("doctorwho", "docwho123");
         assertEquals(30, doctor.getAppointmentsDuration());
+    }
+
+    @Test
+    public void setDoctorsValidityTest(){
+        dao.setDoctorsValidity(1, new Date());
+        Doctor doctor = dao.getDoctor(1);
+        assertNotNull(doctor.getDateOfValidity());
     }
 }
