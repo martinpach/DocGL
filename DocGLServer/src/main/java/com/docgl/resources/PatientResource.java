@@ -136,7 +136,7 @@ public class PatientResource {
         return patientDAO.getFavouriteDoctors(id);
     }
     /**
-     * Resource for adding doctor into patients favourite list
+     * Resource for adding and removing doctor from patient favourite list
      * @param loggedUser is logged user that is sending request
      * @param id chosen patient
      * @param doctorIdInput new favourite doctor ID
@@ -152,9 +152,10 @@ public class PatientResource {
         authorizer.checkAuthentication(loggedUser.getId(), id);
         Doctor doctor = doctorDAO.getDoctor(doctorIdInput.getDoctorId());
         if (doctorDAO.getDoctor(doctorIdInput.getDoctorId()) == null)
-            throw  new BadRequestException("Doctor with this id does not exists!");
+            throw  new BadRequestException("Doctor with id like that does not exist!");
         if (patientDAO.getFavouriteDoctors(id).contains(doctor))
-            throw  new BadRequestException("Doctor is already in favourite list!");
-        patientDAO.addDoctorToFavourite(id, doctorIdInput.getDoctorId());
+            patientDAO.removeDoctorFromFavourite(id, doctorIdInput.getDoctorId());
+        else
+            patientDAO.addDoctorToFavourite(id, doctorIdInput.getDoctorId());
     }
 }

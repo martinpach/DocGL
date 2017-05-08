@@ -211,6 +211,15 @@ public class PatientDAOTest extends AbstractDAO {
         Collection<Doctor> favouriteDoctors = dao.getFavouriteDoctors(1);
         assertNull(doctorDAO.getDoctor(10));
     }
-
+    /**
+     * removeDoctorFromFavourite test
+     */
+    @Test
+    public void removeDoctorFromFavourite() {
+        dao.removeDoctorFromFavourite(1,2);
+        Collection<Doctor> favouriteDoctors = dao.getFavouriteDoctors(1);
+        Doctor doctor = doctorDAO.getDoctor(2);
+        assertFalse(favouriteDoctors.contains(doctor));
+    }
 
 }

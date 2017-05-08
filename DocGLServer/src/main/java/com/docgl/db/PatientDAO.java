@@ -183,7 +183,7 @@ public class PatientDAO extends AbstractDAO<Patient> {
         return patient.getDoctors();
     }
     /**
-     * This function add doctor into patients favourite collection
+     * This function add doctor into patient favourite collection
      * @param patientId patient id in database
      * @param doctorId doctor id in database
      */
@@ -193,6 +193,19 @@ public class PatientDAO extends AbstractDAO<Patient> {
         Collection<Doctor> favouriteDoctors = patient.getDoctors();
         Doctor doctor = session.find(Doctor.class, doctorId);
         favouriteDoctors.add(doctor);
+        patient.setDoctors(favouriteDoctors);
+    }
+    /**
+     * This function remove doctor from patient favourite collection
+     * @param patientId patient id in database
+     * @param doctorId doctor id in database
+     */
+    public void removeDoctorFromFavourite(int patientId, int doctorId) {
+        Session session = currentSession();
+        Patient patient = session.find(Patient.class, patientId);
+        Collection<Doctor> favouriteDoctors = patient.getDoctors();
+        Doctor doctor = session.find(Doctor.class, doctorId);
+        favouriteDoctors.remove(doctor);
         patient.setDoctors(favouriteDoctors);
     }
 }
