@@ -71,7 +71,6 @@ public class AppointmentsResource {
      * Resource for cancelling appointment by his ID
      * @param loggedUser is user that is sending request
      * @param id appointment id
-     * @return appointment in json representation
      */
     @PUT
     @Path("{id}/canceled")
