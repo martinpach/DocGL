@@ -173,5 +173,26 @@ public class PatientDAO extends AbstractDAO<Patient> {
             return false;
         return true;
     }
-
+    /**
+     * @param id patient id in database
+     * @return rreturns collection of favourite doctors
+     */
+    public Collection<Doctor> getFavouriteDoctors(int id) {
+        Session session = currentSession();
+        Patient patient = session.find(Patient.class, id);
+        return patient.getDoctors();
+    }
+    /**
+     * This function add doctor into patients favourite collection
+     * @param patientId patient id in database
+     * @param doctorId doctor id in database
+     */
+    public void addDoctorToFavourite(int patientId, int doctorId) {
+        Session session = currentSession();
+        Patient patient = session.find(Patient.class, patientId);
+        Collection<Doctor> favouriteDoctors = patient.getDoctors();
+        Doctor doctor = session.find(Doctor.class, doctorId);
+        favouriteDoctors.add(doctor);
+        patient.setDoctors(favouriteDoctors);
+    }
 }

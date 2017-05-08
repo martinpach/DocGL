@@ -2,15 +2,14 @@ package com.docgl.resources;
 
 import com.docgl.Authorizer;
 import com.docgl.Views;
-import com.docgl.api.BlockedInput;
-import com.docgl.api.CountRepresentation;
-import com.docgl.api.PasswordInput;
+import com.docgl.api.*;
 import com.docgl.db.AppointmentDAO;
+import com.docgl.db.DoctorDAO;
 import com.docgl.entities.Appointment;
+import com.docgl.entities.Doctor;
 import com.docgl.enums.SortablePatientColumns;
 import com.docgl.enums.SortingWays;
 import com.docgl.enums.UserType;
-import com.docgl.api.LoggedUser;
 import com.docgl.db.PatientDAO;
 import com.docgl.entities.Patient;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -20,6 +19,7 @@ import io.dropwizard.hibernate.UnitOfWork;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -32,11 +32,13 @@ import java.util.List;
 public class PatientResource {
     private PatientDAO patientDAO;
     private AppointmentDAO appointmentDAO;
+    private DoctorDAO doctorDAO;
     private Authorizer authorizer;
 
-    public PatientResource(PatientDAO patientDAO, AppointmentDAO appointmentDAO) {
+    public PatientResource(PatientDAO patientDAO, AppointmentDAO appointmentDAO, DoctorDAO doctorDAO) {
         this.patientDAO = patientDAO;
         this.appointmentDAO = appointmentDAO;
+        this.doctorDAO = doctorDAO;
         this.authorizer = new Authorizer();
     }
 
@@ -64,7 +66,6 @@ public class PatientResource {
         authorizer.checkAuthorization(loggedUser.getUserType(), roles);
         return patientDAO.getAllPatients(limit, start, sortBy, way, name);
     }
-
 
     /**
      * Resource for getting all appointments of patient
@@ -107,7 +108,7 @@ public class PatientResource {
     /**
      * Resource for changing patients password
      * @param loggedUser is logged user that is sending request
-     * @param id chosen admin
+     * @param id chosen patient
      * @param passwordInput new password
      */
     @PUT
@@ -122,5 +123,36 @@ public class PatientResource {
         authorizer.checkAuthorization(loggedUser.getUserType(), UserType.PATIENT);
         authorizer.checkAuthentication(loggedUser.getId(), id);
         patientDAO.setPassword(passwordInput.getPassword(), id);
+    }
+    /**
+     * Resource for getting all doctors in patient favourite collection
+     * @param id selected patient
+     * @return Collection of favourite doctors
+     */
+    @GET
+    @Path("{id}/favourite")
+    @UnitOfWork
+    public Collection<Doctor> getFavouriteDoctors(@PathParam("id") int id){
+        return patientDAO.getFavouriteDoctors(id);
+    }
+    /**
+     * Resource for adding doctor into patients favourite list
+     * @param loggedUser is logged user that is sending request
+     * @param id chosen patient
+     * @param doctorIdInput new favourite doctor ID
+     */
+    @PUT
+    @Path("{id}/favourite")
+    @UnitOfWork
+    public void addDoctorToFavourite(@Auth LoggedUser loggedUser, @PathParam("id") int id, DoctorIdInput doctorIdInput) {
+        if (doctorIdInput.getDoctorId() == 0)
+            throw  new BadRequestException("Property 'doctorId' is missing or not presented!");
+        UserType[] roles = {UserType.ADMIN, UserType.PATIENT};
+        authorizer.checkAuthorization(loggedUser.getUserType(), roles);
+        authorizer.checkAuthentication(loggedUser.getId(), id);
+        Doctor doctor = doctorDAO.getDoctor(doctorIdInput.getDoctorId());
+        if (patientDAO.getFavouriteDoctors(id).contains(doctor))
+            throw  new BadRequestException("Doctor is already in favourite list!");
+        patientDAO.addDoctorToFavourite(id, doctorIdInput.getDoctorId());
     }
 }
