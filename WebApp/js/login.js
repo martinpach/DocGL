@@ -73,7 +73,6 @@ $(document).ready(function () {
                         localStorage.setItem("firstName", doctor.firstName);
                         localStorage.setItem("lastName", doctor.lastName);
                         localStorage.setItem("email", doctor.email);
-                        localStorage.setItem("registrationDate", doctor.registrationDate);
                         localStorage.setItem("likes",doctor.likes);
                         localStorage.setItem("specialization",doctor.specialization);
                         localStorage.setItem("phone", doctor.phone);

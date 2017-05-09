@@ -148,7 +148,7 @@ public class PatientResource {
     @Path("{id}/favourite")
     @UnitOfWork
     public void addDoctorToFavourite(@Auth LoggedUser loggedUser, @PathParam("id") int id, DoctorIdInput doctorIdInput) {
-        if (doctorIdInput.getDoctorId() == 0)
+        if (new Integer(doctorIdInput.getDoctorId()) == null)
             throw  new BadRequestException("Property 'doctorId' is missing or not presented!");
         UserType[] roles = {UserType.ADMIN, UserType.PATIENT};
         authorizer.checkAuthorization(loggedUser.getUserType(), roles);

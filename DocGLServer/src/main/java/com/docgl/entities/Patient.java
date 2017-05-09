@@ -26,6 +26,7 @@ public class Patient extends User {
     @Temporal(TemporalType.DATE)
     @CreationTimestamp
     @NotNull
+    @JsonIgnore
     private Date registrationDate;
 
     @Column(name = "blocked", columnDefinition = "boolean default false")
