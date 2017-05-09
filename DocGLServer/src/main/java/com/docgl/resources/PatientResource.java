@@ -78,8 +78,10 @@ public class PatientResource {
     @UnitOfWork
     @JsonView(Views.PatientView.class)
     public List<Appointment> getPatientAppointments(@Auth LoggedUser loggedUser, @PathParam("id") int id){
-        authorizer.checkAuthorization(loggedUser.getUserType(), UserType.PATIENT);
-        authorizer.checkAuthentication(loggedUser.getId(), id);
+        UserType[] roles = {UserType.ADMIN, UserType.PATIENT};
+        authorizer.checkAuthorization(loggedUser.getUserType(), roles);
+        if (loggedUser.getUserType() == UserType.PATIENT)
+            authorizer.checkAuthentication(loggedUser.getId(), id);
         return appointmentDAO.getAppointments(id, UserType.PATIENT);
     }
 
@@ -119,13 +121,14 @@ public class PatientResource {
     @Path("{id}/profile/password")
     @UnitOfWork
     public void changePassword(@Auth LoggedUser loggedUser, @PathParam("id") int id, PasswordInput passwordInput) {
+        authorizer.checkAuthorization(loggedUser.getUserType(), UserType.PATIENT);
+        authorizer.checkAuthentication(loggedUser.getId(), id);
         if(passwordInput.getPassword() == null || passwordInput.getPassword().trim().isEmpty()){
             throw new BadRequestException("Property 'password' is missing or not presented!");
         }
-        if (patientDAO.isPasswordDifferent(passwordInput.getPassword(), id)==false)
+        if (patientDAO.isPasswordDifferent(passwordInput.getPassword(), id)==false) {
             throw new BadRequestException("New password must be different than the old one!");
-        authorizer.checkAuthorization(loggedUser.getUserType(), UserType.PATIENT);
-        authorizer.checkAuthentication(loggedUser.getId(), id);
+        }
         patientDAO.setPassword(passwordInput.getPassword(), id);
     }
     /**
@@ -139,7 +142,9 @@ public class PatientResource {
     public Collection<Doctor> getFavouriteDoctors(@Auth LoggedUser loggedUser, @PathParam("id") int id){
         UserType[] roles = {UserType.ADMIN, UserType.PATIENT};
         authorizer.checkAuthorization(loggedUser.getUserType(), roles);
-        authorizer.checkAuthentication(loggedUser.getId(), id);
+        if (loggedUser.getUserType() == UserType.PATIENT)
+            authorizer.checkAuthentication(loggedUser.getId(), id);
+
         return patientDAO.getFavouriteDoctors(id);
     }
     /**
@@ -152,11 +157,14 @@ public class PatientResource {
     @Path("{id}/favourite")
     @UnitOfWork
     public void addDoctorToFavourite(@Auth LoggedUser loggedUser, @PathParam("id") int id, DoctorIdInput doctorIdInput) {
-        if (doctorIdInput.getDoctorId() == null)
-            throw  new BadRequestException("Property 'doctorId' is missing or not presented!");
         UserType[] roles = {UserType.ADMIN, UserType.PATIENT};
         authorizer.checkAuthorization(loggedUser.getUserType(), roles);
-        authorizer.checkAuthentication(loggedUser.getId(), id);
+        if (loggedUser.getUserType() == UserType.PATIENT)
+            authorizer.checkAuthentication(loggedUser.getId(), id);
+
+        if (doctorIdInput.getDoctorId() == null) {
+            throw  new BadRequestException("Property 'doctorId' is missing or not presented!");
+        }
         Doctor doctor = doctorDAO.getDoctor(doctorIdInput.getDoctorId());
         if (doctorDAO.getDoctor(doctorIdInput.getDoctorId()) == null)
             throw  new BadRequestException("Doctor with id like that does not exist!");

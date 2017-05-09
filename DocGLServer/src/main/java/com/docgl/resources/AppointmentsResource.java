@@ -45,15 +45,13 @@ public class AppointmentsResource {
 
     /**
      * Resource for getting appointment by ID
-     * @param loggedUser is user that is sending request
      * @param id appointment ID
      * @return appointment in json representation
      */
     @GET
     @Path("{id}")
     @UnitOfWork
-    public Appointment getAppointment(@Auth LoggedUser loggedUser, @PathParam("id") int id) {
-        authorizer.checkAuthentication(loggedUser.getId(), id);
+    public Appointment getAppointment(@PathParam("id") int id) {
         Appointment appointment = appointmentDAO.getAppointment(id);
         if (appointment == null)
             throw new BadRequestException("Appointment with id like that does not exist!");
@@ -61,14 +59,12 @@ public class AppointmentsResource {
     }
     /**
      * Resource for cancelling appointment by his ID
-     * @param loggedUser is user that is sending request
      * @param id appointment id
      */
     @DELETE
     @Path("{id}")
     @UnitOfWork
-    public void cancelAppointment(@Auth LoggedUser loggedUser, @PathParam("id") int id) {
-        authorizer.checkAuthentication(loggedUser.getId(), id);
+    public void cancelAppointment(@PathParam("id") int id) {
         Appointment appointment = appointmentDAO.getAppointment(id);
         if (appointment.isCanceled() == true) {
             throw new BadRequestException("Appointment is already canceled!");
