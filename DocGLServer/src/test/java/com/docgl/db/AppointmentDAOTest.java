@@ -4,6 +4,9 @@ import com.docgl.entities.Appointment;
 import com.docgl.enums.UserType;
 import org.junit.Test;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
@@ -57,4 +60,6 @@ public class AppointmentDAOTest extends AbstractDAO {
         dao.cancelAppointment(1);
         assertTrue(appointment.isCanceled());
     }
+
+
 }
