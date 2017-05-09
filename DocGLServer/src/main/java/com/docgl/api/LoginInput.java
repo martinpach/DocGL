@@ -5,7 +5,9 @@ import com.docgl.enums.UserType;
 /**
  * Created by Solanid on 11.4.2017.
  */
-public class LoginInput extends Input{
+public class LoginInput{
+    private String userName;
+    private String password;
     private UserType userType;
 
     public LoginInput() {
@@ -17,11 +19,20 @@ public class LoginInput extends Input{
      * @param userType represents input from json and it is used to distinct what type of user is trying to log in
      */
     public LoginInput(String userName, String password, UserType userType) {
-        super(userName, password);
+        this.userName = userName;
+        this.password = password;
         this.userType = userType;
     }
 
     public UserType getUserType() {
         return userType;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public String getPassword() {
+        return password;
     }
 }

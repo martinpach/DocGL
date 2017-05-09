@@ -51,18 +51,20 @@ public class AdminDAOTest extends AbstractDAO {
 
     @Test
     public void updateProfileTest(){
-        dao.updateProfile("rastobuttontest", "rastobutton123test", "rasto@buttontest.sk", 1);
+        dao.updateProfile("rastotest", "buttontest", "rastobutton123test", "rasto@buttontest.sk", 1);
         Admin admin = dao.getLoggedAdminInformation(1);
-        assertEquals("rastobuttontest", admin.getUserName());
+        assertEquals("rastotest", admin.getFirstName());
+        assertEquals("buttontest", admin.getLastName());
         assertEquals("rastobutton123test", Cryptor.decrypt(admin.getPassword()));
         assertEquals("rasto@buttontest.sk", admin.getEmail());
     }
 
     @Test
     public void updateProfileEmptyPasswordTest(){
-        dao.updateProfile("rastobuttontest", "", "rasto@buttontest.sk", 1);
+        dao.updateProfile("rastotest", "buttontest", "", "rasto@buttontest.sk", 1);
         Admin admin = dao.getLoggedAdminInformation(1);
-        assertEquals("rastobuttontest", admin.getUserName());
+        assertEquals("rastotest", admin.getFirstName());
+        assertEquals("buttontest", admin.getLastName());
         assertEquals("rasto@buttontest.sk", admin.getEmail());
         assertEquals("rastobutton123", Cryptor.decrypt(admin.getPassword()));
     }

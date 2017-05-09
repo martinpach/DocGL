@@ -4,9 +4,11 @@ import com.docgl.enums.SpecializationsEnum;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.annotations.CreationTimestamp;
+import org.joda.time.format.ISODateTimeFormat;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -30,7 +32,7 @@ public class Doctor extends User{
     @Temporal(TemporalType.DATE)
     @CreationTimestamp
     @NotNull
-    private Date registrationDate = new Date();
+    private Date registrationDate;
 
     @Column(columnDefinition = "int default 0")
     @NotNull

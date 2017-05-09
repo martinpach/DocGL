@@ -6,7 +6,9 @@ import com.docgl.enums.UserType;
 /**
  * Created by Martin on 26.4.2017.
  */
-public class RegistrationInput extends Input{
+public class RegistrationInput{
+    private String userName;
+    private String password;
     private String firstName;
     private String lastName;
     private String email;
@@ -34,7 +36,8 @@ public class RegistrationInput extends Input{
      * @param workplace entered workplace
      */
     public RegistrationInput(String userName, String password, String firstName, String lastName, String email, UserType userType, SpecializationsEnum specialization, String phone, String city, String workplace) {
-        super(userName, password);
+        this.userName = userName;
+        this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -46,7 +49,8 @@ public class RegistrationInput extends Input{
     }
 
     public RegistrationInput(String userName, String password, String firstName, String lastName, String email, UserType userType) {
-        super(userName, password);
+        this.userName = userName;
+        this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -83,5 +87,13 @@ public class RegistrationInput extends Input{
 
     public String getWorkplace() {
         return workplace;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public String getPassword() {
+        return password;
     }
 }
