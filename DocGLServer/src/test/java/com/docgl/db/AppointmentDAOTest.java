@@ -1,12 +1,15 @@
 package com.docgl.db;
 
 import com.docgl.entities.Appointment;
+import com.docgl.entities.WorkingHours;
 import com.docgl.enums.UserType;
+import org.joda.time.LocalDate;
+import org.joda.time.LocalTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 import org.junit.Test;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
@@ -19,6 +22,7 @@ import static junit.framework.TestCase.assertFalse;
  */
 public class AppointmentDAOTest extends AbstractDAO {
     private final AppointmentDAO dao = new AppointmentDAO(sessionFactory);
+    private final WorkingHoursDAO workingHoursDAO = new WorkingHoursDAO(sessionFactory);
 
     @Test
     public void getNumberOfAppointmentsTest() {
@@ -60,6 +64,5 @@ public class AppointmentDAOTest extends AbstractDAO {
         dao.cancelAppointment(1);
         assertTrue(appointment.isCanceled());
     }
-
 
 }
