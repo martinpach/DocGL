@@ -9,4 +9,5 @@
     <item name="tv7" type="id">tv7</item>
     <item name="tv8" type="id">tv8</item>
     <item name="tv9" type="id">tv9</item>
+    <item name="s" type="id">appointments</item>
 </resources>

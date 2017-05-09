@@ -30,4 +30,16 @@
     <string name="type_old_password">type old password</string>
     <string name="navigation_drawer_open">Menu Opened</string>
     <string name="navigation_drawer_close">Menu Closed</string>
+
+    <string name="appointmentDetail">Appointment Detail</string>
+    <string name="appointmentPlace">Address</string>
+    <string name="appointmentDateAndTime">Date and time</string>
+    <string name="appointmentPatient">Name of patient</string>
+    <string name="appointmentNote">Note</string>
+    <string name="appointmentDoctorName">Doctor name</string>
+    <string name="appointmentDoctorInfo">Doctor detail</string>
+    <string name="appointmentCancel">Cancel appointment</string>
+
+    <string name="ok">Ok</string>
+    <string name="cancel">Cancel</string>
 </resources>

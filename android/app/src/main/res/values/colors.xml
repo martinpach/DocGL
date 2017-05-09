@@ -16,4 +16,5 @@
     <color name="errorBackground">#FFBABA</color>
     <color name="successText">#4F8A10</color>
     <color name="successBackground">#DFF2BF</color>
+
 </resources>

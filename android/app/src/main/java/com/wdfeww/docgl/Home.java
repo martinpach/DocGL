@@ -15,7 +15,8 @@ import android.widget.TextView;
 
 import com.wdfeww.docgl.data.methods.FontManager;
 import com.wdfeww.docgl.data.methods.NavigationMenu;
-import com.wdfeww.docgl.data.model.Apointment;
+import com.wdfeww.docgl.data.model.Appointment;
+import com.wdfeww.docgl.data.model.Patient;
 import com.wdfeww.docgl.data.remote.Service;
 import com.wdfeww.docgl.data.remote.ServiceGenerator;
 
@@ -31,11 +32,10 @@ public class Home extends AppCompatActivity {
     Toolbar toolbar;
     DrawerLayout drawer_layout;
     NavigationView nav_view;
-    String firstName, lastName, email, token, username, medkit, calendar;
-    int id;
+    String token, medkit, calendar;
     LinearLayout main_layout;
-    List<Apointment> apointments;
-
+    List<Appointment> appointments;
+    Patient patient;
     Class className;
 
     @Override
@@ -47,42 +47,41 @@ public class Home extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         main_layout = (LinearLayout) findViewById(R.id.main_layout);
-        firstName = getIntent().getStringExtra("firstName");
-        lastName = getIntent().getStringExtra("lastName");
-        email = getIntent().getStringExtra("email");
+
+        Bundle bundle = this.getIntent().getExtras();
+        patient = bundle.getParcelable("patient");
         token = getIntent().getStringExtra("token");
-        id = getIntent().getIntExtra("id", id);
-        username = getIntent().getStringExtra("username");
 
         className = getClass();
         nav_view = (NavigationView) findViewById(R.id.nav_view);
         drawer_layout = (DrawerLayout) findViewById(R.id.drawer_layout);
 
-        NavigationMenu navigationMenu = new NavigationMenu(id, firstName, lastName, email, token, username, this, toolbar, drawer_layout, nav_view, className);
-        navigationMenu.initMenu();
-
         medkit = this.getResources().getString(R.string.fa_medkit);
         calendar = this.getResources().getString(R.string.fa_calendar);
 
-        checkApointments();
+        NavigationMenu navigationMenu = new NavigationMenu(token, patient, this, toolbar, drawer_layout, nav_view, className);
+        navigationMenu.initMenu();
+
+        checkAppointments();
     }
 
-    private void checkApointments() {
+
+    private void checkAppointments() {
 
         Service service = ServiceGenerator.createService(Service.class, "");
-        Call<List<Apointment>> call = service.getPatientAppointments(id);
-        call.enqueue(new Callback<List<Apointment>>() {
+        Call<List<Appointment>> call = service.getPatientAppointments(patient.getId());
+        call.enqueue(new Callback<List<Appointment>>() {
             @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
             @Override
-            public void onResponse(Call<List<Apointment>> call, Response<List<Apointment>> response) {
+            public void onResponse(Call<List<Appointment>> call, Response<List<Appointment>> response) {
                 if (response.isSuccessful()) {
-                    apointments = response.body();
-                    System.out.println(apointments.size());
-                    if (apointments.size() < 1) {
+                    appointments = response.body();
+                    System.out.println(appointments.size());
+                    if (appointments.size() < 1) {
                         createDefaultLayout();
                     } else {
                         try {
-                            createApointmentListLayout();
+                            createAppointmentListLayout();
                         } catch (ParseException e) {
                             e.printStackTrace();
                         }
@@ -92,7 +91,7 @@ public class Home extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<List<Apointment>> call, Throwable t) {
+            public void onFailure(Call<List<Appointment>> call, Throwable t) {
                 createErrorLayout();
             }
         });
@@ -165,7 +164,7 @@ public class Home extends AppCompatActivity {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
-    private void createApointmentListLayout() throws ParseException {
+    private void createAppointmentListLayout() throws ParseException {
         main_layout.removeAllViews();
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         params.setMargins(30, 50, 0, 0);
@@ -181,13 +180,20 @@ public class Home extends AppCompatActivity {
         params.topMargin = 40;
         LinearLayout.LayoutParams txt_params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         txt_params.topMargin = 7;
-        for (Apointment apointment : apointments) {
+        for (final Appointment appointment : appointments) {
 
-            LinearLayout linearLayout = new LinearLayout(this);
+            final LinearLayout linearLayout = new LinearLayout(this);
             linearLayout.setLayoutParams(params);
-            linearLayout.setBackground(this.getResources().getDrawable(R.drawable.background_apointment));
+            linearLayout.setBackground(this.getResources().getDrawable(R.drawable.background_appointment));
             linearLayout.setClickable(true);
             linearLayout.setOrientation(LinearLayout.VERTICAL);
+            linearLayout.setId(appointment.getId());
+            linearLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    showDetailOfAppointment(appointment);
+                }
+            });
             main_layout.addView(linearLayout);
 
 
@@ -198,7 +204,7 @@ public class Home extends AppCompatActivity {
             tv1.setTypeface(FontManager.getTypeface(getApplicationContext(), FontManager.FONTAWESOME));
             tv1.setTextSize(30.0f);
             tv1.setLayoutParams(txt_params);
-            tv1.setText(calendar + " " + sdf1.format(new SimpleDateFormat("yyyy-MM-dd").parse(apointment.getDate())) + " " + sdf2.format(new SimpleDateFormat("hh:mm:ss").parse(apointment.getTime())));
+            tv1.setText(calendar + " " + sdf1.format(new SimpleDateFormat("yyyy-MM-dd").parse(appointment.getDate())) + " " + sdf2.format(new SimpleDateFormat("hh:mm:ss").parse(appointment.getTime())));
             tv1.setGravity(Gravity.LEFT);
             linearLayout.addView(tv1);
 
@@ -206,7 +212,7 @@ public class Home extends AppCompatActivity {
             tv2.setTypeface(FontManager.getTypeface(getApplicationContext(), FontManager.FONTAWESOME));
             tv2.setTextSize(25.0f);
             tv2.setLayoutParams(txt_params);
-            tv2.setText(apointment.getNote());
+            tv2.setText(appointment.getPatientLastName()+ " "+ appointment.getPatientFirstName());
             tv2.setGravity(Gravity.LEFT);
             linearLayout.addView(tv2);
 
@@ -214,7 +220,7 @@ public class Home extends AppCompatActivity {
             tv3.setTypeface(FontManager.getTypeface(getApplicationContext(), FontManager.FONTAWESOME));
             tv3.setTextSize(30.0f);
             tv3.setLayoutParams(txt_params);
-            tv3.setText("@ " + apointment.getDoctor().getWorkplace() + ", " + apointment.getDoctor().getCity());
+            tv3.setText("@ " + appointment.getDoctor().getWorkplace() + ", " + appointment.getDoctor().getCity());
             tv3.setGravity(Gravity.LEFT);
             linearLayout.addView(tv3);
 
@@ -222,7 +228,7 @@ public class Home extends AppCompatActivity {
             tv4.setTypeface(FontManager.getTypeface(getApplicationContext(), FontManager.FONTAWESOME));
             tv4.setTextSize(30.0f);
             tv4.setLayoutParams(txt_params);
-            tv4.setText(medkit + " Doctor " + apointment.getDoctor().getFirstName() + " " + apointment.getDoctor().getLastName());
+            tv4.setText(medkit + " Doctor " + appointment.getDoctor().getFirstName() + " " + appointment.getDoctor().getLastName());
             tv4.setGravity(Gravity.LEFT);
             linearLayout.addView(tv4);
         }
@@ -235,16 +241,24 @@ public class Home extends AppCompatActivity {
 
     public void profile() {
         Intent intent = new Intent(getBaseContext(), Profile.class);
-        intent.putExtra("firstName", firstName);
-        intent.putExtra("lastName", lastName);
-        intent.putExtra("email", email);
-        intent.putExtra("id", id);
+        Bundle bundle = new Bundle();
+        bundle.putParcelable("patient", patient);
+        intent.putExtras(bundle);
         intent.putExtra("token", token);
-        intent.putExtra("username", username);
         startActivity(intent);
     }
 
     public void userSettings() {
 
+    }
+
+    private void showDetailOfAppointment(Appointment appointment){
+        Intent intent = new Intent(getBaseContext(), DetailOfAppointment.class);
+        Bundle bundle = new Bundle();
+        bundle.putParcelable("appointment", appointment);
+        bundle.putParcelable("patient", patient);
+        intent.putExtras(bundle);
+        intent.putExtra("token", token);
+        startActivity(intent);
     }
 }
