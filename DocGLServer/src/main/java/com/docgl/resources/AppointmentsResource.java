@@ -72,8 +72,8 @@ public class AppointmentsResource {
      * @param loggedUser is user that is sending request
      * @param id appointment id
      */
-    @PUT
-    @Path("{id}/canceled")
+    @DELETE
+    @Path("{id}")
     @UnitOfWork
     public void cancelAppointment(@Auth LoggedUser loggedUser, @PathParam("id") int id) {
         authorizer.checkAuthentication(loggedUser.getId(), id);

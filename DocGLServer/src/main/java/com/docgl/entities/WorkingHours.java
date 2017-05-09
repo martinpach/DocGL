@@ -12,7 +12,7 @@ import java.util.Date;
  */
 
 @Entity
-@Table(name="Working_Hours")
+@Table(name = "Working_Hours")
 public class WorkingHours {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,7 +20,7 @@ public class WorkingHours {
     private int id;
 
     @ManyToOne
-    @JoinColumn(name="doctor_id")
+    @JoinColumn(name = "doctor_id")
     @JsonIgnore
     private Doctor doctor;
 
@@ -28,52 +28,52 @@ public class WorkingHours {
     @JsonIgnore
     private int doctorId;
 
-    @Column(name="monday_from")
+    @Column(name = "monday_from")
 //    @Temporal(TemporalType.TIME)
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String mondayFrom;
 
-    @Column(name="monday_to")
+    @Column(name = "monday_to")
 //    @Temporal(TemporalType.TIME)
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String mondayTo;
 
-    @Column(name="tuesday_from")
+    @Column(name = "tuesday_from")
 //    @Temporal(TemporalType.TIME)
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String tuesdayFrom;
 
-    @Column(name="tuesday_to")
+    @Column(name = "tuesday_to")
 //    @Temporal(TemporalType.TIME)
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String tuesdayTo;
 
-    @Column(name="wednesday_from")
+    @Column(name = "wednesday_from")
 //    @Temporal(TemporalType.TIME)
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String wednesdayFrom;
 
-    @Column(name="wednesday_to")
+    @Column(name = "wednesday_to")
 //    @Temporal(TemporalType.TIME)
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String wednesdayTo;
 
-    @Column(name="thursday_from")
+    @Column(name = "thursday_from")
 //    @Temporal(TemporalType.TIME)
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String thursdayFrom;
 
-    @Column(name="thursday_to")
+    @Column(name = "thursday_to")
 //    @Temporal(TemporalType.TIME)
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String thursdayTo;
 
-    @Column(name="friday_from")
+    @Column(name = "friday_from")
 //    @Temporal(TemporalType.TIME)
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String fridayFrom;
 
-    @Column(name="friday_to")
+    @Column(name = "friday_to")
 //    @Temporal(TemporalType.TIME)
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String fridayTo;
