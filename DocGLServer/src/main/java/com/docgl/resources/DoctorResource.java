@@ -17,6 +17,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonView;
 import io.dropwizard.auth.Auth;
 import io.dropwizard.hibernate.UnitOfWork;
+import sun.rmi.runtime.Log;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -154,7 +155,7 @@ public class DoctorResource {
      * @param passwordInput new password
      */
     @PUT
-    @Path("{id}/password")
+    @Path("{id}/profile/password")
     @UnitOfWork
     public void changePassword(@Auth LoggedUser loggedUser, @PathParam("id") int id, PasswordInput passwordInput) {
         if (passwordInput.getPassword() == null || passwordInput.getPassword().trim().isEmpty()){
@@ -227,6 +228,24 @@ public class DoctorResource {
             workingHoursDAO.setDoctorsWorkingHours(interval);
         }
         doctorDAO.markDoctorSetWorkingHours(id);
+    }
+
+    /**
+     * Resource for updating doctors' profile
+     * @param loggedUser user that is sending request
+     * @param id chosen doctor
+     * @param doctor json input with updated fields
+     * @return updated doctor
+     */
+    @PUT
+    @Path("{id}/profile")
+    @UnitOfWork
+    public Doctor updateDoctorsProfile(@Auth LoggedUser loggedUser, @PathParam("id") int id, DoctorInput doctor){
+        authorizer.checkAuthorization(loggedUser.getUserType(), UserType.DOCTOR);
+        authorizer.checkAuthentication(loggedUser.getId(), id);
+        doctorDAO.updateProfile(doctor.getFirstName(), doctor.getLastName(),
+                doctor.getEmail(), doctor.getPassword(), doctor.getPhone(), id);
+        return doctorDAO.getDoctor(id);
     }
 
 }

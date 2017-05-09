@@ -4,14 +4,11 @@ package com.docgl.api;
 /**
  * Created by Martin on 15.4.2017.
  */
-public class AdminInput{
-    private String firstName;
-    private String lastName;
-    private String email;
-    private String password;
+public class AdminInput extends UserInput{
 
     public AdminInput() {
     }
+
 
     /**
      * @param firstName input from json when using updateProfile resource
@@ -20,25 +17,7 @@ public class AdminInput{
      * @param email input from json when using updateProfile resource
      */
     public AdminInput(String firstName, String lastName, String email, String password) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.password = password;
+        super(firstName, lastName, email, password);
     }
 
-    public String getEmail() {
-        return email;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public String getPassword() {
-        return password;
-    }
 }

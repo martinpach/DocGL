@@ -13,8 +13,8 @@ insert into Patients(email, first_name, last_name, password, user_name, registra
 -- insert into Appointments(date, time, note, doctor_id, patient_id) values(CURDATE(), '7:30', 'Grandma Anna', 1, 2);
 -- insert into Appointments(date, time, note, doctor_id, patient_id) values(CURDATE(), '7:50', 'Mother Erica', 1, 1);
 
-insert into Appointments(date, time, note, doctor_id, patient_id, patient_first_name, patient_last_name) values('2017-05-24', '7:30:00', 'Mother Erica', 1, 1, 'Janko', 'Hrasko');
-insert into Appointments(date, time, note, doctor_id, patient_id, patient_first_name, patient_last_name) values(CURDATE(), '11:10:00', 'Dad Joseph', 1, 2, 'Chuck', 'Norris');
+insert into Appointments(date, time, note, doctor_id, patient_id, patient_first_name, patient_last_name) values('2017-05-24', '7:30:00', 'Headache', 1, 1, 'Janko', 'Hrasko');
+insert into Appointments(date, time, note, doctor_id, patient_id, patient_first_name, patient_last_name) values(CURDATE(), '11:10:00', 'Ear ache', 1, 2, 'Chuck', 'Norris');
 -- insert into Appointments(date, time, note, doctor_id, patient_id) values(CURDATE(), CURTIME(), 'Brother John', 1, 1);
 -- insert into Appointments(date, time, note, doctor_id, patient_id) values(CURDATE(), CURTIME(), 'Friend Mark', 1, 1);
 -- insert into Appointments(date, time, note, doctor_id, patient_id) values(CURDATE(), CURTIME(), 'Friend Martin', 1, 1);

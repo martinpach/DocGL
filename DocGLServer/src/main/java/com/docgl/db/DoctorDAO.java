@@ -269,5 +269,34 @@ public class DoctorDAO extends AbstractDAO<Doctor> {
         Doctor doctor = session.find(Doctor.class, id);
         doctor.setWorkingHoursSet(true);
     }
+
+    /**
+     * This function updates doctors' profile in database. If aparam is empty the field will not be updated.
+     * @param firstName to update
+     * @param lastName to update
+     * @param email to update
+     * @param password to update
+     * @param phone to update
+     * @param id chosen doctor
+     */
+    public void updateProfile(String firstName, String lastName, String email, String password, String phone, int id){
+        Session session = currentSession();
+        Doctor doctor = session.find(Doctor.class, id);
+        if(firstName != null && !firstName.trim().isEmpty()){
+            doctor.setFirstName(firstName);
+        }
+        if(lastName != null && !lastName.trim().isEmpty()) {
+            doctor.setLastName(lastName);
+        }
+        if(password != null && !password.trim().isEmpty()) {
+            doctor.setPassword(Cryptor.encrypt(password));
+        }
+        if(email != null && !email.trim().isEmpty()) {
+            doctor.setEmail(email);
+        }
+        if(phone != null && !phone.trim().isEmpty()) {
+            doctor.setPhone(phone);
+        }
+    }
 }
 

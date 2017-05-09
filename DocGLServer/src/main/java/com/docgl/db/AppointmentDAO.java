@@ -48,6 +48,18 @@ public class AppointmentDAO extends AbstractDAO<Appointment> {
     }
 
     /**
+     * @param id user identificator
+     * @param date appointments date
+     * @return list of all appointments for unique doctor chosen date
+     */
+    public List<Appointment> getDoctorsAppointmentsByDate(int id, Date date){
+        Criteria criteria = criteria();
+            criteria.add(Restrictions.eq("doctorId", id));
+            criteria.add(Restrictions.eq("date", date));
+        return list(criteria);
+    }
+
+    /**
      * This function search an appointment by his id
      * @param id appointment id
      * @return appointment

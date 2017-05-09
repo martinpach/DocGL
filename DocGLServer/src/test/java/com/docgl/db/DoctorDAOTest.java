@@ -312,4 +312,26 @@ public class DoctorDAOTest extends AbstractDAO {
         Doctor doctor = dao.getDoctor(1);
         assertTrue(doctor.isWorkingHoursSet());
     }
+
+    @Test
+    public void updateProfileTest(){
+        dao.updateProfile("rastotest", "buttontest",
+                "rasto@buttontest.sk", "rastobutton123test", "0944341879", 1);
+        Doctor doctor = dao.getDoctor(1);
+        assertEquals("rastotest", doctor.getFirstName());
+        assertEquals("buttontest", doctor.getLastName());
+        assertEquals("rastobutton123test", Cryptor.decrypt(doctor.getPassword()));
+        assertEquals("rasto@buttontest.sk", doctor.getEmail());
+    }
+
+    @Test
+    public void updateProfileEmptyPasswordTest(){
+        dao.updateProfile("rastotest", "buttontest",
+                "rasto@buttontest.sk","", "0944341879", 1);
+        Doctor doctor = dao.getDoctor(1);
+        assertEquals("rastotest", doctor.getFirstName());
+        assertEquals("buttontest", doctor.getLastName());
+        assertEquals("rasto@buttontest.sk", doctor.getEmail());
+        assertEquals("docwho123", Cryptor.decrypt(doctor.getPassword()));
+    }
 }
