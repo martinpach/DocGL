@@ -1,9 +1,12 @@
 package com.wdfeww.docgl.data.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Doctor {
+public class Doctor implements Parcelable{
 
     @SerializedName("id")
     @Expose
@@ -20,9 +23,6 @@ public class Doctor {
     @SerializedName("userName")
     @Expose
     private String userName;
-    @SerializedName("registrationDate")
-    @Expose
-    private String registrationDate;
     @SerializedName("likes")
     @Expose
     private Integer likes;
@@ -38,12 +38,44 @@ public class Doctor {
     @SerializedName("workplace")
     @Expose
     private String workplace;
+    @SerializedName("appointmentsDuration")
+    @Expose
+    private Integer appointmentsDuration;
     @SerializedName("blocked")
     @Expose
     private Boolean blocked;
     @SerializedName("approved")
     @Expose
     private Boolean approved;
+    @SerializedName("dateOfValidity")
+    @Expose
+    private Object dateOfValidity;
+    @SerializedName("workingHoursSet")
+    @Expose
+    private Boolean workingHoursSet;
+
+    protected Doctor(Parcel in) {
+        firstName = in.readString();
+        lastName = in.readString();
+        email = in.readString();
+        userName = in.readString();
+        specialization = in.readString();
+        phone = in.readString();
+        city = in.readString();
+        workplace = in.readString();
+    }
+
+    public static final Creator<Doctor> CREATOR = new Creator<Doctor>() {
+        @Override
+        public Doctor createFromParcel(Parcel in) {
+            return new Doctor(in);
+        }
+
+        @Override
+        public Doctor[] newArray(int size) {
+            return new Doctor[size];
+        }
+    };
 
     public Integer getId() {
         return id;
@@ -83,14 +115,6 @@ public class Doctor {
 
     public void setUserName(String userName) {
         this.userName = userName;
-    }
-
-    public String getRegistrationDate() {
-        return registrationDate;
-    }
-
-    public void setRegistrationDate(String registrationDate) {
-        this.registrationDate = registrationDate;
     }
 
     public Integer getLikes() {
@@ -133,6 +157,14 @@ public class Doctor {
         this.workplace = workplace;
     }
 
+    public Integer getAppointmentsDuration() {
+        return appointmentsDuration;
+    }
+
+    public void setAppointmentsDuration(Integer appointmentsDuration) {
+        this.appointmentsDuration = appointmentsDuration;
+    }
+
     public Boolean getBlocked() {
         return blocked;
     }
@@ -149,4 +181,37 @@ public class Doctor {
         this.approved = approved;
     }
 
+    public Object getDateOfValidity() {
+        return dateOfValidity;
+    }
+
+    public void setDateOfValidity(Object dateOfValidity) {
+        this.dateOfValidity = dateOfValidity;
+    }
+
+    public Boolean getWorkingHoursSet() {
+        return workingHoursSet;
+    }
+
+    public void setWorkingHoursSet(Boolean workingHoursSet) {
+        this.workingHoursSet = workingHoursSet;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(firstName);
+        dest.writeString(lastName);
+        dest.writeString(email);
+        dest.writeString(userName);
+        dest.writeString(specialization);
+        dest.writeString(phone);
+        dest.writeString(city);
+        dest.writeString(workplace);
+
+    }
 }

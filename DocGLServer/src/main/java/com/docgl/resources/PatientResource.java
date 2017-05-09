@@ -95,7 +95,8 @@ public class PatientResource {
     @Path("{id}/blocked")
     @UnitOfWork
     public void changeBlockingState(@Auth LoggedUser loggedUser, @PathParam("id") int id, BlockedInput blockedInput) {
-        authorizer.checkAuthorization(loggedUser.getUserType(), UserType.ADMIN);
+        UserType[] roles = {UserType.ADMIN, UserType.PATIENT};
+        authorizer.checkAuthorization(loggedUser.getUserType(), roles);
         patientDAO.blockPatient(blockedInput.isBlocked(), id);
     }
 

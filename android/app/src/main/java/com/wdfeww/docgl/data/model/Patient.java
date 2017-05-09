@@ -1,9 +1,12 @@
 package com.wdfeww.docgl.data.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Patient {
+public class Patient implements Parcelable {
 
     @SerializedName("id")
     @Expose
@@ -26,6 +29,8 @@ public class Patient {
     @SerializedName("blocked")
     @Expose
     private Boolean blocked;
+
+
 
     public Integer getId() {
         return id;
@@ -83,4 +88,38 @@ public class Patient {
         this.blocked = blocked;
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(firstName);
+        dest.writeString(lastName);
+        dest.writeString(email);
+        dest.writeString(userName);
+        dest.writeString(registrationDate);
+        dest.writeInt(id);
+    }
+    protected Patient(Parcel in) {
+        firstName = in.readString();
+        lastName = in.readString();
+        email = in.readString();
+        userName = in.readString();
+        registrationDate = in.readString();
+        id = in.readInt();
+    }
+
+    public static final Creator<Patient> CREATOR = new Creator<Patient>() {
+        @Override
+        public Patient createFromParcel(Parcel in) {
+            return new Patient(in);
+        }
+
+        @Override
+        public Patient[] newArray(int size) {
+            return new Patient[size];
+        }
+    };
 }
