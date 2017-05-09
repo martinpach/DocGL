@@ -49,7 +49,8 @@ public class AdminDAO extends AbstractDAO<Admin> {
     }
 
     /**
-     * @param userName new userName
+     * @param firstName new userName
+     * @param lastName new userName
      * @param password new password
      * @param email new email
      * @param id represents unique admin

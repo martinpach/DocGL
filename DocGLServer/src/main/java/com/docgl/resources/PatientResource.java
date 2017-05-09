@@ -112,7 +112,7 @@ public class PatientResource {
      * @param passwordInput new password
      */
     @PUT
-    @Path("{id}/password")
+    @Path("{id}/profile/password")
     @UnitOfWork
     public void changePassword(@Auth LoggedUser loggedUser, @PathParam("id") int id, PasswordInput passwordInput) {
         if(passwordInput.getPassword() == null || passwordInput.getPassword().trim().isEmpty()){
