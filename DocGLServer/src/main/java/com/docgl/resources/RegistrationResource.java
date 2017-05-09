@@ -7,6 +7,7 @@ import com.docgl.exceptions.ValidationException;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.dropwizard.hibernate.UnitOfWork;
 
+import javax.annotation.security.PermitAll;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -39,6 +40,7 @@ public class RegistrationResource {
      */
     @GET
     @UnitOfWork
+    @PermitAll
     public List<RegistrationCountRepresentation> getNumberOfRegistration(@QueryParam("timePeriod") TimePeriod timePeriod){
         List<RegistrationCountRepresentation> registrations = new ArrayList<>();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");

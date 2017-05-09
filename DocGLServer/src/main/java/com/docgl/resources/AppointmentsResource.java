@@ -1,6 +1,7 @@
 package com.docgl.resources;
 
 import com.docgl.Authorizer;
+import com.docgl.api.CountRepresentation;
 import com.docgl.api.LoggedUser;
 import com.docgl.db.AppointmentDAO;
 import com.docgl.entities.Appointment;
@@ -37,18 +38,9 @@ public class AppointmentsResource {
     @GET
     @Path("count")
     @UnitOfWork
-    public AppointmentsCountRepresentation getNumberOfAppointments(@Auth LoggedUser loggedUser){
+    public CountRepresentation getNumberOfAppointments(@Auth LoggedUser loggedUser){
         authorizer.checkAuthorization(loggedUser.getUserType(), UserType.ADMIN);
-        return new AppointmentsCountRepresentation(appointmentDAO.getNumberOfAppointments());
-    }
-
-    private class AppointmentsCountRepresentation {
-        @JsonProperty
-        private long count;
-
-        AppointmentsCountRepresentation(long count) {
-            this.count = count;
-        }
+        return new CountRepresentation(appointmentDAO.getNumberOfAppointments());
     }
 
     /**

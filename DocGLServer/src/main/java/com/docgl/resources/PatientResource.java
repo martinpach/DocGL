@@ -17,6 +17,7 @@ import com.fasterxml.jackson.annotation.JsonView;
 import io.dropwizard.auth.Auth;
 import io.dropwizard.hibernate.UnitOfWork;
 
+import javax.annotation.security.PermitAll;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.util.Collection;
@@ -76,7 +77,9 @@ public class PatientResource {
     @Path("{id}/appointments")
     @UnitOfWork
     @JsonView(Views.PatientView.class)
-    public List<Appointment> getPatientAppointments(@PathParam("id") int id){
+    public List<Appointment> getPatientAppointments(@Auth LoggedUser loggedUser, @PathParam("id") int id){
+        authorizer.checkAuthorization(loggedUser.getUserType(), UserType.PATIENT);
+        authorizer.checkAuthentication(loggedUser.getId(), id);
         return appointmentDAO.getAppointments(id, UserType.PATIENT);
     }
 
@@ -101,6 +104,7 @@ public class PatientResource {
     @GET
     @Path("count")
     @UnitOfWork
+    @PermitAll
     public CountRepresentation getNumberOfAllPatients(){
         return new CountRepresentation(patientDAO.getNumberOfAllPatients());
     }

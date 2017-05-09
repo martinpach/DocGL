@@ -19,6 +19,7 @@ import io.dropwizard.auth.Auth;
 import io.dropwizard.hibernate.UnitOfWork;
 import sun.rmi.runtime.Log;
 
+import javax.annotation.security.PermitAll;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.util.Arrays;
@@ -58,6 +59,7 @@ public class DoctorResource {
      */
     @GET
     @UnitOfWork
+    @PermitAll
     public List<Doctor> getListOfAllDoctors(@Auth LoggedUser loggedUser,
                                             @QueryParam("limit") int limit,
                                             @QueryParam("start") int start,
@@ -67,7 +69,6 @@ public class DoctorResource {
                                             @QueryParam("spec") SpecializationsEnum spec
     ) {
         UserType[] roles = {UserType.ADMIN, UserType.PATIENT};
-        authorizer.checkAuthorization(loggedUser.getUserType(), roles);
         return doctorDAO.getAllDoctors(limit, start, sortBy, way, name, spec);
     }
 
@@ -82,7 +83,6 @@ public class DoctorResource {
     @UnitOfWork
     public void changeBlockingState(@Auth LoggedUser loggedUser, @PathParam("id") int id, BlockedInput blockedInput) {
         authorizer.checkAuthorization(loggedUser.getUserType(), UserType.ADMIN);
-        authorizer.checkAuthentication(loggedUser.getId(), id);
         doctorDAO.blockDoctor(blockedInput.isBlocked(), id);
     }
 
@@ -96,7 +96,6 @@ public class DoctorResource {
     @UnitOfWork
     public void changeApprovedStatus(@Auth LoggedUser loggedUser, @PathParam("id") int id) {
         authorizer.checkAuthorization(loggedUser.getUserType(), UserType.ADMIN);
-        authorizer.checkAuthentication(loggedUser.getId(), id);
         doctorDAO.approveDoctor(id);
     }
 
@@ -109,7 +108,10 @@ public class DoctorResource {
     @Path("{id}/appointments")
     @UnitOfWork
     @JsonView(Views.DoctorView.class)
-    public List<Appointment> getDoctorAppointments(@PathParam("id") int id) {
+    public List<Appointment> getDoctorAppointments(@Auth LoggedUser loggedUser, @PathParam("id") int id) {
+        UserType[] roles = {UserType.ADMIN, UserType.DOCTOR};
+        authorizer.checkAuthorization(loggedUser.getUserType(), roles);
+        authorizer.checkAuthentication(loggedUser.getId(), id);
         return appointmentDAO.getAppointments(id, UserType.DOCTOR);
     }
 
@@ -133,6 +135,7 @@ public class DoctorResource {
     @GET
     @Path("count")
     @UnitOfWork
+    @PermitAll
     public CountRepresentation getNumberOfAllDoctors(){
         return new CountRepresentation(doctorDAO.getNumberOfAllDoctors());
     }
@@ -143,6 +146,7 @@ public class DoctorResource {
     @GET
     @Path("specializations")
     @UnitOfWork
+    @PermitAll
     public List<SpecializationsEnum> getSpecializations(){
         SpecializationsEnum[] array = SpecializationsEnum.values();
         List<SpecializationsEnum> list = Arrays.asList(array);
@@ -192,7 +196,9 @@ public class DoctorResource {
     @PUT
     @Path("{id}/validity")
     @UnitOfWork
-    public void setDoctorsValidity(@PathParam("id") int id, DateOfValidityInput date){
+    public void setDoctorsValidity(@Auth LoggedUser loggedUser, @PathParam("id") int id, DateOfValidityInput date){
+        authorizer.checkAuthorization(loggedUser.getUserType(), UserType.DOCTOR);
+        authorizer.checkAuthentication(loggedUser.getId(), id);
         doctorDAO.setDoctorsValidity(id, date.getDate());
     }
 
@@ -204,6 +210,7 @@ public class DoctorResource {
     @GET
     @Path("{id}/workingHours")
     @UnitOfWork
+    @PermitAll
     public List<WorkingHours> getDoctorsWorkingHours(@PathParam("id") int id){
         return workingHoursDAO.getDoctorsWorkingHours(id);
     }
@@ -216,7 +223,9 @@ public class DoctorResource {
     @POST
     @Path("{id}/workingHours")
     @UnitOfWork
-    public void setDoctorsWokingHours(@PathParam("id") int id, List<WorkingHours> workingHours){
+    public void setDoctorsWokingHours(@Auth LoggedUser loggedUser, @PathParam("id") int id, List<WorkingHours> workingHours){
+        authorizer.checkAuthentication(loggedUser.getId(), id);
+        authorizer.checkAuthorization(loggedUser.getUserType(), UserType.DOCTOR);
         WorkingHours interval = workingHours.get(0);
         Doctor doctor = doctorDAO.getDoctor(id);
         interval.setDoctor(doctor);
@@ -245,6 +254,19 @@ public class DoctorResource {
         authorizer.checkAuthentication(loggedUser.getId(), id);
         doctorDAO.updateProfile(doctor.getFirstName(), doctor.getLastName(),
                 doctor.getEmail(), doctor.getPassword(), doctor.getPhone(), id);
+        return doctorDAO.getDoctor(id);
+    }
+
+    /**
+     * Resource for getting chosen doctor
+     * @param id chosen doctor
+     * @return chosen doctor
+     */
+    @GET
+    @Path("{id}")
+    @UnitOfWork
+    @PermitAll
+    public Doctor getDoctorsProfile(@PathParam("id") int id){
         return doctorDAO.getDoctor(id);
     }
 
