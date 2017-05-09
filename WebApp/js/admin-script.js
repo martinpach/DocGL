@@ -34,13 +34,16 @@ $(document).ready(function () {
     $("#myProfile").on("click", function () {
         $("#container").load('templates/admin_profile.html', function () {
             var template = "<p>{{userName}}'s</p>";
-            var templateUsername = "<p>{{userName}}</p>";
+            var templateFirstname = "<p>{{firstName}}</p>";
+            var templateLastname="<p>{{lastName}}</p>";
             var templateMail = "<p>{{email}}</p>";
             var templatePassword = "<p>************</p>";
             var html = Mustache.to_html(template, adminData);
             $("#heading").html(html);
-            html = Mustache.to_html(templateUsername, adminData);
-            $("#username").html(html);
+            html = Mustache.to_html(templateFirstname, adminData);
+            $("#firstname").html(html);
+            html = Mustache.to_html(templateLastname, adminData);
+            $("#lastname").html(html);
             html = Mustache.to_html(templateMail, adminData);
             $("#email").html(html);
             html = Mustache.to_html(templatePassword, adminData);
@@ -356,8 +359,6 @@ $(document).ready(function () {
             "blocked":true
         });
         ajaxRequest("/doctors/"+(selectedDoc+1)+"/blocked?name=","PUT",blocked).done(function(){
-            $("#blockDoc").addClass("modalIconSelected");
-            $("#approveDoc").removeClass("modalIconSelected");
             getDoctors(start, limit, sortByDocs, wayDocs);
             dfd.resolve();
         });
@@ -423,9 +424,12 @@ $(document).ready(function () {
     //toggle edit fields
     $(document).on("click", "#editProfile", function (event) {
         event.preventDefault(event);
-        $("#username").toggle();
-        $("#changeUsernameDiv").toggle();
-        $("#editUsernameInput").val(adminData.userName);
+        $("#firstname").toggle();
+        $("#lasttname").toggle();
+        $("#changeFirstnameDiv").toggle();
+        $("#editFirstnameInput").val(adminData.firstName);
+        $("#changeLastnameDiv").toggle();
+        $("#editLastnameInput").val(adminData.lastName);
         $("#email").toggle();
         $("#changeEmailDiv").toggle();
         $("#editEmailInput").val(adminData.email);
@@ -438,28 +442,39 @@ $(document).ready(function () {
         event.preventDefault(event);
         var dfd = $.Deferred();
         var newData = {
-            username: $("#editUsernameInput").val(),
+            firstname: $("#editFirstnameInput").val(),
+            lastname: $("#editLastnameInput").val(),
             email: $("#editEmailInput").val(),
             password: $("#editPwd1").val(),
             password2: $("#editPwd2").val()
         }
         var regex = {
-            username: /^[a-zA-Z0-9_\-]*$/,
+            name: /^[a-zA-Z\-]*$/,
             password: /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\/\^&\*])/,
             email: /^[a-zA-Z0-9.!#$%&’*+\/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
         };
-        var isUsernameValid = false;
+        var isFirstnameValid = false;
+        var isLastnameValid=false;
         var isEmailValid = false;
         var isPasswordValid = false;
 
-        if (regex.username.test(newData.username)) {
-            isUsernameValid = true;
-            console.log(isUsernameValid);
+        if (regex.name.test(newData.firstname)) {
+            isFirstnameValid = true;
+            console.log(isFirstnameValid);
         } else {
             //alert user to enter a valid username
-            console.log("invalid username!");
-            $("#usernameErrorMsg").val("Choose a different username.");
+            console.log("invalid first name!");
+            $("#firstnameErrorMsg").val("Choose a different username.");
         }
+        if (regex.name.test(newData.lastname)) {
+            isLastnameValid = true;
+            console.log(isLastnameValid);
+        } else {
+            //alert user to enter a valid username
+            console.log("invalid last name!");
+            $("#lastnameErrorMsg").val("Choose a different username.");
+        }
+
         if (regex.email.test(newData.email)) {
             isEmailValid = true;
         } else {
@@ -470,9 +485,10 @@ $(document).ready(function () {
         } else {
             $("#pwdErrorMsg").val("Choose a valid password.");
         }
-        if (isPasswordValid && isUsernameValid && isEmailValid) {
+        if (isPasswordValid && isFirstnameValid&&isLastnameValid && isEmailValid) {
             var dataToSend = JSON.stringify({
-                "userName": newData.username,
+                "firstName": newData.firstname,
+                "lastName": newData.lastname,
                 "password": newData.password,
                 "email": newData.email
             });
@@ -480,16 +496,18 @@ $(document).ready(function () {
             ajaxRequest("/admins/" + adminData.id + "/profile", "PUT", dataToSend).done(function () {
                 $("#pwdErrorMsg").html("Profile changed successfully.");
                 console.log(ajaxData);
-                localStorage.setItem("userName", ajaxData.userName);
+                localStorage.setItem("firstName", ajaxData.firstName);
+                localStorage.setItem("lastName", ajaxData.lastName);
                 localStorage.setItem("email", ajaxData.email);
-                adminData.userName = ajaxData.userName;
+                adminData.firstName = ajaxData.firstName;
+                adminData.lastName = ajaxData.lastName;
                 adminData.email = ajaxData.email
                 console.log(localStorage.getItem("userName") + " " + localStorage.getItem("email"));
                 $("#editUsernameInput").val(ajaxData.userName);
                 $("#editEmailInput").val(ajaxData.email);
-                var template = "<p>{{userName}}'s</p>";
+                var template = "<p>{{firstName}} {{lastName}}</p>";
                 html = Mustache.to_html(template, ajaxData);
-                $("#heading").html(html);
+                $("#userName").html(html);
 
                 dfd.resolve();
             });
