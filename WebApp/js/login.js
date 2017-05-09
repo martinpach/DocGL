@@ -81,12 +81,15 @@ $(document).ready(function () {
                         localStorage.setItem("workplace",doctor.workplace);
                         localStorage.setItem("userName", doctor.userName);
                         localStorage.setItem("appointmentsDuration",doctor.appointmentsDuration);
-                        localStorage.setItem("dateOfValidity",doctor.dateOfValidity);
+                        localStorage.setItem("dateOfValidity",doctor.dateOfValidity);                        
                         localStorage.setItem("token", data.token);
+                        alert(doctor.workingHoursSet);
                         if (doctor.approved == false) {
-                            window.location.href = "doctor/approval-wating.html";
-                        } else {
+                            window.location.href = "doctor/approval-wating.html";                        
+                        } else if(!doctor.workingHoursSet){
                             window.location.href = "doctor/working-hours-first-setup.html"
+                        } else{
+                            window.location.href = "doctor/home.html"
                         }
                     }
                 },

@@ -305,4 +305,11 @@ public class DoctorDAOTest extends AbstractDAO {
         Doctor doctor = dao.getDoctor(1);
         assertEquals(9, doctor.getLikes());
     }
+
+    @Test
+    public void markDoctorSetWorkingHoursTest(){
+        dao.markDoctorSetWorkingHours(1);
+        Doctor doctor = dao.getDoctor(1);
+        assertTrue(doctor.isWorkingHoursSet());
+    }
 }

@@ -226,6 +226,7 @@ public class DoctorResource {
             interval.setDoctor(doctor);
             workingHoursDAO.setDoctorsWorkingHours(interval);
         }
+        doctorDAO.markDoctorSetWorkingHours(id);
     }
 
 }

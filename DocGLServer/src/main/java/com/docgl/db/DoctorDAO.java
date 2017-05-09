@@ -230,6 +230,11 @@ public class DoctorDAO extends AbstractDAO<Doctor> {
         doctor.setAppointmentsDuration(minutes);
     }
 
+    /**
+     * This function sets date of validity for doctor.
+     * @param id chosen doctor
+     * @param date chosen date
+     */
     public void setDoctorsValidity(int id, Date date){
         Session session = currentSession();
         Doctor doctor = session.find(Doctor.class, id);
@@ -253,6 +258,16 @@ public class DoctorDAO extends AbstractDAO<Doctor> {
         Session session = currentSession();
         Doctor doctor = session.find(Doctor.class, id);
         doctor.setLikes(doctor.getLikes()-1);
+    }
+
+    /**
+     * This function marks that doctor already sets his working hours
+     * @param id chosen doctor
+     */
+    public void markDoctorSetWorkingHours(int id){
+        Session session = currentSession();
+        Doctor doctor = session.find(Doctor.class, id);
+        doctor.setWorkingHoursSet(true);
     }
 }
 

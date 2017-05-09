@@ -67,6 +67,17 @@ public class Doctor extends User{
     @Temporal(TemporalType.DATE)
     private Date dateOfValidity;
 
+    @Column(name = "working_hours_set", columnDefinition = "boolean default false")
+    private boolean workingHoursSet;
+
+    public boolean isWorkingHoursSet() {
+        return workingHoursSet;
+    }
+
+    public void setWorkingHoursSet(boolean workingHoursSet) {
+        this.workingHoursSet = workingHoursSet;
+    }
+
     public Collection<Appointment> getAppointments() {
         return appointments;
     }

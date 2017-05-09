@@ -17,7 +17,5 @@ insert into Appointments(date, time, note, doctor_id, patient_id) values(CURDATE
 insert into Appointments(date, time, note, doctor_id, patient_id) values(CURDATE(), CURTIME(), "Friend Rasto", 1, 1);
 insert into Appointments(date, time, note, doctor_id, patient_id) values(CURDATE(), CURTIME(), "Friend Dominika", 1, 1);
 insert into Appointments(date, time, note, doctor_id, patient_id) values(CURDATE(), CURTIME(), "Friend Vladimir", 1, 1);
-insert into Working_Hours(monday_from, monday_to, tuesday_from, tuesday_to, wednesday_from, wednesday_to, thursday_from, thursday_to, friday_from, friday_to, doctor_id) values( "07:30 AM", "12:00 AM", "07:30 AM", "12:00 AM", "07:30 AM", "12:00 AM", "07:30 AM", "12:00 AM", "07:30 AM", "12:00 AM", 1);
-insert into Working_Hours(monday_from, monday_to, tuesday_from, tuesday_to, wednesday_from, wednesday_to, thursday_from, thursday_to, doctor_id) values( "01:00 PM", "03:00 PM", "01:00 PM", "03:00 PM", "01:00 PM", "05:00 PM", "01:00 PM", "03:00 PM", 1);
 insert into favourite_doctors VALUES( 1, 1);
 insert into favourite_doctors VALUES( 1, 2);
