@@ -4,17 +4,17 @@ package com.docgl.api;
  * Created by Rasťo on 8.5.2017.
  */
 public class DoctorIdInput {
-    private int doctorId;
+    private Integer doctorId;
 
 
     public DoctorIdInput() {
     }
 
-    public DoctorIdInput(int doctorId) {
+    public DoctorIdInput(Integer doctorId) {
         this.doctorId = doctorId;
     }
 
-    public int getDoctorId() {
+    public Integer getDoctorId() {
         return doctorId;
     }
 }
