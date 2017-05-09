@@ -195,7 +195,11 @@ body{
 	color:#034F85;
 }
 
-#changeUsernameDiv{
+#changeFirstnameDiv{
+	display:none;
+}
+
+#changeLastnameDiv{
 	display:none;
 }
 
