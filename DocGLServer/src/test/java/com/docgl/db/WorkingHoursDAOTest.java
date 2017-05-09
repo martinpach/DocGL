@@ -16,6 +16,6 @@ public class WorkingHoursDAOTest extends AbstractDAO {
     @Test
     public void getDoctorsWorkingHoursTest(){
         List<WorkingHours> workingHours = dao.getDoctorsWorkingHours(1);
-        assertEquals(1, workingHours.size());
+        assertEquals(2, workingHours.size());
     }
 }

@@ -1,11 +1,18 @@
 package com.docgl.db;
 
 import com.docgl.entities.Appointment;
+import com.docgl.entities.WorkingHours;
 import com.docgl.enums.UserType;
+import org.apache.commons.lang3.time.DateUtils;
+import org.joda.time.LocalDate;
+import org.joda.time.LocalTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 import org.junit.Test;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -19,23 +26,24 @@ import static junit.framework.TestCase.assertFalse;
  */
 public class AppointmentDAOTest extends AbstractDAO {
     private final AppointmentDAO dao = new AppointmentDAO(sessionFactory);
+    private final WorkingHoursDAO workingHoursDAO = new WorkingHoursDAO(sessionFactory);
 
     @Test
     public void getNumberOfAppointmentsTest() {
         long count = dao.getNumberOfAppointments();
-        assertEquals(10, count);
+        assertEquals(2, count);
     }
 
     @Test
     public void getAppointments() {
         List<Appointment> appointmentList = dao.getAppointments(1, UserType.PATIENT);
-        assertEquals(9, appointmentList.size());
+        assertEquals(1, appointmentList.size());
     }
 
     @Test
     public void getAppointments2() {
         List<Appointment> appointmentList = dao.getAppointments(1, UserType.DOCTOR);
-        assertEquals(10, appointmentList.size());
+        assertEquals(2, appointmentList.size());
     }
     /**
      * getAppointment test
@@ -60,6 +68,5 @@ public class AppointmentDAOTest extends AbstractDAO {
         dao.cancelAppointment(1);
         assertTrue(appointment.isCanceled());
     }
-
 
 }

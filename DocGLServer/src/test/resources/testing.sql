@@ -13,8 +13,8 @@ insert into Patients(email, first_name, last_name, password, user_name, registra
 -- insert into Appointments(date, time, note, doctor_id, patient_id) values(CURDATE(), '7:30', 'Grandma Anna', 1, 2);
 -- insert into Appointments(date, time, note, doctor_id, patient_id) values(CURDATE(), '7:50', 'Mother Erica', 1, 1);
 
-insert into Appointments(date, time, note, doctor_id, patient_id, patient_first_name, patient_last_name) values(CURDATE(), '7:30:00', 'Mother Erica', 1, 1, 'Janko', 'Hrasko');
-insert into Appointments(date, time, note, doctor_id, patient_id, patient_first_name, patient_last_name) values(CURDATE(), '11:10:00', 'Dad Joseph', 1, 2, 'Chuck', 'Norris');
+insert into Appointments(date, time, note, doctor_id, patient_id, patient_first_name, patient_last_name) values('2017-05-24', '7:30:00', 'Headache', 1, 1, 'Janko', 'Hrasko');
+insert into Appointments(date, time, note, doctor_id, patient_id, patient_first_name, patient_last_name) values(CURDATE(), '11:10:00', 'Ear ache', 1, 2, 'Chuck', 'Norris');
 -- insert into Appointments(date, time, note, doctor_id, patient_id) values(CURDATE(), CURTIME(), 'Brother John', 1, 1);
 -- insert into Appointments(date, time, note, doctor_id, patient_id) values(CURDATE(), CURTIME(), 'Friend Mark', 1, 1);
 -- insert into Appointments(date, time, note, doctor_id, patient_id) values(CURDATE(), CURTIME(), 'Friend Martin', 1, 1);
@@ -22,7 +22,8 @@ insert into Appointments(date, time, note, doctor_id, patient_id, patient_first_
 -- insert into Appointments(date, time, note, doctor_id, patient_id) values(CURDATE(), CURTIME(), 'Friend Dominika', 1, 1);
 -- insert into Appointments(date, time, note, doctor_id, patient_id) values(CURDATE(), CURTIME(), 'Friend Vladimir', 1, 1);
 
-insert into Working_Hours(friday_from, friday_to, monday_from, monday_to, thursday_from, thursday_to, doctor_id) values(CURTIME(), CURTIME(), CURTIME(), CURTIME(), CURTIME(), CURTIME(), 1);
+insert into Working_Hours(monday_from, monday_to, tuesday_from, tuesday_to, wednesday_from, wednesday_to, thursday_from, thursday_to, friday_from, friday_to, doctor_id) values( '07:30', '12:00', '07:30', '12:00', '07:30', '12:00', '07:30', '12:00', '07:30', '12:00', 1);
+insert into Working_Hours(monday_from, monday_to, tuesday_from, tuesday_to, wednesday_from, wednesday_to, thursday_from, thursday_to, doctor_id) values( '01:00', '03:00', '01:00', '03:00', '01:00', '05:00', '01:00', '03:00', 1);
 
 insert into favourite_doctors VALUES( 1, 1);
 insert into favourite_doctors VALUES( 1, 2);
