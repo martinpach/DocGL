@@ -21,6 +21,7 @@ insert into Appointments(date, time, note, doctor_id, patient_id, patient_first_
 
 insert into Working_Hours(monday_from, monday_to, tuesday_from, tuesday_to, wednesday_from, wednesday_to, thursday_from, thursday_to, friday_from, friday_to, doctor_id) values( "07:30", "12:00", "07:30", "12:00", "07:30", "12:00", "07:30", "12:00", "07:30", "12:00", 1);
 insert into Working_Hours(monday_from, monday_to, tuesday_from, tuesday_to, wednesday_from, wednesday_to, thursday_from, thursday_to, doctor_id) values( "01:00", "03:00", "01:00", "03:00", "01:00", "05:00", "01:00", "03:00", 1);
+insert into Free_Hours(date, from, to, doctor_id) values(CURDATE(), "8:00", "9:00", 1);
+insert into Free_Hours(date, from, to, doctor_id) values(CURDATE(), "15:00", "18:00", 1);
 insert into favourite_doctors VALUES( 1, 1);
 insert into favourite_doctors VALUES( 1, 2);
-Add Comment
