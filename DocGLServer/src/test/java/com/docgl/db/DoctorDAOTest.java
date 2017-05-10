@@ -168,7 +168,7 @@ public class DoctorDAOTest extends AbstractDAO {
      */
     @Test
     public void approveDoctorTest() {
-        dao.approveDoctor(1);
+        dao.approveDoctor(3);
         Doctor doctor = dao.getLoggedDoctorInformation("doctorwho", "docwho123");
         assertTrue(doctor.isApproved());
     }
@@ -215,7 +215,7 @@ public class DoctorDAOTest extends AbstractDAO {
         assertEquals("Kosice", doctor.getCity());
         assertEquals("Kukucinova 5", doctor.getWorkplace());
         assertFalse(doctor.isBlocked());
-        assertFalse(doctor.isApproved());
+        assertTrue(doctor.isApproved());
     }
     /**
      * registerDoctor test
