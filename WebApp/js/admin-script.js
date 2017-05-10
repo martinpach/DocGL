@@ -239,6 +239,7 @@ $(document).ready(function () {
         for (i = 0; i < ajaxData.length; i++) {
             blockedStatus=ajaxData[i].blocked;
             statusIcon=blockedStatus==false?statusIcon:blockedIcon;
+            $(".tableRow").remove();
             $("#tableUsers").append('<tr class="tableRow" data-id="'+i+'">' +
             '<td>' + icon + '</td>' +
             '<td>' + ajaxData[i].id + '</td>' +
@@ -320,6 +321,8 @@ $(document).ready(function () {
         console.log(id);
         selectedUser=parseInt(id);
     });
+
+
 
     $(document).on("click","#approveDoc",function(event){
         event.preventDefault();
