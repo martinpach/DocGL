@@ -281,7 +281,6 @@ public class DoctorResource {
     @GET
     @Path("{id}/days")
     @UnitOfWork
-    @PermitAll
     public List<String> getDoctorsWorkingDays(@PathParam("id") int id) {
         Doctor doctor = doctorDAO.getDoctor(id);
         if (!doctor.isWorkingHoursSet())
