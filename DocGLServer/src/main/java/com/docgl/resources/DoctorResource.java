@@ -186,7 +186,7 @@ public class DoctorResource {
         authorizer.checkAuthorization(loggedUser.getUserType(), UserType.DOCTOR);
         authorizer.checkAuthentication(loggedUser.getId(), id);
         if (durationInput.getDuration() == 0) {
-            throw  new BadRequestException("Property 'duration' is missing or not presented!");
+            throw new BadRequestException("Property 'duration' is missing or not presented!");
         }
         doctorDAO.setAppointmentsDuration(durationInput.getDuration(), id);
     }
@@ -273,4 +273,18 @@ public class DoctorResource {
         return doctorDAO.getDoctor(id);
     }
 
+    /**
+     * Resource for getting List of doctors working days.
+     * @param id chosen doctor
+     * @return List of Strings
+     */
+    @GET
+    @Path("{id}/days")
+    @UnitOfWork
+    public List<String> getDoctorsWorkingDays(@PathParam("id") int id) {
+        Doctor doctor = doctorDAO.getDoctor(id);
+        if (!doctor.isWorkingHoursSet())
+            throw new BadRequestException("Doctor did not set up his working hours!");
+        return workingHoursDAO.getDoctorsWorkingDays(id);
+    }
 }
