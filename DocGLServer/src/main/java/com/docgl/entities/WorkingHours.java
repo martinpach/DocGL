@@ -13,6 +13,9 @@ import java.util.Date;
 
 @Entity
 @Table(name = "Working_Hours")
+@NamedQueries({
+        @NamedQuery(name="getDoctorsWorkingHours", query = "from WorkingHours where doctor.id = :id")
+})
 public class WorkingHours {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,57 +27,43 @@ public class WorkingHours {
     @JsonIgnore
     private Doctor doctor;
 
-    @Column(name = "doctor_id", insertable = false, updatable = false)
-    @JsonIgnore
-    private int doctorId;
-
     @Column(name = "monday_from")
-//    @Temporal(TemporalType.TIME)
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String mondayFrom;
 
     @Column(name = "monday_to")
-//    @Temporal(TemporalType.TIME)
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String mondayTo;
 
     @Column(name = "tuesday_from")
-//    @Temporal(TemporalType.TIME)
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String tuesdayFrom;
 
     @Column(name = "tuesday_to")
-//    @Temporal(TemporalType.TIME)
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String tuesdayTo;
 
     @Column(name = "wednesday_from")
-//    @Temporal(TemporalType.TIME)
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String wednesdayFrom;
 
     @Column(name = "wednesday_to")
-//    @Temporal(TemporalType.TIME)
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String wednesdayTo;
 
     @Column(name = "thursday_from")
-//    @Temporal(TemporalType.TIME)
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String thursdayFrom;
 
     @Column(name = "thursday_to")
-//    @Temporal(TemporalType.TIME)
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String thursdayTo;
 
     @Column(name = "friday_from")
-//    @Temporal(TemporalType.TIME)
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String fridayFrom;
 
     @Column(name = "friday_to")
-//    @Temporal(TemporalType.TIME)
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private String fridayTo;
 

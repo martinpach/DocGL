@@ -10,6 +10,7 @@ import com.docgl.entities.Doctor;
 import com.docgl.enums.SortableDoctorColumns;
 import com.docgl.enums.SortingWays;
 import io.dropwizard.hibernate.AbstractDAO;
+import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -282,19 +283,19 @@ public class DoctorDAO extends AbstractDAO<Doctor> {
     public void updateProfile(String firstName, String lastName, String email, String password, String phone, int id){
         Session session = currentSession();
         Doctor doctor = session.find(Doctor.class, id);
-        if(firstName != null && !firstName.trim().isEmpty()){
+        if(StringUtils.isNotBlank(firstName)){
             doctor.setFirstName(firstName);
         }
-        if(lastName != null && !lastName.trim().isEmpty()) {
+        if(StringUtils.isNotBlank(lastName)) {
             doctor.setLastName(lastName);
         }
-        if(password != null && !password.trim().isEmpty()) {
+        if(StringUtils.isNotBlank(password)) {
             doctor.setPassword(Cryptor.encrypt(password));
         }
-        if(email != null && !email.trim().isEmpty()) {
+        if(StringUtils.isNotBlank(email)) {
             doctor.setEmail(email);
         }
-        if(phone != null && !phone.trim().isEmpty()) {
+        if(StringUtils.isNotBlank(phone)) {
             doctor.setPhone(phone);
         }
     }

@@ -16,6 +16,10 @@ import java.util.Date;
 
 @Entity
 @Table(name = "Appointments")
+@NamedQueries({
+        @NamedQuery(name="getDoctorsAppointment", query="from Appointment where doctor.id = :id"),
+        @NamedQuery(name="getPatientsAppointment", query="from Appointment where patient.id = :id")
+})
 public class Appointment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,19 +34,11 @@ public class Appointment {
     @JsonView(Views.PatientView.class)
     private Doctor doctor;
 
-    @Column(name = "doctor_id", insertable = false, updatable = false)
-    @JsonIgnore
-    private int doctorId;
-
     @ManyToOne
     @JoinColumn(name = "patient_id")
     @NotNull
     @JsonView(Views.DoctorView.class)
     private Patient patient;
-
-    @Column(name = "patient_id", insertable = false, updatable = false)
-    @JsonIgnore
-    private int patientId;
 
     @Temporal(TemporalType.TIME)
     @NotNull
@@ -102,22 +98,6 @@ public class Appointment {
 
     public void setPatient(Patient patient) {
         this.patient = patient;
-    }
-
-    public int getDoctorId() {
-        return doctorId;
-    }
-
-    public void setDoctorId(int doctorId) {
-        this.doctorId = doctorId;
-    }
-
-    public int getPatientId() {
-        return patientId;
-    }
-
-    public void setPatientId(int patientId) {
-        this.patientId = patientId;
     }
 
     public Date getTime() {
