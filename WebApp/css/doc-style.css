@@ -44,3 +44,19 @@
 	background-color: #FF7B95;
 }
 
+/*profile*/
+#changeWorkplaceDiv{
+	display:none;
+}
+
+#changeSpecDiv{
+	display:none;
+}
+
+#changeCityDiv{
+	display:none;
+}
+
+#changePhoneDiv{
+	display:none;
+}

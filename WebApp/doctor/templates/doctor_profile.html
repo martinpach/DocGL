@@ -1,5 +1,87 @@
 <h1 class="heading" id="heading"></h1>
-<p class="subHeading">personal profile</p>
+<p class="subHeading">personal profile <i class="fa fa-pencil editProfileI" id="editProfile"></i></p>
 <div class="container contentTab z-depth-1" id="contentTab">
+	<div class="row">
+		<div class="col-md-6"><!--firstname, lastname,spec-->
+			<p class="subHeadingBlue">You</p>
+			<div class="profileDiv" id="firstname_div">
+				<h6 class="lbl">First name </h6>
+				<h2 id="firstname"></h2>
+				<div id="changeFirstnameDiv">
+					<input type="text" id="editFirstnameInput" class="editProfileInput">
+					<p id="firstnameErrorMsg"></p>
+				</div>
+			</div>
+			<div class="profileDiv" id="lastname_div">
+				<h6 class="lbl">Last name</h6>
+				<h2 id="lastname"></h2>
+				<div id="changeLastnameDiv">
+					<input type="text" id="editLastnameInput" class="editProfileInput">
+					<p id="lastnameErrorMsg"></p>
+				</div>
+			</div>
+			<div class="profileDiv" id="spec_div">
+				<h6 class="lbl">Specialization</h6>
+				<h2 id="spec"></h2>
+				<div id="changeSpecDiv">
+					<input type="text" id="editSpecInput" class="editProfileInput">
+					<p id="specErrorMsg"></p>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-6"><!--contact info-->
+			<p class="subHeadingBlue">Contact Information</p>
+			<div class="profileDiv" id="phone_div">
+				<h6 class="lbl">Phone</h6>
+				<h2 id="phone"></h2>
+				<div id="changePhoneDiv">
+					<input type="text" id="editPhoneInput" class="editProfileInput">
+					<p id="phoneErrorMsg"></p>
+				</div>
+			</div>
+			<div class="emailDiv" id="email_div">
+				<h6 class="lbl">Email</h6>
+				<h2 id="email"></h2>
+				<div id="changeEmailDiv">
+					<input type="text" id="editEmailInput" class="editProfileInput">
+					<p id="emailErrorMsg"></p>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-6"><!--city, workplace-->
+			<p class="subHeadingBlue">Location</p>
+			<div class="profileDiv" id="city_div">
+				<h6 class="lbl">City</h6>
+				<h2 id="city"></h2>
+				<div id="changeCityDiv">
+					<input type="text" id="editCityInput" class="editProfileInput">
+					<p id="cityErrorMsg"></p>
+				</div>
+			</div>
+			<div class="profileDiv" id="workplace_div">
+				<h6 class="lbl">Workplace</h6>
+				<h2 id="workplace"></h2>
+				<div id="changeWorkplaceDiv">
+					<input type="text" id="editWorkplaceInput" class="editProfileInput">
+					<p id="workplaceErrorMsg"></p>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-6"><!--password-->
+			<p class="subHeadingBlue">Security</p>
+			<div id="password_div" class="profileDiv">
+				<h6 class="lbl">Password</h6>
+				<h2 id="password"></h2>
+				<div id="changePasswordDiv">
+					<input type="password" id="editPwd1" class="editProfileInput">
+					<input type="password" id="editPwd2" class="editProfileInput">
+					<p id="pwdErrorMsg"></p>
+					<span id="submitProfile"><i class="fa fa-check-square submitIcon" aria-hidden="true"></i></span>
+				</div>
+			</div>
+		</div>
+	</div>
 	
 </div>
