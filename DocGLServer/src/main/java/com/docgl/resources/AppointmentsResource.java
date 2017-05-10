@@ -66,6 +66,8 @@ public class AppointmentsResource {
     @UnitOfWork
     public void cancelAppointment(@PathParam("id") int id) {
         Appointment appointment = appointmentDAO.getAppointment(id);
+        if (appointment == null)
+            throw new BadRequestException("Appointment with id like that does not exist!");
         if (appointment.isCanceled() == true) {
             throw new BadRequestException("Appointment is already canceled!");
         }

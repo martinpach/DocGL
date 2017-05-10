@@ -11,6 +11,7 @@ import com.docgl.entities.Admin;
 import com.docgl.entities.Patient;
 import io.dropwizard.hibernate.UnitOfWork;
 import jersey.repackaged.com.google.common.base.Throwables;
+import org.apache.commons.lang3.StringUtils;
 import org.jose4j.jws.JsonWebSignature;
 import org.jose4j.jwt.JwtClaims;
 import org.jose4j.keys.HmacKey;
@@ -110,15 +111,15 @@ public class AuthResource {
 
         if(userType.equals(UserType.ADMIN))
             throw new ValidationException("Parameter userType should be 'DOCTOR' or 'PATIENT'");
-        if(registrationInput.getFirstName() == null)
+        if(StringUtils.isBlank(registrationInput.getFirstName()))
             throw new BadRequestException("Property 'firstName' is missing or not presented!");
-        if(registrationInput.getLastName() == null)
+        if(StringUtils.isBlank(registrationInput.getLastName()))
             throw new BadRequestException("Property 'lastName' is missing or not presented!");
-        if(registrationInput.getEmail() == null)
+        if(StringUtils.isBlank(registrationInput.getEmail()))
             throw new BadRequestException("Property 'email' is missing or not presented!");
-        if(registrationInput.getUserName() == null)
+        if(StringUtils.isBlank(registrationInput.getUserName()))
             throw new BadRequestException("Property 'userName' is missing or not presented!");
-        if(registrationInput.getPassword() == null)
+        if(StringUtils.isBlank(registrationInput.getPassword()))
             throw new BadRequestException("Property 'password' is missing or not presented!");
 
         if(userType.equals(UserType.PATIENT)) {
@@ -133,11 +134,11 @@ public class AuthResource {
         if (userType.equals(UserType.DOCTOR)) {
             if (registrationInput.getSpecialization() == null)
                 throw new BadRequestException("Property 'specialization' is missing or not presented!");
-            if (registrationInput.getPhone() == null)
+            if (StringUtils.isBlank(registrationInput.getPhone()))
                 throw new BadRequestException("Property 'phone' is missing or not presented!");
-            if (registrationInput.getCity() == null)
+            if (StringUtils.isBlank(registrationInput.getCity()))
                 throw new BadRequestException("Property 'city' is missing or not presented!");
-            if (registrationInput.getWorkplace() == null)
+            if (StringUtils.isBlank(registrationInput.getWorkplace()))
                 throw new BadRequestException("Property 'workplace' is missing or not presented!");
             if (doctorDAO.isUserNameAndEmailUnique(userName, email)) {
                 doctorDAO.registerDoctor(registrationInput);
