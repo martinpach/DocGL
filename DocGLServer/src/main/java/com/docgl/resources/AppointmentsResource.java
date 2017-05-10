@@ -71,4 +71,14 @@ public class AppointmentsResource {
         }
         appointmentDAO.cancelAppointment(id);
     }
+
+    /**
+     * Resource for marking appointment as done
+     */
+    @PUT
+    @Path("{id}/done")
+    @UnitOfWork
+    public void markAppointmentAsDone(@PathParam("id") int id){
+        appointmentDAO.markAppointmentAsDone(id);
+    }
 }

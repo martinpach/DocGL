@@ -18,7 +18,8 @@ import java.util.Date;
 @Table(name = "Appointments")
 @NamedQueries({
         @NamedQuery(name="getDoctorsAppointment", query="from Appointment where doctor.id = :id"),
-        @NamedQuery(name="getPatientsAppointment", query="from Appointment where patient.id = :id")
+        @NamedQuery(name="getPatientsAppointment", query="from Appointment where patient.id = :id"),
+        @NamedQuery(name="getDoctorsAppointmentsByDate", query="from Appointment where doctor.id = :id and date = :date")
 })
 public class Appointment {
     @Id
@@ -65,7 +66,19 @@ public class Appointment {
     @JsonView(Views.PublicView.class)
     private boolean canceled;
 
+    @Column(name = "done", columnDefinition = "boolean default false")
+    @JsonView(Views.PublicView.class)
+    private boolean done;
+
     public Appointment() {
+    }
+
+    public boolean isDone() {
+        return done;
+    }
+
+    public void setDone(boolean done) {
+        this.done = done;
     }
 
     public int getId() {

@@ -58,10 +58,10 @@ public class AppointmentDAO extends AbstractDAO<Appointment> {
      * @return list of all appointments for unique doctor chosen date
      */
     public List<Appointment> getDoctorsAppointmentsByDate(int id, Date date){
-        Criteria criteria = criteria();
-            criteria.add(Restrictions.eq("doctorId", id));
-            criteria.add(Restrictions.eq("date", date));
-        return list(criteria);
+        return namedQuery("getDoctorsAppointmentsByDate")
+                    .setParameter("id", id)
+                    .setParameter("date", date)
+                    .list();
     }
 
     /**
@@ -82,5 +82,15 @@ public class AppointmentDAO extends AbstractDAO<Appointment> {
         Session session = currentSession();
         Appointment appointment = session.find(Appointment.class, id);
         appointment.setCanceled(true);
+    }
+
+    /**
+     * This function mark appointment as done
+     * @param id chosen appointment
+     */
+    public void markAppointmentAsDone(int id){
+        Session session = currentSession();
+        Appointment appointment = session.find(Appointment.class, id);
+        appointment.setDone(true);
     }
 }

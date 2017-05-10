@@ -158,4 +158,11 @@ public class AppointmentDAOTest extends AbstractDAO {
         assertEquals(1, 1);
     }
 
+    @Test
+    public void markAppointmentAsDoneTest(){
+        dao.markAppointmentAsDone(1);
+        Appointment appointment = dao.getAppointment(1);
+        assertTrue(appointment.isDone());
+    }
+
 }
