@@ -1,7 +1,7 @@
 insert into Admins(email, first_name, last_name, password, user_name) values('rasto@button.sk', 'rasto', 'button', '5b5c51be5daa8548667254d666379b0a', 'rastobutton');
 
-insert into Doctors(email, first_name, last_name, password, user_name, registration_date, likes, specialization, phone, city, workplace, validity_date, appointments_duration) values('doctor@who.sk', 'doctor', 'who', '00a1cec95d41d45f77f0f280eebbfa3c', 'doctorwho', CURDATE(), 10, 0, '0949473196', 'Kosice', 'Kukucinova 5', '2017-05-11', 20);
-insert into Doctors(email, first_name, last_name, password, user_name, registration_date, likes, specialization, phone, city, workplace) values('obi.wan@kenobi.sk', 'Obi-Wan', 'Kenobi', '00a1cec95d41d45f77f0f280eebbfa3c', 'obiwan', CURDATE(), 5, 1, '0942223896', 'Kosice', 'Prazska 8');
+insert into Doctors(email, first_name, last_name, password, user_name, registration_date, likes, specialization, phone, city, workplace, validity_date, appointments_duration, working_hours_set, approved) values('doctor@who.sk', 'doctor', 'who', '00a1cec95d41d45f77f0f280eebbfa3c', 'doctorwho', CURDATE(), 10, 0, '0949473196', 'Kosice', 'Kukucinova 5', '2017-05-11', 20, true, true);
+insert into Doctors(email, first_name, last_name, password, user_name, registration_date, likes, specialization, phone, city, workplace, validity_date, appointments_duration, working_hours_set, approved) values('obi.wan@kenobi.sk', 'Obi-Wan', 'Kenobi', '00a1cec95d41d45f77f0f280eebbfa3c', 'obiwan', CURDATE(), 5, 1, '0942223896', 'Kosice', 'Prazska 8', '2017-05-11', 30, true, true);
 insert into Doctors(email, first_name, last_name, password, user_name, registration_date, likes, specialization, phone, city, workplace) values('qui.gon@jinn.de', 'Qui-Gon', 'Jinn', '00a1cec95d41d45f77f0f280eebbfa3c', 'jinn', CURDATE(), 3, 2, '0945463155', 'Presov', 'Komenskeho 34');
 insert into Doctors(email, first_name, last_name, password, user_name, registration_date, likes, specialization, phone, city, workplace) values('r2.d2@doctor.com', 'R2', 'D2', '00a1cec95d41d45f77f0f280eebbfa3c', 'r2d2', CURDATE(), 20, 1, '09568989898', 'Kosice', 'Zimna 16');
 
@@ -29,6 +29,24 @@ insert into Working_Hours(monday_from, monday_to, tuesday_from, tuesday_to, wedn
 insert into Free_Hours(date, time_from, time_to, doctor_id) values(CURDATE(), '8:00', '9:00', 1);
 insert into Free_Hours(date, time_from, time_to, doctor_id) values(CURDATE(), '15:00', '18:00', 1);
 
-
+insert into Working_Hours(monday_from, monday_to, tuesday_from, tuesday_to, wednesday_from, wednesday_to, thursday_from, thursday_to, doctor_id) values( '07:30', '12:00', '07:30', '12:00', '07:30', '12:10', '09:00', '12:00', 2);
+insert into Working_Hours(monday_from, monday_to, tuesday_from, tuesday_to, wednesday_from, wednesday_to, thursday_from, thursday_to, doctor_id) values( '01:00', '03:00', '01:00', '03:00', '01:00', '05:00', '01:00', '03:00', 2);
 insert into favourite_doctors VALUES( 1, 1);
 insert into favourite_doctors VALUES( 1, 2);
+
+-- PUBLIC HOLIDAYS 2017
+insert into Public_Holidays(date) VALUES('2017-01-01');
+insert into Public_Holidays(date) VALUES('2017-01-06');
+insert into Public_Holidays(date) VALUES('2017-04-14');
+insert into Public_Holidays(date) VALUES('2017-04-17');
+insert into Public_Holidays(date) VALUES('2017-05-01');
+insert into Public_Holidays(date) VALUES('2017-05-08');
+insert into Public_Holidays(date) VALUES('2017-07-05');
+insert into Public_Holidays(date) VALUES('2017-08-29');
+insert into Public_Holidays(date) VALUES('2017-09-01');
+insert into Public_Holidays(date) VALUES('2017-09-15');
+insert into Public_Holidays(date) VALUES('2017-11-01');
+insert into Public_Holidays(date) VALUES('2017-11-17');
+insert into Public_Holidays(date) VALUES('2017-12-24');
+insert into Public_Holidays(date) VALUES('2017-12-25');
+insert into Public_Holidays(date) VALUES('2017-12-26');

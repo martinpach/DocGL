@@ -215,10 +215,9 @@ public class PatientDAO extends AbstractDAO<Patient> {
      * @param firstName to update
      * @param lastName to update
      * @param email to update
-     * @param password to update
      * @param id chosen patient
      */
-    public void updateProfile(String firstName, String lastName, String email, String password, int id){
+    public void updateProfile(String firstName, String lastName, String email, int id){
         Session session = currentSession();
         Patient patient = session.find(Patient.class, id);
         if(StringUtils.isNotBlank(firstName)){
@@ -226,9 +225,6 @@ public class PatientDAO extends AbstractDAO<Patient> {
         }
         if(StringUtils.isNotBlank(lastName)) {
             patient.setLastName(lastName);
-        }
-        if(StringUtils.isNotBlank(password)) {
-            patient.setPassword(Cryptor.encrypt(password));
         }
         if(StringUtils.isNotBlank(email)) {
             patient.setEmail(email);

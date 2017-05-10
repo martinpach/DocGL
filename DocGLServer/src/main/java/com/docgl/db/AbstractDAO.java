@@ -24,6 +24,7 @@ public class AbstractDAO {
         config.addAnnotatedClass(Appointment.class);
         config.addAnnotatedClass(WorkingHours.class);
         config.addAnnotatedClass(FreeHours.class);
+        config.addAnnotatedClass(PublicHolidays.class);
 
         config.setProperty("hibernate.connection.url", "jdbc:h2:mem:test");
         config.setProperty("hibernate.connection.username", "sa");

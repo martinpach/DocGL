@@ -14,12 +14,12 @@ $(document).ready(function(){
 		userName:localStorage.getItem("userName"),
 		appointmentsDuration:localStorage.getItem("appointmentsDuration"),
 		dateOfValidity:localStorage.getItem("dateOfValidity"),
+        appointmentCount:0,
         token:localStorage.getItem("token")
 	};
 
 	var ajaxData;
     var appointments;
-    var appointmentCount;
 
 	var usernameTemplate = "<p>{{firstName}} {{lastName}}</p>";
     var html = Mustache.to_html(usernameTemplate, docData);
@@ -34,7 +34,7 @@ $(document).ready(function(){
             var template = "<p>{{userName}}'s</p>";
             var html = Mustache.to_html(template, docData);
             $("#heading").html(html);
-            html = Mustache.to_html(template, docData);
+            //html = Mustache.to_html(template, docData);
         });
     });
 
@@ -42,8 +42,7 @@ $(document).ready(function(){
         $(this).addClass("selected");
         $("#appointments, #settings").removeClass("selected");
         $("#container").load('templates/doctor_home.html');
-        getAppointments();
-        $("#appointmentCount").html(appointmentCount);
+        getHomeData();
     });
 
     $("#home").trigger("click");
@@ -70,16 +69,33 @@ $(document).ready(function(){
         return dfd.promise();
     });
 
-    function getAppointments(){
+    function getHomeData(){
         var dfd= $.Deferred();
         ajaxRequest("/doctors/"+docData.id+"/appointments","GET").done(function(){
             appointments=ajaxData;
-            appointmentCount=appointments.length;
-            console.log(appointmentCount);
+            appointmentCount={
+                count:appointments.length,
+            }
+            var appointmentTime={
+                time:appointments[0].time
+            }
+            var template="You have {{count}} new appointments.";
+            var html=Mustache.to_html(template,appointmentCount);
+            $("#appointmentNotification").html(html);
+            template="{{count}}";
+            html=Mustache.to_html(template,appointmentCount);
+            $("#totalAppointments").html(html);
+            template="{{time}}";
+            html=Mustache.to_html(template,appointmentTime);
+            $("#nextAppointmentTime").html(html);
+            console.log(appointments);
+
             dfd.resolve();
         });
         return dfd.promise();
     }
+
+
 
 
     function ajaxRequest(url, requestType, dataToSend) {

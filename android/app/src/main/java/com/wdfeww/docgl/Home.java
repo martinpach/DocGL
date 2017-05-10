@@ -1,9 +1,11 @@
 package com.wdfeww.docgl;
 
 import android.content.Intent;
+import android.graphics.PorterDuff;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -37,11 +39,14 @@ public class Home extends AppCompatActivity {
     List<Appointment> appointments;
     Patient patient;
     Class className;
-
+    FloatingActionButton fab;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.home);
+
+       // fab = (FloatingActionButton) findViewById(R.id.fab);
+        //fab.setBackgroundColor(this.getResources().getColor(R.color.color2));
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

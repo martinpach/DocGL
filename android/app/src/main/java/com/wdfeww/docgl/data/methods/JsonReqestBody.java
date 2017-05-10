@@ -38,4 +38,15 @@ public class JsonReqestBody {
         }
         return json;
     }
+    public static JSONObject updateProfile(String firstname, String lastname, String email){
+        JSONObject json = new JSONObject();
+        try {
+            json.put("firstName", firstname);
+            json.put("lastName", lastname);
+            json.put("email", email);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return json;
+    }
 }

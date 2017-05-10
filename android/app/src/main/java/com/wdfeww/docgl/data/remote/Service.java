@@ -26,10 +26,13 @@ public interface Service {
         @GET("patients/{id}/appointments")
         Call<List<Appointment>> getPatientAppointments(@Path("id") int id);
 
-        @PUT("patients/{id}/password")
+        @PUT("patients/{id}/profile/password")
         Call<ResponseBody> changePassword(@Path("id") int id, @Body RequestBody params);
 
         @DELETE("appointments/{id}")
         Call<ResponseBody> cancelAppointment(@Path("id") int id);
+
+        @PUT("patients/{id}/profile")
+        Call<ResponseBody> updateProfile(@Path("id") int id, @Body RequestBody params);
 }
 

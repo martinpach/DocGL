@@ -218,11 +218,13 @@ public class Profile extends AppCompatActivity {
         main_layout.addView(et3);
 
         main_layout.addView(tv8);
-        et4 = new EditText(this);
-        et4.setText(patient.getUserName());
-        et4.setLayoutParams(sub_text_params);
-        et4.setInputType(InputType.TYPE_CLASS_TEXT);
-        main_layout.addView(et4);
+
+        main_layout.addView(tv9);
+        errorMessage.setLayoutParams(sub_text_params);
+        main_layout.addView(errorMessage);
+
+        successMessage.setLayoutParams(sub_text_params);
+        main_layout.addView(successMessage);
 
         btn1.setText(this.getResources().getString(R.string.save));
         btn1.setOnClickListener(new View.OnClickListener() {
@@ -233,14 +235,46 @@ public class Profile extends AppCompatActivity {
               patient.setFirstName(et1.getText().toString().trim());
               patient.setLastName(et2.getText().toString().trim());
               patient.setEmail(et3.getText().toString().trim());
-              patient.setUserName(et4.getText().toString().trim());
+                updateProfile();
 
-                showProfile();
+
             }
+
+
         });
         main_layout.addView(btn1);
     }
+    private void updateProfile() {
+        JSONObject json = JsonReqestBody.updateProfile(patient.getFirstName(), patient.getLastName(), patient.getEmail());
+        RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"), (json.toString()));
+        Service loginService =
+                ServiceGenerator.createService(Service.class, token);
+        Call<ResponseBody> call = loginService.updateProfile(patient.getId(), body);
+        call.enqueue(new Callback<ResponseBody>() {
+            @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if(response.isSuccessful()){
+                    successMessage.setText("Profile was changed.");
+                    successMessage.setVisibility(View.VISIBLE);
+                    errorMessage.setVisibility(View.GONE);
+                    showProfile();
+                }else {
+                    errorMessage.setText("Profile was not changed.");
+                    successMessage.setVisibility(View.GONE);
+                    errorMessage.setVisibility(View.VISIBLE);
+                }
+            }
 
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                errorMessage.setText("Server not working or no internet connection.");
+                successMessage.setVisibility(View.GONE);
+                errorMessage.setVisibility(View.VISIBLE);
+            }
+        });
+
+    }
     private void changePassword() {
         main_layout.removeAllViews();
 
