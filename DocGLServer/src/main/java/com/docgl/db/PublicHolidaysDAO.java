@@ -24,4 +24,13 @@ public class PublicHolidaysDAO extends io.dropwizard.hibernate.AbstractDAO<Publi
     public List<PublicHolidays> getPublicHolidays() {
         return namedQuery("getAllPublicHolidays").list();
     }
+
+    public boolean isDatePublicHoliday(Date date) {
+        List<PublicHolidays> publicHolidaysList = namedQuery("getAllPublicHolidays").list();
+        for (PublicHolidays ph:publicHolidaysList) {
+            if (date.compareTo(ph.getDate()) == 0)
+                return true;
+        }
+        return false;
+    }
 }
