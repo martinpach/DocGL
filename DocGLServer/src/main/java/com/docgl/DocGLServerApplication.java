@@ -95,7 +95,7 @@ public class DocGLServerApplication extends Application<DocGLServerConfiguration
         environment.jersey().register(new AdminProfileResource(adminDAO));
         environment.jersey().register(new DoctorResource(docDao, appointmentDAO, workingHoursDAO));
         environment.jersey().register(new PatientResource(patientDao, appointmentDAO, docDao));
-        environment.jersey().register(new AppointmentsResource(appointmentDAO));
+        environment.jersey().register(new AppointmentsResource(appointmentDAO, workingHoursDAO, docDao, publicHolidaysDAO));
         environment.jersey().register(new RegistrationResource(docDao, patientDao));
         environment.jersey().register(new HolidaysResource(publicHolidaysDAO));
         environment.jersey().getResourceConfig().register(new ValidationExceptionMapper());
