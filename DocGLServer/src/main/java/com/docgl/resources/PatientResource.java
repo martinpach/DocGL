@@ -16,6 +16,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonView;
 import io.dropwizard.auth.Auth;
 import io.dropwizard.hibernate.UnitOfWork;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.annotation.security.PermitAll;
 import javax.ws.rs.*;
@@ -119,10 +120,10 @@ public class PatientResource {
     @Path("{id}/profile/password")
     @UnitOfWork
     public void changePassword(@Auth LoggedUser loggedUser, @PathParam("id") int id, PasswordInput passwordInput) {
-        if(passwordInput.getPassword() == null || passwordInput.getPassword().trim().isEmpty()){
+        if(StringUtils.isBlank(passwordInput.getPassword())){
             throw new BadRequestException("Property 'password' is missing or not presented!");
         }
-        if (patientDAO.isPasswordDifferent(passwordInput.getPassword(), id)==false)
+        if (!patientDAO.isPasswordDifferent(passwordInput.getPassword(), id))
             throw new BadRequestException("New password must be different than the old one!");
         authorizer.checkAuthorization(loggedUser.getUserType(), UserType.PATIENT);
         authorizer.checkAuthentication(loggedUser.getId(), id);

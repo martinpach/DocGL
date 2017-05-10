@@ -3,6 +3,7 @@ package com.docgl.db;
 import com.docgl.Cryptor;
 import com.docgl.entities.Admin;
 import io.dropwizard.hibernate.AbstractDAO;
+import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -58,16 +59,16 @@ public class AdminDAO extends AbstractDAO<Admin> {
     public void updateProfile(String firstName, String lastName, String password, String email, int id){
         Session session = currentSession();
         Admin admin = session.find(Admin.class, id);
-        if(firstName != null && !firstName.trim().isEmpty()){
+        if(StringUtils.isNotBlank(firstName)){
             admin.setFirstName(firstName);
         }
-        if(lastName != null && !lastName.trim().isEmpty()) {
+        if(StringUtils.isNotBlank(lastName)) {
             admin.setLastName(lastName);
         }
-        if(password != null && !password.trim().isEmpty()) {
+        if(StringUtils.isNotBlank(password)) {
             admin.setPassword(Cryptor.encrypt(password));
         }
-        if(email != null && !email.trim().isEmpty()) {
+        if(StringUtils.isNotBlank(email)) {
             admin.setEmail(email);
         }
     }

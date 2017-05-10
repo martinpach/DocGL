@@ -165,7 +165,7 @@ public class DoctorResource {
         if (passwordInput.getPassword() == null || passwordInput.getPassword().trim().isEmpty()){
             throw new BadRequestException("Property 'password' is missing or not presented!");
         }
-        if (doctorDAO.isPasswordDifferent(passwordInput.getPassword(), id)==false)
+        if (!doctorDAO.isPasswordDifferent(passwordInput.getPassword(), id))
             throw new BadRequestException("New password must be different than the old one!");
         authorizer.checkAuthorization(loggedUser.getUserType(), UserType.DOCTOR);
         authorizer.checkAuthentication(loggedUser.getId(), id);
