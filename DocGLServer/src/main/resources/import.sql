@@ -29,3 +29,36 @@ insert into Working_Hours(monday_from, monday_to, tuesday_from, tuesday_to, wedn
 insert into favourite_doctors VALUES( 1, 1);
 insert into favourite_doctors VALUES( 1, 2);
 Add Comment
+
+-- PUBLIC HOLIDAYS 2017-2018
+insert into Public_Holidays(date) VALUES("2017-01-01");
+insert into Public_Holidays(date) VALUES("2017-01-06");
+insert into Public_Holidays(date) VALUES("2017-04-14");
+insert into Public_Holidays(date) VALUES("2017-04-17");
+insert into Public_Holidays(date) VALUES("2017-05-01");
+insert into Public_Holidays(date) VALUES("2017-05-08");
+insert into Public_Holidays(date) VALUES("2017-07-05");
+insert into Public_Holidays(date) VALUES("2017-08-29");
+insert into Public_Holidays(date) VALUES("2017-09-01");
+insert into Public_Holidays(date) VALUES("2017-09-15");
+insert into Public_Holidays(date) VALUES("2017-11-01");
+insert into Public_Holidays(date) VALUES("2017-11-17");
+insert into Public_Holidays(date) VALUES("2017-12-24");
+insert into Public_Holidays(date) VALUES("2017-12-25");
+insert into Public_Holidays(date) VALUES("2017-12-26");
+
+insert into Public_Holidays(date) VALUES("2018-01-01");
+insert into Public_Holidays(date) VALUES("2018-01-06");
+insert into Public_Holidays(date) VALUES("2018-03-30");
+insert into Public_Holidays(date) VALUES("2018-04-02");
+insert into Public_Holidays(date) VALUES("2018-05-01");
+insert into Public_Holidays(date) VALUES("2018-05-08");
+insert into Public_Holidays(date) VALUES("2018-07-05");
+insert into Public_Holidays(date) VALUES("2018-08-29");
+insert into Public_Holidays(date) VALUES("2018-09-01");
+insert into Public_Holidays(date) VALUES("2018-09-15");
+insert into Public_Holidays(date) VALUES("2018-11-01");
+insert into Public_Holidays(date) VALUES("2018-11-17");
+insert into Public_Holidays(date) VALUES("2018-12-24");
+insert into Public_Holidays(date) VALUES("2018-12-25");
+insert into Public_Holidays(date) VALUES("2018-12-26");
