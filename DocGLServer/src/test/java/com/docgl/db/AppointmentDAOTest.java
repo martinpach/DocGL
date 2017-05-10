@@ -78,5 +78,5 @@ public class AppointmentDAOTest extends AbstractDAO {
         Appointment appointment = dao.getAppointment(1);
         assertTrue(appointment.isDone());
     }
-
+    
 }

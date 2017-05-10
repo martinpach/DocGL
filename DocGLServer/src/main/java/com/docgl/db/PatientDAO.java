@@ -215,7 +215,6 @@ public class PatientDAO extends AbstractDAO<Patient> {
      * @param firstName to update
      * @param lastName to update
      * @param email to update
-     * @param password to update
      * @param id chosen patient
      */
     public void updateProfile(String firstName, String lastName, String email, int id){
