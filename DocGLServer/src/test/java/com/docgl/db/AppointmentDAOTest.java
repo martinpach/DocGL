@@ -1,6 +1,8 @@
 package com.docgl.db;
 
+import com.docgl.api.OfficeHours;
 import com.docgl.entities.Appointment;
+import com.docgl.entities.Doctor;
 import com.docgl.entities.WorkingHours;
 import com.docgl.enums.UserType;
 import org.apache.commons.lang3.time.DateUtils;
@@ -27,6 +29,7 @@ import static junit.framework.TestCase.assertFalse;
 public class AppointmentDAOTest extends AbstractDAO {
     private final AppointmentDAO dao = new AppointmentDAO(sessionFactory);
     private final WorkingHoursDAO workingHoursDAO = new WorkingHoursDAO(sessionFactory);
+    private final DoctorDAO doctorDAO = new DoctorDAO(sessionFactory);
 
     @Test
     public void getNumberOfAppointmentsTest() {
@@ -35,13 +38,13 @@ public class AppointmentDAOTest extends AbstractDAO {
     }
 
     @Test
-    public void getAppointments() {
+    public void getAppointmentsTest() {
         List<Appointment> appointmentList = dao.getAppointments(1, UserType.PATIENT);
         assertEquals(1, appointmentList.size());
     }
 
     @Test
-    public void getAppointments2() {
+    public void getAppointments2Test() {
         List<Appointment> appointmentList = dao.getAppointments(1, UserType.DOCTOR);
         assertEquals(2, appointmentList.size());
     }
@@ -72,70 +75,11 @@ public class AppointmentDAOTest extends AbstractDAO {
     /**
      *
      */
-    public void setDay(int dayOfWeek) {
-
-    }
-
-    @Test
-    public void getAvailableAppointmentTimesOFDay() {
-
-        //od kedy plati jeho rozvrh ordinuje podmienku
-//        LocalTime
-        Date selectedDate = DateUtils.truncate(new Date(), java.util.Calendar.DAY_OF_MONTH);
-
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        String stringdate = "2017-05-24";
-        Date date = null;
-        try {
-            date = sdf.parse(stringdate);
-        } catch (ParseException ex){
-
-        }
-        System.out.println(DateUtils.truncate(date, java.util.Calendar.DAY_OF_MONTH));
-
-        //musim osetrit aby bralo len appoitmenty daneho dna - done
-        //List<Appointment> appointments = dao.getAppointments(1, UserType.DOCTOR);
-        List<Appointment> appointments = dao.getDoctorsAppointmentsByDate(1, date);
-        List<WorkingHours> workingHoursList = workingHoursDAO.getDoctorsWorkingHours(1);
-
-        LocalDate appDate = new LocalDate(appointments.get(0).getDate());
-        System.out.println("DATE: "+appDate);
-        System.out.println("DATE: "+appDate.getDayOfWeek());
-
-
-
-        String dayFrom = null;
-        String dayTo = null;/*
-        switch (appDate.getDayOfWeek()) {
-            case 1: dayFrom = "monday_from";
-                dayTo = "monday_to";
-            case 2:
-        }
-*/
-
-        //appDate.getDayOfWeek();
-
-
-        String monday_from = "7:30";
-        String monday_to = "12:00";
-        int appDuration = 20;
-
-        DateTimeFormatter format= DateTimeFormat.forPattern("HH:mm");
-        LocalTime mondayFrom = format.parseLocalTime(monday_from);
-        LocalTime mondayTo = format.parseLocalTime(monday_to);
-        LocalTime appointmentTime = mondayFrom;
-
-        LocalTime duration = new LocalTime(0,20);
-
-        mondayFrom = mondayFrom.plusMinutes(appDuration);
-
-        System.out.println("Time: "+ mondayFrom);
-
+    private List<LocalTime> setListOfAvailableTimes(LocalTime officeHoursFrom, LocalTime officeHoursTo, List<Appointment> appointments, int appDuration) {
         List<LocalTime> availableTimes = new ArrayList<LocalTime>();
+        LocalTime appointmentTime = officeHoursFrom;
 
-        System.out.println(appointments.get(0).getTime());
-
-        while (appointmentTime.compareTo(mondayTo) == -1) {
+        while (appointmentTime.plusMinutes(appDuration).compareTo(officeHoursTo) != 1) {
             availableTimes.add(appointmentTime);
             for (Appointment ap:appointments) {
                 LocalTime takenTime = new LocalTime(ap.getTime());
@@ -145,15 +89,85 @@ public class AppointmentDAOTest extends AbstractDAO {
             }
             appointmentTime=appointmentTime.plusMinutes(appDuration);
         }
+        return availableTimes;
+    }
+
+    @Test
+    public void getAvailableAppointmentTimesOFDay() {
+
+        Doctor doctor = doctorDAO.getDoctor(1);
+        Date startingDoctorDate = doctor.getDateOfValidity();
+        int appDuration = doctor.getAppointmentsDuration();
+        System.out.println("DateOfValidity: "+startingDoctorDate);
+
+        //od kedy plati jeho rozvrh ordinuje podmienku
+//        LocalTime
+        //Date selectedDate = DateUtils.truncate(new Date(), java.util.Calendar.DAY_OF_MONTH);
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String stringdate = "2017-05-24";
+        Date date = null;
+        try {
+            date = sdf.parse(stringdate);
+        } catch (ParseException ex){
+
+        }
+        //System.out.println(DateUtils.truncate(date, java.util.Calendar.DAY_OF_MONTH));
+
+        //ci us vtedy ordinuje ak nie vrati false
+        /*
+        if (date.compareTo(startingDoctorDate) == -1)
+            System.out.println("JE TO MENSIE");
+        */
+        //musim osetrit aby bralo len appoitmenty daneho dna - done
+        List<Appointment> appointments = dao.getDoctorsAppointmentsByDate(1, date);
+        List<WorkingHours> workingHoursList = workingHoursDAO.getDoctorsWorkingHours(1);
+
+
+        LocalDate appDate = new LocalDate(appointments.get(0).getDate());
+        System.out.println("DATE: "+appDate);
+        System.out.println("DATE: "+appDate.getDayOfWeek());
+
+
+        int dayOfWeek = appDate.getDayOfWeek();
+
+        OfficeHours officeHours = new OfficeHours();
+        officeHours.setOfficeHours(dayOfWeek, workingHoursList);
+
+
+        System.out.println("DAY FROM: "+officeHours.getFrom()+" DAY TO: "+officeHours.getTo()+"    "+ workingHoursList.get(0).getThursdayFrom());
+
+        List<LocalTime> availableTimesMorning = new ArrayList<LocalTime>();
+        List<LocalTime> availableTimesAfternoon = new ArrayList<LocalTime>();
+        List<LocalTime> availableTimes = new ArrayList<LocalTime>();
+
+        //String times into joda.LocalTime
+        DateTimeFormatter format= DateTimeFormat.forPattern("HH:mm");
+        LocalTime officeHoursFrom = null;
+        LocalTime officeHoursTo = null;
+        //Morning hours
+        if (officeHours.getFrom() != null) {
+            officeHoursFrom = format.parseLocalTime(officeHours.getFrom());
+            officeHoursTo = format.parseLocalTime(officeHours.getTo());
+            availableTimesMorning = setListOfAvailableTimes(officeHoursFrom, officeHoursTo, appointments, appDuration);
+        }
+        //Afternoon hours
+        if (officeHours.getFrom2() != null) {
+            officeHoursFrom = format.parseLocalTime(officeHours.getFrom2());
+            officeHoursTo = format.parseLocalTime(officeHours.getTo2());
+            availableTimesAfternoon = setListOfAvailableTimes(officeHoursFrom, officeHoursTo, appointments, appDuration);
+        }
+
+        availableTimes = availableTimesMorning;
+        if (availableTimesAfternoon != null) {
+            for (LocalTime loc:availableTimesAfternoon) {
+                availableTimes.add(loc);
+            }
+        }
+
         for (LocalTime m:availableTimes) {
             System.out.println("at: "+m);
         }
-//        System.out.println("at: "+availableTimes.size());
-//        System.out.println("compare: "+appointmentTime.compareTo(mondayTo));
-//        System.out.println("compare: "+appointmentTime+"    "+mondayTo);
-//        System.out.println("at: "+availableTimes.get(1));
-//        System.out.println("at: "+availableTimes.get(2));
-//        System.out.println("at: "+availableTimes.get(3));
 
         assertEquals(1, 1);
     }
