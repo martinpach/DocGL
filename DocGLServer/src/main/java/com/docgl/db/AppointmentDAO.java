@@ -11,6 +11,7 @@ import org.hibernate.criterion.Restrictions;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -37,14 +38,18 @@ public class AppointmentDAO extends AbstractDAO<Appointment> {
      * @return list of all appointments for unique doctor or patient
      */
     public List<Appointment> getAppointments(int id, UserType userType){
-        Criteria criteria = criteria();
-        if(userType.getValue().equals("DOCTOR")){
-            criteria.add(Restrictions.eq("doctorId", id));
+        List<Appointment> appointments = new ArrayList<>();
+        if(userType.equals(UserType.DOCTOR)) {
+            appointments = namedQuery("getDoctorsAppointment")
+                    .setParameter("id", id)
+                    .list();
         }
-        if(userType.getValue().equals("PATIENT")){
-            criteria.add(Restrictions.eq("patientId", id));
+        else if(userType.equals(UserType.PATIENT)){
+            appointments = namedQuery("getPatientsAppointment")
+                    .setParameter("id", id)
+                    .list();
         }
-        return list(criteria);
+        return appointments;
     }
 
     /**
@@ -53,10 +58,10 @@ public class AppointmentDAO extends AbstractDAO<Appointment> {
      * @return list of all appointments for unique doctor chosen date
      */
     public List<Appointment> getDoctorsAppointmentsByDate(int id, Date date){
-        Criteria criteria = criteria();
-            criteria.add(Restrictions.eq("doctorId", id));
-            criteria.add(Restrictions.eq("date", date));
-        return list(criteria);
+        return namedQuery("getDoctorsAppointmentsByDate")
+                    .setParameter("id", id)
+                    .setParameter("date", date)
+                    .list();
     }
 
     /**
@@ -77,5 +82,15 @@ public class AppointmentDAO extends AbstractDAO<Appointment> {
         Session session = currentSession();
         Appointment appointment = session.find(Appointment.class, id);
         appointment.setCanceled(true);
+    }
+
+    /**
+     * This function mark appointment as done
+     * @param id chosen appointment
+     */
+    public void markAppointmentAsDone(int id){
+        Session session = currentSession();
+        Appointment appointment = session.find(Appointment.class, id);
+        appointment.setDone(true);
     }
 }

@@ -22,8 +22,9 @@ public class WorkingHoursDAO extends io.dropwizard.hibernate.AbstractDAO<Working
      * @return working hours for chosen doctor
      */
     public List<WorkingHours> getDoctorsWorkingHours(int id){
-        return list(criteria()
-                .add(Restrictions.eq("doctorId", id)));
+        return namedQuery("getDoctorsWorkingHours")
+                .setParameter("id", id)
+                .list();
     }
 
     /**
