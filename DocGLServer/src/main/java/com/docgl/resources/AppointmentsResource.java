@@ -51,8 +51,14 @@ public class AppointmentsResource {
     @GET
     @Path("{id}")
     @UnitOfWork
-    public Appointment getAppointment(@PathParam("id") int id) {
+    public Appointment getAppointment(@Auth LoggedUser loggedUser, @PathParam("id") int id) {
         Appointment appointment = appointmentDAO.getAppointment(id);
+        if(loggedUser.getUserType().equals(UserType.DOCTOR)){
+            authorizer.checkAuthentication(appointment.getDoctor().getId(),loggedUser.getId());
+        }
+        else if(loggedUser.getUserType().equals(UserType.PATIENT)){
+            authorizer.checkAuthentication(appointment.getPatient().getId(), loggedUser.getId());
+        }
         if (appointment == null)
             throw new BadRequestException("Appointment with id like that does not exist!");
         return appointmentDAO.getAppointment(id);
@@ -64,11 +70,21 @@ public class AppointmentsResource {
     @DELETE
     @Path("{id}")
     @UnitOfWork
-    public void cancelAppointment(@PathParam("id") int id) {
+    public void cancelAppointment(@Auth LoggedUser loggedUser, @PathParam("id") int id) {
         Appointment appointment = appointmentDAO.getAppointment(id);
+        int patientId = appointment.getPatient().getId();
+        int doctorId = appointment.getDoctor().getId();
+        UserType[] roles = {UserType.DOCTOR, UserType.PATIENT};
+        authorizer.checkAuthorization(loggedUser.getUserType(), roles);
+        if(loggedUser.getUserType().equals(UserType.DOCTOR)){
+            authorizer.checkAuthentication(doctorId, loggedUser.getId());
+        }
+        else{
+            authorizer.checkAuthentication(patientId, loggedUser.getId());
+        }
         if (appointment == null)
             throw new BadRequestException("Appointment with id like that does not exist!");
-        if (appointment.isCanceled() == true) {
+        if (appointment.isCanceled()) {
             throw new BadRequestException("Appointment is already canceled!");
         }
         appointmentDAO.cancelAppointment(id);
@@ -80,7 +96,10 @@ public class AppointmentsResource {
     @PUT
     @Path("{id}/done")
     @UnitOfWork
-    public void markAppointmentAsDone(@PathParam("id") int id){
+    public void markAppointmentAsDone(@Auth LoggedUser loggedUser, @PathParam("id") int id){
+        authorizer.checkAuthorization(loggedUser.getUserType(), UserType.DOCTOR);
+        Appointment appointment = appointmentDAO.getAppointment(id);
+        authorizer.checkAuthentication(loggedUser.getId(), appointment.getDoctor().getId());
         appointmentDAO.markAppointmentAsDone(id);
     }
 }
