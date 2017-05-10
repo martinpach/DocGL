@@ -205,17 +205,19 @@ $(document).ready(function () {
     function generateDoctorTable() {
         var i = 0;
         var icon = '<i class="fa fa-user-md tableIcon"></i>';
+        var approvedIcon='<i class="fa fa-check-circle-o tableIcon statusIcon approvedIcon" aria-hidden="true"  data-toggle="modal" data-target="#docStatusModal"></i>';
+        var blockedIcon='<i class="fa fa-ban tableIcon statusIcon blockedIcon" aria-hidden="true"  data-toggle="modal" data-target="#docStatusModal"></i>';
+        var unapprovedIcon='<i class="fa fa-circle-o tableIcon statusIcon" aria-hidden="true"  data-toggle="modal" data-target="#docStatusModal"></i>';
         var approvedStatus;
         var blockedStatus;
-        var statusIcon='<i class="fa fa-circle-o tableIcon statusIcon" aria-hidden="true"  data-toggle="modal" data-target="#docStatusModal"></i>';
+        var statusIcon;
         $(".tableRow").remove();
         for (i = 0; i < ajaxData.length; i++) {
             approvedStatus=ajaxData[i].approved;
             blockedStatus=ajaxData[i].blocked;
-            if(approvedStatus==true)
-                statusIcon='<i class="fa fa-check-circle-o tableIcon statusIcon approvedIcon" aria-hidden="true"  data-toggle="modal" data-target="#docStatusModal"></i>';
-            if(blockedStatus==true)
-                statusIcon='<i class="fa fa-ban tableIcon statusIcon blockedIcon" aria-hidden="true"  data-toggle="modal" data-target="#docStatusModal"></i>';
+            statusIcon=blockedStatus==false?approvedIcon:blockedIcon;
+            if(approvedStatus==false)
+                statusIcon=unapprovedIcon;
             $("#tableDoctors").append('<tr class="tableRow" data-id="'+i+'">' +
                 '<td>' + icon + '</td>' +
                 '<td>' + ajaxData[i].id + '</td>' +
@@ -232,22 +234,19 @@ $(document).ready(function () {
         var i = 0;
         var icon = '<i class="fa fa-user tableIcon"></i>';
         var blockedStatus;
-        var statusIcon='<i class="fa fa-circle-o tableIcon statusIcon" aria-hidden="true"  data-toggle="modal" data-target="#userStatusModal"></i>';
-        $(".tableRow").remove();
+        var blockedIcon='<i class="fa fa-ban tableIcon statusIcon blockedIcon" aria-hidden="true"  data-toggle="modal" data-target="#userStatusModal"></i>';
+        var statusIcon='<i class="fa fa-check-circle-o tableIcon statusIcon approvedIcon" aria-hidden="true"  data-toggle="modal" data-target="#userStatusModal"></i>';
         for (i = 0; i < ajaxData.length; i++) {
             blockedStatus=ajaxData[i].blocked;
-            if(blockedStatus==false)
-                statusIcon='<i class="fa fa-check-circle-o tableIcon statusIcon approvedIcon" aria-hidden="true"  data-toggle="modal" data-target="#userStatusModal"></i>';
-            if(blockedStatus==true)
-                statusIcon='<i class="fa fa-ban tableIcon statusIcon blockedIcon" aria-hidden="true"  data-toggle="modal" data-target="#userStatusModal"></i>';
+            statusIcon=blockedStatus==false?statusIcon:blockedIcon;
             $("#tableUsers").append('<tr class="tableRow" data-id="'+i+'">' +
-                '<td>' + icon + '</td>' +
-                '<td>' + ajaxData[i].id + '</td>' +
-                '<td>' + ajaxData[i].firstName + " " + ajaxData[i].lastName + '</td>' +
-                '<td>' + ajaxData[i].email + '</td>' +
-                '<td>' + ajaxData[i].registrationDate + '</td>' +
-                '<td class="text-center">' + statusIcon + '</td>' +
-                '</tr>');
+            '<td>' + icon + '</td>' +
+            '<td>' + ajaxData[i].id + '</td>' +
+            '<td>' + ajaxData[i].firstName + " " + ajaxData[i].lastName + '</td>' +
+            '<td>' + ajaxData[i].email + '</td>' +
+            '<td>' + ajaxData[i].registrationDate + '</td>' +
+            '<td class="text-center">' + statusIcon + '</td>' +
+            '</tr>');
         }
     }
 
