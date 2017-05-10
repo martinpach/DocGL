@@ -8,6 +8,7 @@ import com.docgl.entities.Patient;
 import com.docgl.enums.SortablePatientColumns;
 import com.docgl.enums.SortingWays;
 import io.dropwizard.hibernate.AbstractDAO;
+import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -207,5 +208,41 @@ public class PatientDAO extends AbstractDAO<Patient> {
         Doctor doctor = session.find(Doctor.class, doctorId);
         favouriteDoctors.remove(doctor);
         patient.setDoctors(favouriteDoctors);
+    }
+
+    /**
+     * This function updates patient profile in database. If any params are empty the value will not be updated
+     * @param firstName to update
+     * @param lastName to update
+     * @param email to update
+     * @param password to update
+     * @param id chosen patient
+     */
+    public void updateProfile(String firstName, String lastName, String email, String password, int id){
+        Session session = currentSession();
+        Patient patient = session.find(Patient.class, id);
+        if(StringUtils.isNotBlank(firstName)){
+            patient.setFirstName(firstName);
+        }
+        if(StringUtils.isNotBlank(lastName)) {
+            patient.setLastName(lastName);
+        }
+        if(StringUtils.isNotBlank(password)) {
+            patient.setPassword(Cryptor.encrypt(password));
+        }
+        if(StringUtils.isNotBlank(email)) {
+            patient.setEmail(email);
+        }
+    }
+
+    /**
+     * This function returns chosen patient
+     * @param id chosen patient
+     * @return chosen patient
+     */
+    public Patient getPatient(int id){
+        return (Patient) criteria()
+                .add(Restrictions.eq("id", id))
+                .uniqueResult();
     }
 }

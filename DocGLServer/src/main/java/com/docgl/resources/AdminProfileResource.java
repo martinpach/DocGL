@@ -1,11 +1,11 @@
 package com.docgl.resources;
 
 import com.docgl.Authorizer;
+import com.docgl.api.UserInput;
 import com.docgl.enums.UserType;
 import com.docgl.api.LoggedUser;
 import com.docgl.api.PasswordInput;
 import com.docgl.db.AdminDAO;
-import com.docgl.api.AdminInput;
 import com.docgl.entities.Admin;
 import io.dropwizard.auth.Auth;
 import io.dropwizard.hibernate.UnitOfWork;
@@ -58,7 +58,7 @@ public class AdminProfileResource {
      */
     @PUT
     @UnitOfWork
-    public Admin updateProfile(@Auth LoggedUser loggedUser, @PathParam("id") int id, AdminInput admin){
+    public Admin updateProfile(@Auth LoggedUser loggedUser, @PathParam("id") int id, UserInput admin){
         authorizer.checkAuthorization(loggedUser.getUserType(), UserType.ADMIN);
         authorizer.checkAuthentication(loggedUser.getId(), id);
         adminDAO.updateProfile(admin.getFirstName(), admin.getLastName(), admin.getPassword(), admin.getEmail(), id);

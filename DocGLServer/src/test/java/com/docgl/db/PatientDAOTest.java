@@ -26,81 +26,81 @@ import static org.junit.Assert.assertTrue;
  */
 public class PatientDAOTest extends AbstractDAO {
 
-    private final PatientDAO dao = new PatientDAO(sessionFactory);
+    private final PatientDAO patientDAO = new PatientDAO(sessionFactory);
     private final DoctorDAO doctorDAO = new DoctorDAO(sessionFactory);
 
     @Test
     public void getAllPatientsTest() {
-        List<Patient> patient = dao.getAllPatients(5, 0, SortablePatientColumns.ID, SortingWays.ASC, "");
+        List<Patient> patient = patientDAO.getAllPatients(5, 0, SortablePatientColumns.ID, SortingWays.ASC, "");
         assertEquals(4, patient.size());
     }
 
     @Test
     public void getLoggedIncorrectPasswordTest() {
-        Patient patient = dao.getLoggedPatientInformation("patientwho", "badpassword");
+        Patient patient = patientDAO.getLoggedPatientInformation("patientwho", "badpassword");
         assertNull(patient);
     }
 
     @Test
     public void getLoggedCorrectPasswordTest() {
-        Patient patient = dao.getLoggedPatientInformation("patientwho", "patwho123");
+        Patient patient = patientDAO.getLoggedPatientInformation("patientwho", "patwho123");
         assertNotNull(patient.getId());
     }
 
     @Test
     public void getLoggedIncorrectUserNameTest() {
-        Patient patient = dao.getLoggedPatientInformation("badLoginName", "patwho123");
+        Patient patient = patientDAO.getLoggedPatientInformation("badLoginName", "patwho123");
         assertNull(patient);
     }
 
     @Test
     public void isUserNameAndEmailUniqueTest() {
-        boolean isUnique = dao.isUserNameAndEmailUnique("patientwho", "patient@who.cz");
+        boolean isUnique = patientDAO.isUserNameAndEmailUnique("patientwho", "patient@who.cz");
         assertFalse(isUnique);
     }
 
     @Test
     public void isUserNameAndEmailUniqueTest2() {
-        boolean isUnique = dao.isUserNameAndEmailUnique("asdafas", "patient@who.cz");
+        boolean isUnique = patientDAO.isUserNameAndEmailUnique("asdafas", "patient@who.cz");
         assertFalse(isUnique);
     }
 
     @Test
     public void isUserNameAndEmailUniqueTest3() {
-        boolean isUnique = dao.isUserNameAndEmailUnique("patientwho", "asd@asdd.sd");
+        boolean isUnique = patientDAO.isUserNameAndEmailUnique("patientwho", "asd@asdd.sd");
         assertFalse(isUnique);
     }
 
     @Test
     public void isUserNameAndEmailUniqueTest4() {
-        boolean isUnique = dao.isUserNameAndEmailUnique("asdsafasd", "asd@asdd.sd");
+        boolean isUnique = patientDAO.isUserNameAndEmailUnique("asdsafasd", "asd@asdd.sd");
         assertTrue(isUnique);
     }
 
     @Test
     public void getNumberOfRegistrationsTest() {
-        long countOfRegistrationToday = dao.getNumberOfRegistrations(new Date());
+        long countOfRegistrationToday = patientDAO.getNumberOfRegistrations(new Date());
         assertEquals(4, countOfRegistrationToday);
     }
 
     @Test
     public void blockPatientTest() {
-        dao.blockPatient(true, 1);
-        Patient patient = dao.getLoggedPatientInformation("patientwho", "patwho123");
+        patientDAO.blockPatient(true, 1);
+        Patient patient = patientDAO.getLoggedPatientInformation("patientwho", "patwho123");
         assertTrue(patient.isBlocked());
     }
 
     @Test
     public void blockPatientTest2() {
-        dao.blockPatient(true, 1);
-        dao.blockPatient(false, 1);
-        Patient patient = dao.getLoggedPatientInformation("patientwho", "patwho123");
+        patientDAO.blockPatient(true, 1);
+        patientDAO.blockPatient(false, 1);
+        Patient patient = patientDAO.getLoggedPatientInformation("patientwho", "patwho123");
         assertFalse(patient.isBlocked());
     }
 
     @Test
     public void getNumberOfAllPatientsTest() {
-        long count = dao.getNumberOfAllPatients();
+        long count = patientDAO.getNumberOfAllPatients();
         assertEquals(4, count);
     }
 
@@ -109,24 +109,24 @@ public class PatientDAOTest extends AbstractDAO {
      */
     @Test
     public void getLoggedPatientInformationTest() {
-        Patient patient = dao.getLoggedPatientInformation("dsdfsdwho", "patwho123");
+        Patient patient = patientDAO.getLoggedPatientInformation("dsdfsdwho", "patwho123");
         assertNull(patient);
     }
     //Case sensitive tests
     @Test
     public void getLoggedPatientInformationTest2() {
-        Patient patient = dao.getLoggedPatientInformation("patientwho", "Patwho123");
+        Patient patient = patientDAO.getLoggedPatientInformation("patientwho", "Patwho123");
         assertNull(patient);
     }
     @Test
     public void getLoggedPatientInformationTest3() {
-        Patient patient = dao.getLoggedPatientInformation("Patientwho", "patwho123");
+        Patient patient = patientDAO.getLoggedPatientInformation("Patientwho", "patwho123");
         assertNull(patient);
     }
     //correct credentials test
     @Test
     public void getLoggedPatientInformationTest4() {
-        Patient patient = dao.getLoggedPatientInformation("patientwho", "patwho123");
+        Patient patient = patientDAO.getLoggedPatientInformation("patientwho", "patwho123");
         assertEquals("patient", patient.getFirstName());
         assertEquals("who", patient.getLastName());
         assertEquals("patient@who.cz", patient.getEmail());
@@ -142,8 +142,8 @@ public class PatientDAOTest extends AbstractDAO {
     public void registerPatientTest() {
         RegistrationInput registrationInput = new RegistrationInput("NewPat", "NewPat23",
                 "FirstPatient", "LastPatient", "new.patient@who.cz", UserType.PATIENT);
-        dao.registerPatient(registrationInput);
-        Patient patient = dao.getLoggedPatientInformation("NewPat", "NewPat23");
+        patientDAO.registerPatient(registrationInput);
+        Patient patient = patientDAO.getLoggedPatientInformation("NewPat", "NewPat23");
         assertEquals("FirstPatient", patient.getFirstName());
         assertEquals("LastPatient", patient.getLastName());
         assertEquals("new.patient@who.cz", patient.getEmail());
@@ -158,12 +158,12 @@ public class PatientDAOTest extends AbstractDAO {
      */
     @Test
     public void isPasswordDifferentTest() {
-        Boolean isUnique = dao.isPasswordDifferent("patwho123", 1);
+        Boolean isUnique = patientDAO.isPasswordDifferent("patwho123", 1);
         assertEquals(false, isUnique);
     }
     @Test
     public void isPasswordDifferentTest2() {
-        Boolean isUnique = dao.isPasswordDifferent("blablabla123", 1);
+        Boolean isUnique = patientDAO.isPasswordDifferent("blablabla123", 1);
         assertEquals(true, isUnique);
     }
     /**
@@ -171,8 +171,8 @@ public class PatientDAOTest extends AbstractDAO {
      */
     @Test
     public void setPasswordTest() {
-        dao.setPassword("blablabla123", 1);
-        Patient patient = dao.getLoggedPatientInformation("patientwho","blablabla123");
+        patientDAO.setPassword("blablabla123", 1);
+        Patient patient = patientDAO.getLoggedPatientInformation("patientwho","blablabla123");
         assertEquals("blablabla123", Cryptor.decrypt(patient.getPassword()));
     }
     /**
@@ -180,18 +180,18 @@ public class PatientDAOTest extends AbstractDAO {
      */
     @Test
     public void getFavouriteDoctorsTest() {
-        Collection<Doctor> favouriteDoctors = dao.getFavouriteDoctors(1);
+        Collection<Doctor> favouriteDoctors = patientDAO.getFavouriteDoctors(1);
         assertEquals(2, favouriteDoctors.size());
     }
     @Test
     public void getFavouriteDoctorsTest2() {
-        Collection<Doctor> favouriteDoctors = dao.getFavouriteDoctors(1);
+        Collection<Doctor> favouriteDoctors = patientDAO.getFavouriteDoctors(1);
         Doctor doctor = doctorDAO.getDoctor(1);
         assertTrue(favouriteDoctors.contains(doctor));
     }
     @Test
     public void getFavouriteDoctorsTest3() {
-        Collection<Doctor> favouriteDoctors = dao.getFavouriteDoctors(1);
+        Collection<Doctor> favouriteDoctors = patientDAO.getFavouriteDoctors(1);
         Doctor doctor = doctorDAO.getDoctor(3);
         assertFalse(favouriteDoctors.contains(doctor));
     }
@@ -200,15 +200,15 @@ public class PatientDAOTest extends AbstractDAO {
      */
     @Test
     public void addDoctorToFavouriteTest() {
-        dao.addDoctorToFavourite(1,3);
-        Collection<Doctor> favouriteDoctors = dao.getFavouriteDoctors(1);
+        patientDAO.addDoctorToFavourite(1,3);
+        Collection<Doctor> favouriteDoctors = patientDAO.getFavouriteDoctors(1);
         Doctor doctor = doctorDAO.getDoctor(3);
         assertTrue(favouriteDoctors.contains(doctor));
     }
     @Test
     public void addDoctorToFavouriteTest2() {
-        dao.addDoctorToFavourite(1,10);
-        Collection<Doctor> favouriteDoctors = dao.getFavouriteDoctors(1);
+        patientDAO.addDoctorToFavourite(1,10);
+        Collection<Doctor> favouriteDoctors = patientDAO.getFavouriteDoctors(1);
         assertNull(doctorDAO.getDoctor(10));
     }
     /**
@@ -216,10 +216,32 @@ public class PatientDAOTest extends AbstractDAO {
      */
     @Test
     public void removeDoctorFromFavourite() {
-        dao.removeDoctorFromFavourite(1,2);
-        Collection<Doctor> favouriteDoctors = dao.getFavouriteDoctors(1);
+        patientDAO.removeDoctorFromFavourite(1,2);
+        Collection<Doctor> favouriteDoctors = patientDAO.getFavouriteDoctors(1);
         Doctor doctor = doctorDAO.getDoctor(2);
         assertFalse(favouriteDoctors.contains(doctor));
+    }
+
+    @Test
+    public void updateProfileTest(){
+        patientDAO.updateProfile("rastotest", "buttontest",
+                "rasto@buttontest.sk", "rastobutton123test", 1);
+        Patient patient = patientDAO.getPatient(1);
+        assertEquals("rastotest", patient.getFirstName());
+        assertEquals("buttontest", patient.getLastName());
+        assertEquals("rastobutton123test", Cryptor.decrypt(patient.getPassword()));
+        assertEquals("rasto@buttontest.sk", patient.getEmail());
+    }
+
+    @Test
+    public void updateProfileEmptyPasswordTest(){
+        patientDAO.updateProfile("rastotest", "buttontest",
+                "rasto@buttontest.sk","", 1);
+        Patient patient = patientDAO.getPatient(1);
+        assertEquals("rastotest", patient.getFirstName());
+        assertEquals("buttontest", patient.getLastName());
+        assertEquals("rasto@buttontest.sk", patient.getEmail());
+        assertEquals("patwho123", Cryptor.decrypt(patient.getPassword()));
     }
 
 }

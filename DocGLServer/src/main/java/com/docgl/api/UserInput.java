@@ -3,7 +3,7 @@ package com.docgl.api;
 /**
  * Created by Martin on 9.5.2017.
  */
-public abstract class UserInput {
+public class UserInput {
     private String firstName;
     private String lastName;
     private String email;

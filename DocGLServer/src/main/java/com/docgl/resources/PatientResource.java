@@ -178,4 +178,19 @@ public class PatientResource {
             doctorDAO.addLikeToDoctor(doctorIdInput.getDoctorId());
         }
     }
+
+    /**
+     * Resource for updating chosen patient profile
+     * @param loggedUser user that is sending request
+     * @param id chosen patient
+     * @param patient json input with update values (if any field is empty the value will not be updated)
+     */
+    @PUT
+    @Path("{id}/profile")
+    @UnitOfWork
+    public void updatePatientsProfile(@Auth LoggedUser loggedUser, @PathParam("id") int id, UserInput patient){
+        authorizer.checkAuthorization(loggedUser.getUserType(), UserType.PATIENT);
+        authorizer.checkAuthentication(loggedUser.getId(), id);
+        patientDAO.updateProfile(patient.getFirstName(), patient.getLastName(), patient.getEmail(), patient.getPassword(), id);
+    }
 }
