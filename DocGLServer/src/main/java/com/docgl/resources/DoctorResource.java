@@ -17,6 +17,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonView;
 import io.dropwizard.auth.Auth;
 import io.dropwizard.hibernate.UnitOfWork;
+import org.apache.commons.lang3.StringUtils;
 import sun.rmi.runtime.Log;
 
 import javax.annotation.security.PermitAll;
@@ -164,7 +165,7 @@ public class DoctorResource {
     public void changePassword(@Auth LoggedUser loggedUser, @PathParam("id") int id, PasswordInput passwordInput) {
         authorizer.checkAuthorization(loggedUser.getUserType(), UserType.DOCTOR);
         authorizer.checkAuthentication(loggedUser.getId(), id);
-        if (passwordInput.getPassword() == null || passwordInput.getPassword().trim().isEmpty()){
+        if (StringUtils.isBlank(passwordInput.getPassword())){
             throw new BadRequestException("Property 'password' is missing or not presented!");
         }
         if (!doctorDAO.isPasswordDifferent(passwordInput.getPassword(), id)){

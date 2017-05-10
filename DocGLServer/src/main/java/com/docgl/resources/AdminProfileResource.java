@@ -9,6 +9,7 @@ import com.docgl.api.AdminInput;
 import com.docgl.entities.Admin;
 import io.dropwizard.auth.Auth;
 import io.dropwizard.hibernate.UnitOfWork;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -40,7 +41,7 @@ public class AdminProfileResource {
     @PUT
     @UnitOfWork
     public void changePassword(@Auth LoggedUser loggedUser, @PathParam("id") int id, PasswordInput passwordInput){
-        if(passwordInput.getPassword() == null || passwordInput.getPassword().isEmpty()){
+        if(StringUtils.isBlank(passwordInput.getPassword())){
             throw new BadRequestException("Property 'password' is missing or not presented!");
         }
         authorizer.checkAuthorization(loggedUser.getUserType(), UserType.ADMIN);
