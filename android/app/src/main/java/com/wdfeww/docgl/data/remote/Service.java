@@ -29,7 +29,7 @@ public interface Service {
         @PUT("patients/{id}/password")
         Call<ResponseBody> changePassword(@Path("id") int id, @Body RequestBody params);
 
-        @DELETE("/appointments/{id}")
+        @DELETE("appointments/{id}")
         Call<ResponseBody> cancelAppointment(@Path("id") int id);
 }
 

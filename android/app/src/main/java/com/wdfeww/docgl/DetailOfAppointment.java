@@ -18,9 +18,17 @@ import android.widget.TextView;
 import com.wdfeww.docgl.data.methods.NavigationMenu;
 import com.wdfeww.docgl.data.model.Appointment;
 import com.wdfeww.docgl.data.model.Patient;
+import com.wdfeww.docgl.data.model.User;
+import com.wdfeww.docgl.data.remote.Service;
+import com.wdfeww.docgl.data.remote.ServiceGenerator;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class DetailOfAppointment extends AppCompatActivity {
     Appointment appointment;
@@ -92,7 +100,7 @@ public class DetailOfAppointment extends AppCompatActivity {
         btn_params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         btn_params.setMargins(10, 65, 10, 0);
         btn_confirmation_params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        btn_confirmation_params.setMargins(10, 55, 10,0);
+        btn_confirmation_params.setMargins(10, 35, 10,10);
         text_params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         text_params.setMargins(20, 30, 0, 0);
         sub_text_params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -193,13 +201,14 @@ public class DetailOfAppointment extends AppCompatActivity {
         tv13.setTextAppearance(this, R.style.profile_sub_text);
         main_layout.addView(tv13);
 
+        main_layout.addView(errorMessage);
+        main_layout.addView(successMessage);
+
         linearLayout = new LinearLayout(this);
         linearLayout.setOrientation(LinearLayout.HORIZONTAL);
         linearLayout.setGravity(Gravity.CENTER);
         linearLayout.setLayoutParams(params);
         main_layout.addView(linearLayout);
-
-
 
         btn1 = new Button(this);
         btn1.setText(this.getResources().getString(R.string.appointmentCancel));
@@ -248,8 +257,41 @@ public class DetailOfAppointment extends AppCompatActivity {
             }
         });
         linearLayout.addView(btn3);
+        LinearLayout linearLayoutBottom = new LinearLayout(this);
+        linearLayoutBottom.setLayoutParams(params);
+        main_layout.addView(linearLayoutBottom);
     }
     private void cancelAppointment(){
+        Service loginService =
+                ServiceGenerator.createService(Service.class, token);
+        Call<ResponseBody> call = loginService.cancelAppointment(appointment.getId());
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if(response.isSuccessful()){
+                    errorMessage.setVisibility(View.GONE);
+                    successMessage.setText("Appointment was cancelled!");
+                    successMessage.setVisibility(View.VISIBLE);
+                    redirect();
+                }
+                else{
+                    successMessage.setVisibility(View.GONE);
+                    errorMessage.setText("Appointment is already cancelled!");
+                    errorMessage.setVisibility(View.VISIBLE);
+                }
+            }
 
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                successMessage.setVisibility(View.GONE);
+                errorMessage.setText("Server not responding!");
+                errorMessage.setVisibility(View.VISIBLE);
+            }
+        });
     }
+    private void redirect(){
+
+        navigationMenu.redirect(Home.class);
+    }
+
 }

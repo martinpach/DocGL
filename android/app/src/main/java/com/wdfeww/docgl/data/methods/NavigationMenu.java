@@ -12,9 +12,11 @@ import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.wdfeww.docgl.AppLogin;
+import com.wdfeww.docgl.DetailOfAppointment;
 import com.wdfeww.docgl.Home;
 import com.wdfeww.docgl.Profile;
 import com.wdfeww.docgl.R;
@@ -68,9 +70,12 @@ public class NavigationMenu extends Activity {
         });
 
         logged_user = new TextView(context);
-        logged_user.setTextAppearance(context, R.style.profile_text);
+        logged_user.setTextAppearance(context, R.style.navigationMenu_username);
         logged_user.setText(patient.getUserName());
-
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        params.setMargins(30, 50, 0, 0);
+        logged_user.setLayoutParams(params);
+        logged_user.setBackgroundColor(context.getResources().getColor(R.color.color6));
         nav_view.addHeaderView(logged_user);
         nav_view.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override

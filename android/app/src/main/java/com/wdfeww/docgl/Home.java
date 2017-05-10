@@ -68,7 +68,7 @@ public class Home extends AppCompatActivity {
 
     private void checkAppointments() {
 
-        Service service = ServiceGenerator.createService(Service.class, "");
+        Service service = ServiceGenerator.createService(Service.class, token);
         Call<List<Appointment>> call = service.getPatientAppointments(patient.getId());
         call.enqueue(new Callback<List<Appointment>>() {
             @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
@@ -76,8 +76,13 @@ public class Home extends AppCompatActivity {
             public void onResponse(Call<List<Appointment>> call, Response<List<Appointment>> response) {
                 if (response.isSuccessful()) {
                     appointments = response.body();
-                    System.out.println(appointments.size());
-                    if (appointments.size() < 1) {
+                    int count =0;
+                    for(Appointment appointment:appointments){
+                        if(!appointment.getCanceled()){
+                            count++;
+                        }
+                    }
+                    if (count < 1) {
                         createDefaultLayout();
                     } else {
                         try {
@@ -181,7 +186,7 @@ public class Home extends AppCompatActivity {
         LinearLayout.LayoutParams txt_params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
         txt_params.topMargin = 7;
         for (final Appointment appointment : appointments) {
-
+            if (!appointment.getCanceled()){
             final LinearLayout linearLayout = new LinearLayout(this);
             linearLayout.setLayoutParams(params);
             linearLayout.setBackground(this.getResources().getDrawable(R.drawable.background_appointment));
@@ -231,7 +236,7 @@ public class Home extends AppCompatActivity {
             tv4.setText(medkit + " Doctor " + appointment.getDoctor().getFirstName() + " " + appointment.getDoctor().getLastName());
             tv4.setGravity(Gravity.LEFT);
             linearLayout.addView(tv4);
-        }
+            }}
 
     }
 

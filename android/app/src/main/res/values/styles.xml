@@ -35,6 +35,12 @@
         <item name="android:textColor">@color/color3</item>
         <item name="android:textStyle">bold</item>
     </style>
+    <style name="navigationMenu_username">
+        <item name="android:textSize">@dimen/text_profile_size</item>
+        <item name="android:textColor">@color/color3</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
     <style name="profile_sub_text">
         <item name="android:textSize">@dimen/sub_text_profile_size</item>
         <item name="android:textColor">@color/color3</item>
