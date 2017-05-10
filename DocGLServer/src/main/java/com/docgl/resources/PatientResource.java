@@ -191,6 +191,6 @@ public class PatientResource {
     public void updatePatientsProfile(@Auth LoggedUser loggedUser, @PathParam("id") int id, UserInput patient){
         authorizer.checkAuthorization(loggedUser.getUserType(), UserType.PATIENT);
         authorizer.checkAuthentication(loggedUser.getId(), id);
-        patientDAO.updateProfile(patient.getFirstName(), patient.getLastName(), patient.getEmail(), patient.getPassword(), id);
+        patientDAO.updateProfile(patient.getFirstName(), patient.getLastName(), patient.getEmail(), id);
     }
 }

@@ -225,23 +225,12 @@ public class PatientDAOTest extends AbstractDAO {
     @Test
     public void updateProfileTest(){
         patientDAO.updateProfile("rastotest", "buttontest",
-                "rasto@buttontest.sk", "rastobutton123test", 1);
+                "rasto@buttontest.sk", 1);
         Patient patient = patientDAO.getPatient(1);
         assertEquals("rastotest", patient.getFirstName());
         assertEquals("buttontest", patient.getLastName());
-        assertEquals("rastobutton123test", Cryptor.decrypt(patient.getPassword()));
         assertEquals("rasto@buttontest.sk", patient.getEmail());
     }
 
-    @Test
-    public void updateProfileEmptyPasswordTest(){
-        patientDAO.updateProfile("rastotest", "buttontest",
-                "rasto@buttontest.sk","", 1);
-        Patient patient = patientDAO.getPatient(1);
-        assertEquals("rastotest", patient.getFirstName());
-        assertEquals("buttontest", patient.getLastName());
-        assertEquals("rasto@buttontest.sk", patient.getEmail());
-        assertEquals("patwho123", Cryptor.decrypt(patient.getPassword()));
-    }
 
 }
