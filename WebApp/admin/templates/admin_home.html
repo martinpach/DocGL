@@ -75,6 +75,9 @@
             url: 'http://localhost:8085/api' + ajaxUrl,
             type: "GET",
             dataType: "json",
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader('Authorization', 'Bearer ' + token);
+            },
             success: function (data) {
                 if (data != null) ajaxData = data;
                 dfd.resolve();
