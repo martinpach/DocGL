@@ -61,6 +61,7 @@ public class DocGLServerApplication extends Application<DocGLServerConfiguration
         final PatientDAO patientDao = new PatientDAO(hibernate.getSessionFactory());
         final AppointmentDAO appointmentDAO = new AppointmentDAO(hibernate.getSessionFactory());
         final WorkingHoursDAO workingHoursDAO = new WorkingHoursDAO(hibernate.getSessionFactory());
+        final PublicHolidaysDAO publicHolidaysDAO = new PublicHolidaysDAO(hibernate.getSessionFactory());
 
         final FilterRegistration.Dynamic cors = environment.servlets().addFilter("CORS", CrossOriginFilter.class);
         cors.setInitParameter(CrossOriginFilter.ALLOWED_ORIGINS_PARAM, "*");
@@ -96,6 +97,7 @@ public class DocGLServerApplication extends Application<DocGLServerConfiguration
         environment.jersey().register(new PatientResource(patientDao, appointmentDAO, docDao));
         environment.jersey().register(new AppointmentsResource(appointmentDAO));
         environment.jersey().register(new RegistrationResource(docDao, patientDao));
+        environment.jersey().register(new HolidaysResource(publicHolidaysDAO));
         environment.jersey().getResourceConfig().register(new ValidationExceptionMapper());
 
     }

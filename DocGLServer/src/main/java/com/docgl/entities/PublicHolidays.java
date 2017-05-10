@@ -1,8 +1,11 @@
 package com.docgl.entities;
 
+import com.docgl.Views;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonView;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 /**
@@ -10,13 +13,17 @@ import java.util.Date;
  */
 @Entity
 @Table(name = "Public_Holidays")
+@NamedQueries({
+       @NamedQuery(name = "getAllPublicHolidays", query = "from PublicHolidays")
+})
 public class PublicHolidays {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @JsonIgnore
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @Column(name = "date")
+    @NotNull
     @Temporal(TemporalType.DATE)
     private Date date;
 
@@ -39,6 +46,5 @@ public class PublicHolidays {
     public void setDate(Date date) {
         this.date = date;
     }
-
 
 }
