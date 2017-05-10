@@ -28,6 +28,10 @@ public class Doctor extends User{
     @JsonIgnore
     private Collection<WorkingHours> workingHours = new ArrayList<>(0);
 
+    @OneToMany(mappedBy = "doctor")
+    @JsonIgnore
+    private Collection<FreeHours> freeHours = new ArrayList<>(0);
+
     @Column(name = "registration_date")
     @Temporal(TemporalType.DATE)
     @CreationTimestamp
@@ -107,6 +111,14 @@ public class Doctor extends User{
 
     public Date getRegistrationDate() {
         return registrationDate;
+    }
+
+    public Collection<FreeHours> getFreeHours() {
+        return freeHours;
+    }
+
+    public void setFreeHours(Collection<FreeHours> freeHours) {
+        this.freeHours = freeHours;
     }
 
     public void setRegistrationDate(Date registrationDate) {

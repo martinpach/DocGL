@@ -4,8 +4,10 @@ import com.docgl.Authorizer;
 import com.docgl.Views;
 import com.docgl.api.*;
 import com.docgl.db.AppointmentDAO;
+import com.docgl.db.FreeHoursDAO;
 import com.docgl.db.WorkingHoursDAO;
 import com.docgl.entities.Appointment;
+import com.docgl.entities.FreeHours;
 import com.docgl.entities.WorkingHours;
 import com.docgl.enums.SortableDoctorColumns;
 import com.docgl.enums.SortingWays;
@@ -13,6 +15,7 @@ import com.docgl.enums.SpecializationsEnum;
 import com.docgl.enums.UserType;
 import com.docgl.db.DoctorDAO;
 import com.docgl.entities.Doctor;
+import com.docgl.exceptions.ValidationException;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonView;
 import io.dropwizard.auth.Auth;
@@ -38,12 +41,14 @@ public class DoctorResource {
     private DoctorDAO doctorDAO;
     private AppointmentDAO appointmentDAO;
     private WorkingHoursDAO workingHoursDAO;
+    private FreeHoursDAO freeHoursDAO;
     private Authorizer authorizer;
 
-    public DoctorResource(DoctorDAO doctorDAO, AppointmentDAO appointmentDAO, WorkingHoursDAO workingHoursDAO) {
+    public DoctorResource(DoctorDAO doctorDAO, AppointmentDAO appointmentDAO, WorkingHoursDAO workingHoursDAO, FreeHoursDAO freeHoursDAO) {
         this.doctorDAO = doctorDAO;
         this.appointmentDAO = appointmentDAO;
         this.workingHoursDAO = workingHoursDAO;
+        this.freeHoursDAO = freeHoursDAO;
         this.authorizer = new Authorizer();
     }
 
@@ -271,6 +276,44 @@ public class DoctorResource {
     @PermitAll
     public Doctor getDoctorsProfile(@PathParam("id") int id){
         return doctorDAO.getDoctor(id);
+    }
+
+    /**
+     * Resource for setting doctors' free hours
+     * @param loggedUser user that is sending request
+     * @param id chosen doctor
+     * @param freeHours json input with selected date and from - to time interval
+     */
+    @PUT
+    @Path("{id}/freeHours")
+    @UnitOfWork
+    public void setDoctorsFreeHours(@Auth LoggedUser loggedUser, @PathParam("id") int id, FreeHours freeHours){
+        authorizer.checkAuthorization(loggedUser.getUserType(), UserType.DOCTOR);
+        authorizer.checkAuthentication(loggedUser.getId(), id);
+        if(StringUtils.isBlank(freeHours.getFrom())){
+            throw new ValidationException("Property 'from' is missing");
+        }
+        if(StringUtils.isBlank(freeHours.getTo())){
+            throw new ValidationException("Property 'to' is missing");
+        }
+        if(freeHours.getDate() == null){
+            throw new ValidationException("Property 'date' is missing");
+        }
+        freeHours.setDoctor(doctorDAO.getDoctor(id));
+        freeHoursDAO.setDoctorsFreeHours(freeHours);
+    }
+
+    /**
+     * Resource for getting doctors' free hours
+     * @param id chosen doctor
+     * @return chosen doctor free hours
+     */
+    @GET
+    @Path("{id}/freeHours")
+    @UnitOfWork
+    @PermitAll
+    public List<FreeHours> getDoctorsFreeHours(@PathParam("id") int id){
+        return freeHoursDAO.getDoctorsFreeHours(id);
     }
 
     /**

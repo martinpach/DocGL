@@ -145,6 +145,8 @@ public class AppointmentsResource {
         Date date = input.getDate();
         int docID = input.getId();
 
+        if (date.compareTo(new Date()) == -1)
+            throw new BadRequestException("Appointment date must be set in the future!");
         Doctor doctor = doctorDAO.getDoctor(docID);
         if (!doctor.isWorkingHoursSet() || !doctor.isApproved() || doctor.getDateOfValidity()==null)
             throw new BadRequestException("Its not possible to make appointment at selected Doctor!");
@@ -219,12 +221,13 @@ public class AppointmentsResource {
     private List<LocalTime> setListOfAvailableTimes(LocalTime officeHoursFrom, LocalTime officeHoursTo, List<Appointment> appointments, int appDuration) {
         List<LocalTime> availableTimes = new ArrayList<LocalTime>();
         LocalTime appointmentTime = officeHoursFrom;
+        LocalTime takenTime;
 
         while (appointmentTime.plusMinutes(appDuration).compareTo(officeHoursTo) != 1) {
             availableTimes.add(appointmentTime);
             for (Appointment ap:appointments) {
-                LocalTime takenTime = new LocalTime(ap.getTime());
-                if (takenTime.compareTo(appointmentTime)==0) {
+                takenTime = new LocalTime(ap.getTime());
+                if (takenTime.compareTo(appointmentTime)==0 && !ap.isCanceled()) {
                     availableTimes.remove(availableTimes.size()-1);
                 }
             }
