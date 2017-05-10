@@ -20,6 +20,7 @@ import android.widget.TextView;
 import com.wdfeww.docgl.data.methods.Checker;
 import com.wdfeww.docgl.data.methods.JsonReqestBody;
 import com.wdfeww.docgl.data.methods.NavigationMenu;
+import com.wdfeww.docgl.data.model.Patient;
 import com.wdfeww.docgl.data.remote.Service;
 import com.wdfeww.docgl.data.remote.ServiceGenerator;
 
@@ -35,16 +36,15 @@ public class Profile extends AppCompatActivity {
     Toolbar toolbar;
     DrawerLayout drawer_layout;
     NavigationView nav_view;
-    String firstName, lastName, email, token, username;
+    String token;
     Button btn2, btn1;
     TextView tv1, tv2, tv3, tv4, tv5, tv6, tv7, tv8, tv9, errorMessage, successMessage;
-    EditText et1, et2, et3, et4, et5, et6, et7;
-    int id;
+    EditText et1, et2, et3, et4, et6, et7;
     LinearLayout.LayoutParams params, btn_params, text_params, sub_text_params;
     LinearLayout main_layout;
     TextView logged_user;
     Class className;
-
+    Patient patient;
     NavigationMenu navigationMenu;
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
@@ -69,20 +69,16 @@ public class Profile extends AppCompatActivity {
 
         main_layout = (LinearLayout) findViewById(R.id.main_layout);
 
-        firstName = getIntent().getStringExtra("firstName");
-        lastName = getIntent().getStringExtra("lastName");
-        email = getIntent().getStringExtra("email");
-        token = getIntent().getStringExtra("token");
-        id = getIntent().getIntExtra("id", id);
-        username = getIntent().getStringExtra("username");
-
+        Bundle bundle = this.getIntent().getExtras();
+            patient = bundle.getParcelable("patient");
+            token = getIntent().getStringExtra("token");
 
         className = getClass();
         nav_view = (NavigationView) findViewById(R.id.nav_view);
         drawer_layout = (DrawerLayout) findViewById(R.id.drawer_layout);
         logged_user = new TextView(this);
         logged_user.setTextAppearance(this, R.style.profile_text);
-        navigationMenu = new NavigationMenu(id, firstName, lastName, email, token, username, this, toolbar, drawer_layout, nav_view,  className);
+        navigationMenu = new NavigationMenu(token, patient, this, toolbar, drawer_layout, nav_view,  className);
         navigationMenu.initMenu();
 
         showProfile();
@@ -117,7 +113,7 @@ public class Profile extends AppCompatActivity {
         main_layout.addView(tv2);
 
         tv3 = new TextView(this);
-        tv3.setText(firstName);
+        tv3.setText(patient.getFirstName());
         tv3.setLayoutParams(sub_text_params);
         tv3.setGravity(Gravity.LEFT);
         tv3.setTextAppearance(this, R.style.profile_sub_text);
@@ -131,7 +127,7 @@ public class Profile extends AppCompatActivity {
         main_layout.addView(tv4);
 
         tv5 = new TextView(this);
-        tv5.setText(lastName);
+        tv5.setText(patient.getLastName());
         tv5.setLayoutParams(sub_text_params);
         tv5.setGravity(Gravity.LEFT);
         tv5.setTextAppearance(this, R.style.profile_sub_text);
@@ -145,7 +141,7 @@ public class Profile extends AppCompatActivity {
         main_layout.addView(tv6);
 
         tv7 = new TextView(this);
-        tv7.setText(email);
+        tv7.setText(patient.getEmail());
         tv7.setLayoutParams(sub_text_params);
         tv7.setGravity(Gravity.LEFT);
         tv7.setTextAppearance(this, R.style.profile_sub_text);
@@ -159,7 +155,7 @@ public class Profile extends AppCompatActivity {
         main_layout.addView(tv8);
 
         tv9 = new TextView(this);
-        tv9.setText(username);
+        tv9.setText(patient.getUserName());
         tv9.setLayoutParams(sub_text_params);
         tv9.setGravity(Gravity.LEFT);
         tv9.setTextAppearance(this, R.style.profile_sub_text);
@@ -202,28 +198,28 @@ public class Profile extends AppCompatActivity {
         main_layout.addView(tv1);
         main_layout.addView(tv2);
         et1 = new EditText(this);
-        et1.setText(firstName);
+        et1.setText(patient.getFirstName());
         et1.setLayoutParams(sub_text_params);
         et1.setInputType(InputType.TYPE_CLASS_TEXT);
         main_layout.addView(et1);
 
         main_layout.addView(tv4);
         et2 = new EditText(this);
-        et2.setText(lastName);
+        et2.setText(patient.getLastName());
         et2.setLayoutParams(sub_text_params);
         et2.setInputType(InputType.TYPE_CLASS_TEXT);
         main_layout.addView(et2);
 
         main_layout.addView(tv6);
         et3 = new EditText(this);
-        et3.setText(email);
+        et3.setText(patient.getEmail());
         et3.setLayoutParams(sub_text_params);
         et3.setInputType(InputType.TYPE_CLASS_TEXT);
         main_layout.addView(et3);
 
         main_layout.addView(tv8);
         et4 = new EditText(this);
-        et4.setText(username);
+        et4.setText(patient.getUserName());
         et4.setLayoutParams(sub_text_params);
         et4.setInputType(InputType.TYPE_CLASS_TEXT);
         main_layout.addView(et4);
@@ -234,10 +230,10 @@ public class Profile extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                firstName = et1.getText().toString().trim();
-                lastName = et2.getText().toString().trim();
-                email = et3.getText().toString().trim();
-                username = et4.getText().toString().trim();
+              patient.setFirstName(et1.getText().toString().trim());
+              patient.setLastName(et2.getText().toString().trim());
+              patient.setEmail(et3.getText().toString().trim());
+              patient.setUserName(et4.getText().toString().trim());
 
                 showProfile();
             }
@@ -305,7 +301,7 @@ public class Profile extends AppCompatActivity {
         RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"), (json.toString()));
         Service loginService =
                 ServiceGenerator.createService(Service.class, token);
-        Call<ResponseBody> call = loginService.changePassword(id, body);
+        Call<ResponseBody> call = loginService.changePassword(patient.getId(), body);
         call.enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {

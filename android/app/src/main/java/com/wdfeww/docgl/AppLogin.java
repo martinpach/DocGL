@@ -104,12 +104,10 @@ public class AppLogin extends AppCompatActivity {
 
     private void redirect() {
         Intent intent = new Intent(getBaseContext(), Home.class);
-        intent.putExtra("firstName", user.getPatient().getFirstName());
-        intent.putExtra("lastName", user.getPatient().getLastName());
-        intent.putExtra("email", user.getPatient().getEmail());
-        intent.putExtra("id", user.getPatient().getId());
+        Bundle bundle = new Bundle();
+        bundle.putParcelable("patient", user.getPatient());
+        intent.putExtras(bundle);
         intent.putExtra("token", user.getToken());
-        intent.putExtra("username", user.getPatient().getUserName());
         this.finish();
         startActivity(intent);
     }

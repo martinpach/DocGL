@@ -3,6 +3,7 @@ package com.wdfeww.docgl.data.methods;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
@@ -17,31 +18,28 @@ import com.wdfeww.docgl.AppLogin;
 import com.wdfeww.docgl.Home;
 import com.wdfeww.docgl.Profile;
 import com.wdfeww.docgl.R;
+import com.wdfeww.docgl.data.model.Patient;
+import com.wdfeww.docgl.data.model.User;
 
 /**
  * Created by wdfeww on 5/8/17.
  */
 
 public class NavigationMenu extends Activity {
-    String firstName, lastName, email, token, username;
-    int id;
+    String token;
     TextView logged_user;
     private final Context context;
     Toolbar toolbar;
     final DrawerLayout drawer_layout;
     NavigationView nav_view;
     Class className;
+    Patient patient;
 
-
-    public NavigationMenu(int id, String firstName, String lastName, String email, String token,
-                          String username, Context context, Toolbar toolbar, DrawerLayout drawer_layout,
+    public NavigationMenu(String token,Patient patient,
+                          Context context, Toolbar toolbar, DrawerLayout drawer_layout,
                           NavigationView nav_view, Class className) {
-        this.id = id;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
         this.token = token;
-        this.username = username;
+        this.patient=patient;
         this.context = context;
         this.toolbar = toolbar;
         this.drawer_layout = drawer_layout;
@@ -71,7 +69,7 @@ public class NavigationMenu extends Activity {
 
         logged_user = new TextView(context);
         logged_user.setTextAppearance(context, R.style.profile_text);
-        logged_user.setText(username);
+        logged_user.setText(patient.getUserName());
 
         nav_view.addHeaderView(logged_user);
         nav_view.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
@@ -109,12 +107,10 @@ public class NavigationMenu extends Activity {
     }
     public void redirect(Class nameOfClass) {
         Intent intent = new Intent(context, nameOfClass);
-        intent.putExtra("firstName", firstName);
-        intent.putExtra("lastName", lastName);
-        intent.putExtra("email", email);
-        intent.putExtra("id", id);
+        Bundle bundle = new Bundle();
+        bundle.putParcelable("patient", patient);
+        intent.putExtras(bundle);
         intent.putExtra("token", token);
-        intent.putExtra("username", username);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
 
@@ -130,22 +126,19 @@ public class NavigationMenu extends Activity {
 
 
     public void setFirstName(String firstName) {
-        this.firstName = firstName;
+        this.patient.setFirstName(firstName);
     }
 
     public void setLastName(String lastName) {
-        this.lastName = lastName;
+        this.patient.setLastName(lastName);
     }
 
     public void setEmail(String email) {
-        this.email = email;
+        this.patient.setEmail(email);
     }
 
     public void setUsername(String username) {
-        this.username = username;
+        this.patient.setUserName(username);
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
 }

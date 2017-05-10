@@ -68,7 +68,6 @@ public class DoctorResource {
                                             @QueryParam("name") String name,
                                             @QueryParam("spec") SpecializationsEnum spec
     ) {
-        UserType[] roles = {UserType.ADMIN, UserType.PATIENT};
         return doctorDAO.getAllDoctors(limit, start, sortBy, way, name, spec);
     }
 
@@ -111,7 +110,8 @@ public class DoctorResource {
     public List<Appointment> getDoctorAppointments(@Auth LoggedUser loggedUser, @PathParam("id") int id) {
         UserType[] roles = {UserType.ADMIN, UserType.DOCTOR};
         authorizer.checkAuthorization(loggedUser.getUserType(), roles);
-        authorizer.checkAuthentication(loggedUser.getId(), id);
+        if (loggedUser.getUserType() == UserType.DOCTOR)
+            authorizer.checkAuthentication(loggedUser.getId(), id);
         return appointmentDAO.getAppointments(id, UserType.DOCTOR);
     }
 
@@ -162,13 +162,14 @@ public class DoctorResource {
     @Path("{id}/profile/password")
     @UnitOfWork
     public void changePassword(@Auth LoggedUser loggedUser, @PathParam("id") int id, PasswordInput passwordInput) {
+        authorizer.checkAuthorization(loggedUser.getUserType(), UserType.DOCTOR);
+        authorizer.checkAuthentication(loggedUser.getId(), id);
         if (passwordInput.getPassword() == null || passwordInput.getPassword().trim().isEmpty()){
             throw new BadRequestException("Property 'password' is missing or not presented!");
         }
-        if (!doctorDAO.isPasswordDifferent(passwordInput.getPassword(), id))
+        if (!doctorDAO.isPasswordDifferent(passwordInput.getPassword(), id)){
             throw new BadRequestException("New password must be different than the old one!");
-        authorizer.checkAuthorization(loggedUser.getUserType(), UserType.DOCTOR);
-        authorizer.checkAuthentication(loggedUser.getId(), id);
+        }
         doctorDAO.setPassword(passwordInput.getPassword(), id);
     }
     /**
@@ -181,10 +182,11 @@ public class DoctorResource {
     @Path("{id}/duration")
     @UnitOfWork
     public void setAppointmentsDuration(@Auth LoggedUser loggedUser, @PathParam("id") int id, AppointmentsDurationInput durationInput) {
-        if (durationInput.getDuration() == 0)
-            throw  new BadRequestException("Property 'duration' is missing or not presented!");
         authorizer.checkAuthorization(loggedUser.getUserType(), UserType.DOCTOR);
         authorizer.checkAuthentication(loggedUser.getId(), id);
+        if (durationInput.getDuration() == 0) {
+            throw  new BadRequestException("Property 'duration' is missing or not presented!");
+        }
         doctorDAO.setAppointmentsDuration(durationInput.getDuration(), id);
     }
 

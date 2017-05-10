@@ -44,7 +44,12 @@
         <item name="android:textColor">@color/errorText</item>
         <item name="android:textStyle">bold</item>
     </style>
-
+    <style name="error_text">
+        <item name="android:textColor">@color/errorText</item>
+    </style>
+<style name="success_text">
+    <item name="android:textColor">@color/successText</item>
+</style>
     <style name="home_clickable_text">
         <item name="android:textSize">@dimen/text_size</item>
         <item name="android:textColor">@drawable/text_button</item>
@@ -53,6 +58,9 @@
     </style>
     <style name="btn_transparent">
         <item name="android:textColor">@drawable/btn_transparent_text_color</item>
+    </style>
+    <style name="btn_delete">
+        <item name="android:textColor">@drawable/btn_delete_text_color</item>
     </style>
     <dimen name="text_size">30sp</dimen>
     <dimen name="text_profile_size">20sp</dimen>

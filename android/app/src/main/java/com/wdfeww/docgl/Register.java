@@ -103,12 +103,11 @@ public class Register extends AppCompatActivity {
 
     private void redirectToHome() {
         Intent intent = new Intent(getBaseContext(), Home.class);
-        intent.putExtra("firstName", user.getPatient().getFirstName());
-        intent.putExtra("lastName", user.getPatient().getLastName());
-        intent.putExtra("email", user.getPatient().getEmail());
-        intent.putExtra("id", user.getPatient().getId());
+        Bundle bundle = new Bundle();
+        bundle.putParcelable("patient", user.getPatient());
         intent.putExtra("token", user.getToken());
-        intent.putExtra("username", user.getPatient().getUserName());
+        intent.putExtras(bundle);
+        this.finish();
         startActivity(intent);
     }
 
