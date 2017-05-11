@@ -115,19 +115,19 @@ public class Appointment {
         this.patient = patient;
     }
 
-    public Date getTime() {
+    public LocalTime getTime() {
         return time;
     }
 
-    public void setTime(Date time) {
+    public void setTime(LocalTime time) {
         this.time = time;
     }
 
-    public Date getDate() {
+    public LocalDate getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(LocalDate date) {
         this.date = date;
     }
 
@@ -155,7 +155,7 @@ public class Appointment {
         this.canceled = canceled;
     }
 
-    public Appointment(String note, @NotNull Doctor doctor, @NotNull Patient patient, @NotNull Date time, @NotNull Date date, String patientFirstName, String patientLastName) {
+    public Appointment(String note, @NotNull Doctor doctor, @NotNull Patient patient, @NotNull LocalTime time, @NotNull LocalDate date, String patientFirstName, String patientLastName) {
         this.note = note;
         this.doctor = doctor;
         this.patient = patient;

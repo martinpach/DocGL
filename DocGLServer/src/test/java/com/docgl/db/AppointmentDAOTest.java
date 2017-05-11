@@ -76,9 +76,11 @@ public class AppointmentDAOTest extends AbstractDAO {
         Appointment appointment = dao.getAppointment(1);
         assertTrue(appointment.isDone());
     }
+
     /**
      * createNewAppointment test
      */
+    /*
     @Test
     public void createNewAppointment() {
         NewAppointmentInput newAppointmentInput = new NewAppointmentInput(stringToDate("2017-05-24"), stringToTime("10:50"), "Head ache.", "Chuck", "Norris", 1);
@@ -117,5 +119,5 @@ public class AppointmentDAOTest extends AbstractDAO {
         } catch (ParseException ex){
         }
         return date;
-    }
+    }*/
 }
