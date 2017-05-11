@@ -1,14 +1,14 @@
 <h1 class="heading" id="heading"></h1>
-<p class="subHeading">personal profile <i class="fa fa-pencil editProfileI" id="editProfile"></i></p>
+<p class="subHeading">personal profile</p>
 <div class="container contentTab z-depth-1" id="contentTab">
 	<div class="row" id="profileContainer">
-		<div class=col-md-5>
+		<div class=col-md-6>
 			<div class="profileDiv" id="firstname_div">
 				<h6 class="lbl">First name </h6>
 				<h2 id="firstname"></h2>
 				<div id="changeFirstnameDiv">
 					<input type="text" id="editFirstnameInput" class="editProfileInput">
-					<p id="firstnameErrorMsg"></p>
+					<p id="firstnameErrorMsg" class="profileErrMsg"></p>
 				</div>
 			</div>
 			<div class="profileDiv" id="lastname_div">
@@ -16,7 +16,7 @@
 				<h2 id="lastname"></h2>
 				<div id="changeLastnameDiv">
 					<input type="text" id="editLastnameInput" class="editProfileInput">
-					<p id="lastnameErrorMsg"></p>
+					<p id="lastnameErrorMsg" class="profileErrMsg"></p>
 				</div>
 			</div>
 			<div id="email_div" class="profileDiv">
@@ -24,9 +24,14 @@
 				<h2 id="email"></h2>
 				<div id="changeEmailDiv">
 					<input type="text" id="editEmailInput" class="editProfileInput">
-					<p id="emailErrorMsg"></p>
+					<p id="emailErrorMsg" class="profileErrMsg"></p>
 				</div>
 			</div>
+			<p id="profileSuccessMsg"></p>
+			<button type="button" class="btn btn-primary waves-effect waves-light submitBtn" id="submitProfile">Submit</button> 
+			<button type="button" class="btn btn-primary waves-effect waves-light" id="editProfile">Edit</button> 
+		</div>
+		<div class=col-md-6>
 			<div id="password_div" class="profileDiv">
 				<h6 class="lbl">Password</h6>
 				<h2 id="password"></h2>
@@ -34,14 +39,10 @@
 					<input type="password" id="editPwd1" class="editProfileInput">
 					<input type="password" id="editPwd2" class="editProfileInput">
 					<p id="pwdErrorMsg"></p>
-					<span id="submitProfile"><i class="fa fa-check-square submitIcon" aria-hidden="true"></i></span>
 				</div>
 			</div>
-		</div>
-		<div class=col-md-7>
-			<div>
-				<i class="fa fa-user-circle-o" aria-hidden="true" id="profileIcon"></i>
-			</div>
+			<button type="button" class="btn btn-primary waves-effect waves-light submitBtn" id="submitPassword">Submit</button>
+			<button type="button" class="btn btn-primary waves-effect waves-light" id="editPassword">Edit</button>
 		</div>
 	</div>
 </div>
