@@ -183,12 +183,12 @@ body{
     padding-left: 20px !important;
 }
 
-.submitIcon{
-	color:#B5DFFD;
-	font-size: 30px;
+.submitBtn{
 	float:right;
-	margin:15px;
-	cursor:pointer;
+	display:none;
+}
+.profileErrMsg,#pwdErrorMsg{
+	color:red;
 }
 
 .submitIcon:hover{

@@ -406,81 +406,90 @@ $(document).ready(function () {
     }
 
     //edit profile
-
     //toggle edit fields
     $(document).on("click", "#editProfile", function (event) {
         event.preventDefault(event);
-        $("#firstname").toggle();
-        $("#lasttname").toggle();
-        $("#changeFirstnameDiv").toggle();
+        $("#firstname, #lastname, #email").toggle();
+        $("#changeFirstnameDiv,#changeLastnameDiv,#changeEmailDiv,#submitProfile").toggle();
         $("#editFirstnameInput").val(adminData.firstName);
-        $("#changeLastnameDiv").toggle();
         $("#editLastnameInput").val(adminData.lastName);
-        $("#email").toggle();
-        $("#changeEmailDiv").toggle();
         $("#editEmailInput").val(adminData.email);
-        $("#password").toggle();
-        $("#changePasswordDiv").toggle();
+        $(".profileErrMsg,#profileSuccessMsg").html("");       
     });
 
-    //send changed info to the server,to be finished
-    $(document).on("click", "#submitProfile", function (event) {
-        event.preventDefault(event);
+    $(document).on("click","#editPassword",function(){
+        $("#password,#changePasswordDiv,#submitPassword").toggle();
+        $("#pwdErrorMsg").html("");
+    });
+
+    $(document).on("click","#submitPassword",function(){
+        var dfd=$.Deferred();
+        var newPassword={
+            p1:$("#editPwd1").val(),
+            p2:$("#editPwd2").val()
+        }
+        var pwdRegex=/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\/\^&\*])/;
+        var isPasswordValid=false;
+
+        if (pwdRegex.test(newPassword.p1) && newPassword.p1 == newPassword.p2)
+            isPasswordValid=true;
+
+        if(isPasswordValid==false)
+            $("#pwdErrorMsg").html("Invalid Password!");
+        else{
+            var dataToSend=JSON.stringify({
+                "password":newPassword.p1
+            });
+            ajaxRequest("/admins/" + adminData.id + "/profile/password","PUT",dataToSend).done(function(){
+                $("#pwdErrorMsg").html("password changed successfully!");
+                dfd.resolve();
+            });
+            return dfd.promise();
+        }
+    });
+
+    $(document).on("click", "#submitProfile", function () {
         var dfd = $.Deferred();
         var newData = {
             firstname: $("#editFirstnameInput").val(),
             lastname: $("#editLastnameInput").val(),
             email: $("#editEmailInput").val(),
-            password: $("#editPwd1").val(),
-            password2: $("#editPwd2").val()
+            password: ""
         }
         var regex = {
-            name: /^[a-zA-Z\-]*$/,
-            password: /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\/\^&\*])/,
-            email: /^[a-zA-Z0-9.!#$%&’*+\/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
+            name: /^[a-zA-Z\-]+$/,
+            email:/^[a-zA-Z0-9.!#$%&’*+\/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)+$/
         };
         var isFirstnameValid = false;
         var isLastnameValid=false;
         var isEmailValid = false;
-        var isPasswordValid = false;
 
-        if (regex.name.test(newData.firstname)) {
+        if (regex.name.test(newData.firstname))
             isFirstnameValid = true;
-            console.log(isFirstnameValid);
-        } else {
-            //alert user to enter a valid username
-            console.log("invalid first name!");
-            $("#firstnameErrorMsg").val("Choose a different username.");
-        }
-        if (regex.name.test(newData.lastname)) {
-            isLastnameValid = true;
-            console.log(isLastnameValid);
-        } else {
-            //alert user to enter a valid username
-            console.log("invalid last name!");
-            $("#lastnameErrorMsg").val("Choose a different username.");
-        }
+        else
+            $("#firstnameErrorMsg").html("Invalid first name.");
 
-        if (regex.email.test(newData.email)) {
+        if (regex.name.test(newData.lastname))
+            isLastnameValid = true;
+        else
+             $("#lastnameErrorMsg").html("Invalid last name.");
+
+        if (regex.email.test(newData.email)) 
             isEmailValid = true;
-        } else {
-            $("#emailErrorMsg").val("Choose a valid email.");
-        }
-        if ((regex.password.test(newData.password) && newData.password == newData.password2) || newData.password == "") {
-            isPasswordValid = true;
-        } else {
-            $("#pwdErrorMsg").val("Choose a valid password.");
-        }
-        if (isPasswordValid && isFirstnameValid&&isLastnameValid && isEmailValid) {
+        else
+             $("#emailErrorMsg").html("Invalid email format.");
+
+        console.log(newData.lastname+" "+newData.firstname)
+
+        if (isFirstnameValid&&isLastnameValid && isEmailValid) {
             var dataToSend = JSON.stringify({
                 "firstName": newData.firstname,
                 "lastName": newData.lastname,
                 "password": newData.password,
                 "email": newData.email
             });
-            //console.log(dataToSend);
             ajaxRequest("/admins/" + adminData.id + "/profile", "PUT", dataToSend).done(function () {
-                $("#pwdErrorMsg").html("Profile changed successfully.");
+                $("#emailErrorMsg").html("Profile changed successfully.");
                 console.log(ajaxData);
                 localStorage.setItem("firstName", ajaxData.firstName);
                 localStorage.setItem("lastName", ajaxData.lastName);
@@ -494,13 +503,12 @@ $(document).ready(function () {
                 var template = "<p>{{firstName}} {{lastName}}</p>";
                 html = Mustache.to_html(template, ajaxData);
                 $("#userName").html(html);
+                $(".profileErrMsg").html("");
+                $("#profileSuccessMsg").html("Profile changed successfully");
 
                 dfd.resolve();
             });
-            //finish error messages and test with backend!
             return dfd.promise();
-        } else {
-            console.log("couldn't change password. inputs invalid");
         }
     });
 
