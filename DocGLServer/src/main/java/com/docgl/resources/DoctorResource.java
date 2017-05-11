@@ -141,7 +141,6 @@ public class DoctorResource {
     @GET
     @Path("count")
     @UnitOfWork
-    @PermitAll
     public CountRepresentation getNumberOfAllDoctors(){
         return new CountRepresentation(doctorDAO.getNumberOfAllDoctors());
     }
@@ -152,7 +151,6 @@ public class DoctorResource {
     @GET
     @Path("specializations")
     @UnitOfWork
-    @PermitAll
     public List<SpecializationsEnum> getSpecializations(){
         SpecializationsEnum[] array = SpecializationsEnum.values();
         List<SpecializationsEnum> list = Arrays.asList(array);

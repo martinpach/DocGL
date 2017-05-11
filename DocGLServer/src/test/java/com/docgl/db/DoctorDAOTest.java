@@ -4,7 +4,6 @@ package com.docgl.db;
 import com.docgl.Cryptor;
 import com.docgl.api.RegistrationInput;
 import com.docgl.entities.Doctor;
-import com.docgl.entities.WorkingHours;
 import com.docgl.enums.SortableDoctorColumns;
 import com.docgl.enums.SortingWays;
 import com.docgl.enums.SpecializationsEnum;

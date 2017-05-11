@@ -1,6 +1,9 @@
 package com.docgl.db;
 
+import com.docgl.api.NewAppointmentInput;
 import com.docgl.entities.Appointment;
+import com.docgl.entities.Doctor;
+import com.docgl.entities.Patient;
 import com.docgl.enums.UserType;
 import io.dropwizard.hibernate.AbstractDAO;
 import org.hibernate.Criteria;
@@ -93,5 +96,22 @@ public class AppointmentDAO extends AbstractDAO<Appointment> {
         Session session = currentSession();
         Appointment appointment = session.find(Appointment.class, id);
         appointment.setDone(true);
+    }
+
+    /**
+     * Save new Appointment to the database.
+     * @param input class NewAppointmentInput with date, time, firstName, lastName, note, doctorId
+     * @param patientId patientId
+     */
+    public void createNewAppointment(NewAppointmentInput input, int patientId) {
+        currentSession().save(new Appointment(
+            input.getNote(),
+            currentSession().find(Doctor.class, input.getDoctorId()),
+            currentSession().find(Patient.class, patientId),
+            input.getTime(),
+            input.getDate(),
+            input.getFirstName(),
+            input.getLastName()
+        ));
     }
 }

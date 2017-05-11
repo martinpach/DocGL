@@ -1,20 +1,14 @@
 package com.docgl.db;
 
-import com.docgl.api.OfficeHours;
+import com.docgl.api.NewAppointmentInput;
 import com.docgl.entities.Appointment;
-import com.docgl.entities.Doctor;
-import com.docgl.entities.WorkingHours;
 import com.docgl.enums.UserType;
-import org.apache.commons.lang3.time.DateUtils;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
 import org.junit.Test;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -30,6 +24,7 @@ public class AppointmentDAOTest extends AbstractDAO {
     private final AppointmentDAO dao = new AppointmentDAO(sessionFactory);
     private final WorkingHoursDAO workingHoursDAO = new WorkingHoursDAO(sessionFactory);
     private final DoctorDAO doctorDAO = new DoctorDAO(sessionFactory);
+    private final PatientDAO patientDAO = new PatientDAO(sessionFactory);
 
     @Test
     public void getNumberOfAppointmentsTest() {
@@ -41,6 +36,9 @@ public class AppointmentDAOTest extends AbstractDAO {
     public void getAppointmentsTest() {
         List<Appointment> appointmentList = dao.getAppointments(1, UserType.PATIENT);
         assertEquals(1, appointmentList.size());
+        Appointment appointment = appointmentList.get(0);
+        assertEquals(new LocalDate(2017,5,24), new LocalDate(appointment.getDate()));
+        assertEquals(new LocalTime(7,30), new LocalTime(appointment.getTime()));
     }
 
     @Test
@@ -78,5 +76,46 @@ public class AppointmentDAOTest extends AbstractDAO {
         Appointment appointment = dao.getAppointment(1);
         assertTrue(appointment.isDone());
     }
+    /**
+     * createNewAppointment test
+     */
+    @Test
+    public void createNewAppointment() {
+        NewAppointmentInput newAppointmentInput = new NewAppointmentInput(stringToDate("2017-05-24"), stringToTime("10:50"), "Head ache.", "Chuck", "Norris", 1);
+        dao.createNewAppointment(newAppointmentInput, 4);
+        List<Appointment> appointmentList = dao.getAppointments(4, UserType.PATIENT);
+        assertEquals(1, appointmentList.size());
 
+        Appointment appointment = appointmentList.get(0);
+        System.out.println(appointment.getDate());
+        System.out.println(appointment.getDate());
+        System.out.println(appointment.getDate());
+        System.out.println(stringToDate("2017-05-24"));
+        assertEquals(new LocalDate(2017,5,24), new LocalDate(appointment.getDate()));
+        assertEquals(new LocalTime(10,50, 0), new LocalTime(appointment.getTime()));
+        assertEquals("Head ache.", appointment.getNote());
+        assertEquals("Chuck", appointment.getPatientFirstName());
+        assertEquals("Norris", appointment.getPatientLastName());
+        assertEquals(doctorDAO.getDoctor(1),appointment.getDoctor());
+        assertEquals(patientDAO.getPatient(4),appointment.getPatient());
+    }
+
+    private Date stringToDate(String string) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Date date = null;
+        try {
+            date = sdf.parse(string);
+        } catch (ParseException ex){
+        }
+        return date;
+    }
+    private Date stringToTime(String string) {
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+        Date date = null;
+        try {
+            date = sdf.parse(string);
+        } catch (ParseException ex){
+        }
+        return date;
+    }
 }

@@ -152,4 +152,14 @@ public class Appointment {
     public void setCanceled(boolean canceled) {
         this.canceled = canceled;
     }
+
+    public Appointment(String note, @NotNull Doctor doctor, @NotNull Patient patient, @NotNull Date time, @NotNull Date date, String patientFirstName, String patientLastName) {
+        this.note = note;
+        this.doctor = doctor;
+        this.patient = patient;
+        this.time = time;
+        this.date = date;
+        this.patientFirstName = patientFirstName;
+        this.patientLastName = patientLastName;
+    }
 }
