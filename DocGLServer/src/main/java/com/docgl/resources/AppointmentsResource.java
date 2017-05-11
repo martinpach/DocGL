@@ -1,10 +1,7 @@
 package com.docgl.resources;
 
 import com.docgl.Authorizer;
-import com.docgl.api.AvailableAppointmetTimesInput;
-import com.docgl.api.CountRepresentation;
-import com.docgl.api.LoggedUser;
-import com.docgl.api.OfficeHours;
+import com.docgl.api.*;
 import com.docgl.db.AppointmentDAO;
 import com.docgl.db.DoctorDAO;
 import com.docgl.db.PublicHolidaysDAO;
@@ -135,80 +132,115 @@ public class AppointmentsResource {
      * day are returned.
      *
      * @param input input with Date and Id of Doctor
-     * @return List of times presented in String format
+     * @return List of DayTime object that contains date and List of times in Stings
      */
     @POST
-    @Path("day/times")
+    @Path("interval/times")
     @UnitOfWork
-    public List<String> getAvailableAppointmentTimesOFDay(AvailableAppointmetTimesInput input) {
+    public List<DayTimes> getAvailableAppointmentTimesOfDateInterval(AvailableAppointmetTimesInput input) {
 
-        Date date = input.getDate();
+        if  (input.getId() == null)
+            throw new BadRequestException("Property 'id' is missing or not presented!");
+        if  (input.getDateFrom() == null)
+            throw new BadRequestException("Property 'dateFrom' is missing or not presented!");
+        if  (input.getDateTo() == null)
+            throw new BadRequestException("Property 'dateTo' or 'date' is missing or not presented!");
+
         int docID = input.getId();
+        LocalDate dateFrom = new LocalDate(input.getDateFrom());
+        LocalDate dateTo = new LocalDate(input.getDateTo());
+        LocalDate date = dateFrom;
+        Date dateDate = input.getDateFrom();
 
-        if (date.compareTo(new Date()) == -1)
-            throw new BadRequestException("Appointment date must be set in the future!");
         Doctor doctor = doctorDAO.getDoctor(docID);
         if (!doctor.isWorkingHoursSet() || !doctor.isApproved() || doctor.getDateOfValidity()==null)
             throw new BadRequestException("Its not possible to make appointment at selected Doctor!");
 
-        Date dateOfValidity = doctor.getDateOfValidity();
+        LocalDate dateOfValidity = new LocalDate(doctor.getDateOfValidity());
         int appDuration = doctor.getAppointmentsDuration();
 
-        if (date.compareTo(dateOfValidity) == -1)
-            throw new BadRequestException("Date is earlier than Doctors Date of Validity!");
-        if (publicHolidaysDAO.isDatePublicHoliday(date))
-            throw new BadRequestException("Selected date is an Public Holiday!");
+        List<DayTimes> dayTimesList = new ArrayList<DayTimes>();
 
-        List<Appointment> appointments = appointmentDAO.getDoctorsAppointmentsByDate(docID, date);
-        List<WorkingHours> workingHoursList = workingHoursDAO.getDoctorsWorkingHours(docID);
-
-        int dayOfWeek = new LocalDate(date).getDayOfWeek();
-
-        OfficeHours officeHours = new OfficeHours();
-        officeHours.setOfficeHours(dayOfWeek, workingHoursList);
-
-        if (officeHours.getFrom() == null && officeHours.getFrom2() == null)
-            throw new BadRequestException("Doctor does not work that day!");
-
-        List<LocalTime> availableTimesMorning = new ArrayList<LocalTime>();
-        List<LocalTime> availableTimesAfternoon = new ArrayList<LocalTime>();
-        List<LocalTime> availableTimes = new ArrayList<LocalTime>();
-
-        //String times into joda.LocalTime
-        DateTimeFormatter format= DateTimeFormat.forPattern("HH:mm");
-        LocalTime officeHoursFrom = null;
-        LocalTime officeHoursTo = null;
-        //Morning hours
-        if (officeHours.getFrom() != null) {
-            officeHoursFrom = format.parseLocalTime(officeHours.getFrom());
-            officeHoursTo = format.parseLocalTime(officeHours.getTo());
-            availableTimesMorning = setListOfAvailableTimes(officeHoursFrom, officeHoursTo, appointments, appDuration);
-        }
-        //Afternoon hours
-        if (officeHours.getFrom2() != null) {
-            officeHoursFrom = format.parseLocalTime(officeHours.getFrom2());
-            officeHoursTo = format.parseLocalTime(officeHours.getTo2());
-            availableTimesAfternoon = setListOfAvailableTimes(officeHoursFrom, officeHoursTo, appointments, appDuration);
-        }
-
-        //Morning hours together with Afternoon ones
-        availableTimes = availableTimesMorning;
-        if (availableTimesAfternoon != null) {
-            for (LocalTime loc:availableTimesAfternoon) {
-                availableTimes.add(loc);
+        while (date.compareTo(dateTo) != 1) {
+            // Continue, date is not in the future. //
+            if (date.compareTo(new LocalDate()) == -1) {
+                date = date.plusDays(1);
+                dateDate = new Date(dateDate.getTime()+(24*60*60*1000));
+                continue;
             }
-        }
-        if (availableTimes == null)
-            throw new BadRequestException("That day are all appointment times already taken!");
+            // Continue, date is earlier than Doctors Date of Validity. //
+            if (date.compareTo(dateOfValidity) == -1) {
+                date = date.plusDays(1);
+                dateDate = new Date(dateDate.getTime()+(24*60*60*1000));
+                continue;
+            }
+            // Continue, date is an Public Holiday. //
+            if (publicHolidaysDAO.isDatePublicHoliday(dateDate)) {
+                date = date.plusDays(1);
+                dateDate = new Date(dateDate.getTime()+(24*60*60*1000));
+                continue;
+            }
 
-        //joda.LocalTime to Strings
-        List<String> availableTimesString = new ArrayList<String>();
-        for (LocalTime m:availableTimes) {
-            availableTimesString.add(format.print(m));
+            List<Appointment> appointments = appointmentDAO.getDoctorsAppointmentsByDate(docID, dateDate);
+            List<WorkingHours> workingHoursList = workingHoursDAO.getDoctorsWorkingHours(docID);
+            int dayOfWeek = date.getDayOfWeek();
+            OfficeHours officeHours = new OfficeHours();
+            officeHours.setOfficeHours(dayOfWeek, workingHoursList);
+            // Continue, that date doctor does not work. //
+            if (officeHours.getFrom() == null && officeHours.getFrom2() == null) {
+                date = date.plusDays(1);
+                dateDate = new Date(dateDate.getTime()+(24*60*60*1000));
+                continue;
+            }
+            List<LocalTime> availableTimesMorning = new ArrayList<LocalTime>();
+            List<LocalTime> availableTimesAfternoon = new ArrayList<LocalTime>();
+
+            //String times into joda.LocalTime
+            DateTimeFormatter format= DateTimeFormat.forPattern("HH:mm");
+            LocalTime officeHoursFrom = null;
+            LocalTime officeHoursTo = null;
+
+            //Morning hours
+            if (officeHours.getFrom() != null) {
+                officeHoursFrom = format.parseLocalTime(officeHours.getFrom());
+                officeHoursTo = format.parseLocalTime(officeHours.getTo());
+                availableTimesMorning = setListOfAvailableTimes(officeHoursFrom, officeHoursTo, appointments, appDuration);
+            }
+            //Afternoon hours
+            if (officeHours.getFrom2() != null) {
+                officeHoursFrom = format.parseLocalTime(officeHours.getFrom2());
+                officeHoursTo = format.parseLocalTime(officeHours.getTo2());
+                availableTimesAfternoon = setListOfAvailableTimes(officeHoursFrom, officeHoursTo, appointments, appDuration);
+            }
+            List<LocalTime> availableTimes = new ArrayList<LocalTime>();
+            availableTimes = availableTimesMorning;
+            if (availableTimesAfternoon != null) {
+                for (LocalTime loc:availableTimesAfternoon) {
+                    availableTimes.add(loc);
+                }
+            }
+            // That day are all appointment times already taken. //
+            if (availableTimes == null){
+                date = date.plusDays(1);
+                dateDate = new Date(dateDate.getTime()+(24*60*60*1000));
+                continue;
+            }
+
+            DateTimeFormatter dateformat= DateTimeFormat.forPattern("yyyy-MM-dd");
+            DayTimes dayTimes = new DayTimes(date.toString(dateformat));
+            for (LocalTime m:availableTimes) {
+                dayTimes.getTimes().add(format.print(m));
+            }
+            dayTimesList.add(dayTimes);
+            date = date.plusDays(1);
+            dateDate = new Date(dateDate.getTime()+(24*60*60*1000));
         }
 
-        return availableTimesString;
+        if (dayTimesList.size() == 0)
+            throw new BadRequestException("There are not any possible appointments selected interval!");
+        return dayTimesList;
     }
+
 
     /**
      *  This function fill List of LocalTimes with available times for an Appointment.
@@ -235,5 +267,4 @@ public class AppointmentsResource {
         }
         return availableTimes;
     }
-
 }
