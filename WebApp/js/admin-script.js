@@ -205,27 +205,31 @@ $(document).ready(function () {
     function generateDoctorTable() {
         var i = 0;
         var icon = '<i class="fa fa-user-md tableIcon"></i>';
-        var approvedIcon='<i class="fa fa-check-circle-o tableIcon statusIcon approvedIcon" aria-hidden="true"  data-toggle="modal" data-target="#docStatusModal"></i>';
-        var blockedIcon='<i class="fa fa-ban tableIcon statusIcon blockedIcon" aria-hidden="true"  data-toggle="modal" data-target="#docStatusModal"></i>';
-        var unapprovedIcon='<i class="fa fa-circle-o tableIcon statusIcon" aria-hidden="true"  data-toggle="modal" data-target="#docStatusModal"></i>';
+        var approvedIcon='<i class="fa fa-check-circle-o tableIcon statusIcon approvedIcon" aria-hidden="true"></i>';
+        var unapprovedIcon='<i class="fa fa-circle-o tableIcon statusIcon approvedIcon clickable approve" aria-hidden="true"></i>';
+        var blockedIcon='<i class="fa fa-ban tableIcon statusIcon blockedIcon clickable unblock" aria-hidden="true"></i>';
+        var unblockedIcon='<i class="fa fa-unlock statusIcon tableIcon unapprovedIcon clickable block" aria-hidden="true"></i>';
         var approvedStatus;
         var blockedStatus;
         var statusIcon;
+        var approvalIcon;
         $(".tableRow").remove();
         for (i = 0; i < ajaxData.length; i++) {
             approvedStatus=ajaxData[i].approved;
             blockedStatus=ajaxData[i].blocked;
-            statusIcon=blockedStatus==false?approvedIcon:blockedIcon;
-            if(approvedStatus==false)
-                statusIcon=unapprovedIcon;
+            approvalIcon=approvedStatus==false?unapprovedIcon:approvedIcon;
+            statusIcon=blockedStatus==false?unblockedIcon:blockedIcon;
+
             $("#tableDoctors").append('<tr class="tableRow" data-id="'+i+'">' +
                 '<td>' + icon + '</td>' +
                 '<td>' + ajaxData[i].id + '</td>' +
-                '<td>' + ajaxData[i].firstName + " " + ajaxData[i].lastName + '</td>' +
+                '<td>' + ajaxData[i].firstName + '</td>' +
+                '<td>'+ ajaxData[i].lastName+'</td>'+
                 '<td>' + ajaxData[i].specialization + '</td>' +
                 '<td>' + ajaxData[i].email + '</td>' +
                 '<td><p class="like"><i class="fa fa-heart heart"></i>' + ajaxData[i].likes + '</p></td>' +
                 '<td class="text-center">' + statusIcon + '</td>' +
+                '<td class="text-center">' + approvalIcon + '</td>'  +
                 '</tr>');
         }
     }
@@ -234,16 +238,18 @@ $(document).ready(function () {
         var i = 0;
         var icon = '<i class="fa fa-user tableIcon"></i>';
         var blockedStatus;
-        var blockedIcon='<i class="fa fa-ban tableIcon statusIcon blockedIcon" aria-hidden="true"  data-toggle="modal" data-target="#userStatusModal"></i>';
-        var statusIcon='<i class="fa fa-check-circle-o tableIcon statusIcon approvedIcon" aria-hidden="true"  data-toggle="modal" data-target="#userStatusModal"></i>';
+        var blockedIcon='<i class="fa fa-ban tableIcon statusIcon blockedIcon clickable unblockU" aria-hidden="true"></i>';
+        var unblockedIcon='<i class="fa fa-unlock tableIcon statusIcon approvedIcon clickable blockU" aria-hidden="true"></i>';
+        var statusIcon;
+        $(".tableRow").remove();
         for (i = 0; i < ajaxData.length; i++) {
             blockedStatus=ajaxData[i].blocked;
-            statusIcon=blockedStatus==false?statusIcon:blockedIcon;
-            $(".tableRow").remove();
+            statusIcon=blockedStatus==false?unblockedIcon:blockedIcon;
             $("#tableUsers").append('<tr class="tableRow" data-id="'+i+'">' +
             '<td>' + icon + '</td>' +
             '<td>' + ajaxData[i].id + '</td>' +
-            '<td>' + ajaxData[i].firstName + " " + ajaxData[i].lastName + '</td>' +
+            '<td>' + ajaxData[i].firstName+ '</td>' +
+            '<td>' + ajaxData[i].lastName +'</td>' +
             '<td>' + ajaxData[i].email + '</td>' +
             '<td>' + ajaxData[i].registrationDate + '</td>' +
             '<td class="text-center">' + statusIcon + '</td>' +
@@ -306,99 +312,77 @@ $(document).ready(function () {
 
     });
 
-    //change user/doctor status
-    var selectedDoc;
-    var selectedUser;
-    $(document).on("click","#tableDoctors tbody tr",function(event) {
-        var id = $(this).attr("data-id");
-        console.log(id);
-        selectedDoc=parseInt(id);
-
-    });
-
-    $(document).on("click","#tableUsers tbody tr",function(event) {
-        var id = $(this).attr("data-id");
-        console.log(id);
-        selectedUser=parseInt(id);
-    });
-
-
-
-    $(document).on("click","#approveDoc",function(event){
+//approving and blocking docs
+    $(document).on("click",".approve",function(event){
         event.preventDefault();
         var dfd=$.Deferred();
+        var id=parseInt($(this).parent().parent().attr("data-id"));
         var approved=JSON.stringify({
             "approved":true
         });
+        ajaxRequest("/doctors/"+(id+1)+"/approved?name=","PUT",approved).done(function(){
+            getDoctors(start, limit, sortByDocs, wayDocs);
+            dfd.resolve();
+        });
+        return dfd.promise();
+    });
+
+    $(document).on("click",".unblock",function(event){
+        event.preventDefault();
+        var dfd=$.Deferred();
+        var id=parseInt($(this).parent().parent().attr("data-id"));
         var blocked=JSON.stringify({
             "blocked":false
         });
-        if(doctorList[selectedDoc].approved==false){
-        ajaxRequest("/doctors/"+(selectedDoc+1)+"/approved?name=","PUT",approved).done(function(){
-            $("#blockDoc").removeClass("modalIconSelected");
-            console.log(ajaxData);
+        ajaxRequest("/doctors/"+(id+1)+"/blocked?name=","PUT",blocked).done(function(){
             getDoctors(start, limit, sortByDocs, wayDocs);
             dfd.resolve();
         });
-        }
-        else{
-             $("#approveDoc").addClass("modalIconSelected");
-            ajaxRequest("/doctors/"+(selectedDoc+1)+"/blocked?name=","PUT",blocked).done(function(){
-            $("#approveDoc").addClass("modalIconSelected");
-            $("#blockDoc").removeClass("modalIconSelected");
-            console.log(ajaxData);
-            getDoctors(start, limit, sortByDocs, wayDocs);
-            dfd.resolve();
-        });
-        }
         return dfd.promise();
     });
 
-    $(document).on("click","#blockDoc" ,function(event){
+    $(document).on("click",".block",function(event){
         event.preventDefault();
         var dfd=$.Deferred();
+        var id=parseInt($(this).parent().parent().attr("data-id"));
         var blocked=JSON.stringify({
             "blocked":true
         });
-        ajaxRequest("/doctors/"+(selectedDoc+1)+"/blocked?name=","PUT",blocked).done(function(){
+        ajaxRequest("/doctors/"+(id+1)+"/blocked?name=","PUT",blocked).done(function(){
             getDoctors(start, limit, sortByDocs, wayDocs);
             dfd.resolve();
         });
         return dfd.promise();
     });
 
-    $(document).on("click","#approveUser",function(event){
+    $(document).on("click",".blockU",function(event){
         event.preventDefault();
         var dfd=$.Deferred();
-        var blocked=JSON.stringify({
-            "blocked":false
-        });
-        if(userList[selectedUser].blocked==true){
-        ajaxRequest("/patients/"+(selectedUser+1)+"/blocked?name=","PUT",blocked).done(function(){
-            $("#approveUser").addClass("modalIconSelected");
-            $("#blockUser").removeClass("modalIconSelected");
-            console.log(ajaxData);
-            getUsers(start, limit, sortByUsers, wayUsers);
-            dfd.resolve();
-        });
-        }
-        return dfd.promise();
-    });
-
-    $(document).on("click","#blockUser" ,function(event){
-        event.preventDefault();
-        var dfd=$.Deferred();
+        var id=parseInt($(this).parent().parent().attr("data-id"));
         var blocked=JSON.stringify({
             "blocked":true
         });
-        ajaxRequest("/patients/"+(selectedUser+1)+"/blocked?name=","PUT",blocked).done(function(){
-            $("#blockUser").addClass("modalIconSelected");
-            $("#approveUser").removeClass("modalIconSelected");
+        ajaxRequest("/patients/"+(id+1)+"/blocked?name=","PUT",blocked).done(function(){
             getUsers(start, limit, sortByUsers, wayUsers);
             dfd.resolve();
         });
         return dfd.promise();
     });
+
+    $(document).on("click",".unblockU",function(event){
+        event.preventDefault();
+        var dfd=$.Deferred();
+        var id=parseInt($(this).parent().parent().attr("data-id"));
+        var blocked=JSON.stringify({
+            "blocked":false
+        });
+        ajaxRequest("/patients/"+(id+1)+"/blocked?name=","PUT",blocked).done(function(){
+            getUsers(start, limit, sortByUsers, wayUsers);
+            dfd.resolve();
+        });
+        return dfd.promise();
+    });
+
 
     //get statistics
     function getAppointmentCount() {

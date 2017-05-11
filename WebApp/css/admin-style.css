@@ -259,7 +259,6 @@ i.fa.fa-heart.heart::before{
 }
 
 .statusIcon{
-	cursor:pointer;
 	font-size:20px;
 	color:#B5DFFD;
 }
@@ -270,6 +269,10 @@ i.fa.fa-heart.heart::before{
 
 .blockedIcon{
 	color:#990000;
+}
+
+.clickable{
+	cursor:pointer;
 }
 
 th{
@@ -301,9 +304,9 @@ th{
 	font-size:50px;
 }
 
-.modalIconSelected{
-	opacity:0.5;
-	cursor:not-allowed;
+.unapproved{
+	opacity:0.3;
+	cursor:pointer;
 }
 
 .headingModal{
