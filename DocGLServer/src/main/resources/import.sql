@@ -32,7 +32,6 @@ insert into Working_Hours(monday_from, monday_to, tuesday_from, tuesday_to, wedn
 insert into Working_Hours(monday_from, monday_to, tuesday_from, tuesday_to, wednesday_from, wednesday_to, thursday_from, thursday_to, doctor_id) values( "01:00", "03:00", "01:00", "03:00", "01:00", "05:00", "01:00", "03:00", 2);
 insert into favourite_doctors VALUES( 1, 1);
 insert into favourite_doctors VALUES( 1, 2);
-Add Comment
 
 -- PUBLIC HOLIDAYS 2017-2018
 insert into Public_Holidays(date) VALUES("2017-01-01");

@@ -8,8 +8,10 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
+import org.joda.time.LocalDateTime;
 import org.joda.time.LocalTime;
 
+import java.sql.Time;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -93,5 +95,22 @@ public class AppointmentDAO extends AbstractDAO<Appointment> {
         Session session = currentSession();
         Appointment appointment = session.find(Appointment.class, id);
         appointment.setDone(true);
+    }
+
+    public void cancelDoctorsAppoitmentsByDateBetweenTimeInterval(int idDoctor, Date date, Time from, Time to){
+        from = new java.sql.Time((long) (from.getTime() - 1.14e+6));
+        long numberOfAppointments = getNumberOfAppointments();
+        System.out.println("!!!!!!!!!!!!!! " + to);
+        System.out.println("!!!!!!!!!!!!!! " + from);
+        for(int i = 1; i <= numberOfAppointments; i++) {
+            System.out.println("!!!!!!!!!!!" + i);
+            namedQuery("cancelDoctorsAppointmentsByDateBetweenTimeInterval")
+                    .setParameter("id", i)
+                    .setParameter("idDoctor", idDoctor)
+                    .setParameter("date", date)
+                    .setParameter("timeFrom", from)
+                    .setParameter("timeTo", to)
+                    .executeUpdate();
+        }
     }
 }

@@ -206,7 +206,6 @@ public class AppointmentsResource {
         for (LocalTime m:availableTimes) {
             availableTimesString.add(format.print(m));
         }
-
         return availableTimesString;
     }
 

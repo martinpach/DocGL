@@ -1,5 +1,6 @@
 package com.docgl.db;
 
+import com.docgl.DateParser;
 import com.docgl.api.OfficeHours;
 import com.docgl.entities.Appointment;
 import com.docgl.entities.Doctor;
@@ -34,19 +35,19 @@ public class AppointmentDAOTest extends AbstractDAO {
     @Test
     public void getNumberOfAppointmentsTest() {
         long count = dao.getNumberOfAppointments();
-        assertEquals(4, count);
+        assertEquals(5, count);
     }
 
     @Test
     public void getAppointmentsTest() {
         List<Appointment> appointmentList = dao.getAppointments(1, UserType.PATIENT);
-        assertEquals(1, appointmentList.size());
+        assertEquals(2, appointmentList.size());
     }
 
     @Test
     public void getAppointments2Test() {
         List<Appointment> appointmentList = dao.getAppointments(1, UserType.DOCTOR);
-        assertEquals(4, appointmentList.size());
+        assertEquals(5, appointmentList.size());
     }
     /**
      * getAppointment test
@@ -77,6 +78,13 @@ public class AppointmentDAOTest extends AbstractDAO {
         dao.markAppointmentAsDone(1);
         Appointment appointment = dao.getAppointment(1);
         assertTrue(appointment.isDone());
+    }
+
+    @Test
+    public void cancelDoctorsAppoitmentsByDateBetweenTimeIntervalTest(){
+        dao.cancelDoctorsAppoitmentsByDateBetweenTimeInterval(1, DateParser.parseStringToUtilDate("2017-05-25"), DateParser.parseStringToTime("11:20:00"), DateParser.parseStringToTime("15:50:00"));
+        Appointment appointment = dao.getAppointment(4);
+        assertEquals(true, appointment.isCanceled());
     }
 
 }

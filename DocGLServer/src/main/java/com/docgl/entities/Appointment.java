@@ -8,6 +8,7 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.sql.Time;
 import java.util.Date;
 
 /**
@@ -19,7 +20,9 @@ import java.util.Date;
 @NamedQueries({
         @NamedQuery(name="getDoctorsAppointment", query="from Appointment where doctor.id = :id"),
         @NamedQuery(name="getPatientsAppointment", query="from Appointment where patient.id = :id"),
-        @NamedQuery(name="getDoctorsAppointmentsByDate", query="from Appointment where doctor.id = :id and date = :date")
+        @NamedQuery(name="getDoctorsAppointmentsByDate", query="from Appointment where doctor.id = :id and date = :date"),
+        @NamedQuery(name="cancelDoctorsAppointmentsByDateBetweenTimeInterval",
+                query="update Appointment set canceled = true where id = :id and doctor.id = :idDoctor and date = :date and time >= :timeFrom and time <= :timeTo")
 })
 public class Appointment {
     @Id
@@ -41,10 +44,9 @@ public class Appointment {
     @JsonView(Views.DoctorView.class)
     private Patient patient;
 
-    @Temporal(TemporalType.TIME)
     @NotNull
     @JsonView(Views.PublicView.class)
-    private Date time;
+    private Time time;
 
     @Temporal(TemporalType.DATE)
     @CreationTimestamp
@@ -113,11 +115,11 @@ public class Appointment {
         this.patient = patient;
     }
 
-    public Date getTime() {
+    public Time getTime() {
         return time;
     }
 
-    public void setTime(Date time) {
+    public void setTime(Time time) {
         this.time = time;
     }
 

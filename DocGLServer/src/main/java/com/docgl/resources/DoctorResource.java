@@ -1,6 +1,7 @@
 package com.docgl.resources;
 
 import com.docgl.Authorizer;
+import com.docgl.DateParser;
 import com.docgl.Views;
 import com.docgl.api.*;
 import com.docgl.db.AppointmentDAO;
@@ -301,6 +302,10 @@ public class DoctorResource {
         }
         freeHours.setDoctor(doctorDAO.getDoctor(id));
         freeHoursDAO.setDoctorsFreeHours(freeHours);
+        appointmentDAO.cancelDoctorsAppoitmentsByDateBetweenTimeInterval(id,
+                freeHours.getDate(),
+                DateParser.parseStringToTime(freeHours.getFrom()),
+                DateParser.parseStringToTime(freeHours.getTo()));
     }
 
     /**
