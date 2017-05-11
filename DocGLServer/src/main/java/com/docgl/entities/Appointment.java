@@ -5,6 +5,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonView;
 import org.hibernate.annotations.CreationTimestamp;
+import org.joda.time.LocalDate;
+import org.joda.time.LocalTime;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -44,13 +46,13 @@ public class Appointment {
     @Temporal(TemporalType.TIME)
     @NotNull
     @JsonView(Views.PublicView.class)
-    private Date time;
+    private LocalTime time;
 
     @Temporal(TemporalType.DATE)
     @CreationTimestamp
     @NotNull
     @JsonView(Views.PublicView.class)
-    private Date date;
+    private LocalDate date;
 
     @Column(name = "patient_first_name")
     @JsonView(Views.PublicView.class)
