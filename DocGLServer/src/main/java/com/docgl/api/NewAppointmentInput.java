@@ -1,16 +1,14 @@
 package com.docgl.api;
 
-import org.joda.time.LocalDate;
-import org.joda.time.LocalTime;
-
+import java.sql.Time;
 import java.util.Date;
 
 /**
  * Created by Rasťo on 10.5.2017.
  */
 public class NewAppointmentInput {
-    private LocalDate date;
-    private LocalTime time;
+    private Date date;
+    private Time time;
     private String note;
     private String firstName;
     private String lastName;
@@ -19,7 +17,7 @@ public class NewAppointmentInput {
     public NewAppointmentInput() {
     }
 
-    public NewAppointmentInput(LocalDate date, LocalTime time, String note, String firstName, String lastName, int doctorId) {
+    public NewAppointmentInput(Date date, Time time, String note, String firstName, String lastName, int doctorId) {
         this.date = date;
         this.time = time;
         this.note = note;
@@ -28,11 +26,11 @@ public class NewAppointmentInput {
         this.doctorId = doctorId;
     }
 
-    public LocalDate getDate() {
+    public Date getDate() {
         return date;
     }
 
-    public LocalTime getTime() {
+    public Time getTime() {
         return time;
     }
 

@@ -7,6 +7,7 @@ import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 import org.junit.Test;
 
+import java.sql.Time;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -80,7 +81,6 @@ public class AppointmentDAOTest extends AbstractDAO {
     /**
      * createNewAppointment test
      */
-    /*
     @Test
     public void createNewAppointment() {
         NewAppointmentInput newAppointmentInput = new NewAppointmentInput(stringToDate("2017-05-24"), stringToTime("10:50"), "Head ache.", "Chuck", "Norris", 1);
@@ -89,9 +89,6 @@ public class AppointmentDAOTest extends AbstractDAO {
         assertEquals(1, appointmentList.size());
 
         Appointment appointment = appointmentList.get(0);
-        System.out.println(appointment.getDate());
-        System.out.println(appointment.getDate());
-        System.out.println(appointment.getDate());
         System.out.println(stringToDate("2017-05-24"));
         assertEquals(new LocalDate(2017,5,24), new LocalDate(appointment.getDate()));
         assertEquals(new LocalTime(10,50, 0), new LocalTime(appointment.getTime()));
@@ -111,13 +108,13 @@ public class AppointmentDAOTest extends AbstractDAO {
         }
         return date;
     }
-    private Date stringToTime(String string) {
+    private Time stringToTime(String string) {
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
-        Date date = null;
-        try {
-            date = sdf.parse(string);
+        Long ms = null;
+        try{
+            ms = sdf.parse(string).getTime();
         } catch (ParseException ex){
         }
-        return date;
-    }*/
+        return new Time(ms);
+    }
 }

@@ -5,11 +5,10 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonView;
 import org.hibernate.annotations.CreationTimestamp;
-import org.joda.time.LocalDate;
-import org.joda.time.LocalTime;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.sql.Time;
 import java.util.Date;
 
 /**
@@ -43,16 +42,14 @@ public class Appointment {
     @JsonView(Views.DoctorView.class)
     private Patient patient;
 
-    @Temporal(TemporalType.TIME)
     @NotNull
     @JsonView(Views.PublicView.class)
-    private LocalTime time;
+    private Time time;
 
     @Temporal(TemporalType.DATE)
-    @CreationTimestamp
     @NotNull
     @JsonView(Views.PublicView.class)
-    private LocalDate date;
+    private Date date;
 
     @Column(name = "patient_first_name")
     @JsonView(Views.PublicView.class)
@@ -115,19 +112,19 @@ public class Appointment {
         this.patient = patient;
     }
 
-    public LocalTime getTime() {
+    public Time getTime() {
         return time;
     }
 
-    public void setTime(LocalTime time) {
+    public void setTime(Time time) {
         this.time = time;
     }
 
-    public LocalDate getDate() {
+    public Date getDate() {
         return date;
     }
 
-    public void setDate(LocalDate date) {
+    public void setDate(Date date) {
         this.date = date;
     }
 
@@ -155,7 +152,7 @@ public class Appointment {
         this.canceled = canceled;
     }
 
-    public Appointment(String note, @NotNull Doctor doctor, @NotNull Patient patient, @NotNull LocalTime time, @NotNull LocalDate date, String patientFirstName, String patientLastName) {
+    public Appointment(String note, @NotNull Doctor doctor, @NotNull Patient patient, @NotNull Time time, @NotNull Date date, String patientFirstName, String patientLastName) {
         this.note = note;
         this.doctor = doctor;
         this.patient = patient;
