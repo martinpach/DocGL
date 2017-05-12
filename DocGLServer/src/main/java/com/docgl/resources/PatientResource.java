@@ -66,7 +66,7 @@ public class PatientResource {
     {
         UserType[] roles = {UserType.ADMIN, UserType.DOCTOR};
         authorizer.checkAuthorization(loggedUser.getUserType(), roles);
-        return patientDAO.getAllPatients(limit, start, sortBy, way, name);
+        return patientDAO.getAllPatients(limit, start - 1, sortBy, way, name);
     }
 
     /**

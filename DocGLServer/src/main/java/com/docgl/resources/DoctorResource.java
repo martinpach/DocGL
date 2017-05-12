@@ -75,7 +75,7 @@ public class DoctorResource {
                                             @QueryParam("name") String name,
                                             @QueryParam("spec") SpecializationsEnum spec
     ) {
-        return doctorDAO.getAllDoctors(limit, start, sortBy, way, name, spec);
+        return doctorDAO.getAllDoctors(limit, start - 1, sortBy, way, name, spec);
     }
 
     /**
