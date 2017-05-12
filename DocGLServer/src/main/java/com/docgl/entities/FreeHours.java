@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.sql.Time;
 import java.util.Date;
 
 /**
@@ -27,11 +28,11 @@ public class FreeHours {
 
     @NotNull
     @Column(name="time_from")
-    private String from;
+    private Time from;
 
     @NotNull
     @Column(name="time_to")
-    private String to;
+    private Time to;
 
     @ManyToOne
     @JoinColumn(name = "doctor_id")
@@ -50,19 +51,19 @@ public class FreeHours {
         this.date = date;
     }
 
-    public String getFrom() {
+    public Time getFrom() {
         return from;
     }
 
-    public void setFrom(String from) {
+    public void setFrom(Time from) {
         this.from = from;
     }
 
-    public String getTo() {
+    public Time getTo() {
         return to;
     }
 
-    public void setTo(String to) {
+    public void setTo(Time to) {
         this.to = to;
     }
 

@@ -20,9 +20,7 @@ import java.util.Date;
 @NamedQueries({
         @NamedQuery(name="getDoctorsAppointment", query="from Appointment where doctor.id = :id"),
         @NamedQuery(name="getPatientsAppointment", query="from Appointment where patient.id = :id"),
-        @NamedQuery(name="getDoctorsAppointmentsByDate", query="from Appointment where doctor.id = :id and date = :date"),
-        @NamedQuery(name="cancelDoctorsAppointmentsByDateBetweenTimeInterval",
-                query="update Appointment set canceled = true where id = :id and doctor.id = :idDoctor and date = :date and time >= :timeFrom and time <= :timeTo")
+        @NamedQuery(name="getDoctorsAppointmentsByDate", query="from Appointment where doctor.id = :id and date = :date")
 })
 public class Appointment {
     @Id

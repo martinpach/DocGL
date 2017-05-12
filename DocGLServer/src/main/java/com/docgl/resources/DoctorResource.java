@@ -291,10 +291,10 @@ public class DoctorResource {
     public void setDoctorsFreeHours(@Auth LoggedUser loggedUser, @PathParam("id") int id, FreeHours freeHours){
         authorizer.checkAuthorization(loggedUser.getUserType(), UserType.DOCTOR);
         authorizer.checkAuthentication(loggedUser.getId(), id);
-        if(StringUtils.isBlank(freeHours.getFrom())){
+        if(freeHours.getFrom() == null){
             throw new ValidationException("Property 'from' is missing");
         }
-        if(StringUtils.isBlank(freeHours.getTo())){
+        if(freeHours.getTo() == null){
             throw new ValidationException("Property 'to' is missing");
         }
         if(freeHours.getDate() == null){
@@ -304,8 +304,9 @@ public class DoctorResource {
         freeHoursDAO.setDoctorsFreeHours(freeHours);
         appointmentDAO.cancelDoctorsAppoitmentsByDateBetweenTimeInterval(id,
                 freeHours.getDate(),
-                DateParser.parseStringToTime(freeHours.getFrom()),
-                DateParser.parseStringToTime(freeHours.getTo()));
+                freeHours.getFrom(),
+                freeHours.getTo()
+        );
     }
 
     /**

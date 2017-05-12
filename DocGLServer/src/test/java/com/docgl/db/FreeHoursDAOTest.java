@@ -1,5 +1,6 @@
 package com.docgl.db;
 
+import com.docgl.DateParser;
 import com.docgl.entities.Doctor;
 import com.docgl.entities.FreeHours;
 import org.junit.Test;
@@ -22,8 +23,8 @@ public class FreeHoursDAOTest extends AbstractDAO{
 
         freeHours.setDate(new Date());
         freeHours.setDoctor(doctor);
-        freeHours.setFrom("14:30");
-        freeHours.setTo("15:15");
+        freeHours.setFrom(DateParser.parseStringToTime("14:30:00"));
+        freeHours.setTo(DateParser.parseStringToTime("15:15:00"));
         freeHoursDAO.setDoctorsFreeHours(freeHours);
         assertEquals(1, doctor.getFreeHours().size());
     }

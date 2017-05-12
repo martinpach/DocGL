@@ -97,20 +97,24 @@ public class AppointmentDAO extends AbstractDAO<Appointment> {
         appointment.setDone(true);
     }
 
+    /**
+     * This function cancels appointments in time interval
+     * @param idDoctor doctors' appointment
+     * @param date date of appointment
+     * @param from start of time interval
+     * @param to end of time interval
+     */
     public void cancelDoctorsAppoitmentsByDateBetweenTimeInterval(int idDoctor, Date date, Time from, Time to){
         from = new java.sql.Time((long) (from.getTime() - 1.14e+6));
-        long numberOfAppointments = getNumberOfAppointments();
-        System.out.println("!!!!!!!!!!!!!! " + to);
-        System.out.println("!!!!!!!!!!!!!! " + from);
-        for(int i = 1; i <= numberOfAppointments; i++) {
-            System.out.println("!!!!!!!!!!!" + i);
-            namedQuery("cancelDoctorsAppointmentsByDateBetweenTimeInterval")
-                    .setParameter("id", i)
-                    .setParameter("idDoctor", idDoctor)
-                    .setParameter("date", date)
-                    .setParameter("timeFrom", from)
-                    .setParameter("timeTo", to)
-                    .executeUpdate();
+        List<Appointment> appointments = getDoctorsAppointmentsByDate(idDoctor, date);
+        for(Appointment appointment : appointments) {
+            if(appointment.getDate().equals(date) && appointment.getTime().after(from) && appointment.getTime().before(to)
+                    && !appointment.isCanceled()){
+
+                Appointment appointmentToUpdate = currentSession().find(Appointment.class, appointment.getId());
+                appointmentToUpdate.setCanceled(true);
+                appointmentToUpdate.setTime(new Time((long)(appointment.getTime().getTime() + 3.6e+6)));
+            }
         }
     }
 }
