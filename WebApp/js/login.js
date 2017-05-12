@@ -82,7 +82,6 @@ $(document).ready(function () {
                         localStorage.setItem("appointmentsDuration",doctor.appointmentsDuration);
                         localStorage.setItem("dateOfValidity",doctor.dateOfValidity);                        
                         localStorage.setItem("token", data.token);
-                        alert(doctor.workingHoursSet);
                         if (doctor.blocked == true) {
                         	$("#errorMsg").html("Your account is blocked!");
                     		$("#errorMsg").show();
