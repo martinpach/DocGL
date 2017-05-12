@@ -219,8 +219,9 @@ $(document).ready(function () {
             blockedStatus=ajaxData[i].blocked;
             approvalIcon=approvedStatus==false?unapprovedIcon:approvedIcon;
             statusIcon=blockedStatus==false?unblockedIcon:blockedIcon;
-
-            $("#tableDoctors").append('<tr class="tableRow" data-id="'+i+'">' +
+            if(approvedStatus==false)
+                statusIcon="";
+            $("#tableDoctors").append('<tr class="tableRow" data-id="'+ajaxData[i].id+'">' +
                 '<td>' + icon + '</td>' +
                 '<td>' + ajaxData[i].id + '</td>' +
                 '<td>' + ajaxData[i].firstName + '</td>' +
@@ -245,7 +246,7 @@ $(document).ready(function () {
         for (i = 0; i < ajaxData.length; i++) {
             blockedStatus=ajaxData[i].blocked;
             statusIcon=blockedStatus==false?unblockedIcon:blockedIcon;
-            $("#tableUsers").append('<tr class="tableRow" data-id="'+i+'">' +
+            $("#tableUsers").append('<tr class="tableRow" data-id="'+ajaxData[i].id+'">' +
             '<td>' + icon + '</td>' +
             '<td>' + ajaxData[i].id + '</td>' +
             '<td>' + ajaxData[i].firstName+ '</td>' +
@@ -320,7 +321,7 @@ $(document).ready(function () {
         var approved=JSON.stringify({
             "approved":true
         });
-        ajaxRequest("/doctors/"+(id+1)+"/approved?name=","PUT",approved).done(function(){
+        ajaxRequest("/doctors/"+(id)+"/approved?name=","PUT",approved).done(function(){
             getDoctors(start, limit, sortByDocs, wayDocs);
             dfd.resolve();
         });
@@ -334,7 +335,7 @@ $(document).ready(function () {
         var blocked=JSON.stringify({
             "blocked":false
         });
-        ajaxRequest("/doctors/"+(id+1)+"/blocked?name=","PUT",blocked).done(function(){
+        ajaxRequest("/doctors/"+(id)+"/blocked?name=","PUT",blocked).done(function(){
             getDoctors(start, limit, sortByDocs, wayDocs);
             dfd.resolve();
         });
@@ -348,7 +349,7 @@ $(document).ready(function () {
         var blocked=JSON.stringify({
             "blocked":true
         });
-        ajaxRequest("/doctors/"+(id+1)+"/blocked?name=","PUT",blocked).done(function(){
+        ajaxRequest("/doctors/"+(id)+"/blocked?name=","PUT",blocked).done(function(){
             getDoctors(start, limit, sortByDocs, wayDocs);
             dfd.resolve();
         });
@@ -362,7 +363,7 @@ $(document).ready(function () {
         var blocked=JSON.stringify({
             "blocked":true
         });
-        ajaxRequest("/patients/"+(id+1)+"/blocked?name=","PUT",blocked).done(function(){
+        ajaxRequest("/patients/"+(id)+"/blocked?name=","PUT",blocked).done(function(){
             getUsers(start, limit, sortByUsers, wayUsers);
             dfd.resolve();
         });
@@ -376,7 +377,7 @@ $(document).ready(function () {
         var blocked=JSON.stringify({
             "blocked":false
         });
-        ajaxRequest("/patients/"+(id+1)+"/blocked?name=","PUT",blocked).done(function(){
+        ajaxRequest("/patients/"+(id)+"/blocked?name=","PUT",blocked).done(function(){
             getUsers(start, limit, sortByUsers, wayUsers);
             dfd.resolve();
         });
