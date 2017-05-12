@@ -517,8 +517,8 @@ $(document).ready(function () {
                 adminData.firstName = ajaxData.firstName;
                 adminData.lastName = ajaxData.lastName;
                 adminData.email = ajaxData.email
-                console.log(localStorage.getItem("userName") + " " + localStorage.getItem("email"));
-                $("#editUsernameInput").val(ajaxData.userName);
+                $("#editFirstnameInput").val(ajaxData.lastName);
+                $("#editLastnameInput").val(ajaxData.lastName);
                 $("#editEmailInput").val(ajaxData.email);
                 var template = "<p>{{firstName}} {{lastName}}</p>";
                 html = Mustache.to_html(template, ajaxData);

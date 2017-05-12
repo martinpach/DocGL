@@ -183,16 +183,34 @@ body{
     padding-left: 20px !important;
 }
 
+::-webkit-input-placeholder { 
+  color: #034F84;
+  font-weight: 300;
+  font-size: 20px;
+}
+::-moz-placeholder { 
+  color: #034F84;
+}
+:-ms-input-placeholder { 
+  color: #034F84;
+}
+:-moz-placeholder {
+  color: #034F84;
+}
+
 .submitBtn{
 	float:right;
 	display:none;
+	margin-right:20px;
+	background-color: #034F85!important;
+}
+
+#editProfile,#editPassword{
+	margin-left:20px;
+	background-color: #034F85!important;
 }
 .profileErrMsg,#pwdErrorMsg{
 	color:red;
-}
-
-.submitIcon:hover{
-	color:#034F85;
 }
 
 #changeFirstnameDiv{
