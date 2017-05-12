@@ -1,6 +1,7 @@
 package com.docgl.resources;
 
 import com.docgl.Authorizer;
+import com.docgl.DateParser;
 import com.docgl.Views;
 import com.docgl.api.*;
 import com.docgl.db.AppointmentDAO;
@@ -288,10 +289,10 @@ public class DoctorResource {
     public void setDoctorsFreeHours(@Auth LoggedUser loggedUser, @PathParam("id") int id, FreeHours freeHours){
         authorizer.checkAuthorization(loggedUser.getUserType(), UserType.DOCTOR);
         authorizer.checkAuthentication(loggedUser.getId(), id);
-        if(StringUtils.isBlank(freeHours.getFrom())){
+        if(freeHours.getFrom() == null){
             throw new ValidationException("Property 'from' is missing");
         }
-        if(StringUtils.isBlank(freeHours.getTo())){
+        if(freeHours.getTo() == null){
             throw new ValidationException("Property 'to' is missing");
         }
         if(freeHours.getDate() == null){
@@ -299,6 +300,11 @@ public class DoctorResource {
         }
         freeHours.setDoctor(doctorDAO.getDoctor(id));
         freeHoursDAO.setDoctorsFreeHours(freeHours);
+        appointmentDAO.cancelDoctorsAppoitmentsByDateBetweenTimeInterval(id,
+                freeHours.getDate(),
+                freeHours.getFrom(),
+                freeHours.getTo()
+        );
     }
 
     /**

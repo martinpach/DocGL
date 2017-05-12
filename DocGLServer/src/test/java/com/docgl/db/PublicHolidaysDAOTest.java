@@ -1,5 +1,6 @@
 package com.docgl.db;
 
+import com.docgl.DateParser;
 import com.docgl.entities.PublicHolidays;
 import org.joda.time.LocalDate;
 import org.junit.Test;
@@ -30,20 +31,10 @@ public class PublicHolidaysDAOTest extends AbstractDAO {
 
     @Test
     public void isDatePublicHoliday() {
-        assertTrue(dao.isDatePublicHoliday(parseStringToUtilDate("2017-07-05")));
+        assertTrue(dao.isDatePublicHoliday(DateParser.parseStringToUtilDate("2017-07-05")));
     }
     @Test
     public void isDatePublicHoliday2() {
-        assertFalse(dao.isDatePublicHoliday(parseStringToUtilDate("2017-07-06")));
-    }
-
-    private Date parseStringToUtilDate(String string) {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        Date date = null;
-        try {
-            date = sdf.parse(string);
-        } catch (ParseException ex){
-        }
-        return date;
+        assertFalse(dao.isDatePublicHoliday(DateParser.parseStringToUtilDate("2017-07-06")));
     }
 }

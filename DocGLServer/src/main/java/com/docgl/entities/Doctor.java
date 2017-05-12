@@ -36,7 +36,6 @@ public class Doctor extends User{
     @Temporal(TemporalType.DATE)
     @CreationTimestamp
     @NotNull
-    @JsonIgnore
     private Date registrationDate = new Date();
 
     @Column(columnDefinition = "int default 0")
