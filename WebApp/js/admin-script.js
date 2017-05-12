@@ -11,7 +11,7 @@ $(document).ready(function () {
     };
     var ajaxData;
 
-    var start = 0;
+    var start = 1;
     var limit = 4;
     var sortByDocs = "id";
     var wayDocs = "asc";
@@ -67,7 +67,7 @@ $(document).ready(function () {
         $(this).addClass("selected");
         $("#users, #home").removeClass("selected");
         $("#container").load('templates/admin_doctors.html');
-        start = 0;
+        start = 1;
         getCountOfDoctors();
         getDoctors(start, limit, sortByDocs, wayDocs);
         setText(countDocs);
@@ -80,7 +80,7 @@ $(document).ready(function () {
         $(this).addClass("selected");
         $("#home, #doctors").removeClass("selected");
         $("#container").load('templates/admin_users.html');
-        start = 0;
+        start = 1;
         getCountOfUsers();
         getUsers(start, limit, sortByUsers, wayUsers);
         setText(countUsers);
@@ -143,11 +143,11 @@ $(document).ready(function () {
 
     //pagination
     function setButtons(count) {
-        if (count - start >= 5)
+        if (count - start > 3)
             $("#arrowRight").removeClass("disabledBtn");
         else
             $("#arrowRight").addClass("disabledBtn");
-        if (start >= 4)
+        if (start >= 3)
             $("#arrowLeft").removeClass("disabledBtn");
         else
             $("#arrowLeft").addClass("disabledBtn");
@@ -157,12 +157,12 @@ $(document).ready(function () {
         if (count <= 0) {
             $("#paginationText").hide();
         } else {
-            var from = start + 1;
+            var from = start;
             var to;
-            if (start + 5 > count)
-                to = limit;
+            if (start + 3 >count)
+                to = count;
             else
-                to = start + 5;
+                to = start + 3;
             var paginationText = "Showing " + from + " - " + to + " from " + count;
             $("#paginationText").html(paginationText);
         }
@@ -175,6 +175,7 @@ $(document).ready(function () {
             setText(countDocs);
             setButtons(countDocs);
             generateDoctorTable();
+            console.log("start"+start+" "+"limit "+limit);
         }
         if ($("#users").hasClass("selected")) {
             getUsers(start, limit, sortByUsers, wayUsers);
