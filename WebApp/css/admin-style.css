@@ -3,6 +3,9 @@ html{
 }
 body{
 	height:inherit;
+	margin: 0;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
 
 }
 .mainPage{
@@ -272,7 +275,6 @@ i.fa.fa-heart.heart::before{
 .sortArrow{
 	margin-left:10px;
 	margin-bottom:6px;
-	vertical-align: middle;
 	cursor:pointer;
 }
 
@@ -294,7 +296,7 @@ i.fa.fa-heart.heart::before{
 }
 
 .sortArrowContainer{
-	margin-top:5px;
+	vertical-align: middle
 }
 /*modal*/
 .modalIcon{

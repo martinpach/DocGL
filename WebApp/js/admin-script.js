@@ -49,6 +49,8 @@ $(document).ready(function () {
             html = Mustache.to_html(templatePassword, adminData);
             $("#password").html(html);
         });
+        $("#users, #doctors,#home").removeClass("selected");
+        $("#paginationContainer").hide();
     });
 
     $("#home").on("click", function () {
