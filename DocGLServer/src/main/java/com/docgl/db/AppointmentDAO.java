@@ -11,8 +11,10 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
+import org.joda.time.LocalDateTime;
 import org.joda.time.LocalTime;
 
+import java.sql.Time;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -105,13 +107,35 @@ public class AppointmentDAO extends AbstractDAO<Appointment> {
      */
     public void createNewAppointment(NewAppointmentInput input, int patientId) {
         currentSession().save(new Appointment(
-            input.getNote(),
-            currentSession().find(Doctor.class, input.getDoctorId()),
-            currentSession().find(Patient.class, patientId),
-            input.getTime(),
-            input.getDate(),
-            input.getFirstName(),
-            input.getLastName()
+                input.getNote(),
+                currentSession().find(Doctor.class, input.getDoctorId()),
+                currentSession().find(Patient.class, patientId),
+                input.getTime(),
+                input.getDate(),
+                input.getFirstName(),
+                input.getLastName()
         ));
+    }
+
+     /**
+     * This function cancels appointments in time interval
+     * @param idDoctor doctors' appointment
+     * @param date date of appointment
+     * @param from start of time interval
+     * @param to end of time interval
+     */
+    public void cancelDoctorsAppoitmentsByDateBetweenTimeInterval(int idDoctor, Date date, Time from, Time to){
+        from = new java.sql.Time((long) (from.getTime() - 1.14e+6));
+        List<Appointment> appointments = getDoctorsAppointmentsByDate(idDoctor, date);
+        for(Appointment appointment : appointments) {
+            if(appointment.getDate().equals(date) && appointment.getTime().after(from) && appointment.getTime().before(to)
+                    && !appointment.isCanceled()){
+
+                Appointment appointmentToUpdate = currentSession().find(Appointment.class, appointment.getId());
+                appointmentToUpdate.setCanceled(true);
+                appointmentToUpdate.setTime(new Time((long)(appointment.getTime().getTime() + 3.6e+6)));
+            }
+        }
+
     }
 }

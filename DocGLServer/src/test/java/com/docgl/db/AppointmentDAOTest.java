@@ -1,6 +1,8 @@
 package com.docgl.db;
 
 import com.docgl.api.NewAppointmentInput;
+import com.docgl.DateParser;
+import com.docgl.api.OfficeHours;
 import com.docgl.entities.Appointment;
 import com.docgl.enums.UserType;
 import org.joda.time.LocalDate;
@@ -30,13 +32,13 @@ public class AppointmentDAOTest extends AbstractDAO {
     @Test
     public void getNumberOfAppointmentsTest() {
         long count = dao.getNumberOfAppointments();
-        assertEquals(4, count);
+        assertEquals(5, count);
     }
 
     @Test
     public void getAppointmentsTest() {
         List<Appointment> appointmentList = dao.getAppointments(1, UserType.PATIENT);
-        assertEquals(1, appointmentList.size());
+        assertEquals(2, appointmentList.size());
         Appointment appointment = appointmentList.get(0);
         assertEquals(new LocalDate(2017,5,24), new LocalDate(appointment.getDate()));
         assertEquals(new LocalTime(7,30), new LocalTime(appointment.getTime()));
@@ -45,7 +47,7 @@ public class AppointmentDAOTest extends AbstractDAO {
     @Test
     public void getAppointments2Test() {
         List<Appointment> appointmentList = dao.getAppointments(1, UserType.DOCTOR);
-        assertEquals(4, appointmentList.size());
+        assertEquals(5, appointmentList.size());
     }
     /**
      * getAppointment test
@@ -117,4 +119,12 @@ public class AppointmentDAOTest extends AbstractDAO {
         }
         return new Time(ms);
     }
+
+    @Test
+    public void cancelDoctorsAppoitmentsByDateBetweenTimeIntervalTest(){
+        dao.cancelDoctorsAppoitmentsByDateBetweenTimeInterval(1, DateParser.parseStringToUtilDate("2017-05-25"), DateParser.parseStringToTime("11:20:00"), DateParser.parseStringToTime("15:50:00"));
+        Appointment appointment = dao.getAppointment(4);
+        assertEquals(true, appointment.isCanceled());
+    }
+
 }
