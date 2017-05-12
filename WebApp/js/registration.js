@@ -88,14 +88,14 @@ $(document).ready(function() {
 	function registerDoctor () {
 		var dfd = $.Deferred();
 		var dataToSend = JSON.stringify({
-            "firstName": $("#username").val(),
-		    "lastName": $("#username").val(),
-		    "email": $("#username").val(),
+            "firstName": $("#firstname").val(),
+		    "lastName": $("#lastname").val(),
+		    "email": $("#email").val(),
 		    "userType": "DOCTOR",
 		    "userName": $("#username").val(),
 		    "password": $("#password").val(),
 		    "specialization": $("#specialization option:selected").text().toUpperCase(),
-		    "phone": $("#username").val(),
+		    "phone": $("#phone").val(),
 		    "city": $("#city").val(),
 		    "workplace": $("#workplace").val()
         });
