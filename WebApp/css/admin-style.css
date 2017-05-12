@@ -275,38 +275,12 @@ i.fa.fa-heart.heart::before{
 	cursor:pointer;
 }
 
-th{
-	cursor:pointer;
+.sortArrowContainer{
+	margin-top:5px;
 }
-/*
-#sortIdUsers{
-	display:none;
-}
-#sortNameUsers{
-	display:none;
-}
-#sortJoinedUsers{
-	display:none;
-}
-
-#sortIdDocs{
-	display:none;
-}
-#sortNameDocs{
-	display:none;
-}
-#sortRatingUsers{
-	display:none;
-}
-*/
 /*modal*/
 .modalIcon{
 	font-size:50px;
-}
-
-.unapproved{
-	opacity:0.3;
-	cursor:pointer;
 }
 
 .headingModal{

@@ -260,57 +260,75 @@ $(document).ready(function () {
     }
 
 
+    var sortAsc='<i class="fa fa-sort-asc sortArrow" aria-hidden="true"></i>';
+    var sortDesc='<i class="fa fa-sort-desc sortArrow" aria-hidden="true"></i>';
+    var sortingIcon;
     
-    
-    $(document).on("click", "#sortIdUsers", function (event) { //not done
-        event.preventDefault(event);
+    $(document).on("click", "#sortIdUsers", function () {
         sortByUsers = "id";
         wayUsers = wayUsers == "desc" ? "asc" : "desc";
+        sortingIcon=wayUsers=="asc"?sortAsc:sortDesc;
         getUsers(start, limit, sortByUsers, wayUsers);
-        $(this).find("i").toggleClass("fa-sort-asc");
+        $(".sortArrow").remove();
+        $(this).find("span").html(sortingIcon);
 
     });
 
-    $(document).on("click", "#sortNameUsers", function (event) {
-        event.preventDefault(event);
+    $(document).on("click", "#sortNameUsers", function () {
         sortByUsers = "lastName";
         wayUsers = wayUsers == "desc" ? "asc" : "desc";
+        sortingIcon=wayUsers=="asc"?sortAsc:sortDesc;
         getUsers(start, limit, sortByUsers, wayUsers);
-        $(this).find("i").toggleClass("fa-sort-asc");
+        $(".sortArrow").remove();
+        $(this).find("span").html(sortingIcon);
 
     });
 
-    $(document).on("click", "#sortJoinedUsers", function (event) {
-        event.preventDefault(event);
+    $(document).on("click", "#sortJoinedUsers", function () {
         sortByUsers = "registration_date";
         wayUsers = wayUsers == "desc" ? "asc" : "desc";
+        sortingIcon=wayUsers=="asc"?sortAsc:sortDesc;
         getUsers(start, limit, sortByUsers, wayUsers);
-        $(this).find("i").toggleClass("fa-sort-asc");
+        $(".sortArrow").remove();
+        $(this).find("span").html(sortingIcon);
     });
 
-    $(document).on("click", "#sortIdDocs", function (event) { //not done
-        event.preventDefault(event);
+    $(document).on("click", "#sortIdDocs", function () { 
         sortByDocs = "id";
         wayDocs = wayDocs == "desc" ? "asc" : "desc";
         getDoctors(start, limit, sortByDocs, wayDocs);
-        $(this).find("i").toggleClass("fa-sort-asc");
+        sortingIcon=wayDocs=="asc"?sortAsc:sortDesc;
+        $(".sortArrow").remove();
+        $(this).find("span").html(sortingIcon);
 
     });
 
-    $(document).on("click", "#sortNameDocs", function (event) {
-        event.preventDefault(event);
+    $(document).on("click", "#sortLastNameDocs", function () {
         sortByDocs = "lastName";
         wayDocs = wayDocs == "desc" ? "asc" : "desc";
         getDoctors(start, limit, sortByDocs, wayDocs);
-        $(this).find("i").toggleClass("fa-sort-asc");
+        sortingIcon=wayDocs=="asc"?sortAsc:sortDesc;
+        $(".sortArrow").remove();
+        $(this).find("span").html(sortingIcon);
     });
 
-    $(document).on("click", "#sortRatingDocs", function (event) {
-        event.preventDefault(event);
+    $(document).on("click", "#sortSpecDocs", function () {
+        sortByDocs = "specialization";
+        wayDocs = wayDocs == "desc" ? "asc" : "desc";
+        getDoctors(start, limit, sortByDocs, wayDocs);
+        sortingIcon=wayDocs=="asc"?sortAsc:sortDesc;
+        $(".sortArrow").remove();
+        $(this).find("span").html(sortingIcon);
+    });
+
+
+    $(document).on("click", "#sortRatingDocs", function () {
         sortByDocs = "likes";
         wayDocs = wayDocs == "desc" ? "asc" : "desc";
         getDoctors(start, limit, sortByDocs, wayDocs);
-        $(this).find("i").toggleClass("fa-sort-asc");
+        sortingIcon=wayDocs=="asc"?sortAsc:sortDesc;
+        $(".sortArrow").remove();
+        $(this).find("span").html(sortingIcon);
 
     });
 
