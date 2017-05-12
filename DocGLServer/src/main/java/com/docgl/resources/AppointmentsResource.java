@@ -236,8 +236,6 @@ public class AppointmentsResource {
             dateDate = new Date(dateDate.getTime()+(24*60*60*1000));
         }
 
-        if (dayTimesList.size() == 0)
-            return null;
         return dayTimesList;
     }
 
