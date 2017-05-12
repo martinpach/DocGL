@@ -93,7 +93,7 @@ $(document).ready(function() {
 		    "email": $("#username").val(),
 		    "userType": "DOCTOR",
 		    "userName": $("#username").val(),
-		    "password": $("#username").val(),
+		    "password": $("#password").val(),
 		    "specialization": $("#specialization option:selected").text().toUpperCase(),
 		    "phone": $("#username").val(),
 		    "city": $("#city").val(),

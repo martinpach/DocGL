@@ -83,11 +83,14 @@ $(document).ready(function () {
                         localStorage.setItem("dateOfValidity",doctor.dateOfValidity);                        
                         localStorage.setItem("token", data.token);
                         alert(doctor.workingHoursSet);
-                        if (doctor.approved == false) {
+                        if (doctor.blocked == true) {
+                        	$("#errorMsg").html("Your account is blocked!");
+                    		$("#errorMsg").show();
+                        } else if (doctor.approved == false) {
                             window.location.href = "doctor/approval-wating.html";                        
                         } else if(!doctor.workingHoursSet){
                             window.location.href = "doctor/working-hours-first-setup.html"
-                        } else{
+                        } else {
                             window.location.href = "doctor/home.html"
                         }
                     }
