@@ -517,7 +517,7 @@ $(document).ready(function () {
                 adminData.firstName = ajaxData.firstName;
                 adminData.lastName = ajaxData.lastName;
                 adminData.email = ajaxData.email
-                $("#editFirstnameInput").val(ajaxData.lastName);
+                $("#editFirstnameInput").val(ajaxData.firstName);
                 $("#editLastnameInput").val(ajaxData.lastName);
                 $("#editEmailInput").val(ajaxData.email);
                 var template = "<p>{{firstName}} {{lastName}}</p>";
