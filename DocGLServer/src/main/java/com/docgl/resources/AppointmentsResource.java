@@ -237,7 +237,7 @@ public class AppointmentsResource {
         }
 
         if (dayTimesList.size() == 0)
-            throw new BadRequestException("There are not any possible appointments selected interval!");
+            return null;
         return dayTimesList;
     }
 
