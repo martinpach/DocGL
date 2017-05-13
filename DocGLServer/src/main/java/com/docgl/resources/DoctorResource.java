@@ -120,21 +120,23 @@ public class DoctorResource {
         if (loggedUser.getUserType() == UserType.DOCTOR)
             authorizer.checkAuthentication(loggedUser.getId(), id);
 
-        Date date = DateParser.parseStringToUtilDate(dateInput);
-        Date defaultDate = date;
+        if(StringUtils.isNotBlank(dateInput)) {
+            Date date = DateParser.parseStringToUtilDate(dateInput);
+            Date defaultDate = date;
 
-        if(date != null && (timePeriod == null || timePeriod.equals(TimePeriod.TODAY))){
-            return appointmentDAO.getDoctorsAppointmentsByDate(id, DateParser.addDaysToDate(1, date));
-        }
-        if(date != null && timePeriod.equals(TimePeriod.WEEK)) {
-            List<WeeklyAppointmentsRepresentation> weeklyAppointments = new ArrayList<>();
-            for (int i = 1; i < 8; i++) {
-                date = DateParser.addDaysToDate(i, defaultDate);
-                WeeklyAppointmentsRepresentation weeklyAppointment =
-                        new WeeklyAppointmentsRepresentation(date, appointmentDAO.getDoctorsAppointmentsByDate(id, date).size());
-                weeklyAppointments.add(weeklyAppointment);
+            if (date != null && (timePeriod == null || timePeriod.equals(TimePeriod.TODAY))) {
+                return appointmentDAO.getDoctorsAppointmentsByDate(id, DateParser.addDaysToDate(1, date));
             }
-            return weeklyAppointments;
+            if (date != null && timePeriod.equals(TimePeriod.WEEK)) {
+                List<WeeklyAppointmentsRepresentation> weeklyAppointments = new ArrayList<>();
+                for (int i = 1; i < 8; i++) {
+                    date = DateParser.addDaysToDate(i, defaultDate);
+                    WeeklyAppointmentsRepresentation weeklyAppointment =
+                            new WeeklyAppointmentsRepresentation(date, appointmentDAO.getDoctorsAppointmentsByDate(id, date).size());
+                    weeklyAppointments.add(weeklyAppointment);
+                }
+                return weeklyAppointments;
+            }
         }
         return appointmentDAO.getAppointments(id, UserType.DOCTOR);
     }

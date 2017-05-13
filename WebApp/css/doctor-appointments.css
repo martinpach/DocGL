@@ -1,0 +1,36 @@
+.doctor-appointments input{
+	border: 2px solid #41ccb9;
+	border-radius: 10px;
+	color: white;
+}
+
+.appointment-day, .appointment-week{
+	background-color: #b5dffd;
+	display: inline-block;
+	padding: 40px;
+	margin: 10px !important;
+	text-align: center;	
+}
+
+.appointment-day .time, .appointment-week .date{
+	font-weight: 500;
+	font-size: 30px;
+}
+
+.appointment-day .patient, .appointment-week .num-of-appointments{
+	font-size: 30px;
+	font-weight: 300;
+}
+
+.appointment-day .note{
+	font-size: 20px;
+	width: inherit;
+	margin-top: 5px;
+	word-wrap: break-word;
+	overflow-wrap : break-word;
+	word-break : break-word;
+}
+
+.appointment-day h3{
+	margin: 0;
+}

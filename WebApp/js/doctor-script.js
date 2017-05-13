@@ -1,36 +1,36 @@
-$(document).ready(function(){
+$(document).ready(function() {
 
-	var docData = {
-		id:localStorage.getItem("id"),
-		firstName:localStorage.getItem("firstName"),
-		lastName:localStorage.getItem("lastName"),
-		email:localStorage.getItem("email"),
-		registrationDate:localStorage.getItem("registrationDate"),
-		likes:localStorage.getItem("likes"),
-		specialization:localStorage.getItem("specialization"),
-		phone:localStorage.getItem("phone"),
-		city:localStorage.getItem("city"),
-		workplace:localStorage.getItem("workplace"),
-		userName:localStorage.getItem("userName"),
-		appointmentsDuration:localStorage.getItem("appointmentsDuration"),
-		dateOfValidity:localStorage.getItem("dateOfValidity"),
-        appointmentCount:0,
-        token:localStorage.getItem("token")
-	};
+    var docData = {
+        id: localStorage.getItem("id"),
+        firstName: localStorage.getItem("firstName"),
+        lastName: localStorage.getItem("lastName"),
+        email: localStorage.getItem("email"),
+        registrationDate: localStorage.getItem("registrationDate"),
+        likes: localStorage.getItem("likes"),
+        specialization: localStorage.getItem("specialization"),
+        phone: localStorage.getItem("phone"),
+        city: localStorage.getItem("city"),
+        workplace: localStorage.getItem("workplace"),
+        userName: localStorage.getItem("userName"),
+        appointmentsDuration: localStorage.getItem("appointmentsDuration"),
+        dateOfValidity: localStorage.getItem("dateOfValidity"),
+        appointmentCount: 0,
+        token: localStorage.getItem("token")
+    };
 
-	var ajaxData;
+    var ajaxData;
     var appointments;
 
-	var usernameTemplate = "<p>{{firstName}} {{lastName}}</p>";
+    var usernameTemplate = "<p>{{firstName}} {{lastName}}</p>";
     var html = Mustache.to_html(usernameTemplate, docData);
     $("#userName").html(html);
 
-    var likesTemplate ="{{likes}}";
-    var html=Mustache.to_html(likesTemplate,docData);
+    var likesTemplate = "{{likes}}";
+    var html = Mustache.to_html(likesTemplate, docData);
     $("#likesCount").html(html);
 
-    $("#myProfile").on("click", function () {
-        $("#container").load('templates/doctor_profile.html', function () {
+    $("#myProfile").on("click", function() {
+        $("#container").load('templates/doctor_profile.html', function() {
             var template = "<p>{{userName}}'s</p>";
             var html = Mustache.to_html(template, docData);
             $("#heading").html(html);
@@ -38,7 +38,7 @@ $(document).ready(function(){
         });
     });
 
-    $("#home").on("click", function () {
+    $("#home").on("click", function() {
         $(this).addClass("selected");
         $("#appointments, #settings").removeClass("selected");
         $("#container").load('templates/doctor_home.html');
@@ -47,21 +47,21 @@ $(document).ready(function(){
 
     $("#home").trigger("click");
 
-    $("#appointments").on("click", function () {
+    $("#appointments").on("click", function() {
         $(this).addClass("selected");
         $("#settings, #home").removeClass("selected");
         $("#container").load('templates/doctor_appointments.html');
     });
 
-    $("#settings").on("click", function () {
+    $("#settings").on("click", function() {
         $(this).addClass("selected");
         $("#home, #appointments").removeClass("selected");
         $("#container").load('templates/doctor_settings.html');
     });
 
-    $("#logout").on("click", function () {
+    $("#logout").on("click", function() {
         var dfd = $.Deferred();
-        ajaxRequest('/auth/logout', 'POST').done(function () {
+        ajaxRequest('/auth/logout', 'POST').done(function() {
             localStorage.removeItem("token");
             window.location.href = '../index.html';
             dfd.resolve();
@@ -69,24 +69,24 @@ $(document).ready(function(){
         return dfd.promise();
     });
 
-    function getHomeData(){
-        var dfd= $.Deferred();
-        ajaxRequest("/doctors/"+docData.id+"/appointments","GET").done(function(){
-            appointments=ajaxData;
-            appointmentCount={
-                count:appointments.length,
+    function getHomeData() {
+        var dfd = $.Deferred();
+        ajaxRequest("/doctors/" + docData.id + "/appointments", "GET").done(function() {
+            appointments = ajaxData;
+            appointmentCount = {
+                count: appointments.length,
             }
-            var appointmentTime={
-                time:appointments[0].time
+            var appointmentTime = {
+                time: appointments[0].time
             }
-            var template="You have {{count}} new appointments.";
-            var html=Mustache.to_html(template,appointmentCount);
+            var template = "You have {{count}} new appointments.";
+            var html = Mustache.to_html(template, appointmentCount);
             $("#appointmentNotification").html(html);
-            template="{{count}}";
-            html=Mustache.to_html(template,appointmentCount);
+            template = "{{count}}";
+            html = Mustache.to_html(template, appointmentCount);
             $("#totalAppointments").html(html);
-            template="{{time}}";
-            html=Mustache.to_html(template,appointmentTime);
+            template = "{{time}}";
+            html = Mustache.to_html(template, appointmentTime);
             $("#nextAppointmentTime").html(html);
             console.log(appointments);
 
@@ -101,18 +101,18 @@ $(document).ready(function(){
     function ajaxRequest(url, requestType, dataToSend) {
         var dfd = $.Deferred();
         $.ajax({
-            beforeSend: function (xhr) {
+            beforeSend: function(xhr) {
                 xhr.setRequestHeader('Authorization', 'Bearer ' + docData.token);
             },
             url: 'http://localhost:8085/api' + url,
             type: requestType,
             data: dataToSend,
             contentType: 'application/json',
-            success: function (data) {
+            success: function(data) {
                 if (data != null) ajaxData = data;
                 dfd.resolve();
             },
-            error: function () {
+            error: function() {
                 dfd.reject();
                 console.log("Error");
             }
