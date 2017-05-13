@@ -163,6 +163,8 @@ public class AppointmentsResource {
         int appDuration = doctor.getAppointmentsDuration();
 
         List<DayTimes> dayTimesList = new ArrayList<DayTimes>();
+        List<WorkingHours> workingHoursList = workingHoursDAO.getDoctorsWorkingHours(docID);
+        List<FreeHours> freeHoursList = freeHoursDAO.getDoctorsFreeHours(docID);
 
         while (date.compareTo(dateTo) != 1) {
             // Continue, date is not in the future. //
@@ -185,7 +187,7 @@ public class AppointmentsResource {
             }
 
             List<Appointment> appointments = appointmentDAO.getDoctorsAppointmentsByDate(docID, dateDate);
-            List<WorkingHours> workingHoursList = workingHoursDAO.getDoctorsWorkingHours(docID);
+
             int dayOfWeek = date.getDayOfWeek();
             OfficeHours officeHours = new OfficeHours();
             officeHours.setOfficeHours(dayOfWeek, workingHoursList);
@@ -197,8 +199,6 @@ public class AppointmentsResource {
             }
             List<LocalTime> availableTimesMorning = new ArrayList<LocalTime>();
             List<LocalTime> availableTimesAfternoon = new ArrayList<LocalTime>();
-
-            List<FreeHours> freeHoursList = freeHoursDAO.getDoctorsFreeHours(docID);
 
             //String times into joda.LocalTime
             DateTimeFormatter format= DateTimeFormat.forPattern("HH:mm");
