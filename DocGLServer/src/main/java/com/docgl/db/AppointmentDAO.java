@@ -111,7 +111,7 @@ public class AppointmentDAO extends AbstractDAO<Appointment> {
             currentSession().save(new Appointment(
                     currentSession().find(Doctor.class, input.getDoctorId()),
                     currentSession().find(Patient.class, patientId),
-                    input.getTime(),
+                    new Time((long)(input.getTime().getTime() + 3.6e+6)),
                     input.getDate(),
                     input.getFirstName(),
                     input.getLastName()
@@ -122,7 +122,7 @@ public class AppointmentDAO extends AbstractDAO<Appointment> {
                     input.getNote(),
                     currentSession().find(Doctor.class, input.getDoctorId()),
                     currentSession().find(Patient.class, patientId),
-                    input.getTime(),
+                    new Time((long)(input.getTime().getTime() + 3.6e+6)),
                     input.getDate(),
                     input.getFirstName(),
                     input.getLastName()
