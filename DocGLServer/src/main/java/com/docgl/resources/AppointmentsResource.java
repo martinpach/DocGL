@@ -14,6 +14,7 @@ import com.docgl.enums.UserType;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.dropwizard.auth.Auth;
 import io.dropwizard.hibernate.UnitOfWork;
+import org.apache.commons.lang3.StringUtils;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 import org.joda.time.format.DateTimeFormat;
@@ -21,6 +22,7 @@ import org.joda.time.format.DateTimeFormatter;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import java.sql.Time;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -123,7 +125,7 @@ public class AppointmentsResource {
         appointmentDAO.markAppointmentAsDone(id);
     }
 
-
+    //TODO check free hours
     /**
      * This is a resource for getting all the available times for an appointment.
      * Function: Checks if the doctor has set his working hours, if is approved, Date of Validity is set,
@@ -242,15 +244,14 @@ public class AppointmentsResource {
 
     /**
      *  This function fill List of LocalTimes with available times for an Appointment.
-     *  @param officeHoursFrom start of time when doctor take new Appointments
+     *  @param appointmentTime start of time when doctor take new Appointments
      *  @param officeHoursTo end of time when doctor take new Appointments
      *  @param appointments List of already assigned Appointments
      *  @param appDuration Duration of an Appointment
      *  @return List of Times in joda.LocalTime
      */
-    private List<LocalTime> setListOfAvailableTimes(LocalTime officeHoursFrom, LocalTime officeHoursTo, List<Appointment> appointments, int appDuration) {
+    private List<LocalTime> setListOfAvailableTimes(LocalTime appointmentTime, LocalTime officeHoursTo, List<Appointment> appointments, int appDuration) {
         List<LocalTime> availableTimes = new ArrayList<LocalTime>();
-        LocalTime appointmentTime = officeHoursFrom;
         LocalTime takenTime;
 
         while (appointmentTime.plusMinutes(appDuration).compareTo(officeHoursTo) != 1) {
@@ -264,5 +265,114 @@ public class AppointmentsResource {
             appointmentTime=appointmentTime.plusMinutes(appDuration);
         }
         return availableTimes;
+    }
+
+    private boolean isTimeOfAnAppointmentValid(LocalTime appointmentTime, LocalTime officeHoursTo, List<Appointment> appointments, int appDuration, LocalTime inputTime) {
+        LocalTime takenTime;
+        while (appointmentTime.plusMinutes(appDuration).compareTo(officeHoursTo) != 1) {
+            if (inputTime.compareTo(appointmentTime) == 0) {
+                for (Appointment ap:appointments) {
+                    takenTime = new LocalTime(ap.getTime());
+                    if (takenTime.compareTo(inputTime)==0 && !ap.isCanceled())
+                        return false;
+                }
+                return true;
+            }
+            appointmentTime=appointmentTime.plusMinutes(appDuration);
+        }
+        return false;
+    }
+
+    private boolean isTimeAlreadyTaken(List<Appointment> appointments, LocalTime inputTime) {
+        for (Appointment ap:appointments) {
+            if (new LocalTime(ap.getTime()).compareTo(inputTime)==0 && !ap.isCanceled()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+    //TODO save firstname lastnem to patient history.
+    //TODO check free hours
+    //TODO note is optional
+    @PUT
+    @Path("{id}/new")
+    @UnitOfWork
+    public void createNewAppointment(@Auth LoggedUser loggedUser, @PathParam("id") int patientId,NewAppointmentInput input) {
+        authorizer.checkAuthorization(loggedUser.getUserType(), UserType.PATIENT);
+        authorizer.checkAuthentication(loggedUser.getId(), patientId);
+
+        if (input.getDate() == null)
+            throw new BadRequestException("Property 'date' is missing or not presented!");
+        if (input.getTime() == null)
+            throw new BadRequestException("Property 'time' is missing or not presented!");
+        if (StringUtils.isBlank(input.getFirstName()))
+            throw new BadRequestException("Property 'dateFrom' is missing or not presented!");
+        if (StringUtils.isBlank(input.getLastName()))
+            throw new BadRequestException("Property 'dateFrom' is missing or not presented!");
+        if (input.getDoctorId() == null)
+            throw new BadRequestException("Property 'doctorId' is missing or not presented!");
+
+        Doctor doctor = doctorDAO.getDoctor(input.getDoctorId());
+        if (doctor == null)
+            throw  new BadRequestException("Doctor with id like that does not exist!");
+        if (!doctor.isWorkingHoursSet() || !doctor.isApproved() || doctor.getDateOfValidity()==null)
+            throw new BadRequestException("Its not possible to make appointment at selected Doctor!");
+
+        Date date = input.getDate();
+        Time time = input.getTime();
+        LocalTime inputTime = new LocalTime(input.getTime());
+        String note = input.getNote();
+        String firstName = input.getFirstName();
+        String lastName = input.getLastName();
+        int docId = input.getDoctorId();
+
+        boolean isTimeValid = false;
+        boolean isDateValid = true;
+
+        Date dateOfValidity = doctor.getDateOfValidity();
+        int appDuration = doctor.getAppointmentsDuration();
+
+        if (date.compareTo(new Date()) == -1 || date.compareTo(dateOfValidity) == -1 || publicHolidaysDAO.isDatePublicHoliday(date))
+            isDateValid = false;
+
+        List<Appointment> appointments = appointmentDAO.getDoctorsAppointmentsByDate(docId, date);
+        List<WorkingHours> workingHoursList = workingHoursDAO.getDoctorsWorkingHours(docId);
+        int dayOfWeek = new LocalDate(date).getDayOfWeek();
+
+        OfficeHours officeHours = new OfficeHours();
+        officeHours.setOfficeHours(dayOfWeek, workingHoursList);
+
+        if (officeHours.getFrom() == null && officeHours.getFrom2() == null)
+            isDateValid = false;
+
+        //String times into joda.LocalTime
+        DateTimeFormatter format= DateTimeFormat.forPattern("HH:mm");
+        LocalTime officeHoursFrom = null;
+        LocalTime officeHoursTo = null;
+        //Morning hours
+        if (officeHours.getFrom() != null) {
+            officeHoursFrom = format.parseLocalTime(officeHours.getFrom());
+            officeHoursTo = format.parseLocalTime(officeHours.getTo());
+            isTimeValid = isTimeOfAnAppointmentValid(officeHoursFrom, officeHoursTo, appointments, appDuration, inputTime);
+        }
+        //Afternoon hours
+        if (!isTimeValid && officeHours.getFrom2() != null) {
+            officeHoursFrom = format.parseLocalTime(officeHours.getFrom2());
+            officeHoursTo = format.parseLocalTime(officeHours.getTo2());
+            isTimeValid = isTimeOfAnAppointmentValid(officeHoursFrom, officeHoursTo, appointments, appDuration, inputTime);
+        }
+
+        if (!isDateValid || !isTimeValid)
+            throw new BadRequestException("Selected Time or Date is not VALID!");
+
+        if (isDateValid && isTimeValid)
+            appointmentDAO.createNewAppointment(input, patientId);
+
+    }
+
+    public List<Doctor> getListOfAvailableDoctorsInDateInterval(AvailableDoctorsInput input) {
+        return null;
     }
 }

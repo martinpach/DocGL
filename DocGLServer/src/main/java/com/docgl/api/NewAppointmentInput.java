@@ -12,12 +12,20 @@ public class NewAppointmentInput {
     private String note;
     private String firstName;
     private String lastName;
-    private int doctorId;
+    private Integer doctorId;
 
     public NewAppointmentInput() {
     }
 
-    public NewAppointmentInput(Date date, Time time, String note, String firstName, String lastName, int doctorId) {
+    public NewAppointmentInput(Date date, Time time, String note, String firstName, String lastName, Integer doctorId) {
+        this.date = date;
+        this.time = time;
+        this.note = note;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.doctorId = doctorId;
+    }
+    public NewAppointmentInput(Date date, Time time, String firstName, String lastName, Integer doctorId) {
         this.date = date;
         this.time = time;
         this.note = note;
@@ -46,7 +54,7 @@ public class NewAppointmentInput {
         return lastName;
     }
 
-    public int getDoctorId() {
+    public Integer getDoctorId() {
         return doctorId;
     }
 }

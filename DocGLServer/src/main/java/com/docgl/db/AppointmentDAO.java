@@ -6,6 +6,7 @@ import com.docgl.entities.Doctor;
 import com.docgl.entities.Patient;
 import com.docgl.enums.UserType;
 import io.dropwizard.hibernate.AbstractDAO;
+import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -106,15 +107,27 @@ public class AppointmentDAO extends AbstractDAO<Appointment> {
      * @param patientId patientId
      */
     public void createNewAppointment(NewAppointmentInput input, int patientId) {
-        currentSession().save(new Appointment(
-                input.getNote(),
-                currentSession().find(Doctor.class, input.getDoctorId()),
-                currentSession().find(Patient.class, patientId),
-                input.getTime(),
-                input.getDate(),
-                input.getFirstName(),
-                input.getLastName()
-        ));
+        if (StringUtils.isBlank(input.getNote())) {
+            currentSession().save(new Appointment(
+                    currentSession().find(Doctor.class, input.getDoctorId()),
+                    currentSession().find(Patient.class, patientId),
+                    input.getTime(),
+                    input.getDate(),
+                    input.getFirstName(),
+                    input.getLastName()
+            ));
+        }
+        else {
+            currentSession().save(new Appointment(
+                    input.getNote(),
+                    currentSession().find(Doctor.class, input.getDoctorId()),
+                    currentSession().find(Patient.class, patientId),
+                    input.getTime(),
+                    input.getDate(),
+                    input.getFirstName(),
+                    input.getLastName()
+            ));
+        }
     }
 
      /**

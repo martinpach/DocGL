@@ -100,6 +100,23 @@ public class AppointmentDAOTest extends AbstractDAO {
         assertEquals(doctorDAO.getDoctor(1),appointment.getDoctor());
         assertEquals(patientDAO.getPatient(4),appointment.getPatient());
     }
+    @Test
+    public void createNewAppointment2() {
+        NewAppointmentInput newAppointmentInput = new NewAppointmentInput(stringToDate("2017-05-24"), stringToTime("10:50"), "Chuck", "Norris", 1);
+        dao.createNewAppointment(newAppointmentInput, 4);
+        List<Appointment> appointmentList = dao.getAppointments(4, UserType.PATIENT);
+        assertEquals(1, appointmentList.size());
+
+        Appointment appointment = appointmentList.get(0);
+        System.out.println(stringToDate("2017-05-24"));
+        assertEquals(new LocalDate(2017,5,24), new LocalDate(appointment.getDate()));
+        assertEquals(new LocalTime(10,50, 0), new LocalTime(appointment.getTime()));
+        assertEquals(null, appointment.getNote());
+        assertEquals("Chuck", appointment.getPatientFirstName());
+        assertEquals("Norris", appointment.getPatientLastName());
+        assertEquals(doctorDAO.getDoctor(1),appointment.getDoctor());
+        assertEquals(patientDAO.getPatient(4),appointment.getPatient());
+    }
 
     private Date stringToDate(String string) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");

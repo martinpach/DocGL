@@ -161,4 +161,14 @@ public class Appointment {
         this.patientFirstName = patientFirstName;
         this.patientLastName = patientLastName;
     }
+
+    public Appointment(@NotNull Doctor doctor, @NotNull Patient patient, @NotNull Time time, @NotNull Date date, String patientFirstName, String patientLastName) {
+        this.note = note;
+        this.doctor = doctor;
+        this.patient = patient;
+        this.time = time;
+        this.date = date;
+        this.patientFirstName = patientFirstName;
+        this.patientLastName = patientLastName;
+    }
 }
