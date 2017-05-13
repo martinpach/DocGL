@@ -2,12 +2,10 @@ package com.docgl.resources;
 
 import com.docgl.Authorizer;
 import com.docgl.api.*;
-import com.docgl.db.AppointmentDAO;
-import com.docgl.db.DoctorDAO;
-import com.docgl.db.PublicHolidaysDAO;
-import com.docgl.db.WorkingHoursDAO;
+import com.docgl.db.*;
 import com.docgl.entities.Appointment;
 import com.docgl.entities.Doctor;
+import com.docgl.entities.FreeHours;
 import com.docgl.entities.WorkingHours;
 import com.docgl.enums.TimePeriod;
 import com.docgl.enums.UserType;
@@ -26,6 +24,7 @@ import java.sql.Time;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
@@ -41,13 +40,15 @@ public class AppointmentsResource {
     private AppointmentDAO appointmentDAO;
     private WorkingHoursDAO workingHoursDAO;
     private PublicHolidaysDAO publicHolidaysDAO;
+    private FreeHoursDAO freeHoursDAO;
     private DoctorDAO doctorDAO;
     private Authorizer authorizer;
 
-    public AppointmentsResource(AppointmentDAO appointmentDAO, WorkingHoursDAO workingHoursDAO, DoctorDAO doctorDAO, PublicHolidaysDAO publicHolidaysDAO) {
+    public AppointmentsResource(AppointmentDAO appointmentDAO, WorkingHoursDAO workingHoursDAO, DoctorDAO doctorDAO, PublicHolidaysDAO publicHolidaysDAO, FreeHoursDAO freeHoursDAO) {
         this.appointmentDAO = appointmentDAO;
         this.workingHoursDAO = workingHoursDAO;
         this.publicHolidaysDAO = publicHolidaysDAO;
+        this.freeHoursDAO = freeHoursDAO;
         this.doctorDAO = doctorDAO;
         this.authorizer = new Authorizer();
     }
@@ -197,6 +198,8 @@ public class AppointmentsResource {
             List<LocalTime> availableTimesMorning = new ArrayList<LocalTime>();
             List<LocalTime> availableTimesAfternoon = new ArrayList<LocalTime>();
 
+            List<FreeHours> freeHoursList = freeHoursDAO.getDoctorsFreeHours(docID);
+
             //String times into joda.LocalTime
             DateTimeFormatter format= DateTimeFormat.forPattern("HH:mm");
             LocalTime officeHoursFrom = null;
@@ -206,13 +209,13 @@ public class AppointmentsResource {
             if (officeHours.getFrom() != null) {
                 officeHoursFrom = format.parseLocalTime(officeHours.getFrom());
                 officeHoursTo = format.parseLocalTime(officeHours.getTo());
-                availableTimesMorning = setListOfAvailableTimes(officeHoursFrom, officeHoursTo, appointments, appDuration);
+                availableTimesMorning = setListOfAvailableTimes(officeHoursFrom, officeHoursTo, appointments, appDuration, freeHoursList);
             }
             //Afternoon hours
             if (officeHours.getFrom2() != null) {
                 officeHoursFrom = format.parseLocalTime(officeHours.getFrom2());
                 officeHoursTo = format.parseLocalTime(officeHours.getTo2());
-                availableTimesAfternoon = setListOfAvailableTimes(officeHoursFrom, officeHoursTo, appointments, appDuration);
+                availableTimesAfternoon = setListOfAvailableTimes(officeHoursFrom, officeHoursTo, appointments, appDuration, freeHoursList);
             }
             List<LocalTime> availableTimes = new ArrayList<LocalTime>();
             availableTimes = availableTimesMorning;
@@ -250,7 +253,7 @@ public class AppointmentsResource {
      *  @param appDuration Duration of an Appointment
      *  @return List of Times in joda.LocalTime
      */
-    private List<LocalTime> setListOfAvailableTimes(LocalTime appointmentTime, LocalTime officeHoursTo, List<Appointment> appointments, int appDuration) {
+    private List<LocalTime> setListOfAvailableTimes(LocalTime appointmentTime, LocalTime officeHoursTo, List<Appointment> appointments, int appDuration, List<FreeHours> freeHoursList) {
         List<LocalTime> availableTimes = new ArrayList<LocalTime>();
         LocalTime takenTime;
 
@@ -258,15 +261,29 @@ public class AppointmentsResource {
             availableTimes.add(appointmentTime);
             for (Appointment ap:appointments) {
                 takenTime = new LocalTime(ap.getTime());
-                if (takenTime.compareTo(appointmentTime)==0 && !ap.isCanceled()) {
-                    availableTimes.remove(availableTimes.size()-1);
+                if ( takenTime.compareTo(appointmentTime)==0 && !ap.isCanceled() ) {
+                    if (availableTimes.size() != 0)
+                        availableTimes.remove(availableTimes.size() - 1);
                 }
+            }
+            if (freeHoursList.size() != 0 && isTimeAtFreeHours(freeHoursList, appointmentTime) == true) {
+                availableTimes.remove(availableTimes.size() - 1);
             }
             appointmentTime=appointmentTime.plusMinutes(appDuration);
         }
         return availableTimes;
     }
 
+
+    /**
+     * This function checks if inputTime is in doctors working hours and is'nt already taken by another patient.
+     * @param appointmentTime start of time when doctor take new Appointments
+     * @param officeHoursTo end of time when doctor take new Appointments
+     * @param appointments List of already assigned Appointments
+     * @param appDuration List of already assigned Appointments
+     * @param inputTime new Time of appointment which is going to be checked
+     * @return true if time is valid, false if is not
+     */
     private boolean isTimeOfAnAppointmentValid(LocalTime appointmentTime, LocalTime officeHoursTo, List<Appointment> appointments, int appDuration, LocalTime inputTime) {
         LocalTime takenTime;
         while (appointmentTime.plusMinutes(appDuration).compareTo(officeHoursTo) != 1) {
@@ -283,6 +300,12 @@ public class AppointmentsResource {
         return false;
     }
 
+    /**
+     * This function checks if input time is'nt already taken by another patient.
+     * @param appointments List of already assigned Appointments
+     * @param inputTime new Time of appointment which is going to be checked
+     * @return true if time is taken, false if is'nt
+     */
     private boolean isTimeAlreadyTaken(List<Appointment> appointments, LocalTime inputTime) {
         for (Appointment ap:appointments) {
             if (new LocalTime(ap.getTime()).compareTo(inputTime)==0 && !ap.isCanceled()) {
@@ -292,10 +315,28 @@ public class AppointmentsResource {
         return false;
     }
 
+    /**
+     * This function checks if input time is'nt during the Doctors free hours
+     * @param freeHoursList list of doctors free hours
+     * @param inputTime new Time of appointment which is going to be checked
+     * @return true if Time is during Doctors free hours, false if is'nt
+     */
+    private boolean isTimeAtFreeHours(List<FreeHours> freeHoursList, LocalTime inputTime) {
+        if (freeHoursList.size() != 0) {
+            LocalTime freeHoursFrom;
+            LocalTime freeHoursTo;
+            for (FreeHours f:freeHoursList) {
+                freeHoursFrom = new LocalTime(f.getFrom());
+                freeHoursTo = new LocalTime(f.getTo());
+                if (inputTime.compareTo(freeHoursFrom.minusMinutes(19)) == 1 && inputTime.compareTo(freeHoursTo) == -1) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 
     //TODO save firstname lastnem to patient history.
-    //TODO check free hours
-    //TODO note is optional
     @PUT
     @Path("{id}/new")
     @UnitOfWork
@@ -346,6 +387,10 @@ public class AppointmentsResource {
 
         if (officeHours.getFrom() == null && officeHours.getFrom2() == null)
             isDateValid = false;
+
+        List<FreeHours> freeHoursList = freeHoursDAO.getDoctorsFreeHours(docId);
+        if (isTimeAtFreeHours(freeHoursList, inputTime))
+            throw new BadRequestException("Selected Time Doctor has free hours!");
 
         //String times into joda.LocalTime
         DateTimeFormatter format= DateTimeFormat.forPattern("HH:mm");

@@ -43,6 +43,13 @@ public class FreeHours {
     public FreeHours() {
     }
 
+    public FreeHours(@NotNull Date date, @NotNull Time from, @NotNull Time to, @NotNull Doctor doctor) {
+        this.date = date;
+        this.from = from;
+        this.to = to;
+        this.doctor = doctor;
+    }
+
     public Date getDate() {
         return date;
     }
