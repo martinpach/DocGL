@@ -120,6 +120,17 @@ public class NavigationMenu extends Activity {
 
     }
 
+    public void redirect() {
+        Intent intent = new Intent(context, Home.class);
+        Bundle bundle = new Bundle();
+        bundle.putParcelable("patient", patient);
+        intent.putExtras(bundle);
+        intent.putExtra("token", token);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(intent);
+
+    }
+
     private void logout(){
         Intent intent = new Intent(context, AppLogin.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

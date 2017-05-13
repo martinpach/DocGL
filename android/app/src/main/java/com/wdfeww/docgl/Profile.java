@@ -46,7 +46,7 @@ public class Profile extends AppCompatActivity {
     Class className;
     Patient patient;
     NavigationMenu navigationMenu;
-
+    int i = 0;
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,9 +84,14 @@ public class Profile extends AppCompatActivity {
         showProfile();
 
     }
+
     @Override
     public void onBackPressed() {
-        navigationMenu.redirect(Profile.class);
+
+        if(i==1)
+            navigationMenu.redirect(Profile.class);
+        else
+            navigationMenu.redirect();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)

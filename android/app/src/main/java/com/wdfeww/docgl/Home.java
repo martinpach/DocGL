@@ -1,7 +1,6 @@
 package com.wdfeww.docgl;
 
 import android.content.Intent;
-import android.graphics.PorterDuff;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.RequiresApi;
@@ -74,7 +73,7 @@ public class Home extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                navigationMenu.redirect(NewAppointment.class);
+                navigationMenu.redirect(NewAppointmentChooseDoctor.class);
             }
         });
 
@@ -257,7 +256,7 @@ public class Home extends AppCompatActivity {
     }
 
     public void makeAppointment() {
-        navigationMenu.redirect(NewAppointment.class);
+        navigationMenu.redirect(NewAppointmentChooseDoctor.class);
     }
 
     public void profile() {

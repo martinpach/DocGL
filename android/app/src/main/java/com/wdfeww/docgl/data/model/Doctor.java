@@ -6,7 +6,7 @@ import android.os.Parcelable;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Doctor implements Parcelable{
+public class Doctor implements Parcelable {
 
     @SerializedName("id")
     @Expose
@@ -63,6 +63,7 @@ public class Doctor implements Parcelable{
         phone = in.readString();
         city = in.readString();
         workplace = in.readString();
+        id = in.readInt();
     }
 
     public static final Creator<Doctor> CREATOR = new Creator<Doctor>() {
@@ -212,6 +213,6 @@ public class Doctor implements Parcelable{
         dest.writeString(phone);
         dest.writeString(city);
         dest.writeString(workplace);
-
+        dest.writeInt(id);
     }
 }

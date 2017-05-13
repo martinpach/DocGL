@@ -1,5 +1,6 @@
 package com.wdfeww.docgl;
 
+import android.content.Intent;
 import android.os.Build;
 import android.provider.MediaStore;
 import android.support.annotation.RequiresApi;
@@ -31,9 +32,9 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class NewAppointment extends AppCompatActivity {
+public class NewAppointmentChooseDoctor extends AppCompatActivity {
     Toolbar toolbar;
-    LinearLayout main_layout, getDocLayout, results,chooseSpecLayout;
+    LinearLayout main_layout, getDocLayout, results, chooseSpecLayout;
     DrawerLayout drawer_layout;
     NavigationView nav_view;
     Patient patient;
@@ -150,7 +151,7 @@ public class NewAppointment extends AppCompatActivity {
                     public void onClick(View v) {
 
                         name = search.getText().toString().trim();
-                        switch (radioGroup.getCheckedRadioButtonId()){
+                        switch (radioGroup.getCheckedRadioButtonId()) {
                             case 1:
                                 spec = "DENTIST";
                                 break;
@@ -159,7 +160,8 @@ public class NewAppointment extends AppCompatActivity {
                                 break;
                             case 3:
                                 spec = "ORTHOPEDIST";
-                                break;}
+                                break;
+                        }
                         searchDoctor();
                     }
                 });
@@ -170,7 +172,7 @@ public class NewAppointment extends AppCompatActivity {
                         if ((event.getAction() == KeyEvent.ACTION_DOWN) &&
                                 (keyCode == KeyEvent.KEYCODE_ENTER)) {
                             name = search.getText().toString().trim();
-                            switch (radioGroup.getCheckedRadioButtonId()){
+                            switch (radioGroup.getCheckedRadioButtonId()) {
                                 case 1:
                                     spec = "DENTIST";
                                     break;
@@ -180,7 +182,7 @@ public class NewAppointment extends AppCompatActivity {
                                 case 3:
                                     spec = "ORTHOPEDIST";
                                     break;
-                             }
+                            }
                             searchDoctor();
 
                             return true;
@@ -233,102 +235,109 @@ public class NewAppointment extends AppCompatActivity {
 
     private void searchDoctor() {
 
-            Service service = ServiceGenerator.createService(Service.class, token);
-            Call<List<Doctor>> call = service.searchDoctor(name, spec);
-            call.enqueue(new Callback<List<Doctor>>() {
-                @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
-                @Override
-                public void onResponse(Call<List<Doctor>> call, Response<List<Doctor>> response) {
-                    if (response.isSuccessful()) {
-                        doctors = response.body();
-                        if (doctors.size() > 0) {
-                            errorMessage.setVisibility(View.GONE);
-                            successMessage.setVisibility(View.VISIBLE);
-                            if(doctors.size()==1){
-                                successMessage.setText("one doctor found");
-                            }
-                            else
+        Service service = ServiceGenerator.createService(Service.class, token);
+        Call<List<Doctor>> call = service.searchDoctor(name, spec);
+        call.enqueue(new Callback<List<Doctor>>() {
+            @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
+            @Override
+            public void onResponse(Call<List<Doctor>> call, Response<List<Doctor>> response) {
+                if (response.isSuccessful()) {
+                    doctors = response.body();
+                    if (doctors.size() > 0) {
+                        errorMessage.setVisibility(View.GONE);
+                        successMessage.setVisibility(View.VISIBLE);
+                        if (doctors.size() == 1) {
+                            successMessage.setText("one doctor found");
+                        } else
                             successMessage.setText("found " + response.body().size() + " doctors");
-                            showResults();
-                        } else {
-                            successMessage.setVisibility(View.GONE);
-                            errorMessage.setVisibility(View.VISIBLE);
-                            errorMessage.setText("no doctors found");
-                        }
-
+                        showResults();
                     } else {
                         successMessage.setVisibility(View.GONE);
                         errorMessage.setVisibility(View.VISIBLE);
-                        errorMessage.setText("Problem with search doctors.");
+                        errorMessage.setText("no doctors found");
                     }
 
-                }
-
-                @Override
-                public void onFailure(Call<List<Doctor>> call, Throwable t) {
+                } else {
                     successMessage.setVisibility(View.GONE);
                     errorMessage.setVisibility(View.VISIBLE);
-                    errorMessage.setText("Server not responding or no internet connection.");
+                    errorMessage.setText("Problem with search doctors.");
                 }
-            });
-
-
-    }
-
-
-@RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
-private void showResults() {
-    results.removeAllViews();
-    for(Doctor doctor: doctors){
-        final LinearLayout linearLayout = new LinearLayout(this);
-        linearLayout.setLayoutParams(params);
-        linearLayout.setBackground(this.getResources().getDrawable(R.drawable.background_appointment));
-        linearLayout.setClickable(true);
-        linearLayout.setOrientation(LinearLayout.VERTICAL);
-        linearLayout.setId(doctor.getId());
-        linearLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
 
             }
+
+            @Override
+            public void onFailure(Call<List<Doctor>> call, Throwable t) {
+                successMessage.setVisibility(View.GONE);
+                errorMessage.setVisibility(View.VISIBLE);
+                errorMessage.setText("Server not responding or no internet connection.");
+            }
         });
-        results.addView(linearLayout);
-
-
-        TextView tv1 = new TextView(this);
-        tv1.setTypeface(FontManager.getTypeface(getApplicationContext(), FontManager.FONTAWESOME));
-        tv1.setTextSize(25.0f);
-        tv1.setLayoutParams(txt_params);
-        tv1.setText("Name: "+doctor.getFirstName()+" "+doctor.getLastName());
-        tv1.setGravity(Gravity.LEFT);
-        linearLayout.addView(tv1);
-
-        TextView tv2 = new TextView(this);
-        tv2.setTypeface(FontManager.getTypeface(getApplicationContext(), FontManager.FONTAWESOME));
-        tv2.setTextSize(25.0f);
-        tv2.setLayoutParams(txt_params);
-        tv2.setText("Specialisation: "+doctor.getSpecialization());
-        tv2.setGravity(Gravity.LEFT);
-        linearLayout.addView(tv2);
-
-        TextView tv3 = new TextView(this);
-        tv3.setTypeface(FontManager.getTypeface(getApplicationContext(), FontManager.FONTAWESOME));
-        tv3.setTextSize(25.0f);
-        tv3.setLayoutParams(txt_params);
-        tv3.setText("City: "+doctor.getCity());
-        tv3.setGravity(Gravity.LEFT);
-        linearLayout.addView(tv3);
-
-        TextView tv4 = new TextView(this);
-        tv4.setTypeface(FontManager.getTypeface(getApplicationContext(), FontManager.FONTAWESOME));
-        tv4.setTextSize(25.0f);
-        tv4.setLayoutParams(txt_params);
-        tv4.setText("Workplace: "+doctor.getWorkplace());
-        tv4.setGravity(Gravity.LEFT);
-        linearLayout.addView(tv4);
-    }
 
 
     }
 
+
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
+    private void showResults() {
+        results.removeAllViews();
+        for (final Doctor doctor : doctors) {
+            final LinearLayout linearLayout = new LinearLayout(this);
+            linearLayout.setLayoutParams(params);
+            linearLayout.setBackground(this.getResources().getDrawable(R.drawable.background_appointment));
+            linearLayout.setClickable(true);
+            linearLayout.setOrientation(LinearLayout.VERTICAL);
+            linearLayout.setId(doctor.getId());
+            linearLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    redirect(doctor);
+                }
+            });
+            results.addView(linearLayout);
+
+
+            TextView tv1 = new TextView(this);
+            tv1.setTypeface(FontManager.getTypeface(getApplicationContext(), FontManager.FONTAWESOME));
+            tv1.setTextSize(25.0f);
+            tv1.setLayoutParams(txt_params);
+            tv1.setText("Name: " + doctor.getFirstName() + " " + doctor.getLastName());
+            tv1.setGravity(Gravity.LEFT);
+            linearLayout.addView(tv1);
+
+            TextView tv2 = new TextView(this);
+            tv2.setTypeface(FontManager.getTypeface(getApplicationContext(), FontManager.FONTAWESOME));
+            tv2.setTextSize(25.0f);
+            tv2.setLayoutParams(txt_params);
+            tv2.setText("Specialisation: " + doctor.getSpecialization());
+            tv2.setGravity(Gravity.LEFT);
+            linearLayout.addView(tv2);
+
+            TextView tv3 = new TextView(this);
+            tv3.setTypeface(FontManager.getTypeface(getApplicationContext(), FontManager.FONTAWESOME));
+            tv3.setTextSize(25.0f);
+            tv3.setLayoutParams(txt_params);
+            tv3.setText("City: " + doctor.getCity());
+            tv3.setGravity(Gravity.LEFT);
+            linearLayout.addView(tv3);
+
+            TextView tv4 = new TextView(this);
+            tv4.setTypeface(FontManager.getTypeface(getApplicationContext(), FontManager.FONTAWESOME));
+            tv4.setTextSize(25.0f);
+            tv4.setLayoutParams(txt_params);
+            tv4.setText("Workplace: " + doctor.getWorkplace());
+            tv4.setGravity(Gravity.LEFT);
+            linearLayout.addView(tv4);
+        }
+
+
+    }
+    private void redirect (Doctor doctor){
+        Intent intent = new Intent(getBaseContext(), NewAppointmentChooseDatetime.class);
+        Bundle bundle = new Bundle();
+        bundle.putParcelable("doctor", doctor);
+        bundle.putParcelable("patient", patient);
+        intent.putExtras(bundle);
+        intent.putExtra("token", token);
+        startActivity(intent);
+    }
 }

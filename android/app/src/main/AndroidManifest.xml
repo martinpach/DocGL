@@ -67,7 +67,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".NewAppointment"
+            android:name=".NewAppointmentChooseDoctor"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateHidden">
@@ -75,6 +75,16 @@
                 <action android:name="android.intent.action.MAIN" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".NewAppointmentChooseDatetime"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
+            android:windowSoftInputMode="stateHidden">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".NewAppointmentChooseAppointment"></activity>
     </application>
 
 </manifest>

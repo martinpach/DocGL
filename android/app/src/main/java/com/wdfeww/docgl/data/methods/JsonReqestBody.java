@@ -49,4 +49,15 @@ public class JsonReqestBody {
         }
         return json;
     }
+    public static JSONObject FreeDateToAppoitnment(int id, String dateFrom, String dateTo){
+        JSONObject json = new JSONObject();
+        try {
+            json.put("id", id);
+            json.put("dateFrom", dateFrom);
+            json.put("dateTo", dateTo);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return json;
+    }
 }
