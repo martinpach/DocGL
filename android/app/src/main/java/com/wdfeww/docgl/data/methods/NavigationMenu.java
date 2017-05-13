@@ -88,7 +88,6 @@ public class NavigationMenu extends Activity {
                         break;
                     case R.id.nav_profile:
                         drawer_layout.closeDrawer(Gravity.RIGHT);
-                        if(!(className.equals(Profile.class)))
                         redirect(Profile.class);
                         break;
                     case R.id.nav_favorites:
