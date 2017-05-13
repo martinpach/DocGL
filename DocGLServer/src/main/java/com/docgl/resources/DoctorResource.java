@@ -10,10 +10,7 @@ import com.docgl.db.WorkingHoursDAO;
 import com.docgl.entities.Appointment;
 import com.docgl.entities.FreeHours;
 import com.docgl.entities.WorkingHours;
-import com.docgl.enums.SortableDoctorColumns;
-import com.docgl.enums.SortingWays;
-import com.docgl.enums.SpecializationsEnum;
-import com.docgl.enums.UserType;
+import com.docgl.enums.*;
 import com.docgl.db.DoctorDAO;
 import com.docgl.entities.Doctor;
 import com.docgl.exceptions.ValidationException;
@@ -22,14 +19,14 @@ import com.fasterxml.jackson.annotation.JsonView;
 import io.dropwizard.auth.Auth;
 import io.dropwizard.hibernate.UnitOfWork;
 import org.apache.commons.lang3.StringUtils;
+import org.joda.time.DateTime;
 import sun.rmi.runtime.Log;
 
 import javax.annotation.security.PermitAll;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by Rasťo on 15.4.2017.
@@ -114,11 +111,31 @@ public class DoctorResource {
     @Path("{id}/appointments")
     @UnitOfWork
     @JsonView(Views.DoctorView.class)
-    public List<Appointment> getDoctorAppointments(@Auth LoggedUser loggedUser, @PathParam("id") int id) {
+    public List<? extends Object> getDoctorAppointments(@Auth LoggedUser loggedUser,
+                                                   @PathParam("id") int id,
+                                                   @QueryParam("date") String dateInput,
+                                                   @QueryParam("timePeriod") TimePeriod timePeriod) {
         UserType[] roles = {UserType.ADMIN, UserType.DOCTOR};
         authorizer.checkAuthorization(loggedUser.getUserType(), roles);
         if (loggedUser.getUserType() == UserType.DOCTOR)
             authorizer.checkAuthentication(loggedUser.getId(), id);
+
+        Date date = DateParser.parseStringToUtilDate(dateInput);
+        Date defaultDate = date;
+
+        if(date != null && (timePeriod == null || timePeriod.equals(TimePeriod.TODAY))){
+            return appointmentDAO.getDoctorsAppointmentsByDate(id, DateParser.addDaysToDate(1, date));
+        }
+        if(date != null && timePeriod.equals(TimePeriod.WEEK)) {
+            List<WeeklyAppointmentsRepresentation> weeklyAppointments = new ArrayList<>();
+            for (int i = 1; i < 8; i++) {
+                date = DateParser.addDaysToDate(i, defaultDate);
+                WeeklyAppointmentsRepresentation weeklyAppointment =
+                        new WeeklyAppointmentsRepresentation(date, appointmentDAO.getDoctorsAppointmentsByDate(id, date).size());
+                weeklyAppointments.add(weeklyAppointment);
+            }
+            return weeklyAppointments;
+        }
         return appointmentDAO.getAppointments(id, UserType.DOCTOR);
     }
 

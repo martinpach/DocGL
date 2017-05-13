@@ -1,5 +1,6 @@
 package com.docgl;
 
+import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 
 import java.sql.Time;
@@ -25,5 +26,10 @@ public class DateParser {
 //        SimpleDateFormat sdf = new SimpleTimeFormat("HH:mm");
         Time time = java.sql.Time.valueOf(string);
         return time;
+    }
+
+    public static Date addDaysToDate(int numOfDays, Date date){
+        LocalDate localDate = new LocalDate(date);
+        return localDate.plusDays(numOfDays).toDate();
     }
 }
