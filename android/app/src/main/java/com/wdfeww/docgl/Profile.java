@@ -78,11 +78,15 @@ public class Profile extends AppCompatActivity {
         drawer_layout = (DrawerLayout) findViewById(R.id.drawer_layout);
         logged_user = new TextView(this);
         logged_user.setTextAppearance(this, R.style.profile_text);
-        navigationMenu = new NavigationMenu(token, patient, this, toolbar, drawer_layout, nav_view,  className);
+        navigationMenu = new NavigationMenu(token, patient, this, toolbar, drawer_layout, nav_view, className);
         navigationMenu.initMenu();
 
         showProfile();
 
+    }
+    @Override
+    public void onBackPressed() {
+        navigationMenu.redirect(Profile.class);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)

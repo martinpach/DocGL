@@ -1,6 +1,7 @@
 package com.wdfeww.docgl.data.remote;
 
 import com.wdfeww.docgl.data.model.Appointment;
+import com.wdfeww.docgl.data.model.Doctor;
 import com.wdfeww.docgl.data.model.User;
 
 import java.util.List;
@@ -14,6 +15,7 @@ import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 public interface Service {
 
@@ -34,5 +36,11 @@ public interface Service {
 
         @PUT("patients/{id}/profile")
         Call<ResponseBody> updateProfile(@Path("id") int id, @Body RequestBody params);
+
+        @GET("doctors")
+        Call<List<Doctor>> searchDoctor(@Query("name") String name, @Query("spec") String spec);
+
+        @GET("patients/{id}/favourite")
+        Call<List<Doctor>> getFavouriteDoctors(@Path("id") int id);
 }
 

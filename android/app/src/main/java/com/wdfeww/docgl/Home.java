@@ -40,13 +40,13 @@ public class Home extends AppCompatActivity {
     Patient patient;
     Class className;
     FloatingActionButton fab;
+    NavigationMenu navigationMenu;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.home);
-
-       // fab = (FloatingActionButton) findViewById(R.id.fab);
-        //fab.setBackgroundColor(this.getResources().getColor(R.color.color2));
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -64,10 +64,21 @@ public class Home extends AppCompatActivity {
         medkit = this.getResources().getString(R.string.fa_medkit);
         calendar = this.getResources().getString(R.string.fa_calendar);
 
-        NavigationMenu navigationMenu = new NavigationMenu(token, patient, this, toolbar, drawer_layout, nav_view, className);
+        navigationMenu = new NavigationMenu(token, patient, this, toolbar, drawer_layout, nav_view, className);
         navigationMenu.initMenu();
 
         checkAppointments();
+
+        fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setBackgroundColor(this.getResources().getColor(R.color.color2));
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                navigationMenu.redirect(NewAppointment.class);
+            }
+        });
+
+
     }
 
 
@@ -212,7 +223,7 @@ public class Home extends AppCompatActivity {
 
             TextView tv1 = new TextView(this);
             tv1.setTypeface(FontManager.getTypeface(getApplicationContext(), FontManager.FONTAWESOME));
-            tv1.setTextSize(30.0f);
+            tv1.setTextSize(25.0f);
             tv1.setLayoutParams(txt_params);
             tv1.setText(calendar + " " + sdf1.format(new SimpleDateFormat("yyyy-MM-dd").parse(appointment.getDate())) + " " + sdf2.format(new SimpleDateFormat("hh:mm:ss").parse(appointment.getTime())));
             tv1.setGravity(Gravity.LEFT);
@@ -228,7 +239,7 @@ public class Home extends AppCompatActivity {
 
             TextView tv3 = new TextView(this);
             tv3.setTypeface(FontManager.getTypeface(getApplicationContext(), FontManager.FONTAWESOME));
-            tv3.setTextSize(30.0f);
+            tv3.setTextSize(25.0f);
             tv3.setLayoutParams(txt_params);
             tv3.setText("@ " + appointment.getDoctor().getWorkplace() + ", " + appointment.getDoctor().getCity());
             tv3.setGravity(Gravity.LEFT);
@@ -236,7 +247,7 @@ public class Home extends AppCompatActivity {
 
             TextView tv4 = new TextView(this);
             tv4.setTypeface(FontManager.getTypeface(getApplicationContext(), FontManager.FONTAWESOME));
-            tv4.setTextSize(30.0f);
+            tv4.setTextSize(25.0f);
             tv4.setLayoutParams(txt_params);
             tv4.setText(medkit + " Doctor " + appointment.getDoctor().getFirstName() + " " + appointment.getDoctor().getLastName());
             tv4.setGravity(Gravity.LEFT);
@@ -246,7 +257,7 @@ public class Home extends AppCompatActivity {
     }
 
     public void makeAppointment() {
-
+        navigationMenu.redirect(NewAppointment.class);
     }
 
     public void profile() {
