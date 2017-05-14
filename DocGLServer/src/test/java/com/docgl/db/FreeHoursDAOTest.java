@@ -11,6 +11,7 @@ import static org.junit.Assert.assertEquals;
 
 /**
  * Created by Martin on 10.5.2017.
+ * FreeHours DAO tests.
  */
 public class FreeHoursDAOTest extends AbstractDAO{
     private final FreeHoursDAO freeHoursDAO = new FreeHoursDAO(sessionFactory);

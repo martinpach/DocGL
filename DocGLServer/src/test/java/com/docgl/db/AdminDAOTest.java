@@ -4,11 +4,11 @@ import com.docgl.Cryptor;
 import com.docgl.entities.Admin;
 import org.junit.Test;
 
-import static junit.framework.TestCase.assertFalse;
 import static org.junit.Assert.*;
 
 /**
  * Created by Martin on 1.5.2017.
+ * Admin DAO tests.
  */
 public class AdminDAOTest extends AbstractDAO {
 

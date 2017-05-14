@@ -4,9 +4,7 @@ import com.docgl.entities.Doctor;
 import com.docgl.entities.WorkingHours;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.criterion.Restrictions;
 
-import javax.print.Doc;
 import java.util.ArrayList;
 import java.util.List;
 

@@ -2,6 +2,7 @@ package com.docgl.enums;
 
 /**
  * Created by Martin on 28.4.2017.
+ * Enumeration for all Specializations.
  */
 public enum SpecializationsEnum {
     DENTIST("DENTIST"), CARDIOLOGIST("CARDIOLOGIST"), ORTHOPEDIST("ORTHOPEDIST");

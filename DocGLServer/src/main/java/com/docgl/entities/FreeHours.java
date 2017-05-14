@@ -9,6 +9,7 @@ import java.util.Date;
 
 /**
  * Created by Martin on 10.5.2017.
+ * Free Hours Entity
  */
 @Entity
 @Table(name = "Free_Hours")

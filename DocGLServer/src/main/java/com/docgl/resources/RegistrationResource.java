@@ -14,12 +14,11 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.*;
 
 /**
  * Created by Martin on 29.4.2017.
+ * Java class for Resources that are related with registrations.
  */
 @Path("/registrations")
 @Produces(MediaType.APPLICATION_JSON)
@@ -78,9 +77,17 @@ public class RegistrationResource {
         @JsonProperty
         private long count;
 
-        public RegistrationCountRepresentation(String date, long count) {
+        private RegistrationCountRepresentation(String date, long count) {
             this.date = date;
             this.count = count;
+        }
+
+        public String getDate() {
+            return date;
+        }
+
+        public long getCount() {
+            return count;
         }
     }
 }

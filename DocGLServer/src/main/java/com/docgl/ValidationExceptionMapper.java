@@ -9,6 +9,7 @@ import javax.ws.rs.ext.ExceptionMapper;
 
 /**
  * Created by Martin on 26.4.2017.
+ * Validation Exception Mapper
  */
 public class ValidationExceptionMapper implements ExceptionMapper<ValidationException> {
     @Override

@@ -16,6 +16,7 @@ import javax.ws.rs.core.MediaType;
 
 /**
  * Created by wdfeww on 4/15/17.
+ * Java class for Resources that are related with Admin.
  */
 
 

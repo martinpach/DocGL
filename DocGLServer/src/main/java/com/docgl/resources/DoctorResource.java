@@ -7,29 +7,25 @@ import com.docgl.api.*;
 import com.docgl.db.AppointmentDAO;
 import com.docgl.db.FreeHoursDAO;
 import com.docgl.db.WorkingHoursDAO;
-import com.docgl.entities.Appointment;
 import com.docgl.entities.FreeHours;
 import com.docgl.entities.WorkingHours;
 import com.docgl.enums.*;
 import com.docgl.db.DoctorDAO;
 import com.docgl.entities.Doctor;
 import com.docgl.exceptions.ValidationException;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonView;
 import io.dropwizard.auth.Auth;
 import io.dropwizard.hibernate.UnitOfWork;
 import org.apache.commons.lang3.StringUtils;
-import org.joda.time.DateTime;
-import sun.rmi.runtime.Log;
 
 import javax.annotation.security.PermitAll;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.util.*;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Created by Rasťo on 15.4.2017.
+ * Java class for Resources that are related with Patient.
  */
 @Path("/doctors")
 @Produces(MediaType.APPLICATION_JSON)
@@ -111,7 +107,7 @@ public class DoctorResource {
     @Path("{id}/appointments")
     @UnitOfWork
     @JsonView(Views.DoctorView.class)
-    public List<? extends Object> getDoctorAppointments(@Auth LoggedUser loggedUser,
+    public List<?> getDoctorAppointments(@Auth LoggedUser loggedUser,
                                                    @PathParam("id") int id,
                                                    @QueryParam("date") String dateInput,
                                                    @QueryParam("timePeriod") TimePeriod timePeriod) {
@@ -173,8 +169,7 @@ public class DoctorResource {
     @UnitOfWork
     public List<SpecializationsEnum> getSpecializations(){
         SpecializationsEnum[] array = SpecializationsEnum.values();
-        List<SpecializationsEnum> list = Arrays.asList(array);
-        return list;
+        return Arrays.asList(array);
     }
     /**
      * Resource for changing doctors password

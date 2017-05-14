@@ -9,6 +9,7 @@ import java.util.Date;
 
 /**
  * Created by Martin on 7.5.2017.
+ * Working Hours Entity
  */
 
 @Entity

@@ -5,9 +5,6 @@ import com.docgl.entities.PublicHolidays;
 import org.joda.time.LocalDate;
 import org.junit.Test;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
@@ -16,6 +13,7 @@ import static org.junit.Assert.assertFalse;
 
 /**
  * Created by Rasťo on 10.5.2017.
+ * Public Holidays DAO tests.
  */
 public class PublicHolidaysDAOTest extends AbstractDAO {
     private final PublicHolidaysDAO dao = new PublicHolidaysDAO(sessionFactory);

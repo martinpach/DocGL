@@ -6,6 +6,7 @@ import javax.ws.rs.NotAuthorizedException;
 
 /**
  * Created by Martin on 20.4.2017.
+ * Class with methods for checking Authorization and Authentication of logged user.
  */
 public class Authorizer {
     private int id;

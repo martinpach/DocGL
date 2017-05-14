@@ -25,6 +25,7 @@ import java.util.List;
 
 /**
  * Created by Martin on 29.4.2017.
+ * Java class for Resources that are related to appointments.
  */
 
 @Path("/appointments")
@@ -89,6 +90,8 @@ public class AppointmentsResource {
     @UnitOfWork
     public void cancelAppointment(@Auth LoggedUser loggedUser, @PathParam("id") int id) {
         Appointment appointment = appointmentDAO.getAppointment(id);
+        if (appointment == null)
+            throw new BadRequestException("Appointment with id like that does not exist!");
         int patientId = appointment.getPatient().getId();
         int doctorId = appointment.getDoctor().getId();
         UserType[] roles = {UserType.DOCTOR, UserType.PATIENT};
@@ -99,8 +102,6 @@ public class AppointmentsResource {
         else{
             authorizer.checkAuthentication(patientId, loggedUser.getId());
         }
-        if (appointment == null)
-            throw new BadRequestException("Appointment with id like that does not exist!");
         if (appointment.isCanceled()) {
             throw new BadRequestException("Appointment is already canceled!");
         }
@@ -210,15 +211,11 @@ public class AppointmentsResource {
                 officeHoursTo = format.parseLocalTime(officeHours.getTo2());
                 availableTimesAfternoon = setListOfAvailableTimes(officeHoursFrom, officeHoursTo, appointments, appDuration, freeHoursList, date);
             }
-            List<LocalTime> availableTimes;
-            availableTimes = availableTimesMorning;
-            if (availableTimesAfternoon != null) {
-                for (LocalTime loc:availableTimesAfternoon) {
-                    availableTimes.add(loc);
-                }
-            }
+            List<LocalTime> availableTimes = availableTimesMorning;
+            availableTimes.addAll(availableTimesAfternoon);
+
             // That day are all appointment times already taken. //
-            if (availableTimes == null){
+            if (availableTimes.size() == 0){
                 date = date.plusDays(1);
                 dateDate = new Date(dateDate.getTime()+(24*60*60*1000));
                 continue;
@@ -316,7 +313,6 @@ public class AppointmentsResource {
         return false;
     }
 
-    //TODO save firstname lastneme to patient history.
     /**
      * Resource for creating new appointment, resource check if inputs are valid and time is'nt already taken.
      * @param loggedUser user that is sending request
@@ -352,13 +348,12 @@ public class AppointmentsResource {
         int docId = input.getDoctorId();
 
         boolean isTimeValid = false;
-        boolean isDateValid = true;
 
         Date dateOfValidity = doctor.getDateOfValidity();
         int appDuration = doctor.getAppointmentsDuration();
 
         if (date.compareTo(new Date()) == -1 || date.compareTo(dateOfValidity) == -1 || publicHolidaysDAO.isDatePublicHoliday(date))
-            isDateValid = false;
+            throw new BadRequestException("Selected Date is not VALID!");
 
         List<Appointment> appointments = appointmentDAO.getDoctorsAppointmentsByDate(docId, date);
         List<WorkingHours> workingHoursList = workingHoursDAO.getDoctorsWorkingHours(docId);
@@ -368,7 +363,7 @@ public class AppointmentsResource {
         officeHours.setOfficeHours(dayOfWeek, workingHoursList);
 
         if (officeHours.getFrom() == null && officeHours.getFrom2() == null)
-            isDateValid = false;
+            throw new BadRequestException("Doctor does not work that day!");
 
         List<FreeHours> freeHoursList = freeHoursDAO.getDoctorsFreeHours(docId);
         if (isTimeAtFreeHours(freeHoursList, inputTime, new LocalDate(input.getDate())))
@@ -391,15 +386,14 @@ public class AppointmentsResource {
             isTimeValid = isTimeOfAnAppointmentValid(officeHoursFrom, officeHoursTo, appointments, appDuration, inputTime);
         }
 
-        if (!isDateValid || !isTimeValid)
-            throw new BadRequestException("Selected Time or Date is not VALID!");
-
-        if (isDateValid && isTimeValid)
+        if (!isTimeValid)
+            throw new BadRequestException("Selected Time is not VALID!");
+        else
             appointmentDAO.createNewAppointment(input, patientId);
 
     }
 
-    public List<Doctor> getListOfAvailableDoctorsInDateInterval(AvailableDoctorsInput input) {
+    /*public List<Doctor> getListOfAvailableDoctorsInDateInterval(AvailableDoctorsInput input) {
         return null;
-    }
+    }*/
 }

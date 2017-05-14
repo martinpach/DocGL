@@ -15,6 +15,7 @@ import java.util.Date;
 
 /**
  * Created by Rasťo on 15.4.2017.
+ * Doctor Entity
  */
 @Entity
 @Table(name = "Doctors")

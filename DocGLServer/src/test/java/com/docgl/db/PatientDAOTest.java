@@ -10,7 +10,6 @@ import com.docgl.enums.UserType;
 import org.apache.commons.lang3.time.DateUtils;
 import org.junit.Test;
 
-
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -23,6 +22,7 @@ import static org.junit.Assert.assertTrue;
 
 /**
  * Created by wdfeww on 5/4/17.
+ * Patient DAO tests.
  */
 public class PatientDAOTest extends AbstractDAO {
 

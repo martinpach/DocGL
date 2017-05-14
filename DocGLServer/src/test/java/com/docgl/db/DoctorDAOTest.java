@@ -22,6 +22,7 @@ import static org.junit.Assert.assertNotNull;
 
 /**
  * Created by Rasťo on 6.5.2017.
+ * Doctor DAO tests.
  */
 public class DoctorDAOTest extends AbstractDAO {
 

@@ -26,6 +26,7 @@ import static org.jose4j.jws.AlgorithmIdentifiers.HMAC_SHA256;
 
 /**
  * Created by Martin on 11.4.2017.
+ * Java class for Resources that are related with logging in, out, registrations.
  */
 
 @Path("/auth")
@@ -155,7 +156,7 @@ public class AuthResource {
      * Generating valid token.
      * @param role is user type of logged user (admin, patient, doctor)
      * @param id logged user id
-     * @return
+     * @return valid token in String
      */
     private String generateValidToken(String role, int id) {
         final JwtClaims claims = new JwtClaims();

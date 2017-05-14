@@ -1,6 +1,5 @@
 package com.docgl;
 
-import com.docgl.Cryptor;
 import org.junit.Test;
 
 import static junit.framework.TestCase.assertEquals;

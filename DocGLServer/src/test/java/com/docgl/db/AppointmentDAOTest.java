@@ -2,7 +2,6 @@ package com.docgl.db;
 
 import com.docgl.api.NewAppointmentInput;
 import com.docgl.DateParser;
-import com.docgl.api.OfficeHours;
 import com.docgl.entities.Appointment;
 import com.docgl.enums.UserType;
 import org.joda.time.LocalDate;
@@ -22,6 +21,7 @@ import static junit.framework.TestCase.assertFalse;
 
 /**
  * Created by Client on 5.5.2017.
+ * Appointment DAO tests.
  */
 public class AppointmentDAOTest extends AbstractDAO {
     private final AppointmentDAO dao = new AppointmentDAO(sessionFactory);

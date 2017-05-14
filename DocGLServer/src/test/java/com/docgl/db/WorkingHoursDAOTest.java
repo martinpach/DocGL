@@ -10,6 +10,7 @@ import static org.junit.Assert.assertNull;
 
 /**
  * Created by Martin on 7.5.2017.
+ * Working Hours DAO test.
  */
 public class WorkingHoursDAOTest extends AbstractDAO {
     private final WorkingHoursDAO dao = new WorkingHoursDAO(sessionFactory);

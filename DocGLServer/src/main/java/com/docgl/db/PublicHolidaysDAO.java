@@ -1,8 +1,6 @@
 package com.docgl.db;
 
 import com.docgl.entities.PublicHolidays;
-import org.hibernate.Criteria;
-import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
 import java.util.Date;

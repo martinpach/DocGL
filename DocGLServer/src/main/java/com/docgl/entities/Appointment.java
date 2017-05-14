@@ -13,6 +13,7 @@ import java.util.Date;
 
 /**
  * Created by Martin on 27.4.2017.
+ * Appointment Entity
  */
 
 @Entity

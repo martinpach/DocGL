@@ -17,7 +17,6 @@ import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 
-import javax.print.Doc;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;

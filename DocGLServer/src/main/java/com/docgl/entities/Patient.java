@@ -12,6 +12,7 @@ import java.util.Date;
 
 /**
  * Created by D33 on 4/23/2017.
+ * Patient Entity
  */
 
 @Entity

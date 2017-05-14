@@ -12,6 +12,7 @@ import java.util.List;
 
 /**
  * Created by Rasťo on 10.5.2017.
+ * Java class for Resources that are related to PublicHolidaysDAO.
  */
 
 @Path("/holidays")

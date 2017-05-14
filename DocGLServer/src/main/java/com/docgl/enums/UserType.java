@@ -2,6 +2,7 @@ package com.docgl.enums;
 
 /**
  * Created by Martin on 24.4.2017.
+ * Enumeration of user types.
  */
 public enum UserType {
     ADMIN("ADMIN"), DOCTOR("DOCTOR"), PATIENT("PATIENT");

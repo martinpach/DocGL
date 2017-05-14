@@ -10,6 +10,7 @@ import java.util.Date;
 
 /**
  * Created by Rasťo on 10.5.2017.
+ * Public Holidays Entity
  */
 @Entity
 @Table(name = "Public_Holidays")

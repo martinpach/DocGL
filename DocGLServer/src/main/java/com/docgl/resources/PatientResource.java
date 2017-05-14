@@ -12,7 +12,6 @@ import com.docgl.enums.SortingWays;
 import com.docgl.enums.UserType;
 import com.docgl.db.PatientDAO;
 import com.docgl.entities.Patient;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonView;
 import io.dropwizard.auth.Auth;
 import io.dropwizard.hibernate.UnitOfWork;
@@ -26,6 +25,7 @@ import java.util.List;
 
 /**
  * Created by Rasťo on 22.4.2017.
+ * Java class for Resources that are related with Patient.
  */
 @Path("/patients")
 @Produces(MediaType.APPLICATION_JSON)
