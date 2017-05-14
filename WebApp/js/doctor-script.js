@@ -20,6 +20,11 @@ $(document).ready(function() {
 
     var ajaxData;
     var appointments;
+    var appointmentsToday;
+
+    var today = new Date();
+    var dateToday = today.getFullYear()+"-"+(today.getMonth()+1)+"-"+today.getDate();
+    var time= today.getHours()+":"+today.getMinutes()+":"+today.getSeconds();
 
     var usernameTemplate = "<p>{{firstName}} {{lastName}}</p>";
     var html = Mustache.to_html(usernameTemplate, docData);
@@ -34,7 +39,6 @@ $(document).ready(function() {
             var template = "<p>{{userName}}'s</p>";
             var html = Mustache.to_html(template, docData);
             $("#heading").html(html);
-            //html = Mustache.to_html(template, docData);
         });
     });
 
@@ -42,7 +46,8 @@ $(document).ready(function() {
         $(this).addClass("selected");
         $("#appointments, #settings").removeClass("selected");
         $("#container").load('templates/doctor_home.html');
-        getHomeData();
+        getTodaysAppointmentsInfo();
+        getAllAppointmentsInfo();
     });
 
     $("#home").trigger("click");
@@ -69,32 +74,61 @@ $(document).ready(function() {
         return dfd.promise();
     });
 
-    function getHomeData() {
-        var dfd = $.Deferred();
-        ajaxRequest("/doctors/" + docData.id + "/appointments", "GET").done(function() {
-            appointments = ajaxData;
-            appointmentCount = {
-                count: appointments.length,
+    function getTodaysAppointmentsInfo(){//temporary stuff. count resource needed 
+        var dfd=$.Deferred();
+        ajaxRequest("/doctors/" + docData.id + "/appointments?date="+dateToday, "GET").done(function(){
+            appointmentsToday=ajaxData;
+            var appointmentCount={
+                count:appointmentsToday.length
             }
-            var appointmentTime = {
-                time: appointments[0].time
-            }
-            var template = "You have {{count}} new appointments.";
-            var html = Mustache.to_html(template, appointmentCount);
+            var template = "You have {{count}} appointments today.";
+            var html = Mustache.to_html(template, appointmentCount)
             $("#appointmentNotification").html(html);
-            template = "{{count}}";
-            html = Mustache.to_html(template, appointmentCount);
-            $("#totalAppointments").html(html);
-            template = "{{time}}";
-            html = Mustache.to_html(template, appointmentTime);
-            $("#nextAppointmentTime").html(html);
-            console.log(appointments);
 
+            if(appointmentCount>0){
+                var time={
+                next:appointmentsToday[0].time
+            }
+            template = "{{next}}";
+            html = Mustache.to_html(template, time);
+            $("#nextAppointmentTime").html(html);
+            }
+            else{
+                $("#nextAppointmentAt").html("");
+                $("#nextAppointmentTime").html("No appointments left.");
+            }
             dfd.resolve();
         });
         return dfd.promise();
     }
 
+    function getAllAppointmentsInfo(){//same
+        var dfd=$.Deferred();
+        ajaxRequest("/doctors/" + docData.id + "/appointments", "GET").done(function(){
+            appointments=ajaxData;
+            console.log(appointments);
+            var appointmentCount={
+                count:appointments.length
+            }
+            var template = "{{count}}";
+            var html = Mustache.to_html(template, appointmentCount);
+            $("#totalAppointments").html(html);
+
+            canceledCount=0;
+            if(appointments.length>0){
+            for(var i=0; i<appointments.length;i++){
+                if(appointments[i].canceled==true)
+                    canceledCount++;
+            }
+            $("#canceled").html(canceledCount + " patients canceled an appointment.");
+        }
+    
+            dfd.resolve();
+        });
+        return dfd.promise();
+
+    }
+    
 
 
 
