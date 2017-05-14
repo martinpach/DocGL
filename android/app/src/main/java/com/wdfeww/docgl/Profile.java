@@ -220,6 +220,7 @@ public class Profile extends AppCompatActivity {
         main_layout.addView(et2);
 
         main_layout.addView(tv6);
+
         et3 = new EditText(this);
         et3.setText(patient.getEmail());
         et3.setLayoutParams(sub_text_params);

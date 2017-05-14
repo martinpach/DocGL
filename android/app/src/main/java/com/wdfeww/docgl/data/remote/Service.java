@@ -46,5 +46,8 @@ public interface Service {
 
     @POST("appointments/interval/times")
     Call<List<FreeDateToAppoitnment>> getFreeDateToAppoitnment(@Body RequestBody params);
+
+    @PUT("appointments/{id}/new")
+    Call<ResponseBody> createNewAppointment(@Path("id") int id, @Body RequestBody params);
 }
 

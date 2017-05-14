@@ -28,7 +28,7 @@
                 android:layout_height="fill_parent">
 
                 <LinearLayout
-                    android:id="@+id/main_layout"
+                    android:id="@+id/layout1"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center"
@@ -43,77 +43,98 @@
                         android:theme="@style/home_text" />
 
                     <TextView
+                        android:id="@+id/subTitle"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="20dp"
-                        android:layout_marginTop="30dp"
+                        android:layout_marginTop="10dp"
                         android:text="Choose date of appointment"
                         android:theme="@style/profile_text" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="25dp"
-                        android:layout_marginTop="30dp"
-                        android:text="From"
-                        android:theme="@style/profile_text" />
-
-                    <EditText
-                        android:id="@+id/txtdateFrom"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="left"
-                        android:layout_marginLeft="30dp"
-                        android:drawableLeft="@android:drawable/ic_menu_my_calendar"
-                        android:hint="Choose date"
-                        android:inputType="text"
-                        android:textSize="20sp" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="25dp"
-                        android:layout_marginTop="30dp"
-                        android:text="To"
-                        android:theme="@style/profile_text" />
-
-                    <EditText
-                        android:id="@+id/txtdateTo"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="left"
-                        android:layout_marginLeft="30dp"
-                        android:drawableLeft="@android:drawable/ic_menu_my_calendar"
-                        android:hint="Choose date"
-                        android:inputType="text"
-                        android:textSize="20sp" />
-
-                    <TextView
-                        android:id="@+id/errorMessage"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
-
-                    <Button
-                        android:id="@+id/btn_chceckAppointments"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="20dp"
-                        android:layout_marginRight="20dp"
-                        android:layout_marginTop="30dp"
-                        android:text="check free appointment" />
-
 
                     <LinearLayout
                         android:id="@+id/results"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="400dp"
+                        android:orientation="vertical"></LinearLayout>
+                </LinearLayout>
+            </ScrollView>
+
+            <LinearLayout
+                android:id="@+id/main_layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ScrollView
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent">
+
+                    <LinearLayout
+                        android:id="@+id/layout2"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
                         android:orientation="vertical">
+
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="25dp"
+                            android:layout_marginTop="90dp"
+                            android:text="From"
+                            android:theme="@style/profile_text" />
+
+                        <EditText
+                            android:id="@+id/txtdateFrom"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="left"
+                            android:layout_marginLeft="30dp"
+                            android:drawableLeft="@android:drawable/ic_menu_my_calendar"
+                            android:hint="Choose date"
+                            android:inputType="text"
+                            android:textSize="20sp" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="25dp"
+                            android:layout_marginTop="30dp"
+                            android:text="To"
+                            android:theme="@style/profile_text" />
+
+                        <EditText
+                            android:id="@+id/txtdateTo"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="left"
+                            android:layout_marginLeft="30dp"
+                            android:drawableLeft="@android:drawable/ic_menu_my_calendar"
+                            android:hint="Choose date"
+                            android:inputType="text"
+                            android:textSize="20sp" />
+
+                        <TextView
+                            android:id="@+id/errorMessage"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+
+                        <Button
+                            android:id="@+id/btn_chceckAppointments"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="20dp"
+                            android:layout_marginRight="20dp"
+                            android:layout_marginTop="30dp"
+                            android:text="check free appointment" />
 
 
                     </LinearLayout>
 
-                </LinearLayout>
-            </ScrollView>
+                </ScrollView>
+            </LinearLayout>
 
             <android.support.design.widget.NavigationView
                 android:id="@+id/nav_view"

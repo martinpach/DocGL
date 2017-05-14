@@ -4,6 +4,8 @@ import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
+import android.support.design.widget.NavigationView;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -18,6 +20,7 @@ import android.widget.TextView;
 import com.wdfeww.docgl.data.methods.DateDialog;
 import com.wdfeww.docgl.data.methods.ExpandableListAdapter;
 import com.wdfeww.docgl.data.methods.JsonReqestBody;
+import com.wdfeww.docgl.data.methods.NavigationMenu;
 import com.wdfeww.docgl.data.model.Doctor;
 import com.wdfeww.docgl.data.model.FreeDateToAppoitnment;
 import com.wdfeww.docgl.data.model.Patient;
@@ -38,18 +41,24 @@ import retrofit2.Response;
 public class NewAppointmentChooseDatetime extends AppCompatActivity {
     Toolbar toolbar;
     Patient patient;
-    String token,dateFrom, dateTo;
+    String token, dateFrom, dateTo;
     Doctor doctor;
-    TextView errorMessage;
-    LinearLayout results;
+    TextView errorMessage, subTitle;
+    LinearLayout results, main_layout;
+    DrawerLayout drawer_layout;
+    Class className;
+    NavigationView nav_view;
+    NavigationMenu navigationMenu;
     EditText txtdateFrom, txtdateTo;
     List<FreeDateToAppoitnment> appointments;
     LinearLayout.LayoutParams params;
     Button btn_chceckAppointments;
+    int back = 0;
     private ExpandableListView listView;
     private ExpandableListAdapter listAdapter;
     private List<String> listDataHeader;
     private HashMap<String, List<String>> listHashMap;
+
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,8 +74,12 @@ public class NewAppointmentChooseDatetime extends AppCompatActivity {
         errorMessage.setGravity(Gravity.CENTER);
         errorMessage.setVisibility(View.GONE);
 
-        params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-        params.setMargins(0,0,0,30);
+        main_layout = (LinearLayout) findViewById(R.id.main_layout);
+
+        subTitle = (TextView) findViewById(R.id.subTitle);
+
+        params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+        params.setMargins(0, 0, 0, 30);
         txtdateFrom = (EditText) findViewById(R.id.txtdateFrom);
         txtdateTo = (EditText) findViewById(R.id.txtdateTo);
         Bundle bundle = this.getIntent().getExtras();
@@ -105,6 +118,11 @@ public class NewAppointmentChooseDatetime extends AppCompatActivity {
                 checkAppointments();
             }
         });
+        className = getClass();
+        nav_view = (NavigationView) findViewById(R.id.nav_view);
+        drawer_layout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        navigationMenu = new NavigationMenu(token, patient, this, toolbar, drawer_layout, nav_view, className);
+        navigationMenu.initMenu();
     }
 
     public void checkAppointments() {
@@ -113,7 +131,7 @@ public class NewAppointmentChooseDatetime extends AppCompatActivity {
         if (!(dateFrom.isEmpty())) {
             errorMessage.setVisibility(View.GONE);
             if (dateTo.isEmpty()) {
-                dateTo=dateFrom;
+                dateTo = dateFrom;
                 showAppointments();
             } else {
                 showAppointments();
@@ -121,6 +139,22 @@ public class NewAppointmentChooseDatetime extends AppCompatActivity {
         } else {
             errorMessage.setVisibility(View.VISIBLE);
             errorMessage.setText("Please choose date");
+        }
+
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (back == 0) {
+            navigationMenu.redirect(NewAppointmentChooseDoctor.class);
+        } else {
+            Intent intent = new Intent(getBaseContext(), NewAppointmentChooseDatetime.class);
+            Bundle bundle = new Bundle();
+            bundle.putParcelable("doctor", doctor);
+            bundle.putParcelable("patient", patient);
+            intent.putExtras(bundle);
+            intent.putExtra("token", token);
+            startActivity(intent);
         }
     }
 
@@ -138,12 +172,12 @@ public class NewAppointmentChooseDatetime extends AppCompatActivity {
                 if (response.isSuccessful()) {
                     appointments = response.body();
                     errorMessage.setVisibility(View.GONE);
-                    if(appointments.isEmpty()){
+                    if (appointments.isEmpty()) {
                         errorMessage.setVisibility(View.VISIBLE);
                         errorMessage.setText("Doctor have not able to make appointment with you in chosen date.");
-                    }else{
+                    } else {
                         errorMessage.setVisibility(View.GONE);
-                       fillListOfAppointmets();
+                        fillListOfAppointmets();
 
                     }
                 } else {
@@ -164,14 +198,36 @@ public class NewAppointmentChooseDatetime extends AppCompatActivity {
 
     private void fillListOfAppointmets() {
         int count = 0;
-        for(FreeDateToAppoitnment appointment: appointments){
+        for (FreeDateToAppoitnment appointment : appointments) {
             listDataHeader.add(appointment.getDate());
-            listHashMap.put(listDataHeader.get(count),appointment.getTimes());
+            listHashMap.put(listDataHeader.get(count), appointment.getTimes());
             count++;
         }
+        back = 1;
         listAdapter = new ExpandableListAdapter(this, listDataHeader, listHashMap);
+        listView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
+            @Override
+            public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
+                String time = listAdapter.getChild(groupPosition, childPosition).toString().trim();
+                String date = listAdapter.getGroup(groupPosition).toString().trim();
+
+                Intent intent = new Intent(getBaseContext(), NewAppointmentConfirmation.class);
+                Bundle bundle = new Bundle();
+                bundle.putParcelable("doctor", doctor);
+                bundle.putParcelable("patient", patient);
+                intent.putExtras(bundle);
+                intent.putExtra("token", token);
+                intent.putExtra("time", time);
+                intent.putExtra("date", date);
+                startActivity(intent);
+
+                return true;
+            }
+        });
         listView.setAdapter(listAdapter);
         results.addView(listView);
+        drawer_layout.removeView(main_layout);
+        subTitle.setText("Choose time of appointment");
     }
 
 }

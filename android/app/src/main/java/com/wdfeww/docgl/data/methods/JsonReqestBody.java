@@ -60,4 +60,17 @@ public class JsonReqestBody {
         }
         return json;
     }
+    public static JSONObject newAppointment(String date,String time, String firstName, String lastName, int id){
+        JSONObject json = new JSONObject();
+        try {
+            json.put("date", date);
+            json.put("time", time+":00");
+            json.put("firstName", firstName);
+            json.put("lastName", lastName);
+            json.put("doctorId", id);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return json;
+    }
 }
