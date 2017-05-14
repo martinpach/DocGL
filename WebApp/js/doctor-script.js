@@ -18,6 +18,8 @@ $(document).ready(function() {
         token: localStorage.getItem("token")
     };
 
+    console.log(docData);
+
     var ajaxData;
     var appointments;
     var appointmentsToday;
@@ -30,10 +32,6 @@ $(document).ready(function() {
     var html = Mustache.to_html(usernameTemplate, docData);
     $("#userName").html(html);
 
-    var likesTemplate = "{{likes}}";
-    var html = Mustache.to_html(likesTemplate, docData);
-    $("#likesCount").html(html);
-    console.log(docData.likes);
 
     $("#myProfile").on("click", function() {
         $("#container").load('templates/doctor_profile.html', function() {
@@ -54,10 +52,15 @@ $(document).ready(function() {
     $("#home").on("click", function() {
         $(this).addClass("selected");
         $("#appointments, #settings").removeClass("selected");
-        $("#container").load('templates/doctor_home.html');
+        $("#container").load('templates/doctor_home.html',function(){
+            var template = "{{id}}";
+            var html = Mustache.to_html(template, docData);
+            $("#likesCount").html(docData.likes);
+        });
         getTodaysAppointmentsInfo();
-        getAllAppointmentsInfo();
+        getAllAppointmentsInfo();  
     });
+
 
     $("#home").trigger("click");
 
@@ -141,10 +144,10 @@ $(document).ready(function() {
         event.preventDefault(event);
         $("#firstname, #lastname, #email, #phone").toggle();
         $("#changeFirstnameDiv,#changeLastnameDiv,#changeEmailDiv,#changePhoneDiv,#submitProfile").toggle();
-        $("#editFirstnameInput").val(docData.firstName);
-        $("#editLastnameInput").val(docData.lastName);
-        $("#editEmailInput").val(docData.email);
-        $("#editPhoneInput").val(docData.phone);
+        $("#editFirstnameInput,#firstname").val(docData.firstName);
+        $("#editLastnameInput,#lastname").val(docData.lastName);
+        $("#editEmailInput,#email").val(docData.email);
+        $("#editPhoneInput,#phone").val(docData.phone);
         $(".profileErrMsg,#profileSuccessMsg").html("");       
     });
 
