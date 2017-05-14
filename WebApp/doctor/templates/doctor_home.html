@@ -34,3 +34,10 @@
 		</div>
 	</div>
 </div>
+<script>
+	$('#viewAppointments').click(function() {
+		$('#appointments').addClass("selected");
+        $("#settings, #home").removeClass("selected");
+        $("#container").load('templates/doctor_appointments.html');
+	});
+</script>
