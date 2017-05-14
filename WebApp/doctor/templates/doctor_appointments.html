@@ -1,12 +1,17 @@
 <div class="row doctor-appointments">
-    <div class="col-md-6">
         <h1 class="heading" id="heading">Appointments</h1>
-    </div>
-    <div class="col-md-6">
-        <form class="form-inline pull-right">
+    <div class="row">
+        <div class="app-menu">
             <input type="text" class="form-control datepicker" placeholder="day" id="day-input">
-            <input type="text" class="form-control datepicker" placeholder="week" id="week-input">
-        </form>
+            <div class="btn-group" data-toggle="buttons">
+                <label class="btn btn-primary active">
+                    <input type="radio" name="time_period" value="day" autocomplete="off" checked>Selected Day
+                </label>
+                <label class="btn btn-primary">
+                    <input type="radio" name="time_period" value="week" autocomplete="off">One week from the selected Day
+                </label>
+            </div>
+        </div>
     </div>
 </div>
 <div class="container contentTab z-depth-1" id="contentTab">
@@ -26,59 +31,85 @@
         </div>
     </div>
 </div>
+
 <script>
-var appointments;
+    var appointments;
+    var radioBtn = $('input[type=radio][name=time_period]');
 
-$('#day-input').change(function() {
-	$('#contentTab').empty();
-    ajaxRequest(localStorage.getItem("id"), "appointments?date="+$(this).val()).done(function () {
-    	for (var i = 0; i < appointments.length; i++) {
-        var appointmentBox = $('<div class="appointment-day"></div>');
-        var appointmentTimeBox = $('<div class="time"></div>');
-        var appointmentPatientBox = $('<div class="patient"></div>');
-        var appointmentNoteBox = $('<p class="note"></p>');
-        var colMd4 = $('<div class="col-md-4"></div>');
-        appointmentTimeBox.text(appointments[i].time);
-        appointmentPatientBox.text((appointments[i].patientFirstName == "" ? appointments[i].patient.firstName : appointments[i].patientFirstName) + " " + (appointments[i].patientLastName == "" ? appointments[i].patient.lastName : appointments[i].patientLastName));
-        appointmentNoteBox.text(appointments[i].note);
-        appointmentBox.append(appointmentTimeBox, appointmentPatientBox, appointmentNoteBox);
-        appointmentBox.appendTo(colMd4);
-        colMd4.appendTo('#contentTab');
-    }
-    });
-});
-
-$('#week-input').change(function() {
-    for (var i = 0; i < 7; i++) {
-        var appointmentsOnDate = $('<div class="col-md-1">' + i + '</div>');
-
-    }
-});
-
-$(function() {
-    $(".datepicker").datepicker({
-        dateFormat: "yy-mm-dd"
-    });
-});
-
-function ajaxRequest(id, sufix) {
-    var deferred = $.Deferred();
-    $.ajax({
-        beforeSend: function(xhr) {
-            xhr.setRequestHeader('Authorization', 'Bearer ' + localStorage.getItem("token"));
-        },
-        url: 'http://localhost:8085/api/doctors/' + id + '/' + sufix,
-        type: 'GET',
-        contentType: 'application/json',
-        success: function(data) {            
-            appointments = data;
-            console.log(appointments);
-            deferred.resolve();
-        },
-        error: function() {
-            deferred.reject();
+    $(radioBtn).change(function() {
+        if ($('#day-input').val() != "") {
+            if (this.value == "day") {
+        	    $('#contentTab').empty();
+                showDayAppointments();
+            }
+            if (this.value == "week") {
+                $('#contentTab').empty();
+                console.log("week");
+            }
         }
     });
-    return deferred.promise();
-}
+    $('#day-input').change(function() {
+        console.log("sadas");
+        if ($('input[type=radio][name=time_period]').val() == "day") {
+            $('#contentTab').empty();
+            showDayAppointments();
+        }
+        if ($('input[type=radio][name=time_period]').val() == "week") {
+            $('#contentTab').empty();
+            console.log("week");
+        }
+    });
+/*
+    $('#week-input').change(function() {
+        for (var i = 0; i < 7; i++) {
+            var appointmentsOnDate = $('<div class="col-md-1">' + i + '</div>');
+
+        }
+    });
+*/
+    function showDayAppointments () {
+        ajaxRequest(localStorage.getItem("id"), "appointments?date="+$('#day-input').val()).done(function () {
+            for (var i = 0; i < appointments.length; i++) {
+            var appointmentBox = $('<div class="appointment-day"></div>');
+            var appointmentTimeBox = $('<div class="time"></div>');
+            var appointmentPatientBox = $('<div class="patient"></div>');
+            var appointmentNoteBox = $('<p class="note"></p>');
+            var colMd4 = $('<div class="col-md-4"></div>');
+            appointmentTimeBox.text(appointments[i].time);
+            appointmentPatientBox.text((appointments[i].patientFirstName == "" ? appointments[i].patient.firstName : appointments[i].patientFirstName) + " " + (appointments[i].patientLastName == "" ? appointments[i].patient.lastName : appointments[i].patientLastName));
+            appointmentNoteBox.text(appointments[i].note);
+            appointmentBox.append(appointmentTimeBox, appointmentPatientBox, appointmentNoteBox);
+            appointmentBox.appendTo(colMd4);
+            colMd4.appendTo('#contentTab');
+        }
+        });
+    }
+
+
+    $(function() {
+        $(".datepicker").datepicker({
+            dateFormat: "yy-mm-dd"
+        });
+    });
+
+    function ajaxRequest(id, sufix) {
+        var deferred = $.Deferred();
+        $.ajax({
+            beforeSend: function(xhr) {
+                xhr.setRequestHeader('Authorization', 'Bearer ' + localStorage.getItem("token"));
+            },
+            url: 'http://localhost:8085/api/doctors/' + id + '/' + sufix,
+            type: 'GET',
+            contentType: 'application/json',
+            success: function(data) {            
+                appointments = data;
+                console.log(appointments);
+                deferred.resolve();
+            },
+            error: function() {
+                deferred.reject();
+            }
+        });
+        return deferred.promise();
+    }
 </script>
