@@ -163,7 +163,7 @@ public class AuthResource {
         claims.setSubject(role);
         claims.setClaim("id", id);
         claims.setGeneratedJwtId();
-        claims.setExpirationTimeMinutesInTheFuture(30);
+        claims.setExpirationTimeMinutesInTheFuture(60);
 
         final JsonWebSignature jws = new JsonWebSignature();
         jws.setPayload(claims.toJson());
