@@ -6,23 +6,24 @@
 .appointment-day, .appointment-week{
 	background-color: #b5dffd;
 	display: inline-block;
-	padding: 40px;
+	padding: 20px;
 	margin: 10px !important;
+	width: 100% !important;
 	text-align: center;	
 }
 
 .appointment-day .time, .appointment-week .date{
 	font-weight: 500;
-	font-size: 30px;
+	font-size: 20px;
 }
 
 .appointment-day .patient, .appointment-week .num-of-appointments{
-	font-size: 30px;
+	font-size: 20px;
 	font-weight: 300;
 }
 
 .appointment-day .note{
-	font-size: 20px;
+	font-size: 15px;
 	width: inherit;
 	margin-top: 5px;
 	word-wrap: break-word;
