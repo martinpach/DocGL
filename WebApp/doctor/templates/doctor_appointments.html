@@ -33,9 +33,13 @@
         </div>
     </div>
 </div>
+
+
 <script>
 var appointments;
 var radioBtn = $('input[type=radio][name=time_period]');
+
+
 
 $(radioBtn).change(function() {
     if ($('#day-input').val() != "") {
@@ -62,7 +66,7 @@ $('#day-input').change(function() {
 
 function showDayAppointments(date) {
     ajaxRequest(localStorage.getItem("id"), "appointments?date=" + date).done(function() {
-    	$('#content-tab').empty();
+        $(".appointment-day").remove();
         for (var i = 0; i < appointments.length; i++) {
             var appointmentBox = $('<div class="appointment-day"></div>');
             var appointmentTimeBox = $('<div class="time"></div>');
@@ -81,6 +85,7 @@ function showDayAppointments(date) {
 
 function showWeeklyAppointments() {
     ajaxRequest(localStorage.getItem("id"), "appointments?date=" + $('#day-input').val() + "&timePeriod=week").done(function() {       
+        $(".appointment-day").remove();
         for (var i = 0; i < appointments.length; i++) {
             var appointmentBox = $('<div class="appointment-week"></div>').css('cursor', 'pointer');
             var appointmentDateBox = $('<div class="date"></div>');
