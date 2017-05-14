@@ -1,6 +1,5 @@
 .doctor-appointments input{
 	border: 2px solid #41ccb9;
-	border-radius: 10px;
 	color: white;
 }
 
@@ -31,6 +30,52 @@
 	word-break : break-word;
 }
 
+.heading {
+	margin-left: 30px;
+}
+
 .appointment-day h3{
 	margin: 0;
+}
+
+#day-input {
+	padding: 0 15px !important;
+	width: 100px;
+	text-align: center;
+	margin-bottom: 0;
+	height: 46px;
+	margin-top: 5px !important;
+	display: inline-block;
+}
+
+.btn-primary {
+	background: #41ccb9 !important;
+	border: 2px solid #41ccb9;
+	height: 50px;
+	display: inline-block;
+	margin-top: -2px !important;
+}
+.app-menu {
+	float: right;
+	margin-right: 30px;
+	margin-bottom: 10px;
+	height: 65px;
+}
+
+.btn-primary.active {
+	background: #034F85 !important;
+	border: 2px solid #034F85;
+}
+.btn-primary:hover {
+	background: #034F85 !important;
+	border: 2px solid #034F85;
+}
+
+.ui-widget.ui-widget-content {
+	z-index: 2 !important;
+}
+
+.apointment-select {
+	margin-bottom: 10px !important;
+	margin-right: 15px;
 }
