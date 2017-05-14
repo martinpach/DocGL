@@ -142,12 +142,17 @@ $(document).ready(function() {
 
     $(document).on("click", "#editProfile", function (event) {
         event.preventDefault(event);
+        console.log(docData);
         $("#firstname, #lastname, #email, #phone").toggle();
         $("#changeFirstnameDiv,#changeLastnameDiv,#changeEmailDiv,#changePhoneDiv,#submitProfile").toggle();
-        $("#editFirstnameInput,#firstname").val(docData.firstName);
-        $("#editLastnameInput,#lastname").val(docData.lastName);
-        $("#editEmailInput,#email").val(docData.email);
-        $("#editPhoneInput,#phone").val(docData.phone);
+        $("#editFirstnameInput").val(docData.firstName);
+        $("#editLastnameInput").val(docData.lastName);
+        $("#editEmailInput").val(docData.email);
+        $("#editPhoneInput").val(docData.phone);
+        $("#firstname").val(docData.firstName);
+        $("#lastname").val(docData.lastName);
+        $("#email").val(docData.email);
+        $("#phone").val(docData.phone);
         $(".profileErrMsg,#profileSuccessMsg").html("");       
     });
 
@@ -214,9 +219,8 @@ $(document).ready(function() {
                 $("#userName").html(html);
                 $(".profileErrMsg").html("");
                 $("#profileSuccessMsg").html("Profile changed successfully");
-        
+                $("#myProfile").trigger("click");
                 dfd.resolve();
-
             });
             return dfd.promise();
         }
@@ -248,6 +252,7 @@ $(document).ready(function() {
             ajaxRequest("/doctors/" + docData.id + "/profile/password","PUT",dataToSend).done(function(){
                 $("#pwdErrorMsg").html("password changed successfully!");
                 dfd.resolve();
+                $("#myProfile").trigger("click");
             });
             return dfd.promise();
         }

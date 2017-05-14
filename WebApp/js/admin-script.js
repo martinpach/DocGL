@@ -433,9 +433,9 @@ $(document).ready(function () {
         event.preventDefault(event);
         $("#firstname, #lastname, #email").toggle();
         $("#changeFirstnameDiv,#changeLastnameDiv,#changeEmailDiv,#submitProfile").toggle();
-        $("#editFirstnameInput").val(adminData.firstName);
-        $("#editLastnameInput").val(adminData.lastName);
-        $("#editEmailInput").val(adminData.email);
+        $("#editFirstnameInput, #firstname").val(adminData.firstName);
+        $("#editLastnameInput,#lastname").val(adminData.lastName);
+        $("#editEmailInput,#email").val(adminData.email);
         $(".profileErrMsg,#profileSuccessMsg").html("");       
     });
 
@@ -465,6 +465,7 @@ $(document).ready(function () {
             ajaxRequest("/admins/" + adminData.id + "/profile/password","PUT",dataToSend).done(function(){
                 $("#pwdErrorMsg").html("password changed successfully!");
                 dfd.resolve();
+                $("#myProfile").trigger("click");
             });
             return dfd.promise();
         }
@@ -529,6 +530,7 @@ $(document).ready(function () {
                 $("#profileSuccessMsg").html("Profile changed successfully");
 
                 dfd.resolve();
+                $("#myProfile").trigger("click");
             });
             return dfd.promise();
         }
