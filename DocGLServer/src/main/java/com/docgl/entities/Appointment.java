@@ -1,10 +1,8 @@
 package com.docgl.entities;
 
 import com.docgl.Views;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonView;
-import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -23,7 +21,7 @@ import java.util.Date;
         @NamedQuery(name="getPatientsAppointment", query="from Appointment where patient.id = :id"),
         @NamedQuery(name="getDoctorsAppointmentsByDate", query="from Appointment where doctor.id = :id and date = :date")
 })
-public class Appointment {
+public class Appointment implements Comparable<Appointment>{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @JsonView(Views.PublicView.class)
@@ -171,5 +169,10 @@ public class Appointment {
         this.date = date;
         this.patientFirstName = patientFirstName;
         this.patientLastName = patientLastName;
+    }
+
+    @Override
+    public int compareTo(Appointment o) {
+        return time.compareTo(o.getTime());
     }
 }

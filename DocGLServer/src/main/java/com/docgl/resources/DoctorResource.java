@@ -7,6 +7,7 @@ import com.docgl.api.*;
 import com.docgl.db.AppointmentDAO;
 import com.docgl.db.FreeHoursDAO;
 import com.docgl.db.WorkingHoursDAO;
+import com.docgl.entities.Appointment;
 import com.docgl.entities.FreeHours;
 import com.docgl.entities.WorkingHours;
 import com.docgl.enums.*;
@@ -121,7 +122,9 @@ public class DoctorResource {
             Date defaultDate = date;
 
             if (date != null && (timePeriod == null || timePeriod.equals(TimePeriod.TODAY))) {
-                return appointmentDAO.getDoctorsAppointmentsByDate(id, DateParser.addDaysToDate(1, date));
+                List<Appointment> appointments = appointmentDAO.getDoctorsAppointmentsByDate(id, DateParser.addDaysToDate(1, date));
+                Collections.sort(appointments);
+                return appointments;
             }
             if (date != null && timePeriod.equals(TimePeriod.WEEK)) {
                 List<WeeklyAppointmentsRepresentation> weeklyAppointments = new ArrayList<>();

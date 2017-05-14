@@ -8,7 +8,7 @@ import java.util.Date;
 /**
  * Created by Martin on 13.5.2017.
  */
-public class WeeklyAppointmentsRepresentation {
+public class WeeklyAppointmentsRepresentation{
     @JsonProperty
     @JsonFormat(shape= JsonFormat.Shape.STRING, pattern="yyyy-MM-dd", timezone="UTC")
     private Date date;
