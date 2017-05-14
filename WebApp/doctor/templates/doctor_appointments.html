@@ -76,7 +76,7 @@ function showDayAppointments(date) {
             var appointmentPatientBox = $('<div class="patient"></div>');
             var appointmentNoteBox = $('<p class="note"></p>');
             var colMd4 = $('<div class="col-md-4"></div>');
-            appointmentTimeBox.text(appointments[i].time);
+            appointmentTimeBox.text((appointments[i].time).substr(0,5));
             appointmentPatientBox.text((appointments[i].patientFirstName == "" ? appointments[i].patient.firstName : appointments[i].patientFirstName) + " " + (appointments[i].patientLastName == "" ? appointments[i].patient.lastName : appointments[i].patientLastName));
             appointmentNoteBox.text(appointments[i].note);
             appointmentBox.append(appointmentTimeBox, appointmentPatientBox, appointmentNoteBox);
