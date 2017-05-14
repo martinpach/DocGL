@@ -45,18 +45,14 @@
 }
 
 /*profile*/
-#changeWorkplaceDiv{
-	display:none;
-}
+.docProfileHeader{
+	background-color:#034F84;
+	font-weight:400;
+	color:#41CCB9;
+	padding:5px;
+	position:relative;
 
-#changeSpecDiv{
-	display:none;
 }
-
-#changeCityDiv{
-	display:none;
-}
-
 #changePhoneDiv{
 	display:none;
 }

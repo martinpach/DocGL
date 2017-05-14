@@ -212,6 +212,9 @@ body{
 	margin-left:20px;
 	background-color: #034F85!important;
 }
+#editPassword{
+	margin-right: 20%;
+}
 .profileErrMsg,#pwdErrorMsg{
 	color:red;
 }
