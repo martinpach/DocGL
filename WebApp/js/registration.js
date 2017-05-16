@@ -20,6 +20,10 @@ $(document).ready(function() {
 		rules: {
 			firstname: "required",
 			lastname: "required",
+			username: {
+				required:true,
+				minlength:3
+			},
 			workplace: "required",
 			city: "required",
 			specialization: "required",
@@ -33,18 +37,19 @@ $(document).ready(function() {
 			},
 			password: {
 				required: true,
-				minlength: 5,
+				minlength: 6,
 				passwordRestrictions: true
 			},
 			confirm_password: {
 				required: true,
-				minlength: 5,
+				minlength: 6,
 				equalTo: "#password"
 			},
 		},
 		messages: {
 			firstname: "Please enter your firstname",
 			lastname: "Please enter your lastname",
+			username: "Please enter username (3 characters at least)",
 			workplace: "Please enter a workplace location",
 			city: "Please enter a City",
 			specialization: "Please choose your specialization",
@@ -52,11 +57,11 @@ $(document).ready(function() {
 			phone: "Please enter your phone number",
 			password: {
 				required: "Please provide a password",
-				minlength: "Your password must be at least 5 characters long"
+				minlength: "Your password must be at least 6 characters long"
 			},
 			confirm_password: {
 				required: "Please provide a password",
-				minlength: "Your password must be at least 5 characters long",
+				minlength: "Your password must be at least 6 characters long",
 				equalTo: "Please enter the same password as above"
 			},
 		}
