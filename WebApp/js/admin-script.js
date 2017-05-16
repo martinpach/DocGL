@@ -30,6 +30,7 @@ $(document).ready(function () {
     var html = Mustache.to_html(usernameTemplate, adminData);
     $("#userName").html(html);
 
+
     //load profile
     $("#myProfile").on("click", function () {
         $("#container").load('templates/admin_profile.html', function () {
@@ -58,9 +59,7 @@ $(document).ready(function () {
         $("#users, #doctors").removeClass("selected");
         $("#container").load('templates/admin_home.html');
         $("#paginationContainer").hide();
-        getLikes();
         getAppointmentCount();
-
     });
 
     $("#home").trigger("click");
@@ -100,6 +99,11 @@ $(document).ready(function () {
             dfd.resolve();
         });
         return dfd.promise();
+    });
+
+    $("#changePassword").on("click",function(){
+         $("#container").load('templates/admin_password.html');
+         $("#paginationContainer").hide();
     });
 
     //get doctor list
@@ -226,7 +230,7 @@ $(document).ready(function () {
                 statusIcon="";
             $("#tableDoctors").append('<tr class="tableRow" data-id="'+ajaxData[i].id+'">' +
                 '<td>' + icon + '</td>' +
-                '<td>' + ajaxData[i].id + '</td>' +
+                '<td>' + (i+1) + '</td>' +
                 '<td>' + ajaxData[i].firstName + '</td>' +
                 '<td>'+ ajaxData[i].lastName+'</td>'+
                 '<td>' + ajaxData[i].specialization + '</td>' +
@@ -251,7 +255,7 @@ $(document).ready(function () {
             statusIcon=blockedStatus==false?unblockedIcon:blockedIcon;
             $("#tableUsers").append('<tr class="tableRow" data-id="'+ajaxData[i].id+'">' +
             '<td>' + icon + '</td>' +
-            '<td>' + ajaxData[i].id + '</td>' +
+            '<td>' + (i+1) + '</td>' +
             '<td>' + ajaxData[i].firstName+ '</td>' +
             '<td>' + ajaxData[i].lastName +'</td>' +
             '<td>' + ajaxData[i].email + '</td>' +
@@ -417,21 +421,11 @@ $(document).ready(function () {
         return dfd.promise();
     }
 
-    function getLikes() {
-        var dfd = $.Deferred();
-        ajaxRequest("/doctors/likes", "GET").done(function () {
-            var likeCount = ajaxData.count;
-            $("#countLikes").html(likeCount);
-            dfd.resolve();
-        });
-        return dfd.promise();
-    }
-
     //edit profile
     //toggle edit fields
     $(document).on("click", "#editProfile", function (event) {
         event.preventDefault(event);
-        $("#firstname, #lastname, #email").toggle();
+        $("#firstname, #lastname, #email,#editProfile").toggle();
         $("#changeFirstnameDiv,#changeLastnameDiv,#changeEmailDiv,#submitProfile").toggle();
         $("#editFirstnameInput, #firstname").val(adminData.firstName);
         $("#editLastnameInput,#lastname").val(adminData.lastName);
@@ -440,7 +434,7 @@ $(document).ready(function () {
     });
 
     $(document).on("click","#editPassword",function(){
-        $("#password,#changePasswordDiv,#submitPassword").toggle();
+        $("#password,#changePasswordDiv,#submitPassword,#editPassword").toggle();
         $("#pwdErrorMsg").html("");
     });
 

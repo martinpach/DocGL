@@ -49,6 +49,10 @@ $(document).ready(function() {
         });
     });
 
+    $("#changePassword").on("click",function(){
+        $("#container").load('templates/doctor_password.html');
+    });
+
     $("#home").on("click", function() {
         $(this).addClass("selected");
         $("#appointments, #settings").removeClass("selected");
@@ -143,7 +147,7 @@ $(document).ready(function() {
     $(document).on("click", "#editProfile", function (event) {
         event.preventDefault(event);
         console.log(docData);
-        $("#firstname, #lastname, #email, #phone").toggle();
+        $("#firstname, #lastname, #email, #phone,#editProfile").toggle();
         $("#changeFirstnameDiv,#changeLastnameDiv,#changeEmailDiv,#changePhoneDiv,#submitProfile").toggle();
         $("#editFirstnameInput").val(docData.firstName);
         $("#editLastnameInput").val(docData.lastName);
@@ -218,7 +222,6 @@ $(document).ready(function() {
                 html = Mustache.to_html(template, ajaxData);
                 $("#userName").html(html);
                 $(".profileErrMsg").html("");
-                $("#profileSuccessMsg").html("Profile changed successfully");
                 $("#myProfile").trigger("click");
                 dfd.resolve();
             });
@@ -227,7 +230,7 @@ $(document).ready(function() {
     });
 
     $(document).on("click","#editPassword",function(){
-        $("#password,#changePasswordDiv,#submitPassword").toggle();
+        $("#password,#changePasswordDiv,#submitPassword,#editPassword").toggle();
         $("#pwdErrorMsg").html("");
     });
 
