@@ -11,13 +11,13 @@ header {
 
 main {
 	padding-bottom: 50px;
-    background: rgba(10, 60, 113, 1) !important;
-    background: -moz-linear-gradient(top, rgba(10, 60, 113, 1) 0%, rgba(46, 166, 158, 1) 100%) !important;
-    background: -webkit-gradient(left top, right top, color-stop(0%, rgba(10, 60, 113, 1)), color-stop(100%, rgba(46, 166, 158, 1))) !important;
-    background: -webkit-linear-gradient(top, rgba(10, 60, 113, 1) 0%, rgba(46, 166, 158, 1) 100%) !important;
-    background: -o-linear-gradient(top, rgba(10, 60, 113, 1) 0%, rgba(46, 166, 158, 1) 100%) !important;
-    background: -ms-linear-gradient(top, rgba(10, 60, 113, 1) 0%, rgba(46, 166, 158, 1) 100%) !important;
-    background: linear-gradient(to bottom, rgba(10, 60, 113, 1) 0%, rgba(46, 166, 158, 1) 100%) !important;
+    background: rgba(10, 60, 113, 1) fixed !important;
+    background: -moz-linear-gradient(top, rgba(10, 60, 113, 1) 0%, rgba(46, 166, 158, 1) 100%) fixed !important;
+    background: -webkit-gradient(left top, right top, color-stop(0%, rgba(10, 60, 113, 1)), color-stop(100%, rgba(46, 166, 158, 1))) fixed !important;
+    background: -webkit-linear-gradient(top, rgba(10, 60, 113, 1) 0%, rgba(46, 166, 158, 1) 100%) fixed !important;
+    background: -o-linear-gradient(top, rgba(10, 60, 113, 1) 0%, rgba(46, 166, 158, 1) 100%) fixed !important;
+    background: -ms-linear-gradient(top, rgba(10, 60, 113, 1) 0%, rgba(46, 166, 158, 1) 100%) fixed !important;
+    background: linear-gradient(to bottom, rgba(10, 60, 113, 1) 0%, rgba(46, 166, 158, 1) 100%) fixed !important;
 }
 
 #motto {
