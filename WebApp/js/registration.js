@@ -116,7 +116,8 @@ $(document).ready(function() {
             localStorage.setItem("userName", doctor.userName);
             localStorage.setItem("passwordChanged", doctor.passwordChanged);
             localStorage.setItem("token", ajaxData.token);
-            window.location.href = "approval-wating.html";
+            localStorage.setItem("userType","DOCTOR");
+            window.location.href = "../login.html";
 	        dfd.resolve();
 		});
 		return dfd.promise();
