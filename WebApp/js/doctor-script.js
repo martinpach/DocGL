@@ -38,6 +38,7 @@ $(document).ready(function() {
             var template = "<p>{{userName}}'s</p>";
             var html = Mustache.to_html(template, docData);
             $("#heading").html(html);
+            $("#username").html(docData.userName);
             $("#firstname").html(docData.firstName);
             $("#lastname").html(docData.lastName);
             $("#spec").html(docData.specialization);
@@ -146,13 +147,13 @@ $(document).ready(function() {
 
     $(document).on("click", "#editProfile", function (event) {
         event.preventDefault(event);
-        console.log(docData);
         $("#firstname, #lastname, #email, #phone,#editProfile").toggle();
         $("#changeFirstnameDiv,#changeLastnameDiv,#changeEmailDiv,#changePhoneDiv,#submitProfile").toggle();
         $("#editFirstnameInput").val(docData.firstName);
         $("#editLastnameInput").val(docData.lastName);
         $("#editEmailInput").val(docData.email);
         $("#editPhoneInput").val(docData.phone);
+        $("#username").html(docData.userName);
         $("#firstname").val(docData.firstName);
         $("#lastname").val(docData.lastName);
         $("#email").val(docData.email);

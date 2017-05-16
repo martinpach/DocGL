@@ -38,9 +38,13 @@ $(document).ready(function () {
             var templateFirstname = "<p>{{firstName}}</p>";
             var templateLastname="<p>{{lastName}}</p>";
             var templateMail = "<p>{{email}}</p>";
+            var templateUsername="<p>{{userName}}</p>";
             var templatePassword = "<p>************</p>";
             var html = Mustache.to_html(template, adminData);
             $("#heading").html(html);
+            $("#firstname").html(html);
+            html = Mustache.to_html(templateUsername, adminData);
+            $("#username").html(html);
             html = Mustache.to_html(templateFirstname, adminData);
             $("#firstname").html(html);
             html = Mustache.to_html(templateLastname, adminData);
