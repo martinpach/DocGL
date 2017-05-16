@@ -10,13 +10,13 @@ body{
 }
 .mainPage{
 	min-height:100%;
-	background: #034F84 !important;
-    background: -moz-linear-gradient(bottom, rgba(46, 166, 158, 1) 0%, rgba(10, 60, 113, 1) 100%) !important;
-    background: -webkit-gradient(right top, left top, color-stop(0%, rgba(46, 166, 158, 1)), color-stop(100%, rgba(10, 60, 113, 1))) !important;
-    background: -webkit-linear-gradient(bottom, rgba(46, 166, 158, 1) 0%, rgba(10, 60, 113, 1) 100%) !important;
-    background: -o-linear-gradient(bottom, rgba(46, 166, 158, 1) 0%, rgba(10, 60, 113, 1) 100%) !important;
-    background: -ms-linear-gradient(bottom, rgba(46, 166, 158, 1) 0%, rgba(10, 60, 113, 1) 100%) !important;
-    background: linear-gradient(to top, rgba(46, 166, 158, 1) 0%, rgba(10, 60, 113, 1) 100%) !important;
+	background: #034F84 fixed !important;
+    background: -moz-linear-gradient(bottom, rgba(46, 166, 158, 1) 0%, rgba(10, 60, 113, 1) 100%) fixed !important;
+    background: -webkit-gradient(right top, left top, color-stop(0%, rgba(46, 166, 158, 1)), color-stop(100%, rgba(10, 60, 113, 1))) fixed !important;
+    background: -webkit-linear-gradient(bottom, rgba(46, 166, 158, 1) 0%, rgba(10, 60, 113, 1) 100%) fixed !important;
+    background: -o-linear-gradient(bottom, rgba(46, 166, 158, 1) 0%, rgba(10, 60, 113, 1) 100%) fixed !important;
+    background: -ms-linear-gradient(bottom, rgba(46, 166, 158, 1) 0%, rgba(10, 60, 113, 1) 100%) fixed !important;
+    background: linear-gradient(to top, rgba(46, 166, 158, 1) 0%, rgba(10, 60, 113, 1) 100%) fixed !important;
     -webkit-box-shadow: inset 4px -1px 16px -3px rgba(79,76,79,0.72);
     -moz-box-shadow: inset 4px -1px 16px -3px rgba(79,76,79,0.72);
     box-shadow: inset 4px -1px 16px -3px rgba(79,76,79,0.72);
