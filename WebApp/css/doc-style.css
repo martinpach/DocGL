@@ -50,9 +50,36 @@
 	font-weight:400;
 	color:#41CCB9;
 	padding:5px;
+	padding-left: 20px;
 	position:relative;
 
 }
 #changePhoneDiv{
 	display:none;
+}
+
+/*settings*/
+#settingsMenu{
+	margin-bottom:20px;
+
+}
+.settingsMenuItem{
+	font-size: 20px;
+	cursor: pointer;
+	margin-left:5px;
+}
+
+.activeItem{
+	color:white;
+}
+
+#freeHoursTab{
+	display: none;
+}
+
+#add{
+	color:#41CCB9;
+	font-size:20px;
+	margin-left:20px;
+	cursor:pointer;
 }

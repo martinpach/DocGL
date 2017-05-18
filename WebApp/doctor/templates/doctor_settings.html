@@ -4,5 +4,77 @@
 	</div>
 </div>
 <div class="container contentTab z-depth-1" id="contentTab">
-<!--insert settings here-->
+	<div class="row">
+		<div class="col-md-12" >
+			<div class="docProfileHeader" id="settingsMenu">
+				<span id="workingHours" class="settingsMenuItem activeItem">Working hours</span>
+				<span id="freeHours" class=" settingsMenuItem">Free hours</span>
+			</div>
+		</div>
+	</div>
+	<div class="row" id="workingHoursTab">
+		<div class="col-md-6">
+			<div class="docProfileHeader">Set working hours</div>
+			<div class="row">
+				<div class="col-md-6">
+					<h6 class="lbl">From</h6>
+					<input type="text" id="workingFrom" class="editProfileInput timepicker">
+				</div>
+				<div class="col-md-6">
+					<h6 class="lbl">To</h6>
+					<input type="text" id="workingTo" class="editProfileInput timepicker">
+					<i class="fa fa-plus" id="add" aria-hidden="true"></i>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-12" id="hoursContainer">
+				<!--append hours here-->
+				</div>
+			</div>
+		</div>
+		<div class="col-md-6">
+			<div class="docProfileHeader">Set appointment duration</div>
+				<div class="col-md-6">
+					<h6 class="lbl">Time dedicated to a patient</h6>
+					<input type="number" id="duration" min="20" class="editProfileInput" placeholder="20 min default">
+
+				</div>
+		</div>
+	</div>
+	<div class="row" id="freeHoursTab">
+			
+	</div>
+	
 </div>
+
+<script>
+	$('.timepicker').timepicker({
+    	timeFormat: 'h:mm p',
+    	interval: 30,
+    	minTime: '7',
+   		maxTime: '6:00pm',
+    	defaultTime: '7',
+    	startTime: '7:00',
+    	dynamic: false,
+    	dropdown: true,
+    	scrollbar: true
+	});
+
+
+	$("#workingHours").on("click",function(){
+		$(this).addClass("activeItem");
+		$("#freeHours").removeClass("activeItem");
+        $("#workingHoursTab").toggle();
+        $("#freeHoursTab").toggle();
+
+    });
+
+    $("#freeHours").on("click",function(){
+    	$(this).addClass("activeItem");
+    	$("#workingHours").removeClass("activeItem");
+        $("#freeHoursTab").toggle();
+        $("#workingHoursTab").toggle();
+    });
+
+
+</script>

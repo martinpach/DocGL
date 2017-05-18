@@ -33,6 +33,7 @@
 
 .heading-appointments{
 	margin-left: 30px;
+	display: block
 }
 
 .appointment-day h3{
