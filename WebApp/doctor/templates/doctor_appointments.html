@@ -11,8 +11,8 @@
                     <label class="btn btn-primary btn-appointments">
                         <input type="radio" name="time_period" value="week" autocomplete="off" id="week-radio">One week from the selected Day
                     </label>
+                </div>
             </form>
-            </div>
         </div>
     </div>
 </div>
@@ -33,8 +33,6 @@
         </div>
     </div>
 </div>
-
-
 <script>
 var appointments;
 var radioBtn = $('input[type=radio][name=time_period]');
@@ -55,28 +53,29 @@ $(radioBtn).change(function() {
 });
 $('#day-input').change(function() {
     if ($('input[type=radio][name=time_period]:checked').val() == "day") {
-        $('#contentTab').empty();        
+        $('#contentTab').empty();
         showDayAppointments($('#day-input').val());
     }
     if ($('input[type=radio][name=time_period]:checked').val() == "week") {
-        $('#contentTab').empty();        
+        $('#contentTab').empty();
         showWeeklyAppointments();
     }
 });
 
 function showDayAppointments(date) {
-    ajaxRequest(localStorage.getItem("id"), "appointments?date=" + date).done(function() {
+    ajaxRequest("doctors/" + localStorage.getItem("id") + "/appointments?date=" + date, 'GET').done(function() {
         $(".appointment-day").remove();
         for (var i = 0; i < appointments.length; i++) {
             var appointmentBox = $('<div class="appointment-day"></div>');
             var appointmentTimeBox = $('<div class="time"></div>');
             var appointmentPatientBox = $('<div class="patient"></div>');
             var appointmentNoteBox = $('<p class="note"></p>');
+            var btnCancelAppointment = $('<button type="button" class="btn btn-danger btn-sm btn-cancel-appointment" id="' + appointments[i].id + '">Cancel</button>');
             var colMd4 = $('<div class="col-md-4"></div>');
-            appointmentTimeBox.text((appointments[i].time).substr(0,5));
+            appointmentTimeBox.text((appointments[i].time).substr(0, 5));
             appointmentPatientBox.text((appointments[i].patientFirstName == "" ? appointments[i].patient.firstName : appointments[i].patientFirstName) + " " + (appointments[i].patientLastName == "" ? appointments[i].patient.lastName : appointments[i].patientLastName));
             appointmentNoteBox.text(appointments[i].note);
-            appointmentBox.append(appointmentTimeBox, appointmentPatientBox, appointmentNoteBox);
+            appointmentBox.append(appointmentTimeBox, appointmentPatientBox, appointmentNoteBox, btnCancelAppointment);
             appointmentBox.appendTo(colMd4);
             colMd4.appendTo('#contentTab');
         }
@@ -84,7 +83,7 @@ function showDayAppointments(date) {
 }
 
 function showWeeklyAppointments() {
-    ajaxRequest(localStorage.getItem("id"), "appointments?date=" + $('#day-input').val() + "&timePeriod=week").done(function() {       
+    ajaxRequest("doctors/" + localStorage.getItem("id") + "/appointments?date=" + $('#day-input').val() + "&timePeriod=week", 'GET').done(function() {
         $(".appointment-day").remove();
         for (var i = 0; i < appointments.length; i++) {
             var appointmentBox = $('<div class="appointment-week"></div>').css('cursor', 'pointer');
@@ -108,7 +107,7 @@ $(function() {
     }).val(getCurrentDate());
 });
 
-(function () {
+(function() {
     showDayAppointments(getCurrentDate());
 })();
 
@@ -124,18 +123,20 @@ function getCurrentDate() {
     return [year, month, day].join('-');
 }
 
-function ajaxRequest(id, sufix) {
+function ajaxRequest(sufix, type) {
     var deferred = $.Deferred();
     $.ajax({
         beforeSend: function(xhr) {
             xhr.setRequestHeader('Authorization', 'Bearer ' + localStorage.getItem("token"));
         },
-        url: 'http://localhost:8085/api/doctors/' + id + '/' + sufix,
-        type: 'GET',
+        url: 'http://localhost:8085/api/' + sufix,
+        type: type,
         contentType: 'application/json',
         success: function(data) {
-            appointments = data;
-            console.log(appointments);
+            if (data !== undefined) {
+                appointments = data;
+                console.log(appointments);
+            }
             deferred.resolve();
         },
         error: function() {
@@ -153,5 +154,13 @@ $(document).on('click', '.appointment-week', function() {
     $('#contentTab').empty();
     showDayAppointments(date);
     $('#contentTab').empty();
+});
+
+$(document).on('click', '.btn-cancel-appointment', function() {
+    var appointmentId = $(this).attr('id');
+    ajaxRequest("appointments/" + appointmentId, 'DELETE').done(function () {
+        $('#contentTab').empty();    
+        showDayAppointments($('#day-input').val());   
+    });
 });
 </script>
