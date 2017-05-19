@@ -18,6 +18,7 @@ import android.widget.TextView;
 import com.wdfeww.docgl.AppLogin;
 import com.wdfeww.docgl.DetailOfAppointment;
 import com.wdfeww.docgl.Home;
+import com.wdfeww.docgl.PatientsTab;
 import com.wdfeww.docgl.Profile;
 import com.wdfeww.docgl.R;
 import com.wdfeww.docgl.data.model.Patient;
@@ -95,6 +96,8 @@ public class NavigationMenu extends Activity {
                         break;
                     case R.id.nav_patients:
                         drawer_layout.closeDrawer(Gravity.RIGHT);
+                        if(!(className.equals(PatientsTab.class)))
+                            redirect(PatientsTab.class);
                         break;
                     case R.id.nav_settings:
                         drawer_layout.closeDrawer(Gravity.RIGHT);

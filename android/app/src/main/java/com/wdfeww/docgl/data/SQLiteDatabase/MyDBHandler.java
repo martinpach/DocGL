@@ -52,17 +52,18 @@ public class MyDBHandler extends SQLiteOpenHelper {
         db.execSQL("DELETE FROM " + PatientsContract.Patients.TABLE_NAME + " WHERE " + PatientsContract.Patients._ID + "=" + patientId + ";");
     }
 
-    public List<String> databaseToString(int userId) {
-        List<String> dbString = new ArrayList<>();
+    public List<DBOutput> databaseToString(int userId) {
+        List<DBOutput> dbString = new ArrayList<>();
         SQLiteDatabase db = getWritableDatabase();
         String query = "SELECT * FROM " + PatientsContract.Patients.TABLE_NAME + " WHERE " + PatientsContract.Patients.COLUMN_USERID + "= " + userId + ";";
 
         Cursor cursor = db.rawQuery(query, null);
 
         while (cursor.moveToNext()) {
-            dbString.add(cursor.getInt(cursor.getColumnIndex(PatientsContract.Patients._ID)) + "."
-                    + cursor.getString(cursor.getColumnIndex(PatientsContract.Patients.COLUMN_PATIENTFIRSTNAME)) + " "
-                    + cursor.getString(cursor.getColumnIndex(PatientsContract.Patients.COLUMN_PATIENTLASTNAME)));
+
+            dbString.add(new DBOutput(cursor.getInt(cursor.getColumnIndex(PatientsContract.Patients._ID)),
+                     cursor.getString(cursor.getColumnIndex(PatientsContract.Patients.COLUMN_PATIENTFIRSTNAME)),
+                     cursor.getString(cursor.getColumnIndex(PatientsContract.Patients.COLUMN_PATIENTLASTNAME))));
         }
         cursor.close();
 
