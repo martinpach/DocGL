@@ -23,42 +23,98 @@
 				<div class="col-md-6">
 					<h6 class="lbl">To</h6>
 					<input type="text" id="workingTo" class="editProfileInput timepicker">
-					<i class="fa fa-plus" id="add" aria-hidden="true"></i>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+					<div class="docProfileHeader">Add<i class="fa fa-plus add" id="setWorkingHours" aria-hidden="true"></i></div>
 				</div>
 			</div>
 			<div class="row">
 				<div class="col-md-12" id="hoursContainer">
-				<!--append hours here-->
+					<!--<div class="listItem"><i class="fa fa-times deleteWorkingHours" aria-hidden="true"></i></div>-->
 				</div>
 			</div>
 		</div>
 		<div class="col-md-6">
 			<div class="docProfileHeader">Set appointment duration</div>
-				<div class="col-md-6">
-					<h6 class="lbl">Time dedicated to a patient</h6>
-					<input type="number" id="duration" min="20" class="editProfileInput" placeholder="20 min default">
-
+				<div class="row">
+					<div class="col-md-12">
+						<h6 class="lbl">Time dedicated to a patient</h6>
+						<input type="number" id="duration" min="20" class="editProfileInput" placeholder="20 min default">
+						<div class="docProfileHeader">Set<i class="fa fa-cog add" id="setDuration" aria-hidden="true"></i></div>
+					</div>
 				</div>
 		</div>
 	</div>
 	<div class="row" id="freeHoursTab">
-			
-	</div>
-	
+		<div class="col-md-12">
+			<div id="freeHrsText">Even doctors need a day off from time to time. Let your patients know you won't be available.</div>
+			<div class="row">
+				<div class="col-md-6">
+					<div class="docProfileHeader">Choose a date</div>
+					<div class="row">
+						<div class="col-md-6">
+							<h6 class="lbl">From</h6>
+							<input type="text" class="form-control datepicker editProfileInput" placeholder="day" id="day-from">
+						</div>
+						<div class="col-md-6">
+							<h6 class="lbl">To</h6>
+							<input type="text" class="form-control datepicker editProfileInput" placeholder="day" id="day-to">
+						</div>
+					</div>
+					<div class="docProfileHeader">Add<i class="fa fa-plus add" id="addFreeDay" aria-hidden="true"></i></div>
+				</div>
+				<div class="col-md-6">
+					<div class="docProfileHeader">...or time</div>
+					<div class="row">
+						<div class="col-md-6">
+							<h6 class="lbl">From</h6>
+							<input type="text" id="workingFrom" class="editProfileInput timepicker">
+						</div>
+						<div class="col-md-6">
+							<h6 class="lbl">To</h6>
+							<input type="text" id="workingFrom" class="editProfileInput timepicker">
+						</div>
+					</div>
+					<div class="docProfileHeader">Add<i class="fa fa-plus add" id="addFreeHr" aria-hidden="true"></i></div>
+				</div>
+			</div>
+		</div>		
+	</div>	
 </div>
 
 <script>
 	$('.timepicker').timepicker({
     	timeFormat: 'h:mm p',
     	interval: 30,
-    	minTime: '7',
+    	minTime: '07',
    		maxTime: '6:00pm',
     	defaultTime: '7',
-    	startTime: '7:00',
+    	startTime: '07:00',
     	dynamic: false,
     	dropdown: true,
     	scrollbar: true
 	});
+
+   $(function() {
+   		$(".datepicker").datepicker({
+        	dateFormat: "yy-mm-dd",
+        	defaultDate: getCurrentDate()
+    	}).val(getCurrentDate());
+	});
+
+   function getCurrentDate() {
+    var d = new Date(),
+        month = '' + (d.getMonth() + 1),
+        day = '' + d.getDate(),
+        year = d.getFullYear();
+
+    if (month.length < 2) month = '0' + month;
+    if (day.length < 2) day = '0' + day;
+
+    return [year, month, day].join('-');
+}
 
 
 	$("#workingHours").on("click",function(){
@@ -75,6 +131,9 @@
         $("#freeHoursTab").toggle();
         $("#workingHoursTab").toggle();
     });
+
+
+
 
 
 </script>

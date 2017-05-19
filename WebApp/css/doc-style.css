@@ -52,6 +52,7 @@
 	padding:5px;
 	padding-left: 20px;
 	position:relative;
+	margin-bottom: 10px;
 
 }
 #changePhoneDiv{
@@ -77,9 +78,36 @@
 	display: none;
 }
 
-#add{
+.add{
 	color:#41CCB9;
 	font-size:20px;
-	margin-left:20px;
+	margin-left:5px;
+	margin-right:10px;
 	cursor:pointer;
+	border-radius: 10;
+	float:right;
+}
+
+.add:hover{
+	color:#034F84;
+}
+
+.listItem{
+	background-color: #B5DFFD;
+	padding:20px;
+}
+
+.deleteWorkingHours{
+	cursor:pointer;
+	float:right;
+}
+.freeHoursOption{
+	color:#41CCB9;
+}
+#freeHrsText{
+	font-size:20px;
+	margin-bottom:10px;
+}
+#day-to{
+	margin-right:0px;
 }
