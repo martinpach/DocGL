@@ -215,7 +215,7 @@ public class DetailOfAppointment extends AppCompatActivity {
         btn1.setGravity(Gravity.CENTER);
         btn1.setLayoutParams(btn_params);
         btn1.setBackground(this.getResources().getDrawable(R.drawable.btn_transparent_background));
-        btn1.setTextAppearance(this, R.style.btn_delete);
+        btn1.setTextColor(this.getResources().getColor(R.color.color5));
         btn1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -231,8 +231,8 @@ public class DetailOfAppointment extends AppCompatActivity {
         btn2.setText(this.getResources().getString(R.string.ok));
         btn2.setGravity(Gravity.CENTER);
         btn2.setLayoutParams(btn_confirmation_params);
-        btn2.setBackground(this.getResources().getDrawable(R.drawable.success_message_background));
-        btn2.setTextAppearance(this, R.style.success_text);
+        btn2.setBackground(this.getResources().getDrawable(R.drawable.btn_transparent_background));
+        btn2.setTextColor(this.getResources().getColor(R.color.color1));
         btn2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -246,8 +246,8 @@ public class DetailOfAppointment extends AppCompatActivity {
         btn3.setText(this.getResources().getString(R.string.cancel));
         btn3.setGravity(Gravity.CENTER);
         btn3.setLayoutParams(btn_confirmation_params);
-        btn3.setBackground(this.getResources().getDrawable(R.drawable.error_message_background));
-        btn3.setTextAppearance(this, R.style.error_text);
+        btn3.setBackground(this.getResources().getDrawable(R.drawable.btn_transparent_background));
+        btn3.setTextColor(this.getResources().getColor(R.color.color2));
         btn3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
