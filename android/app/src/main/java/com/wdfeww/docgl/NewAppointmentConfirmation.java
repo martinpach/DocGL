@@ -1,8 +1,10 @@
 package com.wdfeww.docgl;
 
 import android.annotation.TargetApi;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Handler;
+import android.provider.CalendarContract;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
@@ -27,6 +29,10 @@ import com.wdfeww.docgl.data.remote.Service;
 import com.wdfeww.docgl.data.remote.ServiceGenerator;
 
 import org.json.JSONObject;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
@@ -187,6 +193,7 @@ public class NewAppointmentConfirmation extends AppCompatActivity {
         main_layout.addView(btn1);
 
     }
+
     boolean doubleBackToExitPressedOnce = false;
 
     @Override
@@ -203,10 +210,11 @@ public class NewAppointmentConfirmation extends AppCompatActivity {
 
             @Override
             public void run() {
-                doubleBackToExitPressedOnce=false;
+                doubleBackToExitPressedOnce = false;
             }
         }, 2000);
     }
+
     private void createAppointment() {
         if (pFirstName.isEmpty() && pLastName.isEmpty()) {
             errorMessage.setVisibility(View.VISIBLE);
@@ -227,6 +235,11 @@ public class NewAppointmentConfirmation extends AppCompatActivity {
                         successMessage.setText("Appointment was created!");
                         successMessage.setVisibility(View.VISIBLE);
                         navigationMenu.redirect(Home.class);
+                        try {
+                            addAppoitnmenToCalendar();
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
 
                     } else {
                         errorMessage.setVisibility(View.VISIBLE);
@@ -245,5 +258,21 @@ public class NewAppointmentConfirmation extends AppCompatActivity {
 
     }
 
+    private void addAppoitnmenToCalendar() throws ParseException {
 
+        Calendar cal = Calendar.getInstance();
+        String dateTime = date + " " + time;
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm");
+        cal.setTime(simpleDateFormat.parse(dateTime));
+
+        Intent intent = new Intent(Intent.ACTION_EDIT);
+        intent.setType("vnd.android.cursor.item/event");
+        intent.putExtra("beginTime", cal.getTimeInMillis());
+        intent.putExtra("allDay", true);
+        intent.putExtra(CalendarContract.Events.DESCRIPTION, pFirstName+" "+pLastName+" "+note);
+        intent.putExtra(CalendarContract.Events.EVENT_LOCATION, doctor.getCity() + " " + doctor.getWorkplace());
+        intent.putExtra("endTime", cal.getTimeInMillis() + 30 * 60 * 1000);
+        intent.putExtra("title", doctor.getSpecialization());
+        startActivity(intent);
+    }
 }
