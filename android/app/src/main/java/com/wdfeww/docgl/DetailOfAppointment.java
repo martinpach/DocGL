@@ -193,9 +193,9 @@ public class DetailOfAppointment extends AppCompatActivity {
         main_layout.addView(tv12);
 
         tv13 = new TextView(this);
-        tv13.setText("Specialization " + appointment.getDoctor().getSpecialization() + "\n"
-                + "Phone " + appointment.getDoctor().getPhone() + "\n"
-                + "Email " + appointment.getDoctor().getEmail());
+        tv13.setText("Specialization: " + appointment.getDoctor().getSpecialization() + "\n"
+                + "Phone: " + appointment.getDoctor().getPhone() + "\n"
+                + "Email: " + appointment.getDoctor().getEmail());
         tv13.setLayoutParams(sub_text_params);
         tv13.setGravity(Gravity.LEFT);
         tv13.setTextAppearance(this, R.style.profile_sub_text);

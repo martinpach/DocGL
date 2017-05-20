@@ -48,7 +48,7 @@ tools:context="com.wdfeww.docgl.NewAppointmentConfirmation">
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
                     android:layout_marginTop="30dp"
-                    android:text="Confirmation to make new appointment"
+                    android:text="Confirmation to make new appointment:"
                     android:theme="@style/profile_text" />
 
             </LinearLayout>

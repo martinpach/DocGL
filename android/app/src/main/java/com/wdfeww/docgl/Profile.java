@@ -194,6 +194,7 @@ public class Profile extends AppCompatActivity {
         btn2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 changePassword();
             }
         });
@@ -201,6 +202,9 @@ public class Profile extends AppCompatActivity {
     }
 
     private void editProfile() {
+
+        errorMessage.setVisibility(View.GONE);
+        successMessage.setVisibility(View.GONE);
         main_layout.removeAllViews();
 
         tv1.setText(this.getResources().getString(R.string.editProfile));
@@ -255,6 +259,7 @@ public class Profile extends AppCompatActivity {
         main_layout.addView(btn1);
     }
     private void updateProfile() {
+
         JSONObject json = JsonReqestBody.updateProfile(patient.getFirstName(), patient.getLastName(), patient.getEmail());
         RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"), (json.toString()));
         Service loginService =
@@ -286,6 +291,8 @@ public class Profile extends AppCompatActivity {
 
     }
     private void changePassword() {
+        errorMessage.setVisibility(View.GONE);
+        successMessage.setVisibility(View.GONE);
         main_layout.removeAllViews();
 
         tv1.setText(this.getResources().getString(R.string.changePassword));

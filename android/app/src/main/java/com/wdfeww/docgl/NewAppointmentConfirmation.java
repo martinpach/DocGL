@@ -99,7 +99,7 @@ public class NewAppointmentConfirmation extends AppCompatActivity {
         btn_params.setMargins(10, 65, 10, 0);
 
         tv1 = new TextView(this);
-        tv1.setText("Date and time");
+        tv1.setText("Date and time:");
         tv1.setLayoutParams(text_params);
         tv1.setGravity(Gravity.LEFT);
         tv1.setTextAppearance(this, R.style.profile_text);
@@ -113,7 +113,7 @@ public class NewAppointmentConfirmation extends AppCompatActivity {
         main_layout.addView(tv2);
 
         tv3 = new TextView(this);
-        tv3.setText("Informations about doctor");
+        tv3.setText("Informations about doctor:");
         tv3.setLayoutParams(text_params);
         tv3.setGravity(Gravity.LEFT);
         tv3.setTextAppearance(this, R.style.profile_text);
@@ -129,7 +129,7 @@ public class NewAppointmentConfirmation extends AppCompatActivity {
         main_layout.addView(tv4);
 
         tv5 = new TextView(this);
-        tv5.setText("Set patient name");
+        tv5.setText("Set patient name:");
         tv5.setLayoutParams(text_params);
         tv5.setGravity(Gravity.LEFT);
         tv5.setTextAppearance(this, R.style.profile_text);
@@ -150,7 +150,7 @@ public class NewAppointmentConfirmation extends AppCompatActivity {
         main_layout.addView(et2);
 
         tv6 = new TextView(this);
-        tv6.setText("Note");
+        tv6.setText("Note:");
         tv6.setLayoutParams(text_params);
         tv6.setGravity(Gravity.LEFT);
         tv6.setTextAppearance(this, R.style.profile_text);
