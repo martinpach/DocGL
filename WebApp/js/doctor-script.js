@@ -23,6 +23,7 @@ $(document).ready(function() {
     var ajaxData;
     var appointments;
     var appointmentsToday;
+    var freeHours;
 
     var today = new Date();
     var dateToday = today.getFullYear()+"-"+(today.getMonth()+1)+"-"+today.getDate();
@@ -78,8 +79,92 @@ $(document).ready(function() {
     $("#settings").on("click", function() {
         $(this).addClass("selected");
         $("#home, #appointments").removeClass("selected");
-        $("#container").load('templates/doctor_settings.html');
+        $("#container").load('templates/doctor_settings.html',function(){
+
+        $('.timepicker').timepicker({
+            timeFormat: 'H:mm:ss',
+            interval: 30,
+            minTime: '7',
+            maxTime: '18:00',
+            defaultTime: '7',
+            startTime: '7:00',
+            dynamic: false,
+            dropdown: true,
+            scrollbar: true
+        });
+
+        $(function() {
+            $(".datepicker").datepicker({
+                dateFormat: "yy-mm-dd",
+                defaultDate: dateToday
+            }).val(dateToday);
+        });
+
+        getFreeHours();
+
+        $("#workingHours").on("click",function(){
+            $(this).addClass("activeItem");
+            $("#freeHours").removeClass("activeItem");
+            $("#workingHoursTab").show();
+            $("#freeHoursTab").hide();
+
+        });
+
+        $("#freeHours").on("click",function(){
+            $(this).addClass("activeItem");
+            $("#workingHours").removeClass("activeItem");
+            $("#freeHoursTab").show();
+            $("#workingHoursTab").hide();
+        });
+        $(document).on("click","#addFreeHrs",function(event){
+            event.preventDefault();
+            addFreeHour();
+        });
+
+        $("#notWorkingFrom, #notWorkingTo").on('blur', function() {
+            var time = $('#notWorkingFrom').val();
+            var splitTime = time.split(":");
+            var hours = parseInt(splitTime[0]) + 1;
+            hours = (hours == 13) ? 1 : hours;
+            var newTime = hours + ":" + splitTime[1];
+            $("#notWorkingTo").timepicker('option', 'minTime', newTime);
+            $("#notWorkingTo").val(newTime);
+        });
+
+        });
     });
+
+    function getFreeHours(){
+        var dfd=$.Deferred();
+        ajaxRequest("/doctors/"+docData.id+"/freeHours","GET").done(function(){
+            freeHours=ajaxData;
+            renderFreeHours();
+            dfd.resolve();
+        });
+        return dfd.promise();
+    }
+
+    function renderFreeHours(){
+        $("#freeHoursContainer").empty();
+            for(var i=0;i<freeHours.length;i++){
+            $("#freeHoursContainer").append("<div id='"+i+"' class='listItem'>"+freeHours[i].date+" "+freeHours[i].from+" "+freeHours[i].to+"</div>");
+        }
+    }
+
+    function addFreeHour(){
+        var dfd=$.Deferred();
+        var freeHour={
+            date:$("#day").val(),
+            from:$("#notWorkingFrom").val(),
+            to:$("#notWorkingTo").val()
+        };
+        var dataToSend=JSON.stringify(freeHour);
+        ajaxRequest("/doctors/"+docData.id+"/freeHours","PUT",dataToSend).done(function(){
+            getFreeHours();
+            dfd.resolve();
+        });
+        return dfd.promise();
+    }
 
     $("#logout").on("click", function() {
         var dfd = $.Deferred();
@@ -90,6 +175,7 @@ $(document).ready(function() {
         });
         return dfd.promise();
     });
+
 
     function getTodaysAppointmentsInfo(){//temporary stuff. count resource needed 
         var dfd=$.Deferred();

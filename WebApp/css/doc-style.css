@@ -89,12 +89,13 @@
 }
 
 .add:hover{
-	color:#034F84;
+	color:#ffffff;
 }
 
 .listItem{
 	background-color: #B5DFFD;
 	padding:20px;
+	margin-bottom:5px;
 }
 
 .deleteWorkingHours{
@@ -110,4 +111,14 @@
 }
 #day-to{
 	margin-right:0px;
+}
+
+.settingsBtn{
+	width:100px;
+	margin-top:20px;
+	margin-left:40%;
+	float:right;
+}
+#saveFreeHrs{
+	display: none;
 }

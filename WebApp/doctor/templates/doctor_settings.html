@@ -16,6 +16,20 @@
 		<div class="col-md-6">
 			<div class="docProfileHeader">Set working hours</div>
 			<div class="row">
+				<div class="col-md-12">
+					<div class="form-group">
+                        <label for="day" class="lbl">Day</label>
+                        <select id="input-day" class="editProfileInput form-control">
+                            <option value="mon">Monday</option>
+                            <option value="tue">Tuesday</option>
+                            <option value="wed">Wednesday</option>
+                            <option value="thu">Thursday</option>
+                            <option value="fri">Friday</option>
+                        </select>
+                    </div>
+				</div>
+			</div>
+			<div class="row">
 				<div class="col-md-6">
 					<h6 class="lbl">From</h6>
 					<input type="text" id="workingFrom" class="editProfileInput timepicker">
@@ -27,7 +41,7 @@
 			</div>
 			<div class="row">
 				<div class="col-md-12">
-					<div class="docProfileHeader">Add<i class="fa fa-plus add" id="setWorkingHours" aria-hidden="true"></i></div>
+					<div class="docProfileHeader settingsBtn">Add<i class="fa fa-plus add" id="setWorkingHours" aria-hidden="true"></i></div>
 				</div>
 			</div>
 			<div class="row">
@@ -42,7 +56,7 @@
 					<div class="col-md-12">
 						<h6 class="lbl">Time dedicated to a patient</h6>
 						<input type="number" id="duration" min="20" class="editProfileInput" placeholder="20 min default">
-						<div class="docProfileHeader">Set<i class="fa fa-cog add" id="setDuration" aria-hidden="true"></i></div>
+						<div class="docProfileHeader settingsBtn">Set<i class="fa fa-cog add" id="setDuration" aria-hidden="true"></i></div>
 					</div>
 				</div>
 		</div>
@@ -51,89 +65,38 @@
 		<div class="col-md-12">
 			<div id="freeHrsText">Even doctors need a day off from time to time. Let your patients know you won't be available.</div>
 			<div class="row">
-				<div class="col-md-6">
-					<div class="docProfileHeader">Choose a date</div>
+				<div class="col-md-6" id="freeHoursDiv">
+					<div class="docProfileHeader">Choose free hours</div>
 					<div class="row">
-						<div class="col-md-6">
-							<h6 class="lbl">From</h6>
-							<input type="text" class="form-control datepicker editProfileInput" placeholder="day" id="day-from">
-						</div>
-						<div class="col-md-6">
-							<h6 class="lbl">To</h6>
-							<input type="text" class="form-control datepicker editProfileInput" placeholder="day" id="day-to">
-						</div>
+						<div class="col-md-12">
+							<div class="form-group">
+                        		<label for="day" class="lbl">Day</label>
+                        		<input type="text" class="form-control datepicker editProfileInput" placeholder="day" id="day">
+                    	</div>
 					</div>
-					<div class="docProfileHeader">Add<i class="fa fa-plus add" id="addFreeDay" aria-hidden="true"></i></div>
 				</div>
-				<div class="col-md-6">
-					<div class="docProfileHeader">...or time</div>
 					<div class="row">
 						<div class="col-md-6">
 							<h6 class="lbl">From</h6>
-							<input type="text" id="workingFrom" class="editProfileInput timepicker">
+							<input type="text" id="notWorkingFrom" class="editProfileInput timepicker">
 						</div>
 						<div class="col-md-6">
 							<h6 class="lbl">To</h6>
-							<input type="text" id="workingFrom" class="editProfileInput timepicker">
+							<input type="text" id="notWorkingTo" class="editProfileInput timepicker">
 						</div>
 					</div>
-					<div class="docProfileHeader">Add<i class="fa fa-plus add" id="addFreeHr" aria-hidden="true"></i></div>
+					<div class="row">
+						<div class="col-md-12">
+							<div class="docProfileHeader settingsBtn">Add<i class="fa fa-plus add" id="addFreeHrs" aria-hidden="true"></i></div>
+						</div>
+					</div>
+					<div class="row">
+						<div class='col-md-12'>
+						<div id="freeHoursContainer"></div>
+						</div>
+					</div>	
 				</div>
 			</div>
 		</div>		
 	</div>	
 </div>
-
-<script>
-	$('.timepicker').timepicker({
-    	timeFormat: 'h:mm p',
-    	interval: 30,
-    	minTime: '07',
-   		maxTime: '6:00pm',
-    	defaultTime: '7',
-    	startTime: '07:00',
-    	dynamic: false,
-    	dropdown: true,
-    	scrollbar: true
-	});
-
-   $(function() {
-   		$(".datepicker").datepicker({
-        	dateFormat: "yy-mm-dd",
-        	defaultDate: getCurrentDate()
-    	}).val(getCurrentDate());
-	});
-
-   function getCurrentDate() {
-    var d = new Date(),
-        month = '' + (d.getMonth() + 1),
-        day = '' + d.getDate(),
-        year = d.getFullYear();
-
-    if (month.length < 2) month = '0' + month;
-    if (day.length < 2) day = '0' + day;
-
-    return [year, month, day].join('-');
-}
-
-
-	$("#workingHours").on("click",function(){
-		$(this).addClass("activeItem");
-		$("#freeHours").removeClass("activeItem");
-        $("#workingHoursTab").toggle();
-        $("#freeHoursTab").toggle();
-
-    });
-
-    $("#freeHours").on("click",function(){
-    	$(this).addClass("activeItem");
-    	$("#workingHours").removeClass("activeItem");
-        $("#freeHoursTab").toggle();
-        $("#workingHoursTab").toggle();
-    });
-
-
-
-
-
-</script>
