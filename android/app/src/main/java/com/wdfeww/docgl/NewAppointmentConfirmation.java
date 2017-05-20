@@ -39,13 +39,13 @@ public class NewAppointmentConfirmation extends AppCompatActivity {
     NavigationView nav_view;
     DrawerLayout drawer_layout;
     NavigationMenu navigationMenu;
-    String token, date, time, pFirstName, pLastName;
+    String token, date, time, pFirstName, pLastName, note;
     Patient patient;
     Toolbar toolbar;
     Doctor doctor;
     LinearLayout results, main_layout;
     TextView tv1, tv2, tv3, tv4, tv5, tv6, tv7, tv8, errorMessage, successMessage;
-    EditText et1, et2;
+    EditText et1, et2, et3;
     LinearLayout.LayoutParams text_params, sub_text_params, btn_params;
     Button btn1;
 
@@ -143,6 +143,20 @@ public class NewAppointmentConfirmation extends AppCompatActivity {
         et2.setHintTextColor(this.getResources().getColor(R.color.color6));
         main_layout.addView(et2);
 
+        tv6 = new TextView(this);
+        tv6.setText("Note");
+        tv6.setLayoutParams(text_params);
+        tv6.setGravity(Gravity.LEFT);
+        tv6.setTextAppearance(this, R.style.profile_text);
+        main_layout.addView(tv6);
+
+        et3 = new EditText(this);
+        et3.setHint("note");
+        et3.setLayoutParams(sub_text_params);
+        et3.setInputType(InputType.TYPE_CLASS_TEXT);
+        et3.setHintTextColor(this.getResources().getColor(R.color.color6));
+        main_layout.addView(et3);
+
         errorMessage.setLayoutParams(sub_text_params);
         main_layout.addView(errorMessage);
 
@@ -163,6 +177,7 @@ public class NewAppointmentConfirmation extends AppCompatActivity {
 
                 pFirstName = et1.getText().toString().trim();
                 pLastName = et2.getText().toString().trim();
+                note = et3.getText().toString().trim();
 
                 createAppointment();
 
@@ -199,7 +214,7 @@ public class NewAppointmentConfirmation extends AppCompatActivity {
 
         } else {
             errorMessage.setVisibility(View.GONE);
-            JSONObject json = JsonReqestBody.newAppointment(date, time, pFirstName, pLastName, doctor.getId());
+            JSONObject json = JsonReqestBody.newAppointment(date, time, pFirstName, pLastName, doctor.getId(), note);
             RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"), (json.toString()));
             Service loginService =
                     ServiceGenerator.createService(Service.class, token);

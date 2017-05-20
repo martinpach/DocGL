@@ -32,6 +32,7 @@ public class Register extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.register);
         sign_up = (Button) findViewById(R.id.sign_up);
+        sign_up.setEnabled(true);
         edit_txt_firstname = (EditText) findViewById(R.id.edit_txt_firstname);
         edit_txt_lastname = (EditText) findViewById(R.id.edit_txt_lastname);
         edit_txt_email = (EditText) findViewById(R.id.edit_txt_email);
@@ -75,6 +76,7 @@ public class Register extends AppCompatActivity {
     }
 
     private void register() {
+        sign_up.setEnabled(false);
         JSONObject json = JsonReqestBody.register(edit_txt_username.getText().toString().trim(), edit_txt_password.getText().toString().trim(),
                 edit_txt_firstname.getText().toString().trim(), edit_txt_lastname.getText().toString().trim(),
                 edit_txt_email.getText().toString().trim());
@@ -91,11 +93,13 @@ public class Register extends AppCompatActivity {
                     successMessage.setText("Registration success!");
                     user = response.body();
                     redirectToHome();
+                    sign_up.setEnabled(false);
                 }
             }
 
             @Override
             public void onFailure(Call<User> call, Throwable t) {
+                sign_up.setEnabled(true);
                 errorMessage.setText("Server not responding!");
             }
         });

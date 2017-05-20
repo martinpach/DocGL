@@ -60,7 +60,7 @@ public class JsonReqestBody {
         }
         return json;
     }
-    public static JSONObject newAppointment(String date,String time, String firstName, String lastName, int id){
+    public static JSONObject newAppointment(String date,String time, String firstName, String lastName, int id, String note){
         JSONObject json = new JSONObject();
         try {
             json.put("date", date);
@@ -68,6 +68,7 @@ public class JsonReqestBody {
             json.put("firstName", firstName);
             json.put("lastName", lastName);
             json.put("doctorId", id);
+            json.put("note", note);
         } catch (JSONException e) {
             e.printStackTrace();
         }
