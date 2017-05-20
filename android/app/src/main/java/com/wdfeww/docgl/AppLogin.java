@@ -32,7 +32,7 @@ public class AppLogin extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.app_login);
-
+        login.setEnabled(true);
         login = (Button) findViewById(R.id.btn_login);
         sign_up = (Button) findViewById(R.id.sign_up);
         password = (EditText) findViewById(R.id.edit_txt_password);
@@ -74,6 +74,7 @@ public class AppLogin extends AppCompatActivity {
 
 
     private void login() {
+        login.setEnabled(false);
         JSONObject json = JsonReqestBody.login(username.getText().toString().trim(), password.getText().toString().trim());
         RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"), (json.toString()));
         Service loginService =
@@ -85,11 +86,13 @@ public class AppLogin extends AppCompatActivity {
             @Override
             public void onResponse(Call<User> call, Response<User> response) {
                 if (response.isSuccessful()) {
+                    login.setEnabled(false);
                     errorMessagePassword.setText("");
                     successMessage.setText("Login success!");
                     user = response.body();
                     redirect();
                 } else {
+                    login.setEnabled(true);
                     errorMessagePassword.setText("Incorrect username or password!");
                     successMessage.setText("");
                 }
@@ -97,6 +100,7 @@ public class AppLogin extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<User> call, Throwable t) {
+                login.setEnabled(true);
                 errorMessagePassword.setText("Server not responding!");
             }
         });
