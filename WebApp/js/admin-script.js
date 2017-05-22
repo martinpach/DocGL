@@ -234,7 +234,6 @@ $(document).ready(function () {
                 statusIcon="";
             $("#tableDoctors").append('<tr class="tableRow" data-id="'+ajaxData[i].id+'">' +
                 '<td>' + icon + '</td>' +
-                '<td>' + (i+1) + '</td>' +
                 '<td>' + ajaxData[i].firstName + '</td>' +
                 '<td>'+ ajaxData[i].lastName+'</td>'+
                 '<td>' + ajaxData[i].specialization + '</td>' +
@@ -259,7 +258,6 @@ $(document).ready(function () {
             statusIcon=blockedStatus==false?unblockedIcon:blockedIcon;
             $("#tableUsers").append('<tr class="tableRow" data-id="'+ajaxData[i].id+'">' +
             '<td>' + icon + '</td>' +
-            '<td>' + (i+1) + '</td>' +
             '<td>' + ajaxData[i].firstName+ '</td>' +
             '<td>' + ajaxData[i].lastName +'</td>' +
             '<td>' + ajaxData[i].email + '</td>' +
@@ -273,16 +271,6 @@ $(document).ready(function () {
     var sortAsc='<i class="fa fa-sort-asc sortArrow" aria-hidden="true"></i>';
     var sortDesc='<i class="fa fa-sort-desc sortArrow" aria-hidden="true"></i>';
     var sortingIcon;
-    
-    $(document).on("click", "#sortIdUsers", function () {
-        sortByUsers = "id";
-        wayUsers = wayUsers == "desc" ? "asc" : "desc";
-        sortingIcon=wayUsers=="asc"?sortAsc:sortDesc;
-        getUsers(start, limit, sortByUsers, wayUsers);
-        $(".sortArrow").remove();
-        $(this).find("span").html(sortingIcon);
-
-    });
 
     $(document).on("click", "#sortNameUsers", function () {
         sortByUsers = "lastName";
@@ -301,16 +289,6 @@ $(document).ready(function () {
         getUsers(start, limit, sortByUsers, wayUsers);
         $(".sortArrow").remove();
         $(this).find("span").html(sortingIcon);
-    });
-
-    $(document).on("click", "#sortIdDocs", function () { 
-        sortByDocs = "id";
-        wayDocs = wayDocs == "desc" ? "asc" : "desc";
-        getDoctors(start, limit, sortByDocs, wayDocs);
-        sortingIcon=wayDocs=="asc"?sortAsc:sortDesc;
-        $(".sortArrow").remove();
-        $(this).find("span").html(sortingIcon);
-
     });
 
     $(document).on("click", "#sortLastNameDocs", function () {
@@ -538,8 +516,10 @@ $(document).ready(function () {
 
     function getDoctorsSearch() {
         var dfd = $.Deferred();
+        //var spec="DENTIST";
         ajaxRequest("/doctors?name=" + searchString, "GET").done(function () {
             var icon = '<i class="fa fa-user-md tableIcon"></i>';
+            console.log(ajaxData);
             generateDoctorTable();
             dfd.resolve();
         });
@@ -550,7 +530,7 @@ $(document).ready(function () {
         var dfd = $.Deferred();
         ajaxRequest("/patients?name=" + searchString, "GET").done(function () {
             var icon = '<i class="fa fa-user-md tableIcon"></i>';
-            generateDoctorTable();
+            generateUserTable();
             dfd.resolve();
         });
         return dfd.promise();
