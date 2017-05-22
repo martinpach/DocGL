@@ -42,7 +42,7 @@ public class NewAppointmentChooseDoctor extends AppCompatActivity {
     Class className;
     NavigationMenu navigationMenu;
     RadioButton radioButton1, radioButton2;
-    EditText search;
+    EditText search, searchCity;
     TextView errorMessage, successMessage;
     List<Doctor> doctors;
     Button btn_search;
@@ -96,6 +96,13 @@ public class NewAppointmentChooseDoctor extends AppCompatActivity {
         search.setHint("search");
         search.setLayoutParams(params);
 
+        searchCity = new EditText(this);
+        searchCity.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_search_black_24dp, 0, 0, 0);
+        searchCity.setTextColor(this.getResources().getColor(R.color.color5));
+        searchCity.setHintTextColor(this.getResources().getColor(R.color.color6));
+        searchCity.setHint("city");
+        searchCity.setLayoutParams(params);
+
         btn_search = new Button(this);
         btn_search.setText("search");
         btn_search.setLayoutParams(params);
@@ -139,6 +146,7 @@ public class NewAppointmentChooseDoctor extends AppCompatActivity {
                 results.removeAllViews();
                 getDocLayout.removeAllViews();
                 getDocLayout.addView(search);
+                getDocLayout.addView(searchCity);
                 getDocLayout.addView(chooseSpecLayout);
                 getDocLayout.addView(errorMessage);
                 getDocLayout.addView(successMessage);
@@ -246,11 +254,32 @@ public class NewAppointmentChooseDoctor extends AppCompatActivity {
                     if (doctors.size() > 0) {
                         errorMessage.setVisibility(View.GONE);
                         successMessage.setVisibility(View.VISIBLE);
-                        if (doctors.size() == 1) {
-                            successMessage.setText("one doctor found");
-                        } else
-                            successMessage.setText("found " + response.body().size() + " doctors");
-                        showResults();
+                        if(!(searchCity.getText().toString().trim().isEmpty())){
+                            for(Doctor doctor:doctors){
+                                if(!(doctor.getCity().toLowerCase().contains(searchCity.getText().toString().trim().toLowerCase()))){
+                                    doctors.remove(doctor);
+                                }
+
+                            }
+                        }
+
+                            if (doctors.size() == 1) {
+                                errorMessage.setVisibility(View.GONE);
+                                successMessage.setVisibility(View.VISIBLE);
+                                successMessage.setText("one doctor found");
+                                showResults();
+                            } else if(doctors.size() == 0){
+                                successMessage.setVisibility(View.GONE);
+                                errorMessage.setVisibility(View.VISIBLE);
+                                errorMessage.setText("no doctors found");
+                                showResults();
+                            }else {
+                                errorMessage.setVisibility(View.GONE);
+                                successMessage.setVisibility(View.VISIBLE);
+                                successMessage.setText("found " + response.body().size() + " doctors");
+                                showResults();
+                            }
+
                     } else {
                         successMessage.setVisibility(View.GONE);
                         errorMessage.setVisibility(View.VISIBLE);
