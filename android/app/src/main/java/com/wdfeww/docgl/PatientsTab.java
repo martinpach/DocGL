@@ -46,7 +46,6 @@ public class PatientsTab extends AppCompatActivity {
 
     Patients newPatient;
 
-    GestureDetector gd;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
