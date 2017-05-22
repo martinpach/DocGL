@@ -513,23 +513,33 @@ $(document).ready(function () {
     });
 
     var searchString;
+    var numberOfResults;
 
     function getDoctorsSearch() {
         var dfd = $.Deferred();
-        //var spec="DENTIST";
         ajaxRequest("/doctors?name=" + searchString, "GET").done(function () {
-            var icon = '<i class="fa fa-user-md tableIcon"></i>';
-            console.log(ajaxData);
-            generateDoctorTable();
-            dfd.resolve();
+            if(ajaxData!=null){
+                generateDoctorTable();
+                numberOfResults=ajaxData.length;
+                dfd.resolve();
+            }
         });
         return dfd.promise();
     }
 
+    function searchDocsBySpec(){
+        var dfd=$.Deferred();
+        ajaxRequest("/doctors?spec="+searchString,"GET").done(function(){
+            generateDoctorTable();
+            console.log(ajaxData.length);
+            dfd.resolve();
+        })
+    }
+
+
     function getUsersSearch() {
         var dfd = $.Deferred();
         ajaxRequest("/patients?name=" + searchString, "GET").done(function () {
-            var icon = '<i class="fa fa-user-md tableIcon"></i>';
             generateUserTable();
             dfd.resolve();
         });
@@ -550,9 +560,16 @@ $(document).ready(function () {
     function setActionToDoctorsSearchBox() {
         $(document).on("keydown", "#searchFieldDoctors", function (event) {
             searchString = $("#searchFieldDoctors").val();
+            var e = jQuery.Event("keydown");
+            e.which = 13; 
             if (event.keyCode == 13) {
                 if ($("#doctors").hasClass("selected")) {
                     getDoctorsSearch();
+                    if(numberOfResults==0){
+                        $("#searchFieldDoctors").trigger(e);
+                        searchString = $("#searchFieldDoctors").val();
+                        searchDocsBySpec();
+                    }
                 }
             }
         });
