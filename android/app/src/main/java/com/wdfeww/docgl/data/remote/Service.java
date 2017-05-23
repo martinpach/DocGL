@@ -44,6 +44,9 @@ public interface Service {
     @GET("patients/{id}/favourite")
     Call<List<Doctor>> getFavouriteDoctors(@Path("id") int id);
 
+    @PUT("patients/{id}/favourite")
+    Call<ResponseBody> addDoctorToFavourite(@Path("id") int id, @Body RequestBody params);
+
     @POST("appointments/interval/times")
     Call<List<FreeDateToAppoitnment>> getFreeDateToAppoitnment(@Body RequestBody params);
 

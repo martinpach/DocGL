@@ -18,6 +18,8 @@
     <string name="myProfile">My Profile</string>
     <string name="fa_medkit">&#xf0fa;</string>
     <string name="fa_calendar">&#xf073;</string>
+    <string name="fill_heart">&#xf004;</string>
+    <string name="notfill_heart">&#xf08a;</string>
     <string name="firstName">First name:</string>
     <string name="lastName">Last name:</string>
     <string name="changePassword">Change password</string>

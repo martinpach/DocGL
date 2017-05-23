@@ -74,4 +74,13 @@ public class JsonReqestBody {
         }
         return json;
     }
+    public static JSONObject addDoctorToFavourite( int DoctorIdInput ){
+        JSONObject json = new JSONObject();
+        try {
+            json.put("doctorId", DoctorIdInput);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return json;
+    }
 }

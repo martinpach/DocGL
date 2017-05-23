@@ -19,7 +19,6 @@ android:layout_height="match_parent">
 
     </android.support.v7.widget.Toolbar>
 
-
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -46,9 +45,19 @@ android:layout_height="match_parent">
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10dp"
                         android:layout_marginTop="10dp"
+                        android:layout_marginBottom="20dp"
                         android:text="My favourite doctors"
                         android:theme="@style/home_text" />
 
+                    <TextView
+                        android:id="@+id/noResult"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="30dp"
+                        android:layout_gravity="center"
+                        android:text="You don't have any favourite doctor"
+                        android:theme="@style/profile_text" />
 
                     <LinearLayout
                         android:id="@+id/results"
