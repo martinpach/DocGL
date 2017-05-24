@@ -53,6 +53,15 @@ public class Doctor implements Parcelable {
     @SerializedName("workingHoursSet")
     @Expose
     private Boolean workingHoursSet;
+    private boolean isFavourite;
+
+    public boolean isFavourite() {
+        return isFavourite;
+    }
+
+    public void setFavourite(boolean favourite) {
+        isFavourite = favourite;
+    }
 
     protected Doctor(Parcel in) {
         firstName = in.readString();

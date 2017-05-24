@@ -118,6 +118,7 @@ public class FavouriteDoctors extends AppCompatActivity {
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     private void showResults() {
+        params.setMargins(0,0,0,20);
         results.removeAllViews();
         for (final Doctor doctor : doctors) {
             final LinearLayout linearLayout = new LinearLayout(this);

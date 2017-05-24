@@ -18,16 +18,22 @@ import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.wdfeww.docgl.data.methods.FontManager;
+import com.wdfeww.docgl.data.methods.JsonReqestBody;
 import com.wdfeww.docgl.data.methods.NavigationMenu;
 import com.wdfeww.docgl.data.model.Doctor;
 import com.wdfeww.docgl.data.model.Patient;
 import com.wdfeww.docgl.data.remote.Service;
 import com.wdfeww.docgl.data.remote.ServiceGenerator;
 
+import org.json.JSONObject;
+
 import java.util.List;
 
+import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -44,7 +50,7 @@ public class NewAppointmentChooseDoctor extends AppCompatActivity {
     RadioButton radioButton1, radioButton2;
     EditText search, searchCity;
     TextView errorMessage, successMessage;
-    List<Doctor> doctors;
+    List<Doctor> doctors, s_doctors;
     Button btn_search;
     LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
     LinearLayout.LayoutParams txt_params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -215,7 +221,10 @@ public class NewAppointmentChooseDoctor extends AppCompatActivity {
                     doctors = response.body();
                     if (doctors.size() > 0) {
                         errorMessage.setVisibility(View.GONE);
-                        showResults();
+                        if (radioButton1.isChecked())
+                            for(Doctor doctor: doctors)
+                                doctor.setFavourite(true);
+                            showResults();
                     } else {
                         successMessage.setVisibility(View.GONE);
                         errorMessage.setVisibility(View.VISIBLE);
@@ -242,7 +251,7 @@ public class NewAppointmentChooseDoctor extends AppCompatActivity {
 
 
     private void searchDoctor() {
-
+        selectFromFavouritelist();
         Service service = ServiceGenerator.createService(Service.class, token);
         Call<List<Doctor>> call = service.searchDoctor(name, spec);
         call.enqueue(new Callback<List<Doctor>>() {
@@ -250,35 +259,50 @@ public class NewAppointmentChooseDoctor extends AppCompatActivity {
             @Override
             public void onResponse(Call<List<Doctor>> call, Response<List<Doctor>> response) {
                 if (response.isSuccessful()) {
-                    doctors = response.body();
-                    if (doctors.size() > 0) {
+                    s_doctors = response.body();
+                    for (Doctor doctor : s_doctors) {
+                        for (Doctor s_doctor : doctors) {
+                            if (s_doctor.getId() == doctor.getId()) {
+                                s_doctor.setFavourite(true);
+
+                            } else {
+                                s_doctor.setFavourite(false);
+                            }
+
+                        }
+                    }
+                    if (s_doctors.size() > 0) {
+
                         errorMessage.setVisibility(View.GONE);
                         successMessage.setVisibility(View.VISIBLE);
-                        if(!(searchCity.getText().toString().trim().isEmpty())){
-                            for(Doctor doctor:doctors){
-                                if(!(doctor.getCity().toLowerCase().contains(searchCity.getText().toString().trim().toLowerCase()))){
-                                    doctors.remove(doctor);
+                        if (!(searchCity.getText().toString().trim().isEmpty())) {
+                            for (Doctor doctor : s_doctors) {
+                                if (!(doctor.getCity().toLowerCase().contains(searchCity.getText().toString().trim().toLowerCase()))) {
+                                    s_doctors.remove(doctor);
                                 }
 
                             }
                         }
 
-                            if (doctors.size() == 1) {
-                                errorMessage.setVisibility(View.GONE);
-                                successMessage.setVisibility(View.VISIBLE);
-                                successMessage.setText("one doctor found");
-                                showResults();
-                            } else if(doctors.size() == 0){
-                                successMessage.setVisibility(View.GONE);
-                                errorMessage.setVisibility(View.VISIBLE);
-                                errorMessage.setText("no doctors found");
-                                showResults();
-                            }else {
-                                errorMessage.setVisibility(View.GONE);
-                                successMessage.setVisibility(View.VISIBLE);
-                                successMessage.setText("found " + response.body().size() + " doctors");
-                                showResults();
-                            }
+                        if (s_doctors.size() == 1) {
+                            errorMessage.setVisibility(View.GONE);
+                            successMessage.setVisibility(View.VISIBLE);
+                            successMessage.setText("one doctor found");
+                            doctors = s_doctors;
+                            showResults();
+                        } else if (s_doctors.size() == 0) {
+                            successMessage.setVisibility(View.GONE);
+                            errorMessage.setVisibility(View.VISIBLE);
+                            errorMessage.setText("no doctors found");
+                            doctors = s_doctors;
+                            showResults();
+                        } else {
+                            errorMessage.setVisibility(View.GONE);
+                            successMessage.setVisibility(View.VISIBLE);
+                            successMessage.setText("found " + response.body().size() + " doctors");
+                            doctors = s_doctors;
+                            showResults();
+                        }
 
                     } else {
                         successMessage.setVisibility(View.GONE);
@@ -356,11 +380,56 @@ public class NewAppointmentChooseDoctor extends AppCompatActivity {
             tv4.setText("Workplace: " + doctor.getWorkplace());
             tv4.setGravity(Gravity.LEFT);
             linearLayout.addView(tv4);
+
+            if (doctor.isFavourite()) {
+                final TextView tv5 = new TextView(this);
+                tv5.setTypeface(FontManager.getTypeface(getApplicationContext(), FontManager.FONTAWESOME));
+                tv5.setTextSize(25.0f);
+                tv5.setLayoutParams(txt_params);
+                tv5.setText(this.getResources().getString(R.string.fill_heart));
+                tv5.setGravity(Gravity.LEFT);
+                tv5.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        toggleFavourite(tv5, doctor);
+                    }
+                });
+                linearLayout.addView(tv5);
+            } else {
+                final TextView tv5 = new TextView(this);
+                tv5.setTypeface(FontManager.getTypeface(getApplicationContext(), FontManager.FONTAWESOME));
+                tv5.setTextSize(25.0f);
+                tv5.setLayoutParams(txt_params);
+                tv5.setText(this.getResources().getString(R.string.notfill_heart));
+                tv5.setGravity(Gravity.LEFT);
+                tv5.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        toggleFavourite(tv5, doctor);
+                    }
+                });
+                linearLayout.addView(tv5);
+            }
         }
 
 
     }
-    private void redirect (Doctor doctor){
+
+    private void toggleFavourite(TextView tv, Doctor doctor) {
+        if (doctor.isFavourite() == true) {
+            Toast.makeText(getApplicationContext(), "doctor " + doctor.getFirstName() + " " + doctor.getLastName()+ " was removed from favourite list", Toast.LENGTH_SHORT).show();
+            doctor.setFavourite(false);
+            tv.setText(this.getResources().getString(R.string.notfill_heart));
+            addAndRemovefromfavouriteList(doctor);
+        } else {
+            Toast.makeText(getApplicationContext(), "doctor " + doctor.getFirstName() + " " + doctor.getLastName()+ " was added to favourite list", Toast.LENGTH_SHORT).show();
+            doctor.setFavourite(true);
+            tv.setText(this.getResources().getString(R.string.fill_heart));
+            addAndRemovefromfavouriteList(doctor);
+        }
+    }
+
+    private void redirect(Doctor doctor) {
         Intent intent = new Intent(getBaseContext(), NewAppointmentChooseDatetime.class);
         Bundle bundle = new Bundle();
         bundle.putParcelable("doctor", doctor);
@@ -368,5 +437,29 @@ public class NewAppointmentChooseDoctor extends AppCompatActivity {
         intent.putExtras(bundle);
         intent.putExtra("token", token);
         startActivity(intent);
+    }
+    private void addAndRemovefromfavouriteList(Doctor doc){
+        JSONObject json = JsonReqestBody.addDoctorToFavourite(doc.getId());
+        RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"), (json.toString()));
+        Service service =
+                ServiceGenerator.createService(Service.class, token);
+        Call<ResponseBody> call = service.addDoctorToFavourite(patient.getId(), body);
+        call.enqueue(new Callback<ResponseBody>() {
+            @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if(response.isSuccessful()){
+
+
+                }else {
+                    Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_LONG).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Toast.makeText(getApplicationContext(), "Server error!", Toast.LENGTH_LONG).show();
+            }
+        });
     }
 }
