@@ -276,7 +276,7 @@ public class DoctorResource {
         authorizer.checkAuthentication(loggedUser.getId(), id);
         authorizer.checkAuthorization(loggedUser.getUserType(), UserType.DOCTOR);
         Appointment lastAppointment = appointmentDAO.getDoctorsLastAppointment(id);
-        if(new Date().before(lastAppointment.getDate())){
+        if(new Date().before(lastAppointment.getDate()) || new Date().before(lastAppointment.getTime())){
             throw new BadRequestException("Cannot set working hours because you have appointments already planned");
         }
         workingHoursDAO.updateDoctorsWorkingHours(id, workingHours);
