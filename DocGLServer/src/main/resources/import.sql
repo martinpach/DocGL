@@ -10,21 +10,21 @@ insert into Patients(email, first_name, last_name, password, user_name, registra
 insert into Patients(email, first_name, last_name, password, user_name, registration_date) values("yoda@master.com", "Yoda", "Master", "71dfd7af6d2ae6abf10b62b719e6600f", "pat3", CURDATE());
 insert into Patients(email, first_name, last_name, password, user_name, registration_date) values("darth@tyranus.sk", "Darth", "Tyranus", "71dfd7af6d2ae6abf10b62b719e6600f", "pat4", CURDATE());
 
-insert into Appointments(date, time, note, doctor_id, patient_id, patient_first_name, patient_last_name, canceled) values("2017-05-24", "7:30:00", "Headache", 1, 1, "Janko", "Hrasko", true);
-insert into Appointments(date, time, note, doctor_id, patient_id, patient_first_name, patient_last_name) values("2017-05-24", "10:10:00", "Headache", 1, 3, "Juraj", "Janosik");
-insert into Appointments(date, time, note, doctor_id, patient_id, patient_first_name, patient_last_name) values("2017-05-24", "11:30:00", "Headache", 1, 3, "Tyroone", "Hill");
+insert into Appointments(date, time, note, doctor_id, patient_id, patient_first_name, patient_last_name, canceled) values("2017-06-28", "7:30:00", "Headache", 1, 1, "Janko", "Hrasko", true);
 insert into Appointments(date, time, note, doctor_id, patient_id, patient_first_name, patient_last_name) values("2017-05-19", "9:30:00", "Ear ache", 1, 2, "Chuck", "Norris");
 insert into Appointments(date, time, note, doctor_id, patient_id, patient_first_name, patient_last_name) values("2017-06-21", "16:00:00", "Error 404 leg is missing.", 2, 2, "Lucia", "Norrisova");
 insert into Appointments(date, time, note, doctor_id, patient_id, patient_first_name, patient_last_name) values("2017-07-03", "13:40:00", "Leprosy", 1, 1, "Rocky", "Balboa");
 insert into Appointments(date, time, note, doctor_id, patient_id, patient_first_name, patient_last_name) values("2017-07-07", "10:50:00", "Cancer", 2, 1, "King", "Arthur");
 
--- insert into Appointments(date, time, note, doctor_id, patient_id, patient_first_name, patient_last_name) values("2017-05-24", "7:30:00", "Headache", 1, 3, "Juraj", "Janosik");
-insert into Appointments(date, time, note, doctor_id, patient_id, patient_first_name, patient_last_name) values("2017-05-24", "10:30:00", "Headache", 1, 1, "Jeff", "Myname");
-insert into Appointments(date, time, note, doctor_id, patient_id, patient_first_name, patient_last_name) values("2017-05-24", "10:50:00", "Headache", 1, 2, "Martin", "Martinez");
-insert into Appointments(date, time, note, doctor_id, patient_id, patient_first_name, patient_last_name) values("2017-05-24", "11:10:00", "Headache", 1, 1, "Vlad", "Dracula");
-insert into Appointments(date, time, note, doctor_id, patient_id, patient_first_name, patient_last_name) values("2017-05-24", "13:00:00", "Headache", 1, 2, "Kalumum", "Puannum");
-insert into Appointments(date, time, note, doctor_id, patient_id, patient_first_name, patient_last_name) values("2017-05-24", "13:20:00", "Headache", 1, 2, "Zuqaqip", "Balih");
-insert into Appointments(date, time, note, doctor_id, patient_id, patient_first_name, patient_last_name) values("2017-05-24", "13:40:00", "Headache", 1, 2, "Zamug", "Iltasadum");
+-- insert into Appointments(date, time, note, doctor_id, patient_id, patient_first_name, patient_last_name) values("2017-06-28", "7:30:00", "Headache", 1, 3, "Juraj", "Janosik");
+insert into Appointments(date, time, note, doctor_id, patient_id, patient_first_name, patient_last_name) values("2017-06-28", "10:10:00", "Headache", 1, 3, "Juraj", "Janosik");
+insert into Appointments(date, time, note, doctor_id, patient_id, patient_first_name, patient_last_name) values("2017-06-28", "10:30:00", "Headache", 1, 1, "Jeff", "Myname");
+insert into Appointments(date, time, note, doctor_id, patient_id, patient_first_name, patient_last_name) values("2017-06-28", "10:50:00", "Headache", 1, 2, "Martin", "Martinez");
+insert into Appointments(date, time, note, doctor_id, patient_id, patient_first_name, patient_last_name) values("2017-06-28", "11:10:00", "Headache", 1, 1, "Vlad", "Dracula");
+insert into Appointments(date, time, note, doctor_id, patient_id, patient_first_name, patient_last_name) values("2017-06-28", "11:30:00", "Headache", 1, 3, "Tyroone", "Hill");
+insert into Appointments(date, time, note, doctor_id, patient_id, patient_first_name, patient_last_name) values("2017-06-28", "13:00:00", "Headache", 1, 2, "Kalumum", "Puannum");
+-- insert into Appointments(date, time, note, doctor_id, patient_id, patient_first_name, patient_last_name) values("2017-06-28", "13:20:00", "Headache", 1, 2, "Zuqaqip", "Balih");
+insert into Appointments(date, time, note, doctor_id, patient_id, patient_first_name, patient_last_name) values("2017-06-28", "13:40:00", "Headache", 1, 2, "Zamug", "Iltasadum");
 
 -- CURRENT DATE APPOINTMENTS --
 insert into Appointments(date, time, note, doctor_id, patient_id, patient_first_name, patient_last_name) values(CURDATE(), "10:30:00", "Headache", 1, 1, "Jeff", "Myname");
@@ -36,8 +36,8 @@ insert into Appointments(date, time, note, doctor_id, patient_id, patient_first_
 
 insert into Working_Hours(monday_from, monday_to, tuesday_from, tuesday_to, wednesday_from, wednesday_to, thursday_from, thursday_to, friday_from, friday_to, doctor_id) values( "07:30", "12:00", "07:30", "12:00", "07:30", "12:00", "07:30", "12:00", "07:30", "12:00", 1);
 insert into Working_Hours(monday_from, monday_to, tuesday_from, tuesday_to, wednesday_from, wednesday_to, thursday_from, thursday_to, doctor_id) values( "13:00", "15:00", "13:00", "15:00", "13:00", "17:00", "13:00", "15:00", 1);
-insert into Free_Hours(date, time_from, time_to, doctor_id) values("2017-05-24", "8:00:00", "10:00:00", 1);
-insert into Free_Hours(date, time_from, time_to, doctor_id) values("2017-05-24", "14:10:00", "17:00:00", 1);
+insert into Free_Hours(date, time_from, time_to, doctor_id) values("2017-06-28", "8:00:00", "10:00:00", 1);
+insert into Free_Hours(date, time_from, time_to, doctor_id) values("2017-06-28", "14:10:00", "17:00:00", 1);
 insert into Working_Hours(monday_from, monday_to, tuesday_from, tuesday_to, wednesday_from, wednesday_to, thursday_from, thursday_to, doctor_id) values( "07:30", "12:00", "07:30", "12:00", "07:30", "12:10", "09:00", "12:00", 2);
 insert into Working_Hours(monday_from, monday_to, tuesday_from, tuesday_to, wednesday_from, wednesday_to, thursday_from, thursday_to, doctor_id) values( "13:00", "15:00", "13:00", "15:00", "13:00", "17:00", "13:00", "15:00", 2);
 insert into favourite_doctors VALUES( 1, 1);

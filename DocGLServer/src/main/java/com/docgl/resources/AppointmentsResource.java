@@ -143,9 +143,13 @@ public class AppointmentsResource {
         if  (input.getDateTo() == null)
             throw new BadRequestException("Property 'dateTo' or 'date' is missing or not presented!");
 
-        int docID = input.getId();
         LocalDate dateFrom = new LocalDate(input.getDateFrom());
         LocalDate dateTo = new LocalDate(input.getDateTo());
+
+        if (dateTo.compareTo(dateFrom.plusDays(30)) == 1)
+            throw new BadRequestException("Date interval from, to is too big!");
+
+        int docID = input.getId();
         LocalDate date = dateFrom;
         Date dateDate = input.getDateFrom();
 
