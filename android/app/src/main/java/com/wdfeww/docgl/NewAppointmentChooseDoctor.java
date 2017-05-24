@@ -30,6 +30,7 @@ import com.wdfeww.docgl.data.remote.ServiceGenerator;
 
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import okhttp3.RequestBody;
@@ -221,10 +222,11 @@ public class NewAppointmentChooseDoctor extends AppCompatActivity {
                     doctors = response.body();
                     if (doctors.size() > 0) {
                         errorMessage.setVisibility(View.GONE);
-                        if (radioButton1.isChecked())
-                            for(Doctor doctor: doctors)
-                                doctor.setFavourite(true);
-                            showResults();
+
+                        for (Doctor doctor : doctors)
+                            doctor.setFavourite(true);
+                        if(radioButton1.isChecked())
+                        showResults(doctors);
                     } else {
                         successMessage.setVisibility(View.GONE);
                         errorMessage.setVisibility(View.VISIBLE);
@@ -260,13 +262,14 @@ public class NewAppointmentChooseDoctor extends AppCompatActivity {
             public void onResponse(Call<List<Doctor>> call, Response<List<Doctor>> response) {
                 if (response.isSuccessful()) {
                     s_doctors = response.body();
-                    for (Doctor doctor : s_doctors) {
-                        for (Doctor s_doctor : doctors) {
-                            if (s_doctor.getId() == doctor.getId()) {
+                    for (Doctor doctor : doctors) {
+                        for (Doctor s_doctor : s_doctors) {
+                            if (s_doctor.getId().intValue() == doctor.getId().intValue()) {
                                 s_doctor.setFavourite(true);
-
+                                System.out.println("setted true");
                             } else {
                                 s_doctor.setFavourite(false);
+                                System.out.println("setted false");
                             }
 
                         }
@@ -288,21 +291,18 @@ public class NewAppointmentChooseDoctor extends AppCompatActivity {
                             errorMessage.setVisibility(View.GONE);
                             successMessage.setVisibility(View.VISIBLE);
                             successMessage.setText("one doctor found");
-                            doctors = s_doctors;
-                            showResults();
                         } else if (s_doctors.size() == 0) {
                             successMessage.setVisibility(View.GONE);
                             errorMessage.setVisibility(View.VISIBLE);
                             errorMessage.setText("no doctors found");
-                            doctors = s_doctors;
-                            showResults();
                         } else {
                             errorMessage.setVisibility(View.GONE);
                             successMessage.setVisibility(View.VISIBLE);
                             successMessage.setText("found " + response.body().size() + " doctors");
-                            doctors = s_doctors;
-                            showResults();
                         }
+
+
+                        showResults(s_doctors);
 
                     } else {
                         successMessage.setVisibility(View.GONE);
@@ -331,9 +331,9 @@ public class NewAppointmentChooseDoctor extends AppCompatActivity {
 
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
-    private void showResults() {
+    private void showResults(List<Doctor> docs) {
         results.removeAllViews();
-        for (final Doctor doctor : doctors) {
+        for (final Doctor doctor : docs) {
             final LinearLayout linearLayout = new LinearLayout(this);
             linearLayout.setLayoutParams(params);
             linearLayout.setBackground(this.getResources().getDrawable(R.drawable.background_appointment));
@@ -381,7 +381,8 @@ public class NewAppointmentChooseDoctor extends AppCompatActivity {
             tv4.setGravity(Gravity.LEFT);
             linearLayout.addView(tv4);
 
-            if (doctor.isFavourite()) {
+            System.out.println(doctor.isFavourite());
+            if (doctor.isFavourite() == true) {
                 final TextView tv5 = new TextView(this);
                 tv5.setTypeface(FontManager.getTypeface(getApplicationContext(), FontManager.FONTAWESOME));
                 tv5.setTextSize(25.0f);
@@ -417,12 +418,12 @@ public class NewAppointmentChooseDoctor extends AppCompatActivity {
 
     private void toggleFavourite(TextView tv, Doctor doctor) {
         if (doctor.isFavourite() == true) {
-            Toast.makeText(getApplicationContext(), "doctor " + doctor.getFirstName() + " " + doctor.getLastName()+ " was removed from favourite list", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "doctor " + doctor.getFirstName() + " " + doctor.getLastName() + " was removed from favourite list", Toast.LENGTH_SHORT).show();
             doctor.setFavourite(false);
             tv.setText(this.getResources().getString(R.string.notfill_heart));
             addAndRemovefromfavouriteList(doctor);
         } else {
-            Toast.makeText(getApplicationContext(), "doctor " + doctor.getFirstName() + " " + doctor.getLastName()+ " was added to favourite list", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "doctor " + doctor.getFirstName() + " " + doctor.getLastName() + " was added to favourite list", Toast.LENGTH_SHORT).show();
             doctor.setFavourite(true);
             tv.setText(this.getResources().getString(R.string.fill_heart));
             addAndRemovefromfavouriteList(doctor);
@@ -438,7 +439,8 @@ public class NewAppointmentChooseDoctor extends AppCompatActivity {
         intent.putExtra("token", token);
         startActivity(intent);
     }
-    private void addAndRemovefromfavouriteList(Doctor doc){
+
+    private void addAndRemovefromfavouriteList(Doctor doc) {
         JSONObject json = JsonReqestBody.addDoctorToFavourite(doc.getId());
         RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"), (json.toString()));
         Service service =
@@ -448,10 +450,10 @@ public class NewAppointmentChooseDoctor extends AppCompatActivity {
             @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                if(response.isSuccessful()){
+                if (response.isSuccessful()) {
 
 
-                }else {
+                } else {
                     Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_LONG).show();
                 }
             }
