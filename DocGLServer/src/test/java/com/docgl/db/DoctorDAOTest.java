@@ -2,6 +2,7 @@ package com.docgl.db;
 
 
 import com.docgl.Cryptor;
+import com.docgl.DateParser;
 import com.docgl.api.RegistrationInput;
 import com.docgl.entities.Doctor;
 import com.docgl.enums.SortableDoctorColumns;

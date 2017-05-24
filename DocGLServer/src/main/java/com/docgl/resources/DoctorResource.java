@@ -264,6 +264,26 @@ public class DoctorResource {
     }
 
     /**
+     * Resource for updating working hours for exact doctor
+     * @param loggedUser user that is sending request
+     * @param id chosen doctor
+     * @param workingHours updated working hours
+     */
+    @PUT
+    @Path("{id}/workingHours")
+    @UnitOfWork
+    public void changeDoctorsWorkingHours(@Auth LoggedUser loggedUser, @PathParam("id") int id, List<WorkingHours> workingHours){
+        authorizer.checkAuthentication(loggedUser.getId(), id);
+        authorizer.checkAuthorization(loggedUser.getUserType(), UserType.DOCTOR);
+        Appointment lastAppointment = appointmentDAO.getDoctorsLastAppointment(id);
+        if(new Date().before(lastAppointment.getDate())){
+            throw new BadRequestException("Cannot set working hours because you have appointments already planned");
+        }
+        workingHoursDAO.updateDoctorsWorkingHours(id, workingHours);
+
+    }
+
+    /**
      * Resource for updating doctors' profile
      * @param loggedUser user that is sending request
      * @param id chosen doctor

@@ -18,6 +18,7 @@ import java.util.Date;
 @Table(name = "Appointments")
 @NamedQueries({
         @NamedQuery(name="getDoctorsAppointment", query="from Appointment where doctor.id = :id"),
+        @NamedQuery(name="getDoctorsLastAppointment", query="from Appointment where doctor.id = :id order by date desc"),
         @NamedQuery(name="getPatientsAppointment", query="from Appointment where patient.id = :id"),
         @NamedQuery(name="getDoctorsAppointmentsByDate", query="from Appointment where doctor.id = :id and date = :date")
 })

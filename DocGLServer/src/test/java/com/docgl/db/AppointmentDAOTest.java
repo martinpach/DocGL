@@ -144,4 +144,10 @@ public class AppointmentDAOTest extends AbstractDAO {
         assertEquals(true, appointment.isCanceled());
     }
 
+    @Test
+    public void getDoctorsLastAppointmentTest(){
+        Appointment appointment = dao.getDoctorsLastAppointment(1);
+        assertEquals(DateParser.parseStringToTime("11:10:00"), appointment.getTime());
+    }
+
 }

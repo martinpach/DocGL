@@ -5,6 +5,7 @@ import com.docgl.entities.WorkingHours;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
+import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,6 +27,17 @@ public class WorkingHoursDAO extends io.dropwizard.hibernate.AbstractDAO<Working
         return namedQuery("getDoctorsWorkingHours")
                 .setParameter("id", id)
                 .list();
+    }
+
+    /**
+     * Updating working doctors' working hours
+     * @param idDoctor chosen doctor
+     * @param workingHours updated working hours
+     */
+    public void updateDoctorsWorkingHours(int idDoctor, List<WorkingHours> workingHours){
+        Session session = currentSession();
+        Doctor doctor = session.find(Doctor.class, idDoctor);
+        doctor.setWorkingHours(workingHours);
     }
 
     /**

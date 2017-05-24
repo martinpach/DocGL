@@ -78,6 +78,18 @@ public class AppointmentDAO extends AbstractDAO<Appointment> {
     }
 
     /**
+     * This function gets last doctor appointment from database. It is for doctor changing working hours. (He cannot change working hours while he has some interview)
+     * @param idDoctor chosen doctor
+     * @return last appointment
+     */
+    public Appointment getDoctorsLastAppointment(int idDoctor){
+        return (Appointment) namedQuery("getDoctorsLastAppointment")
+                .setParameter("id", idDoctor)
+                .setMaxResults(1)
+                .getSingleResult();
+    }
+
+    /**
      * This function cancel appointment, canceled appointment cannot be approved again
      * @param id appointment id
      */
