@@ -52,5 +52,8 @@ public interface Service {
 
     @PUT("appointments/{id}/new")
     Call<ResponseBody> createNewAppointment(@Path("id") int id, @Body RequestBody params);
+
+    @PUT("patients/{id}/notification")
+    Call<ResponseBody> updatePatientsFCMRegistrationToken(@Path("id")int id, @Body RequestBody params);
 }
 
