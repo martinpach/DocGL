@@ -16,7 +16,7 @@ import java.util.Date;
  */
 
 @Entity
-@Table(name="Patients")
+@Table(name = "Patients")
 public class Patient extends User {
 
     @OneToMany(mappedBy = "patient", fetch = FetchType.LAZY)
@@ -38,12 +38,24 @@ public class Patient extends User {
     @JsonIgnore
     private Collection<Doctor> doctors = new ArrayList<>();
 
-    public Patient(){
+    @Column(name = "fcm_registration_token")
+    private String FCMRegistrationToken;
+
+    public Patient() {
     }
 
-    public Patient (String firstName, String lastName, String email, String userName, String password, Date registrationDate){
-        super(firstName,lastName,email,userName,password);
+    public Patient(String firstName, String lastName, String email, String userName, String password, Date registrationDate) {
+        super(firstName, lastName, email, userName, password);
         this.registrationDate = registrationDate;
+
+    }
+
+    public String getFCMRegistrationToken() {
+        return FCMRegistrationToken;
+    }
+
+    public void setFCMRegistrationToken(String FCMRegistrationToken) {
+        this.FCMRegistrationToken = FCMRegistrationToken;
     }
 
     public Collection<Doctor> getDoctors() {
@@ -79,16 +91,16 @@ public class Patient extends User {
     }
 
     @Override
-    public String toString(){
+    public String toString() {
 
         return "Patient{" +
                 "id='" + this.getId() + '\'' +
                 ", firstname='" + this.getFirstName() + '\'' +
-                ", lastname='" + this.getLastName() +'\''+
-                ", email='" + this.getEmail() +'\''+
-                ", username='"+this.getUserName()+'\''+
-                ", password='"+this.getPassword()+'\''+
-                ", blocked='"+this.isBlocked()+'\''+
+                ", lastname='" + this.getLastName() + '\'' +
+                ", email='" + this.getEmail() + '\'' +
+                ", username='" + this.getUserName() + '\'' +
+                ", password='" + this.getPassword() + '\'' +
+                ", blocked='" + this.isBlocked() + '\'' +
                 '}';
     }
 }

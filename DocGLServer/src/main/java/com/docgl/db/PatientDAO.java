@@ -31,24 +31,25 @@ public class PatientDAO extends AbstractDAO<Patient> {
 
     /**
      * This function provides formatted return of patients.
-     * @param limit number of returned doctors
-     * @param start first selected doctor
+     *
+     * @param limit  number of returned doctors
+     * @param start  first selected doctor
      * @param sortBy column that table will be sorted by
-     * @param way sorted ascending or descending (asc,desc)
-     * @param name searched patient name
+     * @param way    sorted ascending or descending (asc,desc)
+     * @param name   searched patient name
      * @return list of patients filtered by entered params. If no params are presented, all patients will be returned
      */
-    public List<Patient> getAllPatients(int limit, int start, SortablePatientColumns sortBy, SortingWays way, String name){
+    public List<Patient> getAllPatients(int limit, int start, SortablePatientColumns sortBy, SortingWays way, String name) {
         Criteria criteria = criteria();
         if (name != null) {
             criteria = searchPatient(name);
 
         }
-        if(limit > 0 && start >= 0) {
+        if (limit > 0 && start >= 0) {
             criteria.setFirstResult(start)
                     .setMaxResults(limit);
         }
-        if(sortBy != null) {
+        if (sortBy != null) {
             if (way != null) {
                 if (way.getValue().equals("asc")) {
                     criteria.addOrder(Order.asc(sortBy.getValue()));
@@ -64,6 +65,7 @@ public class PatientDAO extends AbstractDAO<Patient> {
 
     /**
      * This function is called during login. If credentials are incorrect function return null.
+     *
      * @param userName login username
      * @param password login password
      * @return Patient entity object with entered username and password
@@ -77,6 +79,7 @@ public class PatientDAO extends AbstractDAO<Patient> {
 
     /**
      * Save new patient to the database
+     *
      * @param registrationInput object with all registration values
      */
     public void registerPatient(RegistrationInput registrationInput) {
@@ -87,13 +90,14 @@ public class PatientDAO extends AbstractDAO<Patient> {
                 registrationInput.getUserName(),
                 Cryptor.encrypt(registrationInput.getPassword()),
                 new Date()
-                ));
+        ));
     }
 
     /**
      * This function checked if selected userName and email are unique
+     *
      * @param userName to test if it is unique
-     * @param email to test if it is unique
+     * @param email    to test if it is unique
      * @return true if both params are unique
      */
     public boolean isUserNameAndEmailUnique(String userName, String email) {
@@ -119,7 +123,7 @@ public class PatientDAO extends AbstractDAO<Patient> {
 
     /**
      * @param blocked true = block, false = unblock
-     * @param id selected patient
+     * @param id      selected patient
      */
     public void blockPatient(boolean blocked, int id) {
         currentSession();
@@ -130,40 +134,44 @@ public class PatientDAO extends AbstractDAO<Patient> {
     /**
      * @return number of all patients
      */
-    public long getNumberOfAllPatients(){
-        return (long)criteria()
+    public long getNumberOfAllPatients() {
+        return (long) criteria()
                 .setProjection(Projections.rowCount())
                 .uniqueResult();
     }
 
     /**
      * This function search patients by theirs name.
+     *
      * @param name name to search
      * @return Criteria
      */
     public Criteria searchPatient(String name) {
         Criteria criteria = criteria();
-            Criterion firstname = Restrictions.ilike("firstName", "%" + name + "%");
-            Criterion lastname = Restrictions.ilike("lastName", "%" + name + "%");
-            Criterion email = Restrictions.ilike("email", "%" + name + "%");
-            criteria.add(Restrictions.or(firstname, lastname, email));
+        Criterion firstname = Restrictions.ilike("firstName", "%" + name + "%");
+        Criterion lastname = Restrictions.ilike("lastName", "%" + name + "%");
+        Criterion email = Restrictions.ilike("email", "%" + name + "%");
+        criteria.add(Restrictions.or(firstname, lastname, email));
         return criteria;
     }
 
     /**
      * This function sets patients password and encrypt it.
+     *
      * @param password new password
-     * @param id doctor id in database
+     * @param id       doctor id in database
      */
     public void setPassword(String password, int id) {
         Session session = currentSession();
         Patient patient = session.find(Patient.class, id);
         patient.setPassword(Cryptor.encrypt(password));
     }
+
     /**
      * This function compare the new password with the old one.
+     *
      * @param password new password
-     * @param id doctor id in database
+     * @param id       doctor id in database
      * @return returns true if password are different, false if are not
      */
     public boolean isPasswordDifferent(String password, int id) {
@@ -173,6 +181,7 @@ public class PatientDAO extends AbstractDAO<Patient> {
             return false;
         return true;
     }
+
     /**
      * @param id patient id in database
      * @return rreturns collection of favourite doctors
@@ -182,10 +191,12 @@ public class PatientDAO extends AbstractDAO<Patient> {
         Patient patient = session.find(Patient.class, id);
         return patient.getDoctors();
     }
+
     /**
      * This function add doctor into patient favourite collection
+     *
      * @param patientId patient id in database
-     * @param doctorId doctor id in database
+     * @param doctorId  doctor id in database
      */
     public void addDoctorToFavourite(int patientId, int doctorId) {
         Session session = currentSession();
@@ -195,10 +206,12 @@ public class PatientDAO extends AbstractDAO<Patient> {
         favouriteDoctors.add(doctor);
         patient.setDoctors(favouriteDoctors);
     }
+
     /**
      * This function remove doctor from patient favourite collection
+     *
      * @param patientId patient id in database
-     * @param doctorId doctor id in database
+     * @param doctorId  doctor id in database
      */
     public void removeDoctorFromFavourite(int patientId, int doctorId) {
         Session session = currentSession();
@@ -211,33 +224,45 @@ public class PatientDAO extends AbstractDAO<Patient> {
 
     /**
      * This function updates patient profile in database. If any params are empty the value will not be updated
+     *
      * @param firstName to update
-     * @param lastName to update
-     * @param email to update
-     * @param id chosen patient
+     * @param lastName  to update
+     * @param email     to update
+     * @param id        chosen patient
      */
-    public void updateProfile(String firstName, String lastName, String email, int id){
+    public void updateProfile(String firstName, String lastName, String email, int id) {
         Session session = currentSession();
         Patient patient = session.find(Patient.class, id);
-        if(StringUtils.isNotBlank(firstName)){
+        if (StringUtils.isNotBlank(firstName)) {
             patient.setFirstName(firstName);
         }
-        if(StringUtils.isNotBlank(lastName)) {
+        if (StringUtils.isNotBlank(lastName)) {
             patient.setLastName(lastName);
         }
-        if(StringUtils.isNotBlank(email)) {
+        if (StringUtils.isNotBlank(email)) {
             patient.setEmail(email);
         }
     }
 
     /**
      * This function returns chosen patient
+     *
      * @param id chosen patient
      * @return chosen patient
      */
-    public Patient getPatient(int id){
+    public Patient getPatient(int id) {
         return (Patient) criteria()
                 .add(Restrictions.eq("id", id))
                 .uniqueResult();
     }
+
+    public void updateFCMRegistrationToken(String fcmRegistrationToken, int id) {
+        Session session = currentSession();
+        Patient patient = session.find(Patient.class, id);
+        if (StringUtils.isNotBlank(fcmRegistrationToken)) {
+            patient.setFCMRegistrationToken(fcmRegistrationToken);
+        }
+    }
+
+
 }

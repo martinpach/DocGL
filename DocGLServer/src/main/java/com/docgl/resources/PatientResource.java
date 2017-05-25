@@ -47,12 +47,13 @@ public class PatientResource {
 
     /**
      * Resource for getting patients.
+     *
      * @param loggedUser is user that is sending a request
-     * @param limit is number of returned patients
-     * @param start is first patient to be returned
-     * @param sortBy column to sort results by
-     * @param way ascending or descending (asc, desc)
-     * @param name searched patient name
+     * @param limit      is number of returned patients
+     * @param start      is first patient to be returned
+     * @param sortBy     column to sort results by
+     * @param way        ascending or descending (asc, desc)
+     * @param name       searched patient name
      * @return List of filtered patients. If no params are presented then all patients are returned.
      */
     @GET
@@ -62,8 +63,7 @@ public class PatientResource {
                                               @QueryParam("start") int start,
                                               @QueryParam("sortBy") SortablePatientColumns sortBy,
                                               @QueryParam("way") SortingWays way,
-                                              @QueryParam("name") String name)
-    {
+                                              @QueryParam("name") String name) {
         UserType[] roles = {UserType.ADMIN, UserType.DOCTOR};
         authorizer.checkAuthorization(loggedUser.getUserType(), roles);
         return patientDAO.getAllPatients(limit, start - 1, sortBy, way, name);
@@ -71,6 +71,7 @@ public class PatientResource {
 
     /**
      * Resource for getting all appointments of patient
+     *
      * @param id selected patient
      * @return list of all appointments
      */
@@ -78,7 +79,7 @@ public class PatientResource {
     @Path("{id}/appointments")
     @UnitOfWork
     @JsonView(Views.PatientView.class)
-    public List<Appointment> getPatientAppointments(@Auth LoggedUser loggedUser, @PathParam("id") int id){
+    public List<Appointment> getPatientAppointments(@Auth LoggedUser loggedUser, @PathParam("id") int id) {
         UserType[] roles = {UserType.ADMIN, UserType.PATIENT};
         authorizer.checkAuthorization(loggedUser.getUserType(), roles);
         if (loggedUser.getUserType() == UserType.PATIENT)
@@ -88,8 +89,9 @@ public class PatientResource {
 
     /**
      * Resource for block/unblock patient
-     * @param loggedUser user that is sending a request
-     * @param id selected patient
+     *
+     * @param loggedUser   user that is sending a request
+     * @param id           selected patient
      * @param blockedInput json input with one property (blocked : true/false)
      */
     @PUT
@@ -102,20 +104,22 @@ public class PatientResource {
 
     /**
      * Resource for getting number of all patients
+     *
      * @return number of all patients in json representation (count : {numberOfPatients})
      */
     @GET
     @Path("count")
     @UnitOfWork
     @PermitAll
-    public CountRepresentation getNumberOfAllPatients(){
+    public CountRepresentation getNumberOfAllPatients() {
         return new CountRepresentation(patientDAO.getNumberOfAllPatients());
     }
 
     /**
      * Resource for changing patients password
-     * @param loggedUser is logged user that is sending request
-     * @param id chosen patient
+     *
+     * @param loggedUser    is logged user that is sending request
+     * @param id            chosen patient
      * @param passwordInput new password
      */
     @PUT
@@ -124,23 +128,25 @@ public class PatientResource {
     public void changePassword(@Auth LoggedUser loggedUser, @PathParam("id") int id, PasswordInput passwordInput) {
         authorizer.checkAuthorization(loggedUser.getUserType(), UserType.PATIENT);
         authorizer.checkAuthentication(loggedUser.getId(), id);
-        if(StringUtils.isBlank(passwordInput.getPassword())){
+        if (StringUtils.isBlank(passwordInput.getPassword())) {
             throw new BadRequestException("Property 'password' is missing or not presented!");
         }
-        if (!patientDAO.isPasswordDifferent(passwordInput.getPassword(), id)){
+        if (!patientDAO.isPasswordDifferent(passwordInput.getPassword(), id)) {
             throw new BadRequestException("New password must be different than the old one!");
         }
         patientDAO.setPassword(passwordInput.getPassword(), id);
     }
+
     /**
      * Resource for getting all doctors in patient favourite collection
+     *
      * @param id selected patient
      * @return Collection of favourite doctors
      */
     @GET
     @Path("{id}/favourite")
     @UnitOfWork
-    public Collection<Doctor> getFavouriteDoctors(@Auth LoggedUser loggedUser, @PathParam("id") int id){
+    public Collection<Doctor> getFavouriteDoctors(@Auth LoggedUser loggedUser, @PathParam("id") int id) {
         UserType[] roles = {UserType.ADMIN, UserType.PATIENT};
         authorizer.checkAuthorization(loggedUser.getUserType(), roles);
         if (loggedUser.getUserType() == UserType.PATIENT)
@@ -148,10 +154,12 @@ public class PatientResource {
 
         return patientDAO.getFavouriteDoctors(id);
     }
+
     /**
      * Resource for adding and removing doctor from patient favourite list alse add and remove one doctors like
-     * @param loggedUser is logged user that is sending request
-     * @param id chosen patient
+     *
+     * @param loggedUser    is logged user that is sending request
+     * @param id            chosen patient
      * @param doctorIdInput new favourite doctor ID
      */
     @PUT
@@ -164,16 +172,15 @@ public class PatientResource {
             authorizer.checkAuthentication(loggedUser.getId(), id);
 
         if (doctorIdInput.getDoctorId() == null) {
-            throw  new BadRequestException("Property 'doctorId' is missing or not presented!");
+            throw new BadRequestException("Property 'doctorId' is missing or not presented!");
         }
         Doctor doctor = doctorDAO.getDoctor(doctorIdInput.getDoctorId());
         if (doctorDAO.getDoctor(doctorIdInput.getDoctorId()) == null)
-            throw  new BadRequestException("Doctor with id like that does not exist!");
+            throw new BadRequestException("Doctor with id like that does not exist!");
         if (patientDAO.getFavouriteDoctors(id).contains(doctor)) {
             patientDAO.removeDoctorFromFavourite(id, doctorIdInput.getDoctorId());
             doctorDAO.removeLikeFromDoctor(doctorIdInput.getDoctorId());
-        }
-        else {
+        } else {
             patientDAO.addDoctorToFavourite(id, doctorIdInput.getDoctorId());
             doctorDAO.addLikeToDoctor(doctorIdInput.getDoctorId());
         }
@@ -181,16 +188,26 @@ public class PatientResource {
 
     /**
      * Resource for updating chosen patient profile
+     *
      * @param loggedUser user that is sending request
-     * @param id chosen patient
-     * @param patient json input with update values (if any field is empty the value will not be updated)
+     * @param id         chosen patient
+     * @param patient    json input with update values (if any field is empty the value will not be updated)
      */
     @PUT
     @Path("{id}/profile")
     @UnitOfWork
-    public void updatePatientsProfile(@Auth LoggedUser loggedUser, @PathParam("id") int id, UserInput patient){
+    public void updatePatientsProfile(@Auth LoggedUser loggedUser, @PathParam("id") int id, UserInput patient) {
         authorizer.checkAuthorization(loggedUser.getUserType(), UserType.PATIENT);
         authorizer.checkAuthentication(loggedUser.getId(), id);
         patientDAO.updateProfile(patient.getFirstName(), patient.getLastName(), patient.getEmail(), id);
+    }
+
+    @PUT
+    @Path("{id}/notification")
+    @UnitOfWork
+    public void updatePatientsFCMRegistrationToken(@Auth LoggedUser loggedUser, @PathParam("id") int id, FCMRegistrationToken fcmRegistrationToken) {
+        authorizer.checkAuthorization(loggedUser.getUserType(), UserType.PATIENT);
+        authorizer.checkAuthentication(loggedUser.getId(), id);
+        patientDAO.updateFCMRegistrationToken(fcmRegistrationToken.getFcmRegistrationToken(), id);
     }
 }
