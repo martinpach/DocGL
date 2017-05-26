@@ -24,6 +24,7 @@ $(document).ready(function() {
     var appointments;
     var appointmentsToday;
     var freeHours;
+    var workingHours;
 
     var today = new Date();
     var dateToday = today.getFullYear()+"-"+(today.getMonth()+1)+"-"+today.getDate();
@@ -82,7 +83,7 @@ $(document).ready(function() {
         $("#container").load('templates/doctor_settings.html',function(){
 
         $('.timepicker').timepicker({
-            timeFormat: 'H:mm:ss',
+            timeFormat: 'H:mm',
             interval: 30,
             minTime: '7',
             maxTime: '18:00',
@@ -101,6 +102,7 @@ $(document).ready(function() {
         });
 
         getFreeHours();
+        getWorkingHours();
 
         $("#workingHours").on("click",function(){
             $(this).addClass("activeItem");
@@ -109,6 +111,150 @@ $(document).ready(function() {
             $("#freeHoursTab").hide();
 
         });
+
+        $("#workingFrom, #workingTo").on('blur', function() {
+            var time = $('#workingFrom').val();
+            var splitTime = time.split(":");
+            var hours = parseInt(splitTime[0]) + 1;
+            hours = (hours == 13) ? 1 : hours;
+            var newTime = hours + ":" + splitTime[1];
+            $("#workingTo").timepicker('option', 'minTime', newTime);
+            $("#workingTo").val(newTime);
+        });
+
+        function getWorkingHours(){
+            var dfd =$.Deferred();
+            ajaxRequest("/doctors/"+docData.id+"/workingHours","GET").done(function(){
+                workingHours=ajaxData;
+                console.log(workingHours);
+                dfd.resolve();
+            });
+            return dfd.promise();
+        }
+
+        var updatedWorkingHours = {
+            mon: [],
+            tue: [],
+            wed: [],
+            thu: [],
+            fri: []
+        }
+
+        var workingHours1st = {
+            mondayFrom: null,
+            mondayTo: null,
+            tuesdayFrom: null,
+            tuesdayTo: null,
+            wednesdayFrom: null,
+            wednesdayTo: null,
+            thursdayFrom: null,
+            thursdayTo: null,
+            fridayFrom: null,
+            fridayTo: null
+        }
+
+        var workingHours2nd = {
+            mondayFrom: null,
+            mondayTo: null,
+            tuesdayFrom: null,
+            tuesdayTo: null,
+            wednesdayFrom: null,
+            wednesdayTo: null,
+            thursdayFrom: null,
+            thursdayTo: null,
+            fridayFrom: null,
+            fridayTo: null
+        }
+
+        $(document).on("click","#setWorkingHours",function(event){
+            event.preventDefault();
+            addWorkingHour();
+        });
+
+        function addWorkingHour(){
+            var dayInput=$("#input-day").val();
+            var fromInput=$("#workingFrom").val();
+            var toInput=$("#workingTo").val();
+
+            if(fromInput != "" && toInput != ""){
+                var interval ={
+                    from: fromInput,
+                    to: toInput
+                }
+                if(updatedWorkingHours[dayInput].length<=2)
+                    updatedWorkingHours[dayInput].push(interval);
+                else{
+                    console.log("2 intervals allowed.");
+                }
+            }
+            else{
+                console.log("inputs must not be empty.");
+            }
+
+        }
+
+        function setIntervals (){
+            if (updatedWorkingHours.mon[0] != undefined) {
+                workingHours1st.mondayFrom = updatedWorkingHours.mon[0].from;
+                workingHours2nd.mondayTo = updatedWorkingHours.mon[0].to;
+            }
+            if (updatedWorkingHours.mon[1] != undefined) {
+                workingHours1st.mondayFrom = updatedWorkingHours.mon[1].from;
+                workingHours2nd.mondayTo = updatedWorkingHours.mon[1].to;
+            }
+            if (updatedWorkingHours.tue[0] != undefined) {
+                workingHours1st.tuesdayFrom = updatedWorkingHours.tue[0].from;
+                workingHours2nd.tuesdayTo = updatedWorkingHours.tue[0].to;
+            }
+            if (updatedWorkingHours.tue[1] != undefined) {
+                workingHours1st.tuesdayFrom = updatedWorkingHours.tue[1].from;
+                workingHours2nd.tuesdayTo = updatedWorkingHours.tue[1].to;
+            }
+            if (updatedWorkingHours.wed[0] != undefined) {
+                workingHours1st.wednesdayFrom = updatedWorkingHours.wed[0].from;
+                workingHours2nd.wednesdayTo = updatedWorkingHours.wed[0].to;
+            }
+            if (updatedWorkingHours.wed[1] != undefined) {
+                workingHours1st.wednesdayFrom = updatedWorkingHours.wed[1].from;
+                workingHours2nd.wednesdayTo = updatedWorkingHours.wed[1].to;
+            }
+            if (updatedWorkingHours.thu[0] != undefined) {
+                workingHours1st.thursdayFrom = updatedWorkingHours.thu[0].from;
+                workingHours2nd.thursdayTo = updatedWorkingHours.thu[0].to;
+            }
+            if (updatedWorkingHours.thu[1] != undefined) {
+                workingHours1st.thursdayFrom = updatedWorkingHours.thu[1].from;
+                workingHours2nd.thursdayTo = updatedWorkingHours.thu[1].to;
+            }
+            if (updatedWorkingHours.fri[0] != undefined) {
+                workingHours1st.fridayFrom = updatedWorkingHours.fri[0].from;
+                workingHours2nd.fridayTo = updatedWorkingHours.fri[0].to;
+            }
+            if (updatedWorkingHours.mon[1] != undefined) {
+                workingHours1st.fridayFrom = updatedWorkingHours.fri[1].from;
+                workingHours2nd.fridayTo = updatedWorkingHours.fri[1].to;
+            }
+
+        }
+
+        $(document).on("click","#submitWorkingHours",function(event){
+            event.preventDefault();
+            var workingHoursObj=JSON.stringify([workingHours1st,workingHours2nd]);
+            console.log(workingHoursObj);
+            ajaxRequest("/doctors/"+docData.id+"/workingHours","PUT",workingHoursObj).done(function(){
+                console.log("update successful.");
+            });
+
+        });
+
+
+
+        function renderWorkingHours(){
+            $("#workingHoursContainer").empty();
+                for(var i=0;i<workingHours.length;i++){
+                $("#workingHoursContainer").append("<div id='"+i+"' class='listItem'>"+workingHours[i].date+" "+workingHours[i].from+" "+workingHours[i].to+"</div>");
+            }
+        }
 
         $("#freeHours").on("click",function(){
             $(this).addClass("activeItem");

@@ -83,4 +83,13 @@ public class JsonReqestBody {
         }
         return json;
     }
+    public static JSONObject updateFCMRegistrationToken( String fcmRegistrationToken ){
+        JSONObject json = new JSONObject();
+        try {
+            json.put("fcmRegistrationToken", fcmRegistrationToken);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return json;
+    }
 }

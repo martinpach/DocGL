@@ -10,23 +10,30 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.wdfeww.docgl.data.methods.FontManager;
+import com.wdfeww.docgl.data.methods.JsonReqestBody;
 import com.wdfeww.docgl.data.methods.NavigationMenu;
 import com.wdfeww.docgl.data.model.Appointment;
 import com.wdfeww.docgl.data.model.Patient;
 import com.wdfeww.docgl.data.remote.Service;
 import com.wdfeww.docgl.data.remote.ServiceGenerator;
 
+import org.json.JSONObject;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
+import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -76,11 +83,40 @@ public class Home extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 navigationMenu.redirect(NewAppointmentChooseDoctor.class);
+
             }
         });
-
+        updateFCMToken();
 
     }
+
+    private void updateFCMToken(){
+        JSONObject json = JsonReqestBody.updateFCMRegistrationToken(FirebaseInstanceId.getInstance().getToken());
+        RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"), (json.toString()));
+        Service loginService =
+                ServiceGenerator.createService(Service.class, token);
+        Call<ResponseBody> call = loginService.updatePatientsFCMRegistrationToken(patient.getId(), body);
+        call.enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if (response.isSuccessful()) {
+
+                    Toast.makeText(getApplicationContext(), "token was updated", Toast.LENGTH_SHORT).show();
+
+
+                } else {
+                    Toast.makeText(getApplicationContext(), "token was not updated", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                Toast.makeText(getApplicationContext(), "Server error", Toast.LENGTH_SHORT).show();
+                Log.d("Error", t.getMessage());
+            }
+        });
+    }
+
     boolean doubleBackToExitPressedOnce = false;
 
     @Override
