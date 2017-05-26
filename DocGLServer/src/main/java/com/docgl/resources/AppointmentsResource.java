@@ -1,6 +1,7 @@
 package com.docgl.resources;
 
 import com.docgl.Authorizer;
+import com.docgl.FCMessaging;
 import com.docgl.api.*;
 import com.docgl.db.*;
 import com.docgl.entities.Appointment;
@@ -37,14 +38,16 @@ public class AppointmentsResource {
     private PublicHolidaysDAO publicHolidaysDAO;
     private FreeHoursDAO freeHoursDAO;
     private DoctorDAO doctorDAO;
+    private PatientDAO patientDAO;
     private Authorizer authorizer;
 
-    public AppointmentsResource(AppointmentDAO appointmentDAO, WorkingHoursDAO workingHoursDAO, DoctorDAO doctorDAO, PublicHolidaysDAO publicHolidaysDAO, FreeHoursDAO freeHoursDAO) {
+    public AppointmentsResource(AppointmentDAO appointmentDAO, WorkingHoursDAO workingHoursDAO, DoctorDAO doctorDAO, PublicHolidaysDAO publicHolidaysDAO, FreeHoursDAO freeHoursDAO, PatientDAO patientDAO) {
         this.appointmentDAO = appointmentDAO;
         this.workingHoursDAO = workingHoursDAO;
         this.publicHolidaysDAO = publicHolidaysDAO;
         this.freeHoursDAO = freeHoursDAO;
         this.doctorDAO = doctorDAO;
+        this.patientDAO = patientDAO;
         this.authorizer = new Authorizer();
     }
 
@@ -98,6 +101,11 @@ public class AppointmentsResource {
         authorizer.checkAuthorization(loggedUser.getUserType(), roles);
         if(loggedUser.getUserType().equals(UserType.DOCTOR)){
             authorizer.checkAuthentication(doctorId, loggedUser.getId());
+            try {
+                new FCMessaging().pushFCMNotification(patientDAO.getFCMRegistrationToken(appointment.getPatient().getId()), "DocGL", "Your appointment ("+ appointment.getDate() +") was cancelled.");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
         else{
             authorizer.checkAuthentication(patientId, loggedUser.getId());

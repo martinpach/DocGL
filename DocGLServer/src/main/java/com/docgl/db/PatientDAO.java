@@ -264,5 +264,12 @@ public class PatientDAO extends AbstractDAO<Patient> {
         }
     }
 
+    public String getFCMRegistrationToken(int id){
+        return (String) criteria()
+                .add(Restrictions.eq("id", id))
+                .setProjection(Projections.property("FCMRegistrationToken"))
+                .uniqueResult();
+    }
+
 
 }

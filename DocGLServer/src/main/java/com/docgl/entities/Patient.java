@@ -39,6 +39,7 @@ public class Patient extends User {
     private Collection<Doctor> doctors = new ArrayList<>();
 
     @Column(name = "fcm_registration_token")
+    @Lob
     private String FCMRegistrationToken;
 
     public Patient() {
