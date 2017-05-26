@@ -38,7 +38,7 @@ public class Patient extends User {
     @JsonIgnore
     private Collection<Doctor> doctors = new ArrayList<>();
 
-    @Column(name = "fcm_registration_token")
+    @Column(name = "fcm_registration_token" ,columnDefinition = "text")
     private String FCMRegistrationToken;
 
     public Patient() {
