@@ -122,3 +122,7 @@
 #saveFreeHrs{
 	display: none;
 }
+
+.submitWorkingHours{
+	display:none;
+}

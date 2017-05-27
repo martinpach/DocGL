@@ -103,7 +103,6 @@ $(document).ready(function() {
 
         getFreeHours();
         getWorkingHours();
-
         $("#workingHours").on("click",function(){
             $(this).addClass("activeItem");
             $("#freeHours").removeClass("activeItem");
@@ -169,10 +168,13 @@ $(document).ready(function() {
         $(document).on("click","#setWorkingHours",function(event){
             event.preventDefault();
             addWorkingHour();
+            renderWorkingHours();
+            $(".submitWorkingHours").show();
         });
 
         function addWorkingHour(){
             var dayInput=$("#input-day").val();
+            console.log(dayInput);
             var fromInput=$("#workingFrom").val();
             var toInput=$("#workingTo").val();
 
@@ -181,8 +183,11 @@ $(document).ready(function() {
                     from: fromInput,
                     to: toInput
                 }
-                if(updatedWorkingHours[dayInput].length<=2)
+                if(updatedWorkingHours[dayInput].length<2){
                     updatedWorkingHours[dayInput].push(interval);
+                    setIntervalValues();
+                    console.log(interval);
+                }
                 else{
                     console.log("2 intervals allowed.");
                 }
@@ -193,67 +198,75 @@ $(document).ready(function() {
 
         }
 
-        function setIntervals (){
+        function setIntervalValues (){
             if (updatedWorkingHours.mon[0] != undefined) {
                 workingHours1st.mondayFrom = updatedWorkingHours.mon[0].from;
-                workingHours2nd.mondayTo = updatedWorkingHours.mon[0].to;
+                workingHours1st.mondayTo = updatedWorkingHours.mon[0].to;
+                console.log(workingHours1st.mondayFrom+" "+workingHours1st.mondayTo);
             }
             if (updatedWorkingHours.mon[1] != undefined) {
-                workingHours1st.mondayFrom = updatedWorkingHours.mon[1].from;
+                workingHours2nd.mondayFrom = updatedWorkingHours.mon[1].from;
                 workingHours2nd.mondayTo = updatedWorkingHours.mon[1].to;
             }
             if (updatedWorkingHours.tue[0] != undefined) {
                 workingHours1st.tuesdayFrom = updatedWorkingHours.tue[0].from;
-                workingHours2nd.tuesdayTo = updatedWorkingHours.tue[0].to;
+                workingHours1st.tuesdayTo = updatedWorkingHours.tue[0].to;
             }
             if (updatedWorkingHours.tue[1] != undefined) {
-                workingHours1st.tuesdayFrom = updatedWorkingHours.tue[1].from;
+                workingHours2nd.tuesdayFrom = updatedWorkingHours.tue[1].from;
                 workingHours2nd.tuesdayTo = updatedWorkingHours.tue[1].to;
             }
             if (updatedWorkingHours.wed[0] != undefined) {
                 workingHours1st.wednesdayFrom = updatedWorkingHours.wed[0].from;
-                workingHours2nd.wednesdayTo = updatedWorkingHours.wed[0].to;
+                workingHours1st.wednesdayTo = updatedWorkingHours.wed[0].to;
             }
             if (updatedWorkingHours.wed[1] != undefined) {
-                workingHours1st.wednesdayFrom = updatedWorkingHours.wed[1].from;
+                workingHours2nd.wednesdayFrom = updatedWorkingHours.wed[1].from;
                 workingHours2nd.wednesdayTo = updatedWorkingHours.wed[1].to;
             }
             if (updatedWorkingHours.thu[0] != undefined) {
                 workingHours1st.thursdayFrom = updatedWorkingHours.thu[0].from;
-                workingHours2nd.thursdayTo = updatedWorkingHours.thu[0].to;
+                workingHours1st.thursdayTo = updatedWorkingHours.thu[0].to;
             }
             if (updatedWorkingHours.thu[1] != undefined) {
-                workingHours1st.thursdayFrom = updatedWorkingHours.thu[1].from;
+                workingHours2nd.thursdayFrom = updatedWorkingHours.thu[1].from;
                 workingHours2nd.thursdayTo = updatedWorkingHours.thu[1].to;
             }
             if (updatedWorkingHours.fri[0] != undefined) {
                 workingHours1st.fridayFrom = updatedWorkingHours.fri[0].from;
-                workingHours2nd.fridayTo = updatedWorkingHours.fri[0].to;
+                workingHours1st.fridayTo = updatedWorkingHours.fri[0].to;
             }
-            if (updatedWorkingHours.mon[1] != undefined) {
-                workingHours1st.fridayFrom = updatedWorkingHours.fri[1].from;
+            if (updatedWorkingHours.fri[1] != undefined) {
+                workingHours2nd.fridayFrom = updatedWorkingHours.fri[1].from;
                 workingHours2nd.fridayTo = updatedWorkingHours.fri[1].to;
             }
 
         }
 
+
         $(document).on("click","#submitWorkingHours",function(event){
             event.preventDefault();
+            setIntervalValues();
             var workingHoursObj=JSON.stringify([workingHours1st,workingHours2nd]);
             console.log(workingHoursObj);
             ajaxRequest("/doctors/"+docData.id+"/workingHours","PUT",workingHoursObj).done(function(){
                 console.log("update successful.");
+                }).fail(function(){
+                    $("#warningModal").modal("show");
             });
 
         });
 
-
+        $("#input-day").on("change", function(){
+            renderWorkingHours();
+        })
 
         function renderWorkingHours(){
-            $("#workingHoursContainer").empty();
-                for(var i=0;i<workingHours.length;i++){
-                $("#workingHoursContainer").append("<div id='"+i+"' class='listItem'>"+workingHours[i].date+" "+workingHours[i].from+" "+workingHours[i].to+"</div>");
-            }
+            $("#hoursContainer").empty();
+            var day=$("#input-day").val();
+                for(var i=0;i<updatedWorkingHours[day].length;i++)
+                    if(updatedWorkingHours[day][i]!=undefined)
+                        $("#hoursContainer").append("<div id='"+i+"' class='listItem'><b>"+ day+" </b>"+updatedWorkingHours[day][i].from+" - "+updatedWorkingHours[day][i].to+"</div>");
         }
 
         $("#freeHours").on("click",function(){
@@ -511,9 +524,9 @@ $(document).ready(function() {
                 if (data != null) ajaxData = data;
                 dfd.resolve();
             },
-            error: function() {
+            error: function(errorData) {
                 dfd.reject();
-                console.log("Error");
+                console.log(errorData);
             }
         });
         return dfd.promise();
