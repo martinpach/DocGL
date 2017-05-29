@@ -86,36 +86,11 @@ public class Home extends AppCompatActivity {
 
             }
         });
-        updateFCMToken();
+
 
     }
 
-    private void updateFCMToken(){
-        JSONObject json = JsonReqestBody.updateFCMRegistrationToken(FirebaseInstanceId.getInstance().getToken());
-        RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"), (json.toString()));
-        Service loginService =
-                ServiceGenerator.createService(Service.class, token);
-        Call<ResponseBody> call = loginService.updatePatientsFCMRegistrationToken(patient.getId(), body);
-        call.enqueue(new Callback<ResponseBody>() {
-            @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                if (response.isSuccessful()) {
 
-                    Toast.makeText(getApplicationContext(), "token was updated", Toast.LENGTH_SHORT).show();
-
-
-                } else {
-                    Toast.makeText(getApplicationContext(), "token was not updated", Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-                Toast.makeText(getApplicationContext(), "Server error", Toast.LENGTH_SHORT).show();
-                Log.d("Error", t.getMessage());
-            }
-        });
-    }
 
     boolean doubleBackToExitPressedOnce = false;
 
