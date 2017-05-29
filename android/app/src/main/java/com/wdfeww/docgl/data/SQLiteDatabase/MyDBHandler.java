@@ -23,26 +23,33 @@ public class MyDBHandler extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
 
-        String query = "CREATE TABLE " + PatientsContract.Patients.TABLE_NAME + " (" +
+        String patientsTable = "CREATE TABLE " + PatientsContract.Patients.TABLE_NAME + " (" +
                 PatientsContract.Patients._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 PatientsContract.Patients.COLUMN_PATIENTFIRSTNAME + " TEXT ," +
                 PatientsContract.Patients.COLUMN_PATIENTLASTNAME + " TEXT ," +
                 PatientsContract.Patients.COLUMN_USERID + " INT );";
-        db.execSQL(query);
+        db.execSQL(patientsTable);
+
+        String notificationsTable = "CREATE TABLE " + NotificationsContract.Notifications.TABLE_NAME + " (" +
+                NotificationsContract.Notifications._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                NotificationsContract.Notifications.COLUMN_NOTIFICATIONS + " TINYINT(1) DEFAULT 1 ," +
+                NotificationsContract.Notifications.COLUMN_USERID + " INT ";
+        db.execSQL(notificationsTable);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS " + PatientsContract.Patients.TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + NotificationsContract.Notifications.TABLE_NAME);
         onCreate(db);
     }
 
     public void addPatient(Patients patient) {
+        SQLiteDatabase db = getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(PatientsContract.Patients.COLUMN_PATIENTFIRSTNAME, patient.get_patientFirstName());
         values.put(PatientsContract.Patients.COLUMN_PATIENTLASTNAME, patient.get_patientLastName());
         values.put(PatientsContract.Patients.COLUMN_USERID, patient.get_userId());
-        SQLiteDatabase db = getWritableDatabase();
         db.insert(PatientsContract.Patients.TABLE_NAME, null, values);
         db.close();
     }
@@ -62,12 +69,47 @@ public class MyDBHandler extends SQLiteOpenHelper {
         while (cursor.moveToNext()) {
 
             dbString.add(new DBOutput(cursor.getInt(cursor.getColumnIndex(PatientsContract.Patients._ID)),
-                     cursor.getString(cursor.getColumnIndex(PatientsContract.Patients.COLUMN_PATIENTFIRSTNAME)),
-                     cursor.getString(cursor.getColumnIndex(PatientsContract.Patients.COLUMN_PATIENTLASTNAME))));
+                    cursor.getString(cursor.getColumnIndex(PatientsContract.Patients.COLUMN_PATIENTFIRSTNAME)),
+                    cursor.getString(cursor.getColumnIndex(PatientsContract.Patients.COLUMN_PATIENTLASTNAME))));
         }
         cursor.close();
-
         db.close();
+
         return dbString;
+    }
+
+    public boolean isNotificationsEnabled(int userId) {
+
+        SQLiteDatabase db = getWritableDatabase();
+        int isEnabled = 1;
+        String query = "SELECT " + NotificationsContract.Notifications.COLUMN_NOTIFICATIONS + " FROM " + NotificationsContract.Notifications.TABLE_NAME + " WHERE " + NotificationsContract.Notifications.COLUMN_USERID + "= " + userId + ";";
+        Cursor cursor = db.rawQuery(query, null);
+        if (cursor.moveToNext()) {
+            isEnabled = cursor.getInt(cursor.getColumnIndex(NotificationsContract.Notifications.COLUMN_NOTIFICATIONS));
+        }
+        else{
+            db.execSQL("INSERT INTO " + NotificationsContract.Notifications.TABLE_NAME + " VAULES ( " + NotificationsContract.Notifications._ID + "=" + userId + "+) ;");
+        }
+
+        cursor.close();
+        db.close();
+
+        if (isEnabled == 1) {
+            return true;
+        }
+        return false;
+    }
+
+    public void setNotifications(boolean notifications, int userId) {
+        SQLiteDatabase db = getWritableDatabase();
+        int bool;
+
+        if(notifications==true)
+            bool = 1;
+        else
+            bool =0;
+
+        db.execSQL("UPDATE TABLE " + NotificationsContract.Notifications.TABLE_NAME + " SET " + NotificationsContract.Notifications.COLUMN_NOTIFICATIONS + "=" + bool + " WHERE "+NotificationsContract.Notifications.COLUMN_USERID +" = "+ userId+";");
+
     }
 }
