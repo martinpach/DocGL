@@ -119,8 +119,8 @@ public class AppointmentDAO extends AbstractDAO<Appointment> {
             currentSession().save(new Appointment(
                     currentSession().find(Doctor.class, input.getDoctorId()),
                     currentSession().find(Patient.class, patientId),
-                    new Time((long)(input.getTime().getTime() + 3.6e+6)),
-                    //input.getTime(),
+                   // new Time((long)(input.getTime().getTime() + 3.6e+6)),
+                    input.getTime(),
                     input.getDate(),
                     input.getFirstName(),
                     input.getLastName()
@@ -131,7 +131,8 @@ public class AppointmentDAO extends AbstractDAO<Appointment> {
                     input.getNote(),
                     currentSession().find(Doctor.class, input.getDoctorId()),
                     currentSession().find(Patient.class, patientId),
-                    new Time((long)(input.getTime().getTime() + 3.6e+6)),
+                   // new Time((long)(input.getTime().getTime() + 3.6e+6)),
+                    input.getTime(),
                     input.getDate(),
                     input.getFirstName(),
                     input.getLastName()
@@ -155,8 +156,8 @@ public class AppointmentDAO extends AbstractDAO<Appointment> {
 
                 Appointment appointmentToUpdate = currentSession().find(Appointment.class, appointment.getId());
                 appointmentToUpdate.setCanceled(true);
-                appointmentToUpdate.setTime(new Time((long)(appointment.getTime().getTime() + 3.6e+6)));
-                //appointmentToUpdate.setTime(appointment.getTime());
+                //appointmentToUpdate.setTime(new Time((long)(appointment.getTime().getTime() + 3.6e+6)));
+                appointmentToUpdate.setTime(appointment.getTime());
             }
         }
 
