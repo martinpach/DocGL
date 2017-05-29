@@ -45,6 +45,11 @@
 				</div>
 			</div>
 			<div class="row">
+				<div class="col-md-12" id="warningContainer">
+				<p class="profileErrMsg" id="workingHoursError">Two intervals per day allowed.</p>
+				</div>
+			</div>
+			<div class="row">
 				<div class="col-md-12" id="hoursContainer">
 				</div>
 			</div>
@@ -60,15 +65,20 @@
 				<div class="row">
 					<div class="col-md-12">
 						<h6 class="lbl">Time dedicated to a patient</h6>
-						<input type="number" id="duration" min="20" class="editProfileInput" placeholder="20 min default">
+						<input type="number" id="duration" min="20" class="editProfileInput" placeholder="choose...">
 					</div>
 				</div>
 				<div class="row">
 					<div class="col-md-12">
 						<h6 class="lbl"></h6>
-						<div class="docProfileHeader settingsBtn">Set<i class="fa fa-cog add" id="submitAppointmentLength" aria-hidden="true"></i></div>
+						<div class="docProfileHeader settingsBtn" id="setDuration">Set<i class="fa fa-cog add" id="setAppointmentDuration" aria-hidden="true"></i></div>
 					</div>
 				</div>
+				<div class="row">
+				<div class="col-md-12" id="warningContainer">
+				<p id="durationMsg"></p>
+				</div>
+			</div>
 		</div>
 	</div>
 	<div class="row" id="freeHoursTab">
@@ -118,7 +128,7 @@
 				<h4 class="modal-title headingModal"></h4>
 			</div>
 			<div class="modal-body text-center">
-				<p>Please cancel all upcoming appointments before changing working hours!</p>
+				<p class="subHeadingBlue">Please cancel all upcoming appointments before changing working hours!</p>
 			</div>
 			<div class="modal-footer">
 				<button type="button" class="btn btn-default" data-dismiss="modal">OK</button>

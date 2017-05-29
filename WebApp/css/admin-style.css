@@ -374,6 +374,9 @@ i.fa.fa-heart.heart::before{
 	color:white;
 	vertical-align: middle;
 }
+#workingHoursError{
+	display:none;
+}
 
 /* Chart section */
 #chartContainer {

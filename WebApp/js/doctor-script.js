@@ -189,7 +189,7 @@ $(document).ready(function() {
                     console.log(interval);
                 }
                 else{
-                    console.log("2 intervals allowed.");
+                    $("#workingHoursError").show();
                 }
             }
             else{
@@ -259,6 +259,7 @@ $(document).ready(function() {
 
         $("#input-day").on("change", function(){
             renderWorkingHours();
+            $("#workingHoursError").hide();
         })
 
         function renderWorkingHours(){
@@ -268,6 +269,31 @@ $(document).ready(function() {
                     if(updatedWorkingHours[day][i]!=undefined)
                         $("#hoursContainer").append("<div id='"+i+"' class='listItem'><b>"+ day+" </b>"+updatedWorkingHours[day][i].from+" - "+updatedWorkingHours[day][i].to+"</div>");
         }
+
+        $("#duration").on("change",function(){
+            $("#setDuration").show();
+            $("#durationMsg").html("");
+            $("#durationMsg").removeClass(".profileErrMsg");
+        })
+
+        $(document).on("click","#setAppointmentDuration", function(event){
+            event.preventDefault();
+            var newDuration=$("#duration").val();
+            if(duration.length==0){
+                $("#durationMsg").addClass(".profileErrMsg");
+                $("#durationMsg").html("Input field must not be empty.");
+            }
+            else{
+                var dataToSend=JSON.stringify({
+                    duration:newDuration
+                });
+                ajaxRequest("/doctors/"+docData.id+"/duration","PUT",dataToSend).done(function(){
+                    $("#setDuration").hide();
+                    $("#durationMsg").html("Update successful.");
+
+                });
+            }
+        });
 
         $("#freeHours").on("click",function(){
             $(this).addClass("activeItem");
@@ -336,7 +362,7 @@ $(document).ready(function() {
     });
 
 
-    function getTodaysAppointmentsInfo(){//temporary stuff. count resource needed 
+    function getTodaysAppointmentsInfo(){
         var dfd=$.Deferred();
         ajaxRequest("/doctors/" + docData.id + "/appointments?date="+dateToday, "GET").done(function(){
             appointmentsToday=ajaxData;
