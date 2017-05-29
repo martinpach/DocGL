@@ -1,6 +1,8 @@
 package com.wdfeww.docgl;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.gson.Gson;
 import com.wdfeww.docgl.data.methods.Checker;
 import com.wdfeww.docgl.data.methods.JsonReqestBody;
 import com.wdfeww.docgl.data.model.User;
@@ -31,11 +34,12 @@ public class AppLogin extends AppCompatActivity {
     private EditText password, username;
     private TextView errorMessageUsername, errorMessagePassword, successMessage;
     private User user;
-
+    SharedPreferences prefs;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.app_login);
+        prefs = this.getSharedPreferences("com.wdfeww.docgl", Context.MODE_PRIVATE);
         login = (Button) findViewById(R.id.btn_login);
         login.setEnabled(true);
         sign_up = (Button) findViewById(R.id.sign_up);
@@ -74,6 +78,7 @@ public class AppLogin extends AppCompatActivity {
                     }
                 }
         );
+
     }
 
 
@@ -94,6 +99,14 @@ public class AppLogin extends AppCompatActivity {
                     errorMessagePassword.setText("");
                     successMessage.setText("Login success!");
                     user = response.body();
+
+                    SharedPreferences.Editor prefsEditor = prefs.edit();
+                    Gson gson = new Gson();
+                    String json = gson.toJson(user);
+                    prefsEditor.putString("LoggedUser", json);
+                    prefsEditor.commit();
+
+
                     updateFCMToken();
                     redirect();
                 } else {

@@ -88,7 +88,7 @@ public class Home extends AppCompatActivity {
             }
         });
 
-        new MyDBHandler(getApplicationContext()).isNotificationsEnabled(patient.getId());
+
     }
 
 
