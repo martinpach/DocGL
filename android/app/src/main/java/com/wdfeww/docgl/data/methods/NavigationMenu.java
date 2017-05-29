@@ -22,6 +22,7 @@ import com.wdfeww.docgl.Home;
 import com.wdfeww.docgl.PatientsTab;
 import com.wdfeww.docgl.Profile;
 import com.wdfeww.docgl.R;
+import com.wdfeww.docgl.Settings;
 import com.wdfeww.docgl.data.model.Patient;
 import com.wdfeww.docgl.data.model.User;
 
@@ -104,6 +105,8 @@ public class NavigationMenu extends Activity {
                         break;
                     case R.id.nav_settings:
                         drawer_layout.closeDrawer(Gravity.RIGHT);
+                        if(!(className.equals(Settings.class)))
+                            redirect(Settings.class);
                         break;
                     case R.id.nav_logout:
                         drawer_layout.closeDrawer(Gravity.RIGHT);

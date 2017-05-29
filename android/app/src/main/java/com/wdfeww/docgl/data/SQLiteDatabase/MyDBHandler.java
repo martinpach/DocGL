@@ -33,7 +33,7 @@ public class MyDBHandler extends SQLiteOpenHelper {
         String notificationsTable = "CREATE TABLE " + NotificationsContract.Notifications.TABLE_NAME + " (" +
                 NotificationsContract.Notifications._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 NotificationsContract.Notifications.COLUMN_NOTIFICATIONS + " TINYINT(1) DEFAULT 1 ," +
-                NotificationsContract.Notifications.COLUMN_USERID + " INT ";
+                NotificationsContract.Notifications.COLUMN_USERID + " INT );";
         db.execSQL(notificationsTable);
     }
 
@@ -88,7 +88,9 @@ public class MyDBHandler extends SQLiteOpenHelper {
             isEnabled = cursor.getInt(cursor.getColumnIndex(NotificationsContract.Notifications.COLUMN_NOTIFICATIONS));
         }
         else{
-            db.execSQL("INSERT INTO " + NotificationsContract.Notifications.TABLE_NAME + " VAULES ( " + NotificationsContract.Notifications._ID + "=" + userId + "+) ;");
+            ContentValues values = new ContentValues();
+            values.put(NotificationsContract.Notifications.COLUMN_USERID,userId);
+            db.insert(NotificationsContract.Notifications.TABLE_NAME, null, values);
         }
 
         cursor.close();
@@ -109,7 +111,11 @@ public class MyDBHandler extends SQLiteOpenHelper {
         else
             bool =0;
 
-        db.execSQL("UPDATE TABLE " + NotificationsContract.Notifications.TABLE_NAME + " SET " + NotificationsContract.Notifications.COLUMN_NOTIFICATIONS + "=" + bool + " WHERE "+NotificationsContract.Notifications.COLUMN_USERID +" = "+ userId+";");
+        ContentValues values = new ContentValues();
+        values.put( NotificationsContract.Notifications.COLUMN_NOTIFICATIONS ,bool);
+        db.update(NotificationsContract.Notifications.TABLE_NAME, values,NotificationsContract.Notifications.COLUMN_USERID +" = "+ userId, null);
+
+
 
     }
 }

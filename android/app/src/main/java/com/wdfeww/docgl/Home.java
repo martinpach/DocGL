@@ -18,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.iid.FirebaseInstanceId;
+import com.wdfeww.docgl.data.SQLiteDatabase.MyDBHandler;
 import com.wdfeww.docgl.data.methods.FontManager;
 import com.wdfeww.docgl.data.methods.JsonReqestBody;
 import com.wdfeww.docgl.data.methods.NavigationMenu;
@@ -87,7 +88,7 @@ public class Home extends AppCompatActivity {
             }
         });
 
-
+        new MyDBHandler(getApplicationContext()).isNotificationsEnabled(patient.getId());
     }
 
 
