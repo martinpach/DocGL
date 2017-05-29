@@ -1,3 +1,8 @@
+<head>
+    <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
+    <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+</head>
+
 <h1 class="heading" id="heading">Welcome!</h1>
 <h3 class="subHeading">Here's what DocGL's been up to while you were gone.</h3>
 <div class="container contentTab z-depth-1" id="contentTab">
@@ -6,6 +11,9 @@
 		<span id="countAppointments" class="homeNumbers"></span>
 		<br>
 		<span class="homeText">appointments today</span>
+		<div id="charts-checkbox">
+			<input type="checkbox" data-toggle="toggle" data-on="Doctors" data-off="Patients" id="toogle-types" checked>
+		</div>
 	</div>
 </div>
 	<div class="row" id="registrationStatistics">
@@ -20,10 +28,22 @@
 	var token = localStorage.getItem("token");
 	var weekday = ["sun","mon","tue","wed","thu","fri","sat"];
     var dataPoints = [];
+    var ajaxUrl;
+    var urlDoctors = '/registrations?timePeriod=WEEK&userTypes=DOCTORS';
+    var urlPatients = '/registrations?timePeriod=WEEK&userTypes=PATIENTS';
 
-	function initRegistrationsChart () {
+    $(document).on('change', '#toogle-types', function(event) {
+    	if ($("#toogle-types").prop( "checked" )) {
+    		initRegistrationsChart(urlDoctors);
+    	}
+    	else{
+    		initRegistrationsChart(urlPatients);
+    	}
+    });
+
+	function initRegistrationsChart (ajaxUrl) {
 		var dfd = $.Deferred();
-		ajaxRequest('/registrations?timePeriod=WEEK').done(function () {
+		ajaxRequest(ajaxUrl).done(function () {
 	    	CanvasJS.addColorSet("greenShades", ["rgb(181, 223, 253)", "rgb(150, 221, 255)"]);
 	        var chart = new CanvasJS.Chart("chartContainer", {
 	        	colorSet: "greenShades",
@@ -62,7 +82,7 @@
 		return dfd.promise();
 	}
 
-	initRegistrationsChart();
+	initRegistrationsChart(urlDoctors);
 
 	function ajaxRequest(ajaxUrl) {
         var dfd = $.Deferred();
