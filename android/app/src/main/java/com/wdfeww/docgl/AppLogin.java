@@ -104,6 +104,8 @@ public class AppLogin extends AppCompatActivity {
                     Gson gson = new Gson();
                     String json = gson.toJson(user);
                     prefsEditor.putString("LoggedUser", json);
+                    json = gson.toJson(user.getPatient());
+                    prefsEditor.putString("LoggedPatient", json);
                     prefsEditor.commit();
 
 
@@ -126,10 +128,6 @@ public class AppLogin extends AppCompatActivity {
 
     private void redirect() {
         Intent intent = new Intent(getBaseContext(), Home.class);
-        Bundle bundle = new Bundle();
-        bundle.putParcelable("patient", user.getPatient());
-        intent.putExtras(bundle);
-        intent.putExtra("token", user.getToken());
         this.finish();
         startActivity(intent);
     }

@@ -1,5 +1,7 @@
 package com.wdfeww.docgl;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Handler;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
@@ -16,12 +18,14 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
 import com.wdfeww.docgl.data.SQLiteDatabase.MyDBHandler;
 import com.wdfeww.docgl.data.SQLiteDatabase.Patients;
 import com.wdfeww.docgl.data.SQLiteDatabase.DBOutput;
 import com.wdfeww.docgl.data.methods.Checker;
 import com.wdfeww.docgl.data.methods.NavigationMenu;
 import com.wdfeww.docgl.data.model.Patient;
+import com.wdfeww.docgl.data.model.User;
 
 import java.util.List;
 
@@ -45,11 +49,19 @@ public class PatientsTab extends AppCompatActivity {
     MyDBHandler dbHandler;
 
     Patients newPatient;
-
+    User user;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.patients_tab);
+
+        SharedPreferences prefs = this.getSharedPreferences("com.wdfeww.docgl", Context.MODE_PRIVATE);
+        Gson gson = new Gson();
+        String json = prefs.getString("LoggedUser", "");
+        user = gson.fromJson(json, User.class);
+        json = prefs.getString("LoggedPatient", "");
+        patient = gson.fromJson(json, Patient.class);
+        token = user.getToken();
 
         newPatient = new Patients();
 
@@ -65,10 +77,6 @@ public class PatientsTab extends AppCompatActivity {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        Bundle bundle = this.getIntent().getExtras();
-        patient = bundle.getParcelable("patient");
-        token = getIntent().getStringExtra("token");
-
         className = getClass();
 
         nav_view = (NavigationView) findViewById(R.id.nav_view);
@@ -77,7 +85,7 @@ public class PatientsTab extends AppCompatActivity {
         main_layout = (LinearLayout) findViewById(R.id.main_layout);
         results = (LinearLayout) findViewById(R.id.results);
 
-        navigationMenu = new NavigationMenu(token, patient, this, toolbar, drawer_layout, nav_view, className);
+        navigationMenu = new NavigationMenu(this, toolbar, drawer_layout, nav_view, className);
         navigationMenu.initMenu();
 
         dbHandler = new MyDBHandler(getApplicationContext());

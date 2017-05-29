@@ -3,8 +3,10 @@ package com.wdfeww.docgl.data.methods;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -15,6 +17,7 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
 import com.wdfeww.docgl.AppLogin;
 import com.wdfeww.docgl.DetailOfAppointment;
 import com.wdfeww.docgl.FavouriteDoctors;
@@ -38,13 +41,11 @@ public class NavigationMenu extends Activity {
     final DrawerLayout drawer_layout;
     NavigationView nav_view;
     Class className;
-    Patient patient;
+    private Patient patient;
+    User user;
 
-    public NavigationMenu(String token,Patient patient,
-                          Context context, Toolbar toolbar, DrawerLayout drawer_layout,
+    public NavigationMenu(Context context, Toolbar toolbar, DrawerLayout drawer_layout,
                           NavigationView nav_view, Class className) {
-        this.token = token;
-        this.patient=patient;
         this.context = context;
         this.toolbar = toolbar;
         this.drawer_layout = drawer_layout;
@@ -54,6 +55,14 @@ public class NavigationMenu extends Activity {
     }
 
     public void initMenu(){
+
+        SharedPreferences prefs = context.getSharedPreferences("com.wdfeww.docgl", Context.MODE_PRIVATE);
+        Gson gson = new Gson();
+        String json = prefs.getString("LoggedUser", "");
+        user = gson.fromJson(json, User.class);
+        json = prefs.getString("LoggedPatient", "");
+        patient = gson.fromJson(json, Patient.class);
+        token = user.getToken();
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer_layout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -120,10 +129,6 @@ public class NavigationMenu extends Activity {
     }
     public void redirect(Class nameOfClass) {
         Intent intent = new Intent(context, nameOfClass);
-        Bundle bundle = new Bundle();
-        bundle.putParcelable("patient", patient);
-        intent.putExtras(bundle);
-        intent.putExtra("token", token);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
 
@@ -131,10 +136,6 @@ public class NavigationMenu extends Activity {
 
     public void redirect() {
         Intent intent = new Intent(context, Home.class);
-        Bundle bundle = new Bundle();
-        bundle.putParcelable("patient", patient);
-        intent.putExtras(bundle);
-        intent.putExtra("token", token);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
 

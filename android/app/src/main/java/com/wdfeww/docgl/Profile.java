@@ -1,5 +1,7 @@
 package com.wdfeww.docgl;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.NavigationView;
@@ -17,10 +19,12 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
 import com.wdfeww.docgl.data.methods.Checker;
 import com.wdfeww.docgl.data.methods.JsonReqestBody;
 import com.wdfeww.docgl.data.methods.NavigationMenu;
 import com.wdfeww.docgl.data.model.Patient;
+import com.wdfeww.docgl.data.model.User;
 import com.wdfeww.docgl.data.remote.Service;
 import com.wdfeww.docgl.data.remote.ServiceGenerator;
 
@@ -47,11 +51,20 @@ public class Profile extends AppCompatActivity {
     Patient patient;
     NavigationMenu navigationMenu;
     int i = 0;
+    User user;
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.profile);
+
+        SharedPreferences prefs = this.getSharedPreferences("com.wdfeww.docgl", Context.MODE_PRIVATE);
+        Gson gson = new Gson();
+        String json = prefs.getString("LoggedUser", "");
+        user = gson.fromJson(json, User.class);
+        json = prefs.getString("LoggedPatient", "");
+        patient = gson.fromJson(json, Patient.class);
+        token = user.getToken();
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -69,16 +82,12 @@ public class Profile extends AppCompatActivity {
 
         main_layout = (LinearLayout) findViewById(R.id.main_layout);
 
-        Bundle bundle = this.getIntent().getExtras();
-            patient = bundle.getParcelable("patient");
-            token = getIntent().getStringExtra("token");
-
         className = getClass();
         nav_view = (NavigationView) findViewById(R.id.nav_view);
         drawer_layout = (DrawerLayout) findViewById(R.id.drawer_layout);
         logged_user = new TextView(this);
         logged_user.setTextAppearance(this, R.style.profile_text);
-        navigationMenu = new NavigationMenu(token, patient, this, toolbar, drawer_layout, nav_view, className);
+        navigationMenu = new NavigationMenu(this, toolbar, drawer_layout, nav_view, className);
         navigationMenu.initMenu();
 
         showProfile();

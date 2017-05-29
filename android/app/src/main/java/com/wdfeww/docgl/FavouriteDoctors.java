@@ -1,6 +1,8 @@
 package com.wdfeww.docgl;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.NavigationView;
@@ -15,12 +17,14 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.wdfeww.docgl.data.methods.FontManager;
 import com.wdfeww.docgl.data.methods.JsonReqestBody;
 import com.wdfeww.docgl.data.methods.NavigationMenu;
 import com.wdfeww.docgl.data.model.Appointment;
 import com.wdfeww.docgl.data.model.Doctor;
 import com.wdfeww.docgl.data.model.Patient;
+import com.wdfeww.docgl.data.model.User;
 import com.wdfeww.docgl.data.remote.Service;
 import com.wdfeww.docgl.data.remote.ServiceGenerator;
 
@@ -52,6 +56,7 @@ public class FavouriteDoctors extends AppCompatActivity {
     TextView noResult;
     LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
     LinearLayout.LayoutParams txt_params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+    User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,9 +66,13 @@ public class FavouriteDoctors extends AppCompatActivity {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        Bundle bundle = this.getIntent().getExtras();
-        patient = bundle.getParcelable("patient");
-        token = getIntent().getStringExtra("token");
+        SharedPreferences prefs = this.getSharedPreferences("com.wdfeww.docgl", Context.MODE_PRIVATE);
+        Gson gson = new Gson();
+        String json = prefs.getString("LoggedUser", "");
+        user = gson.fromJson(json, User.class);
+        json = prefs.getString("LoggedPatient", "");
+        patient = gson.fromJson(json, Patient.class);
+        token = user.getToken();
 
         className = getClass();
 
@@ -73,7 +82,7 @@ public class FavouriteDoctors extends AppCompatActivity {
         main_layout = (LinearLayout) findViewById(R.id.main_layout);
         results = (LinearLayout) findViewById(R.id.results);
 
-        navigationMenu = new NavigationMenu(token, patient, this, toolbar, drawer_layout, nav_view, className);
+        navigationMenu = new NavigationMenu(this, toolbar, drawer_layout, nav_view, className);
         navigationMenu.initMenu();
 
         noResult = (TextView) findViewById(R.id.noResult);

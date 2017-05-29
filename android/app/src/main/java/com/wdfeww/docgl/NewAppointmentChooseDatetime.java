@@ -1,7 +1,9 @@
 package com.wdfeww.docgl;
 
 import android.app.FragmentTransaction;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.NavigationView;
@@ -17,6 +19,7 @@ import android.widget.ExpandableListView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
 import com.wdfeww.docgl.data.methods.DateDialog;
 import com.wdfeww.docgl.data.methods.ExpandableListAdapter;
 import com.wdfeww.docgl.data.methods.JsonReqestBody;
@@ -24,6 +27,7 @@ import com.wdfeww.docgl.data.methods.NavigationMenu;
 import com.wdfeww.docgl.data.model.Doctor;
 import com.wdfeww.docgl.data.model.FreeDateToAppoitnment;
 import com.wdfeww.docgl.data.model.Patient;
+import com.wdfeww.docgl.data.model.User;
 import com.wdfeww.docgl.data.remote.Service;
 import com.wdfeww.docgl.data.remote.ServiceGenerator;
 
@@ -58,12 +62,20 @@ public class NewAppointmentChooseDatetime extends AppCompatActivity {
     private ExpandableListAdapter listAdapter;
     private List<String> listDataHeader;
     private HashMap<String, List<String>> listHashMap;
-
+    User user;
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.new_appointment_choose_datetime);
+
+        SharedPreferences prefs = this.getSharedPreferences("com.wdfeww.docgl", Context.MODE_PRIVATE);
+        Gson gson = new Gson();
+        String json = prefs.getString("LoggedUser", "");
+        user = gson.fromJson(json, User.class);
+        json = prefs.getString("LoggedPatient", "");
+        patient = gson.fromJson(json, Patient.class);
+        token = user.getToken();
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -83,9 +95,8 @@ public class NewAppointmentChooseDatetime extends AppCompatActivity {
         txtdateFrom = (EditText) findViewById(R.id.txtdateFrom);
         txtdateTo = (EditText) findViewById(R.id.txtdateTo);
         Bundle bundle = this.getIntent().getExtras();
-        patient = bundle.getParcelable("patient");
         doctor = bundle.getParcelable("doctor");
-        token = getIntent().getStringExtra("token");
+
         results = (LinearLayout) findViewById(R.id.results);
 
         listView = new ExpandableListView(this);
@@ -121,7 +132,7 @@ public class NewAppointmentChooseDatetime extends AppCompatActivity {
         className = getClass();
         nav_view = (NavigationView) findViewById(R.id.nav_view);
         drawer_layout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        navigationMenu = new NavigationMenu(token, patient, this, toolbar, drawer_layout, nav_view, className);
+        navigationMenu = new NavigationMenu( this, toolbar, drawer_layout, nav_view, className);
         navigationMenu.initMenu();
     }
 
@@ -151,9 +162,7 @@ public class NewAppointmentChooseDatetime extends AppCompatActivity {
             Intent intent = new Intent(getBaseContext(), NewAppointmentChooseDatetime.class);
             Bundle bundle = new Bundle();
             bundle.putParcelable("doctor", doctor);
-            bundle.putParcelable("patient", patient);
             intent.putExtras(bundle);
-            intent.putExtra("token", token);
             startActivity(intent);
         }
     }
@@ -214,9 +223,7 @@ public class NewAppointmentChooseDatetime extends AppCompatActivity {
                 Intent intent = new Intent(getBaseContext(), NewAppointmentConfirmation.class);
                 Bundle bundle = new Bundle();
                 bundle.putParcelable("doctor", doctor);
-                bundle.putParcelable("patient", patient);
                 intent.putExtras(bundle);
-                intent.putExtra("token", token);
                 intent.putExtra("time", time);
                 intent.putExtra("date", date);
                 startActivity(intent);

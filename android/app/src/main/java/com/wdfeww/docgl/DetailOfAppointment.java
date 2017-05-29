@@ -1,5 +1,7 @@
 package com.wdfeww.docgl;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.NavigationView;
@@ -15,6 +17,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
 import com.wdfeww.docgl.data.methods.NavigationMenu;
 import com.wdfeww.docgl.data.model.Appointment;
 import com.wdfeww.docgl.data.model.Patient;
@@ -44,22 +47,26 @@ public class DetailOfAppointment extends AppCompatActivity {
     Class className;
     Patient patient;
     NavigationMenu navigationMenu;
-
+    User user;
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.detail_of_appointment);
 
+        SharedPreferences prefs = this.getSharedPreferences("com.wdfeww.docgl", Context.MODE_PRIVATE);
+        Gson gson = new Gson();
+        String json = prefs.getString("LoggedUser", "");
+        user = gson.fromJson(json, User.class);
+        json = prefs.getString("LoggedPatient", "");
+        patient = gson.fromJson(json, Patient.class);
+        token = user.getToken();
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         Bundle bundle = this.getIntent().getExtras();
         appointment = bundle.getParcelable("appointment");
-        patient = bundle.getParcelable("patient");
-        token = getIntent().getStringExtra("token");
-
 
         errorMessage = new TextView(this);
         errorMessage.setTextAppearance(this, R.style.ErrorMessage);
@@ -79,7 +86,7 @@ public class DetailOfAppointment extends AppCompatActivity {
         drawer_layout = (DrawerLayout) findViewById(R.id.drawer_layout);
         logged_user = new TextView(this);
         logged_user.setTextAppearance(this, R.style.profile_text);
-        navigationMenu = new NavigationMenu(token, patient, this, toolbar, drawer_layout, nav_view, className);
+        navigationMenu = new NavigationMenu( this, toolbar, drawer_layout, nav_view, className);
         navigationMenu.initMenu();
 
 

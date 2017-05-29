@@ -1,6 +1,8 @@
 package com.wdfeww.docgl;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -8,6 +10,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
 import com.wdfeww.docgl.data.methods.Checker;
 import com.wdfeww.docgl.data.methods.JsonReqestBody;
 import com.wdfeww.docgl.data.model.User;
@@ -26,11 +29,12 @@ public class Register extends AppCompatActivity {
     private EditText edit_txt_firstname, edit_txt_lastname, edit_txt_email, edit_txt_username, edit_txt_password;
     private TextView errorMessage, successMessage;
     private User user;
-
+    SharedPreferences prefs;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.register);
+        prefs = this.getSharedPreferences("com.wdfeww.docgl", Context.MODE_PRIVATE);
         sign_up = (Button) findViewById(R.id.sign_up);
         sign_up.setEnabled(true);
         edit_txt_firstname = (EditText) findViewById(R.id.edit_txt_firstname);
@@ -92,6 +96,13 @@ public class Register extends AppCompatActivity {
                     errorMessage.setText("");
                     successMessage.setText("Registration success!");
                     user = response.body();
+                    SharedPreferences.Editor prefsEditor = prefs.edit();
+                    Gson gson = new Gson();
+                    String json = gson.toJson(user);
+                    prefsEditor.putString("LoggedUser", json);
+                    json = gson.toJson(user.getPatient());
+                    prefsEditor.putString("LoggedPatient", json);
+                    prefsEditor.commit();
                     redirectToHome();
                     sign_up.setEnabled(false);
                 }
@@ -107,10 +118,6 @@ public class Register extends AppCompatActivity {
 
     private void redirectToHome() {
         Intent intent = new Intent(getBaseContext(), Home.class);
-        Bundle bundle = new Bundle();
-        bundle.putParcelable("patient", user.getPatient());
-        intent.putExtra("token", user.getToken());
-        intent.putExtras(bundle);
         this.finish();
         startActivity(intent);
     }

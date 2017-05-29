@@ -1,6 +1,8 @@
 package com.wdfeww.docgl;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -18,12 +20,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.gson.Gson;
 import com.wdfeww.docgl.data.SQLiteDatabase.MyDBHandler;
 import com.wdfeww.docgl.data.methods.FontManager;
 import com.wdfeww.docgl.data.methods.JsonReqestBody;
 import com.wdfeww.docgl.data.methods.NavigationMenu;
 import com.wdfeww.docgl.data.model.Appointment;
 import com.wdfeww.docgl.data.model.Patient;
+import com.wdfeww.docgl.data.model.User;
 import com.wdfeww.docgl.data.remote.Service;
 import com.wdfeww.docgl.data.remote.ServiceGenerator;
 
@@ -51,20 +55,24 @@ public class Home extends AppCompatActivity {
     FloatingActionButton fab;
     NavigationMenu navigationMenu;
 
-
+    User user;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.home);
 
+        SharedPreferences prefs = this.getSharedPreferences("com.wdfeww.docgl", Context.MODE_PRIVATE);
+        Gson gson = new Gson();
+        String json = prefs.getString("LoggedUser", "");
+        user = gson.fromJson(json, User.class);
+        json = prefs.getString("LoggedPatient", "");
+        patient = gson.fromJson(json, Patient.class);
+        token = user.getToken();
+
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         main_layout = (LinearLayout) findViewById(R.id.main_layout);
-
-        Bundle bundle = this.getIntent().getExtras();
-        patient = bundle.getParcelable("patient");
-        token = getIntent().getStringExtra("token");
 
         className = getClass();
         nav_view = (NavigationView) findViewById(R.id.nav_view);
@@ -73,7 +81,7 @@ public class Home extends AppCompatActivity {
         medkit = this.getResources().getString(R.string.fa_medkit);
         calendar = this.getResources().getString(R.string.fa_calendar);
 
-        navigationMenu = new NavigationMenu(token, patient, this, toolbar, drawer_layout, nav_view, className);
+        navigationMenu = new NavigationMenu(this, toolbar, drawer_layout, nav_view, className);
         navigationMenu.initMenu();
 
         checkAppointments();
@@ -294,10 +302,6 @@ public class Home extends AppCompatActivity {
 
     public void profile() {
         Intent intent = new Intent(getBaseContext(), Profile.class);
-        Bundle bundle = new Bundle();
-        bundle.putParcelable("patient", patient);
-        intent.putExtras(bundle);
-        intent.putExtra("token", token);
         startActivity(intent);
     }
 
@@ -309,9 +313,7 @@ public class Home extends AppCompatActivity {
         Intent intent = new Intent(getBaseContext(), DetailOfAppointment.class);
         Bundle bundle = new Bundle();
         bundle.putParcelable("appointment", appointment);
-        bundle.putParcelable("patient", patient);
         intent.putExtras(bundle);
-        intent.putExtra("token", token);
         startActivity(intent);
     }
 }
