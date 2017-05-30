@@ -17,13 +17,22 @@ import android.text.InputType;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.wdfeww.docgl.data.SQLiteDatabase.DBOutput;
+import com.wdfeww.docgl.data.SQLiteDatabase.MyDBHandler;
+import com.wdfeww.docgl.data.SQLiteDatabase.Patients;
+import com.wdfeww.docgl.data.methods.Checker;
 import com.wdfeww.docgl.data.methods.JsonReqestBody;
 import com.wdfeww.docgl.data.methods.NavigationMenu;
 import com.wdfeww.docgl.data.model.Doctor;
@@ -36,7 +45,9 @@ import org.json.JSONObject;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
@@ -59,12 +70,22 @@ public class NewAppointmentConfirmation extends AppCompatActivity {
     LinearLayout.LayoutParams text_params, sub_text_params, btn_params;
     Button btn1;
     User user;
+    RadioGroup rg;
+    RadioButton rb1, rb2;
+    Patients newPatient;
+    MyDBHandler dbHandler;
+    Spinner spinner;
+    List<String> listPatients;
+    List<DBOutput> dbOutputs;
+
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.new_appointment_confirmation);
-
+        doctor = new Doctor();
+        newPatient = new Patients();
+        dbHandler = new MyDBHandler(getApplicationContext());
         SharedPreferences prefs = this.getSharedPreferences("com.wdfeww.docgl", Context.MODE_PRIVATE);
         Gson gson = new Gson();
         String json = prefs.getString("LoggedUser", "");
@@ -145,6 +166,45 @@ public class NewAppointmentConfirmation extends AppCompatActivity {
         tv5.setTextAppearance(this, R.style.profile_text);
         main_layout.addView(tv5);
 
+        rg = new RadioGroup(this);
+        rg.setLayoutParams(sub_text_params);
+        rb1 = new RadioButton(this);
+        rb2 = new RadioButton(this);
+        rb1.setText("New patient");
+        rb2.setText("My patients");
+        rg.addView(rb1);
+        rg.addView(rb2);
+        rb1.setChecked(true);
+        main_layout.addView(rg);
+
+        rb1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                et1.setVisibility(View.VISIBLE);
+                et2.setVisibility(View.VISIBLE);
+                spinner.setVisibility(View.GONE);
+            }
+        });
+
+        rb2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                et1.setText("");
+                et2.setText("");
+                et1.setVisibility(View.GONE);
+                et2.setVisibility(View.GONE);
+                spinner.setVisibility(View.VISIBLE);
+                initSpinner();
+
+            }
+        });
+
+
+        spinner = new Spinner(this);
+        spinner.setLayoutParams(sub_text_params);
+        main_layout.addView(spinner);
+        spinner.setVisibility(View.GONE);
+
         et1 = new EditText(this);
         et1.setHint("first name");
         et1.setLayoutParams(sub_text_params);
@@ -152,12 +212,14 @@ public class NewAppointmentConfirmation extends AppCompatActivity {
         et1.setHintTextColor(this.getResources().getColor(R.color.color6));
         main_layout.addView(et1);
 
+
         et2 = new EditText(this);
         et2.setHint("last name");
         et2.setLayoutParams(sub_text_params);
         et2.setInputType(InputType.TYPE_CLASS_TEXT);
         et2.setHintTextColor(this.getResources().getColor(R.color.color6));
         main_layout.addView(et2);
+
 
         tv6 = new TextView(this);
         tv6.setText("Note:");
@@ -190,9 +252,47 @@ public class NewAppointmentConfirmation extends AppCompatActivity {
             @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
             @Override
             public void onClick(View v) {
+                pFirstName = pLastName = "";
 
-                pFirstName = et1.getText().toString().trim();
-                pLastName = et2.getText().toString().trim();
+                if (rb1.isChecked()) {
+
+                    if (Checker.isNameValid(et1.getText().toString().trim())) {
+                        if (Checker.isNameValid(et2.getText().toString().trim())) {
+
+                            newPatient.set_patientFirstName(et1.getText().toString().trim());
+                            newPatient.set_patientLastName(et2.getText().toString().trim());
+                            newPatient.set_userId(patient.getId());
+                            dbHandler.addPatient(newPatient);
+
+                            pFirstName = et1.getText().toString().trim();
+                            pLastName = et2.getText().toString().trim();
+                            et1.setText("");
+                            et2.setText("");
+                            errorMessage.setVisibility(View.GONE);
+                            successMessage.setVisibility(View.GONE);
+
+
+                        } else {
+
+                            errorMessage.setVisibility(View.VISIBLE);
+                            errorMessage.setText("Please type patient last name.");
+                            successMessage.setVisibility(View.GONE);
+
+                        }
+                    } else {
+
+                        errorMessage.setVisibility(View.VISIBLE);
+                        errorMessage.setText("Please type patient first name.");
+                        successMessage.setVisibility(View.GONE);
+
+                    }
+
+                } else {
+
+                    pFirstName = dbOutputs.get(spinner.getSelectedItemPosition()).getFirstname();
+                    pLastName = dbOutputs.get(spinner.getSelectedItemPosition()).getLastname();
+
+                }
                 note = et3.getText().toString().trim();
 
                 createAppointment();
@@ -201,6 +301,21 @@ public class NewAppointmentConfirmation extends AppCompatActivity {
 
         });
         main_layout.addView(btn1);
+
+    }
+
+    private void initSpinner() {
+        spinner.setAdapter(null);
+        listPatients = new ArrayList<String>();
+        dbOutputs = dbHandler.databaseToString(patient.getId());
+        for (final DBOutput dbOutput : dbOutputs) {
+
+            listPatients.add(dbOutput.getFirstname() + " " + dbOutput.getLastname());
+        }
+        ArrayAdapter<String> adapter2 = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, listPatients);
+        adapter2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(adapter2);
+
 
     }
 
@@ -279,7 +394,7 @@ public class NewAppointmentConfirmation extends AppCompatActivity {
         intent.setType("vnd.android.cursor.item/event");
         intent.putExtra("beginTime", cal.getTimeInMillis());
         intent.putExtra("allDay", true);
-        intent.putExtra(CalendarContract.Events.DESCRIPTION, pFirstName+" "+pLastName+" "+note);
+        intent.putExtra(CalendarContract.Events.DESCRIPTION, pFirstName + " " + pLastName + " " + note);
         intent.putExtra(CalendarContract.Events.EVENT_LOCATION, doctor.getCity() + " " + doctor.getWorkplace());
         intent.putExtra("endTime", cal.getTimeInMillis() + 30 * 60 * 1000);
         intent.putExtra("title", doctor.getSpecialization());
