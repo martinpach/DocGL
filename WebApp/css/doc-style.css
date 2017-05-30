@@ -119,14 +119,9 @@
 	margin-left:40%;
 	float:right;
 }
-#saveFreeHrs{
-	display: none;
-}
 
-.submitWorkingHours{
-	display:none;
-}
 
-#setDuration{
+#submitHours,#workingHoursError,
+#saveFreeHrs,#setDuration{
 	display:none;
 }

@@ -72,7 +72,7 @@ $(document).ready(function() {
     $("#home").trigger("click");
 
     $("#appointments").on("click", function() {
-        $("#appointents").addClass("selected");
+        $("#appointments").addClass("selected");
         $("#settings, #home").removeClass("selected");
         $("#container").load('templates/doctor_appointments.html');
     });
@@ -169,7 +169,7 @@ $(document).ready(function() {
             event.preventDefault();
             addWorkingHour();
             renderWorkingHours();
-            $(".submitWorkingHours").show();
+            $("#submitHours").show();
         });
 
         function addWorkingHour(){
@@ -178,7 +178,7 @@ $(document).ready(function() {
             var fromInput=$("#workingFrom").val();
             var toInput=$("#workingTo").val();
 
-            if(fromInput != "" && toInput != ""){
+            if(fromInput != null&& toInput != null){
                 var interval ={
                     from: fromInput,
                     to: toInput
@@ -260,7 +260,7 @@ $(document).ready(function() {
         $("#input-day").on("change", function(){
             renderWorkingHours();
             $("#workingHoursError").hide();
-        })
+        });
 
         function renderWorkingHours(){
             $("#hoursContainer").empty();

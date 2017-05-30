@@ -38,9 +38,6 @@
 <script>
 var appointments;
 var radioBtn = $('input[type=radio][name=time_period]');
-
-
-
 $(radioBtn).change(function() {
     if ($('#day-input').val() != "") {
         if (this.value == "day") {
@@ -63,27 +60,27 @@ $('#day-input').change(function() {
         showWeeklyAppointments();
     }
 });
-
 function showDayAppointments(date) {
     ajaxRequest("doctors/" + localStorage.getItem("id") + "/appointments?date=" + date, 'GET').done(function() {
         $(".appointment-day").remove();
         for (var i = 0; i < appointments.length; i++) {
-            var appointmentBox = $('<div class="appointment-day"></div>');
-            var appointmentTimeBox = $('<div class="time"></div>');
-            var appointmentPatientBox = $('<div class="patient"></div>');
-            var appointmentNoteBox = $('<p class="note"></p>');
-            var btnCancelAppointment = $('<button type="button" class="btn btn-danger btn-sm btn-cancel-appointment" id="' + appointments[i].id + '">Cancel</button>');
-            var colMd4 = $('<div class="col-md-4"></div>');
-            appointmentTimeBox.text((appointments[i].time).substr(0, 5));
-            appointmentPatientBox.text((appointments[i].patientFirstName == "" ? appointments[i].patient.firstName : appointments[i].patientFirstName) + " " + (appointments[i].patientLastName == "" ? appointments[i].patient.lastName : appointments[i].patientLastName));
-            appointmentNoteBox.text(appointments[i].note);
-            appointmentBox.append(appointmentTimeBox, appointmentPatientBox, appointmentNoteBox, btnCancelAppointment);
-            appointmentBox.appendTo(colMd4);
-            colMd4.appendTo('#contentTab');
+            if(appointments[i].canceled==false){
+                var appointmentBox = $('<div class="appointment-day"></div>');
+                var appointmentTimeBox = $('<div class="time"></div>');
+                var appointmentPatientBox = $('<div class="patient"></div>');
+                var appointmentNoteBox = $('<p class="note"></p>');
+                var btnCancelAppointment = $('<button type="button" class="btn btn-danger btn-sm btn-cancel-appointment" id="' + appointments[i].id + '">Cancel</button>');
+                var colMd4 = $('<div class="col-md-4"></div>');
+                appointmentTimeBox.text((appointments[i].time).substr(0, 5));
+                appointmentPatientBox.text((appointments[i].patientFirstName == "" ? appointments[i].patient.firstName : appointments[i].patientFirstName) + " " + (appointments[i].patientLastName == "" ? appointments[i].patient.lastName : appointments[i].patientLastName));
+                appointmentNoteBox.text(appointments[i].note);
+                appointmentBox.append(appointmentTimeBox, appointmentPatientBox, appointmentNoteBox, btnCancelAppointment);
+                appointmentBox.appendTo(colMd4);
+                colMd4.appendTo('#contentTab');
+            }
         }
     });
 }
-
 function showWeeklyAppointments() {
     ajaxRequest("doctors/" + localStorage.getItem("id") + "/appointments?date=" + $('#day-input').val() + "&timePeriod=week", 'GET').done(function() {
         $(".appointment-day").remove();
@@ -100,31 +97,24 @@ function showWeeklyAppointments() {
         }
     });
 }
-
-
 $(function() {
     $(".datepicker").datepicker({
         dateFormat: "yy-mm-dd",
         defaultDate: getCurrentDate()
     }).val(getCurrentDate());
 });
-
 (function() {
     showDayAppointments(getCurrentDate());
 })();
-
 function getCurrentDate() {
     var d = new Date(),
         month = '' + (d.getMonth() + 1),
         day = '' + d.getDate(),
         year = d.getFullYear();
-
     if (month.length < 2) month = '0' + month;
     if (day.length < 2) day = '0' + day;
-
     return [year, month, day].join('-');
 }
-
 function ajaxRequest(sufix, type) {
     var deferred = $.Deferred();
     $.ajax({
@@ -147,7 +137,6 @@ function ajaxRequest(sufix, type) {
     });
     return deferred.promise();
 }
-
 $(document).on('click', '.appointment-week', function() {
     var date = $(this).find('.date').text();
     $('#week-radio').prop("checked", false);
@@ -157,7 +146,6 @@ $(document).on('click', '.appointment-week', function() {
     showDayAppointments(date);
     $('#contentTab').empty();
 });
-
 $(document).on('click', '.btn-cancel-appointment', function() {
     var appointmentId = $(this).attr('id');
     ajaxRequest("appointments/" + appointmentId, 'DELETE').done(function () {
@@ -166,4 +154,3 @@ $(document).on('click', '.btn-cancel-appointment', function() {
     });
 });
 </script>
-
