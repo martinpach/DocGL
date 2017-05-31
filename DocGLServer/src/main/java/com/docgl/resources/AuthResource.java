@@ -65,12 +65,11 @@ public class AuthResource {
         if(userType == null)
             throw new BadRequestException("Property 'userType' is missing or not presented!");
 
-        if (userType.equals(UserType.ADMIN)) {
+        if (userType.equals(UserType.DOCTOR) || userType.equals(UserType.ADMIN)) {
             Admin adminInfo = adminDAO.getLoggedAdminInformation(username, password);
             if(adminInfo != null)
                 return new AdminRepresentation(adminInfo, generateValidToken("admin", adminInfo.getId()));
-        }
-        if (userType.equals(UserType.DOCTOR)) {
+
             Doctor doctorInfo = doctorDAO.getLoggedDoctorInformation(username, password);
             if(doctorInfo != null){
                 String token = (!doctorInfo.isApproved() || doctorInfo.isBlocked()) ? "" : generateValidToken("doctor", doctorInfo.getId());

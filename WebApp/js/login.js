@@ -1,14 +1,9 @@
 $(document).ready(function () {
     var username;
     var password;
-    var userType = localStorage.getItem("userType")
 
-    $(document).on('click', '#btn-admin-login', function() {
-        localStorage.setItem("userType", "ADMIN");
-        window.location.href = "login.html";
-    });
-    $(document).on('click', '#btn-doctor-login', function() {
-        localStorage.setItem("userType", "DOCTOR");
+
+    $(document).on('click', '#btn-login', function() {
         window.location.href = "login.html";
     });
     $(document).on('click', '#btn-doctor-register', function() {
@@ -37,7 +32,7 @@ $(document).ready(function () {
             inputField.val(inputField.val().slice(0, -1));
         }
     }
-    console.log(userType);
+
     function logIn() {
         $("#errorMsg").hide();
         username = $("#username").val();
@@ -50,10 +45,10 @@ $(document).ready(function () {
                 data: JSON.stringify({
                     "userName": username,
                     "password": password,
-                    "userType": userType
+                    "userType": "DOCTOR"
                 }),
                 success: function (data) {
-                    if (userType == "ADMIN") {
+                    if (data.admin) {
                         var admin = data.admin;
                         localStorage.setItem("id", admin.id);
                         localStorage.setItem("firstName", admin.firstName);
@@ -67,7 +62,7 @@ $(document).ready(function () {
                             window.location.href = "admin/changepass.html";
                         } else window.location.href = "admin/home.html";
                     }
-                    if (userType == "DOCTOR") {
+                    else {
                         var doctor = data.doctor;
                         localStorage.setItem("id", doctor.id);
                         localStorage.setItem("firstName", doctor.firstName);

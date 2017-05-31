@@ -10,7 +10,7 @@ header {
 }
 
 main {
-	padding-bottom: 50px;
+	padding-bottom: 137px;
     background: rgba(10, 60, 113, 1) fixed !important;
     background: -moz-linear-gradient(top, rgba(10, 60, 113, 1) 0%, rgba(46, 166, 158, 1) 100%) fixed !important;
     background: -webkit-gradient(left top, right top, color-stop(0%, rgba(10, 60, 113, 1)), color-stop(100%, rgba(46, 166, 158, 1))) fixed !important;
