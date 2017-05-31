@@ -185,7 +185,7 @@ $(document).ready(function () {
             setText(countDocs);
             setButtons(countDocs);
             generateDoctorTable();
-            console.log("start"+start+" "+"limit "+limit);
+            //console.log("start"+start+" "+"limit "+limit);
         }
         if ($("#users").hasClass("selected")) {
             getUsers(start, limit, sortByUsers, wayUsers);
@@ -196,7 +196,7 @@ $(document).ready(function () {
     });
 
     $("#arrowRight").on("click", function () {
-        console.log("click");
+        //console.log("click");
         start += 4;
         if ($("#doctors").hasClass("selected")) {
             getDoctors(start, limit, sortByDocs, wayDocs);
@@ -478,7 +478,7 @@ $(document).ready(function () {
         else
              $("#emailErrorMsg").html("Invalid email format.");
 
-        console.log(newData.lastname+" "+newData.firstname)
+        //console.log(newData.lastname+" "+newData.firstname)
 
         if (isFirstnameValid&&isLastnameValid && isEmailValid) {
             var dataToSend = JSON.stringify({
@@ -489,7 +489,7 @@ $(document).ready(function () {
             });
             ajaxRequest("/admins/" + adminData.id + "/profile", "PUT", dataToSend).done(function () {
                 $("#emailErrorMsg").html("Profile changed successfully.");
-                console.log(ajaxData);
+                //console.log(ajaxData);
                 localStorage.setItem("firstName", ajaxData.firstName);
                 localStorage.setItem("lastName", ajaxData.lastName);
                 localStorage.setItem("email", ajaxData.email);
@@ -531,7 +531,7 @@ $(document).ready(function () {
         var dfd=$.Deferred();
         ajaxRequest("/doctors?spec="+searchString,"GET").done(function(){
             generateDoctorTable();
-            console.log(ajaxData.length);
+            //console.log(ajaxData.length);
             dfd.resolve();
         })
     }

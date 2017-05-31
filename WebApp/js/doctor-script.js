@@ -340,9 +340,10 @@ $(document).ready(function() {
         var dfd=$.Deferred();
         var freeHour={
             date:$("#day").val(),
-            from:$("#notWorkingFrom").val(),
-            to:$("#notWorkingTo").val()
+            from:$("#notWorkingFrom").val()+":00",
+            to:$("#notWorkingTo").val()+":00"
         };
+        
         var dataToSend=JSON.stringify(freeHour);
         ajaxRequest("/doctors/"+docData.id+"/freeHours","PUT",dataToSend).done(function(){
             getFreeHours();

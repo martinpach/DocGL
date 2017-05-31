@@ -22,6 +22,7 @@ import org.apache.commons.lang3.StringUtils;
 import javax.annotation.security.PermitAll;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import java.sql.Time;
 import java.util.*;
 
 /**
@@ -335,6 +336,8 @@ public class DoctorResource {
         if(freeHours.getDate() == null){
             throw new ValidationException("Property 'date' is missing");
         }
+        freeHours.setFrom(new Time((long)(freeHours.getFrom().getTime() + 3.6e+6)));
+        freeHours.setTo(new Time((long)(freeHours.getTo().getTime() + 3.6e+6)));
         freeHours.setDoctor(doctorDAO.getDoctor(id));
         freeHoursDAO.setDoctorsFreeHours(freeHours);
         appointmentDAO.cancelDoctorsAppoitmentsByDateBetweenTimeInterval(id,
