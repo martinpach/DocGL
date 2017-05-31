@@ -31,8 +31,8 @@ insert into Appointments(date, time, note, doctor_id, patient_id, patient_first_
 insert into Appointments(date, time, note, doctor_id, patient_id, patient_first_name, patient_last_name) values(CURDATE(), "10:50:00", "Headache", 1, 2, "Martin", "Martinez");
 insert into Appointments(date, time, note, doctor_id, patient_id, patient_first_name, patient_last_name) values(CURDATE(), "11:10:00", "Headache", 1, 1, "Vlad", "Dracula");
 insert into Appointments(date, time, note, doctor_id, patient_id, patient_first_name, patient_last_name) values(CURDATE(), "13:00:00", "Headache", 1, 2, "Kalumum", "Puannum");
-insert into Appointments(date, time, note, doctor_id, patient_id, patient_first_name, patient_last_name) values(CURDATE(), "13:20:00", "Headache", 1, 2, "Zuqaqip", "Balih");
-insert into Appointments(date, time, note, doctor_id, patient_id, patient_first_name, patient_last_name) values(CURDATE(), "13:40:00", "Headache", 1, 2, "Zamug", "Iltasadum");
+insert into Appointments(date, time, note, doctor_id, patient_id, patient_first_name, patient_last_name, canceled) values(CURDATE(), "13:20:00", "Headache", 1, 2, "Zuqaqip", "Balih", true);
+insert into Appointments(date, time, note, doctor_id, patient_id, patient_first_name, patient_last_name, done) values(CURDATE(), "13:40:00", "Headache", 1, 2, "Zamug", "Iltasadum", true);
 
 insert into Working_Hours(monday_from, monday_to, tuesday_from, tuesday_to, wednesday_from, wednesday_to, thursday_from, thursday_to, friday_from, friday_to, doctor_id) values( "07:30", "12:00", "07:30", "12:00", "07:30", "12:00", "07:30", "12:00", "07:30", "12:00", 1);
 insert into Working_Hours(monday_from, monday_to, tuesday_from, tuesday_to, wednesday_from, wednesday_to, thursday_from, thursday_to, doctor_id) values( "13:00", "15:00", "13:00", "15:00", "13:00", "17:00", "13:00", "15:00", 1);

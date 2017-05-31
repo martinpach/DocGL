@@ -30,9 +30,11 @@ public class AppointmentDAO extends AbstractDAO<Appointment> {
      * @return number of appointemnts for today
      */
     public long getNumberOfAppointments(){
-        Criteria criteria = criteria();
-        criteria.add(Restrictions.eq("date", new Date()));
-        return (long) criteria().setProjection(Projections.rowCount()).uniqueResult();
+        return (long) criteria()
+                .add(Restrictions.eq("canceled", false))
+                .add(Restrictions.eq("done", false))
+                .add(Restrictions.eq("date", new Date()))
+                .setProjection(Projections.rowCount()).uniqueResult();
     }
 
     /**
