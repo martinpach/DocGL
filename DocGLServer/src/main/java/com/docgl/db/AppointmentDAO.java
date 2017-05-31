@@ -71,7 +71,6 @@ public class AppointmentDAO extends AbstractDAO<Appointment> {
                 .setParameter("id", id)
                 .setParameter("date", date)
                 .list();
-        markAsDonePastAppointments(appointments);
         return appointments;
     }
 

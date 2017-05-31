@@ -1,8 +1,3 @@
-<head>
-    <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
-    <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
-</head>
-
 <h1 class="heading" id="heading">Welcome!</h1>
 <h3 class="subHeading">Here's what DocGL's been up to while you were gone.</h3>
 <div class="container contentTab z-depth-1" id="contentTab">
@@ -11,9 +6,14 @@
 		<span id="countAppointments" class="homeNumbers"></span>
 		<br>
 		<span class="homeText">appointments today</span>
-		<div id="charts-checkbox">
-			<input type="checkbox" data-toggle="toggle" data-on="Doctors" data-off="Patients" id="toogle-types" checked>
-		</div>
+		<div class="checkbox-user-types" data-toggle="buttons">
+            <label class="btn btn-primary btn-appointments active">
+                <input type="radio" name="user-type" value="doctors" autocomplete="off" checked>Doctors
+            </label>
+            <label class="btn btn-primary btn-appointments">
+                <input type="radio" name="user-type" value="patients" autocomplete="off">Patients
+            </label>
+        </div>
 	</div>
 </div>
 	<div class="row" id="registrationStatistics">
@@ -31,15 +31,15 @@
     var ajaxUrl;
     var urlDoctors = '/registrations?timePeriod=WEEK&userTypes=DOCTORS';
     var urlPatients = '/registrations?timePeriod=WEEK&userTypes=PATIENTS';
+    var radioBtn = $('input[type=radio][name=user-type]');
 
-    $(document).on('change', '#toogle-types', function(event) {
-    	if ($("#toogle-types").prop( "checked" )) {
-    		initRegistrationsChart(urlDoctors);
-    	}
-    	else{
-    		initRegistrationsChart(urlPatients);
-    	}
-    });
+
+    $(radioBtn).change(function() {
+        if (this.value == "doctors") 
+        	initRegistrationsChart(urlDoctors);
+        else
+        	initRegistrationsChart(urlPatients);
+	});
 
 	function initRegistrationsChart (ajaxUrl) {
 		var dfd = $.Deferred();
