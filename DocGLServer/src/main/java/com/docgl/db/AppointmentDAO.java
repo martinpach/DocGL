@@ -12,9 +12,12 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
+import org.joda.time.LocalDate;
+import org.joda.time.LocalTime;
 
 import java.sql.Time;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -54,6 +57,7 @@ public class AppointmentDAO extends AbstractDAO<Appointment> {
                     .setParameter("id", id)
                     .list();
         }
+        markAsDonePastAppointments(appointments);
         return appointments;
     }
 
@@ -63,10 +67,12 @@ public class AppointmentDAO extends AbstractDAO<Appointment> {
      * @return list of all appointments for unique doctor chosen date
      */
     public List<Appointment> getDoctorsAppointmentsByDate(int id, Date date){
-        return namedQuery("getDoctorsAppointmentsByDate")
-                    .setParameter("id", id)
-                    .setParameter("date", date)
-                    .list();
+        List<Appointment> appointments = namedQuery("getDoctorsAppointmentsByDate")
+                .setParameter("id", id)
+                .setParameter("date", date)
+                .list();
+        markAsDonePastAppointments(appointments);
+        return appointments;
     }
 
     /**
@@ -76,7 +82,9 @@ public class AppointmentDAO extends AbstractDAO<Appointment> {
      */
     public Appointment getAppointment(int id) {
         Session session = currentSession();
-        return session.find(Appointment.class, id);
+        Appointment appointment = session.find(Appointment.class, id);
+        markAsDonePastAppointment(appointment);
+        return appointment;
     }
 
     /**
@@ -85,10 +93,12 @@ public class AppointmentDAO extends AbstractDAO<Appointment> {
      * @return last appointment
      */
     public Appointment getDoctorsLastAppointment(int idDoctor){
-        return (Appointment) namedQuery("getDoctorsLastAppointment")
+        Appointment appointment = (Appointment) namedQuery("getDoctorsLastAppointment")
                 .setParameter("id", idDoctor)
                 .setMaxResults(1)
                 .getSingleResult();
+        markAsDonePastAppointment(appointment);
+        return appointment;
     }
 
     /**
@@ -164,4 +174,41 @@ public class AppointmentDAO extends AbstractDAO<Appointment> {
         }
 
     }
+
+    /**
+     * Function that set all appointments that are older as actual date and actual time plus doctors working hours as DONE
+     * @param appointments list of Appointments
+     */
+    private void markAsDonePastAppointments(List<Appointment> appointments) {
+        if  (appointments != null) {
+            Doctor doctor = appointments.get(0).getDoctor();
+            LocalDate date;
+            LocalTime time;
+            LocalTime currTimeWithAppDuration = new LocalTime().plusMinutes(doctor.getAppointmentsDuration());
+            for (Appointment a : appointments) {
+                date = new LocalDate(a.getDate());
+                time = new LocalTime(a.getTime());
+                if  ((date.compareTo(new LocalDate()) == 0 && time.compareTo(currTimeWithAppDuration) == -1) || date.compareTo(new LocalDate()) == -1)
+                    a.setDone(true);
+            }
+        }
+    }
+
+    /**
+     * Function that set appointment if is older than actual date and actual time plus doctors working hours as DONE
+     * @param appointment list of Appointment
+     */
+    private void markAsDonePastAppointment(Appointment appointment) {
+        if  (appointment != null) {
+            Doctor doctor = appointment.getDoctor();
+            LocalDate date;
+            LocalTime time;
+            LocalTime currTimeWithAppDuration = new LocalTime().plusMinutes(doctor.getAppointmentsDuration());
+            date = new LocalDate(appointment.getDate());
+            time = new LocalTime(appointment.getTime());
+            if  ((date.compareTo(new LocalDate()) == 0 && time.compareTo(currTimeWithAppDuration) == -1) || date.compareTo(new LocalDate()) == -1)
+                appointment.setDone(true);
+        }
+    }
+
 }

@@ -11,6 +11,7 @@ import org.junit.Test;
 import java.sql.Time;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -32,7 +33,7 @@ public class AppointmentDAOTest extends AbstractDAO {
     @Test
     public void getNumberOfAppointmentsTest() {
         long count = dao.getNumberOfAppointments();
-        assertEquals(5, count);
+        assertEquals(1, count);
     }
 
     @Test

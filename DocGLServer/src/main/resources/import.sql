@@ -27,7 +27,7 @@ insert into Appointments(date, time, note, doctor_id, patient_id, patient_first_
 insert into Appointments(date, time, note, doctor_id, patient_id, patient_first_name, patient_last_name) values("2017-06-28", "13:40:00", "Headache", 1, 2, "Zamug", "Iltasadum");
 
 -- CURRENT DATE APPOINTMENTS --
-insert into Appointments(date, time, note, doctor_id, patient_id, patient_first_name, patient_last_name) values(CURDATE(), "10:30:00", "Headache", 1, 1, "Jeff", "Myname");
+insert into Appointments(date, time, note, doctor_id, patient_id, patient_first_name, patient_last_name) values(CURDATE(), "7:30:00", "Headache", 1, 1, "Jeff", "Myname");
 insert into Appointments(date, time, note, doctor_id, patient_id, patient_first_name, patient_last_name) values(CURDATE(), "10:50:00", "Headache", 1, 2, "Martin", "Martinez");
 insert into Appointments(date, time, note, doctor_id, patient_id, patient_first_name, patient_last_name) values(CURDATE(), "11:10:00", "Headache", 1, 1, "Vlad", "Dracula");
 insert into Appointments(date, time, note, doctor_id, patient_id, patient_first_name, patient_last_name) values(CURDATE(), "13:00:00", "Headache", 1, 2, "Kalumum", "Puannum");

@@ -18,8 +18,8 @@ insert into Appointments(date, time, note, doctor_id, patient_id, patient_first_
 insert into Appointments(date, time, note, doctor_id, patient_id, patient_first_name, patient_last_name) values('2017-05-24', '11:30:00', 'Headache', 1, 3, 'Tyroone', 'Bigdik');
 insert into Appointments(date, time, note, doctor_id, patient_id, patient_first_name, patient_last_name) values('2017-05-25', '11:10:00', 'Ear ache', 1, 1, 'Chuck', 'Norris');
 insert into Appointments(date, time, note, doctor_id, patient_id, patient_first_name, patient_last_name) values('2017-05-25', '11:30:00', 'Ear ache', 1, 2, 'Chuck', 'Norris');
--- insert into Appointments(date, time, note, doctor_id, patient_id) values(CURDATE(), CURTIME(), 'Brother John', 1, 1);
--- insert into Appointments(date, time, note, doctor_id, patient_id) values(CURDATE(), CURTIME(), 'Friend Mark', 1, 1);
+insert into Appointments(date, time, note, doctor_id, patient_id) values(CURDATE(), '7:30:00', 'Brother John', 1, 1);
+insert into Appointments(date, time, note, doctor_id, patient_id, canceled) values(CURDATE(), '7:50:00', 'Friend Mark', 1, 1, true);
 -- insert into Appointments(date, time, note, doctor_id, patient_id) values(CURDATE(), CURTIME(), 'Friend Martin', 1, 1);
 -- insert into Appointments(date, time, note, doctor_id, patient_id) values(CURDATE(), CURTIME(), 'Friend Rasto', 1, 1);
 -- insert into Appointments(date, time, note, doctor_id, patient_id) values(CURDATE(), CURTIME(), 'Friend Dominika', 1, 1);
