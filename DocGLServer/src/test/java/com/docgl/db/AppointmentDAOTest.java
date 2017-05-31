@@ -39,7 +39,7 @@ public class AppointmentDAOTest extends AbstractDAO {
     @Test
     public void getAppointmentsTest() {
         List<Appointment> appointmentList = dao.getAppointments(1, UserType.PATIENT);
-        assertEquals(2, appointmentList.size());
+        assertEquals(4, appointmentList.size());
         Appointment appointment = appointmentList.get(0);
         assertEquals(new LocalDate(2017,5,24), new LocalDate(appointment.getDate()));
         assertEquals(new LocalTime(7,30), new LocalTime(appointment.getTime()));
@@ -48,7 +48,7 @@ public class AppointmentDAOTest extends AbstractDAO {
     @Test
     public void getAppointments2Test() {
         List<Appointment> appointmentList = dao.getAppointments(1, UserType.DOCTOR);
-        assertEquals(5, appointmentList.size());
+        assertEquals(7, appointmentList.size());
     }
     /**
      * getAppointment test
@@ -94,7 +94,7 @@ public class AppointmentDAOTest extends AbstractDAO {
         Appointment appointment = appointmentList.get(0);
         System.out.println(stringToDate("2017-05-24"));
         assertEquals(new LocalDate(2017,5,24), new LocalDate(appointment.getDate()));
-        assertEquals(new LocalTime(10,50, 0), new LocalTime(appointment.getTime()));
+        assertEquals(new LocalTime(11,50, 0), new LocalTime(appointment.getTime()));
         assertEquals("Head ache.", appointment.getNote());
         assertEquals("Chuck", appointment.getPatientFirstName());
         assertEquals("Norris", appointment.getPatientLastName());
@@ -111,7 +111,7 @@ public class AppointmentDAOTest extends AbstractDAO {
         Appointment appointment = appointmentList.get(0);
         System.out.println(stringToDate("2017-05-24"));
         assertEquals(new LocalDate(2017,5,24), new LocalDate(appointment.getDate()));
-        assertEquals(new LocalTime(10,50, 0), new LocalTime(appointment.getTime()));
+        assertEquals(new LocalTime(11,50, 0), new LocalTime(appointment.getTime()));
         assertEquals(null, appointment.getNote());
         assertEquals("Chuck", appointment.getPatientFirstName());
         assertEquals("Norris", appointment.getPatientLastName());
@@ -148,7 +148,7 @@ public class AppointmentDAOTest extends AbstractDAO {
     @Test
     public void getDoctorsLastAppointmentTest(){
         Appointment appointment = dao.getDoctorsLastAppointment(1);
-        assertEquals(DateParser.parseStringToTime("11:10:00"), appointment.getTime());
+        assertEquals(new LocalDate(), new LocalDate(appointment.getDate()));
     }
 
 }
