@@ -22,7 +22,8 @@ $(document).ready(function() {
 
     var ajaxData;
     var appointments;
-    var appointmentsToday;
+    var appointmentsToday=[];
+    var appointmentCount;
     var freeHours;
     var workingHours;
 
@@ -66,6 +67,7 @@ $(document).ready(function() {
         });
         getTodaysAppointmentsInfo();
         getAllAppointmentsInfo();  
+        getUpcomingAppointment();
     });
 
 
@@ -366,26 +368,47 @@ $(document).ready(function() {
     function getTodaysAppointmentsInfo(){
         var dfd=$.Deferred();
         ajaxRequest("/doctors/" + docData.id + "/appointments?date="+dateToday, "GET").done(function(){
-            appointmentsToday=ajaxData;
+            var appointmentsToday=ajaxData;
+            var countAppointments=0;
+            for(var i=0;i<appointmentsToday.length;i++){
+                if(appointmentsToday[i].canceled==false)
+                    countAppointments++;
+            }
             var appointmentCount={
-                count:appointmentsToday.length
+                count:countAppointments
             }
             var template = "You have {{count}} appointments today.";
             var html = Mustache.to_html(template, appointmentCount)
-            $("#appointmentNotification").html(html);
+            $("#appointmentNotification").html(html);          
+           
+            dfd.resolve();
+        });
+        return dfd.promise();
+    }
 
-            if(appointmentCount>0){
-                var time={
-                next:appointmentsToday[0].time
+    function getUpcomingAppointment(){
+        var dfd=$.Deferred();
+        ajaxRequest("/doctors/" + docData.id + "/appointments?date="+dateToday, "GET").done(function(){
+            appointmentsToday=ajaxData;
+            var time={
+                next:null
             }
-            template = "{{next}}";
-            html = Mustache.to_html(template, time);
-            $("#nextAppointmentTime").html(html);
+            if(appointmentsToday.length>0){
+                for(var i=0;i<appointmentsToday.length;i++){
+                    if(appointmentsToday[i].done==false&&appointmentsToday[i].canceled==false){
+                        time.next=appointmentsToday[i].time;
+                        break;
+                    }
+                }
+                console.log(time.next);
+                template = "{{next}}";
+                html = Mustache.to_html(template, time);
+                $("#nextAppointmentTime").html(html);
             }
             else{
                 $("#nextAppointmentContainer").hide();
             }
-            dfd.resolve();
+            dfd.resolve();         
         });
         return dfd.promise();
     }

@@ -90,7 +90,7 @@ function showWeeklyAppointments() {
             var appointmentCountBox = $('<div class="num-of-appointments"></div>');
             var colMd4 = $('<div class="col-md-4"></div>');
             appointmentDateBox.text(appointments[i].date);
-            appointmentCountBox.text("Number of appointments: " + appointments[i].appointments);
+            appointmentCountBox.text("Number of appointments: " + appointments[i].appointments);//return only uncanceled or this will show bad stuff.
             appointmentBox.append(appointmentDateBox, appointmentCountBox);
             appointmentBox.appendTo(colMd4);
             colMd4.appendTo('#contentTab');
