@@ -158,9 +158,10 @@ public class AppointmentDAO extends AbstractDAO<Appointment> {
      * @param from start of time interval
      * @param to end of time interval
      */
-    public void cancelDoctorsAppoitmentsByDateBetweenTimeInterval(int idDoctor, Date date, Time from, Time to){
+    public List<Appointment> cancelDoctorsAppoitmentsByDateBetweenTimeInterval(int idDoctor, Date date, Time from, Time to){
         from = new java.sql.Time((long) (from.getTime() - 1.14e+6));
         List<Appointment> appointments = getDoctorsAppointmentsByDate(idDoctor, date);
+        List<Appointment> cancelledAppointments = new ArrayList<>();
         for(Appointment appointment : appointments) {
             if(appointment.getDate().equals(date) && appointment.getTime().after(from) && appointment.getTime().before(to)
                     && !appointment.isCanceled()){
@@ -169,8 +170,10 @@ public class AppointmentDAO extends AbstractDAO<Appointment> {
                 appointmentToUpdate.setCanceled(true);
                 appointmentToUpdate.setTime(new Time((long)(appointment.getTime().getTime() + 3.6e+6)));
                 //appointmentToUpdate.setTime(appointment.getTime());
+                cancelledAppointments.add(appointmentToUpdate);
             }
         }
+        return cancelledAppointments;
 
     }
 

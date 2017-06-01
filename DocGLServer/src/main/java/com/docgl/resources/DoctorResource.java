@@ -2,16 +2,14 @@ package com.docgl.resources;
 
 import com.docgl.Authorizer;
 import com.docgl.DateParser;
+import com.docgl.FCMessaging;
 import com.docgl.Views;
 import com.docgl.api.*;
-import com.docgl.db.AppointmentDAO;
-import com.docgl.db.FreeHoursDAO;
-import com.docgl.db.WorkingHoursDAO;
+import com.docgl.db.*;
 import com.docgl.entities.Appointment;
 import com.docgl.entities.FreeHours;
 import com.docgl.entities.WorkingHours;
 import com.docgl.enums.*;
-import com.docgl.db.DoctorDAO;
 import com.docgl.entities.Doctor;
 import com.docgl.exceptions.ValidationException;
 import com.fasterxml.jackson.annotation.JsonView;
@@ -38,13 +36,15 @@ public class DoctorResource {
     private AppointmentDAO appointmentDAO;
     private WorkingHoursDAO workingHoursDAO;
     private FreeHoursDAO freeHoursDAO;
+    private PatientDAO patientDAO;
     private Authorizer authorizer;
 
-    public DoctorResource(DoctorDAO doctorDAO, AppointmentDAO appointmentDAO, WorkingHoursDAO workingHoursDAO, FreeHoursDAO freeHoursDAO) {
+    public DoctorResource(DoctorDAO doctorDAO, AppointmentDAO appointmentDAO, WorkingHoursDAO workingHoursDAO, FreeHoursDAO freeHoursDAO, PatientDAO patientDAO) {
         this.doctorDAO = doctorDAO;
         this.appointmentDAO = appointmentDAO;
         this.workingHoursDAO = workingHoursDAO;
         this.freeHoursDAO = freeHoursDAO;
+        this.patientDAO = patientDAO;
         this.authorizer = new Authorizer();
     }
 
@@ -340,11 +340,18 @@ public class DoctorResource {
         freeHours.setTo(new Time((long)(freeHours.getTo().getTime() + 3.6e+6)));
         freeHours.setDoctor(doctorDAO.getDoctor(id));
         freeHoursDAO.setDoctorsFreeHours(freeHours);
-        appointmentDAO.cancelDoctorsAppoitmentsByDateBetweenTimeInterval(id,
+        List<Appointment> cancelledAppointments = appointmentDAO.cancelDoctorsAppoitmentsByDateBetweenTimeInterval(id,
                 freeHours.getDate(),
                 freeHours.getFrom(),
                 freeHours.getTo()
         );
+        for(Appointment cancelledAppointment : cancelledAppointments) {
+            try {
+                new FCMessaging().pushFCMNotification(patientDAO.getFCMRegistrationToken(cancelledAppointment.getPatient().getId()), "DocGL", "Your appointment (" + cancelledAppointment.getDate() + ") was cancelled.");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     /**

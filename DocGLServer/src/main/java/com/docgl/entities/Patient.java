@@ -37,7 +37,7 @@ public class Patient extends User {
     @JoinTable(name = "Favourite_doctors")
     @JsonIgnore
     private Collection<Doctor> doctors = new ArrayList<>();
-    
+
     @Column(name = "fcm_registration_token")
     @Lob
     private String FCMRegistrationToken;
