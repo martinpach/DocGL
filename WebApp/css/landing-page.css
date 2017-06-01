@@ -74,3 +74,20 @@ footer{
 	color: #41ccb9;
 	background: none !important;
 }
+
+.pageContainer{
+    position:relative;
+    margin-top:150px;
+}
+
+.loginDiv{
+    position:relative;
+}
+
+.linksContainer{
+    padding-top:40px;
+}
+
+.secondLink{
+    margin-top: 30px
+}
