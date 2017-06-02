@@ -20,7 +20,7 @@ import java.util.Date;
         @NamedQuery(name="getDoctorsAppointment", query="from Appointment where doctor.id = :id"),
         @NamedQuery(name="getDoctorsLastAppointment", query="from Appointment where doctor.id = :id AND canceled = false AND done = false order by date desc"),
         @NamedQuery(name="getPatientsAppointment", query="from Appointment where patient.id = :id"),
-        @NamedQuery(name="getDoctorsAppointmentsByDate", query="from Appointment where doctor.id = :id and date = :date and canceled = false and done = false")
+        @NamedQuery(name="getDoctorsAppointmentsByDate", query="from Appointment where doctor.id = :id and date = :date and canceled = false")
 })
 public class Appointment implements Comparable<Appointment>{
     @Id
