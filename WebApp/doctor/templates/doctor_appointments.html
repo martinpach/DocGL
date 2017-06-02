@@ -63,22 +63,28 @@ $('#day-input').change(function() {
 function showDayAppointments(date) {
     ajaxRequest("doctors/" + localStorage.getItem("id") + "/appointments?date=" + date, 'GET').done(function() {
         $(".appointment-day").remove();
-        for (var i = 0; i < appointments.length; i++) {
-            if(appointments[i].canceled==false){
-                var appointmentBox = $('<div class="appointment-day"></div>');
-                var appointmentTimeBox = $('<div class="time"></div>');
-                var appointmentPatientBox = $('<div class="patient"></div>');
-                var appointmentNoteBox = $('<p class="note"></p>');
-                var btnCancelAppointment = $('<button type="button" class="btn btn-danger btn-sm btn-cancel-appointment" id="' + appointments[i].id + '">Cancel</button>');
-                var colMd4 = $('<div class="col-md-4"></div>');
-                appointmentTimeBox.text((appointments[i].time).substr(0, 5));
-                appointmentPatientBox.text((appointments[i].patientFirstName == "" ? appointments[i].patient.firstName : appointments[i].patientFirstName) + " " + (appointments[i].patientLastName == "" ? appointments[i].patient.lastName : appointments[i].patientLastName));
-                appointmentNoteBox.text(appointments[i].note);
-                appointmentBox.append(appointmentTimeBox, appointmentPatientBox, appointmentNoteBox, btnCancelAppointment);
-                appointmentBox.appendTo(colMd4);
-                colMd4.appendTo('#contentTab');
+        if(appointments.length!=0)
+            for (var i = 0; i < appointments.length; i++) {
+                if(appointments[i].canceled==false){
+                    var appointmentBox = $('<div class="appointment-day"></div>');
+                    var appointmentTimeBox = $('<div class="time"></div>');
+                    var appointmentPatientBox = $('<div class="patient"></div>');
+                    var appointmentNoteBox = $('<p class="note"></p>');
+                    var btnCancelAppointment = $('<button type="button" class="btn btn-danger btn-sm btn-cancel-appointment" id="' + appointments[i].id + '">Cancel</button>');
+                    var colMd4 = $('<div class="col-md-4"></div>');
+                    appointmentTimeBox.text((appointments[i].time).substr(0, 5));
+                    appointmentPatientBox.text((appointments[i].patientFirstName == "" ? appointments[i].patient.firstName : appointments[i].patientFirstName) + " " + (appointments[i].patientLastName == "" ? appointments[i].patient.lastName : appointments[i].patientLastName));
+                    appointmentNoteBox.text(appointments[i].note);
+                    appointmentBox.append(appointmentTimeBox, appointmentPatientBox, appointmentNoteBox, btnCancelAppointment);
+                    appointmentBox.appendTo(colMd4);
+                    colMd4.appendTo('#contentTab');
+                }
             }
+        else{
+            $("#contentTab").empty();
+            $("#contentTab").append("<div class='text-center subHeadingBlue'>No appointments scheduled for today.</div>");
         }
+                
     });
 }
 function showWeeklyAppointments() {
