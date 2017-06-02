@@ -74,6 +74,13 @@ public class AppointmentDAO extends AbstractDAO<Appointment> {
         return appointments;
     }
 
+    public List<Appointment> getDoctorsCancelledAppointmentsForToday(int id){
+        return namedQuery("getDoctorsCancelledAppointmentsByDate")
+                .setParameter("id", id)
+                .setParameter("date", new Date())
+                .list();
+    }
+
     /**
      * This function search an appointment by his id
      * @param id appointment id

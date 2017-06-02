@@ -141,6 +141,23 @@ public class DoctorResource {
         return appointmentDAO.getAppointments(id, UserType.DOCTOR);
     }
 
+    @GET
+    @Path("{id}/appointments/cancelled")
+    @UnitOfWork
+    @JsonView(Views.DoctorView.class)
+    public List<Appointment> getDoctorCancelledAppointmentsForToday(@Auth LoggedUser loggedUser,
+                                                                    @PathParam("id") int id,
+                                                                    @QueryParam("timePeriod") TimePeriod timePeriod){
+
+        UserType[] roles = {UserType.ADMIN, UserType.DOCTOR};
+        authorizer.checkAuthorization(loggedUser.getUserType(), roles);
+        if (loggedUser.getUserType() == UserType.DOCTOR)
+            authorizer.checkAuthentication(loggedUser.getId(), id);
+        if(timePeriod == null || !timePeriod.equals(TimePeriod.TODAY))
+            throw new BadRequestException("Query parameter must be presented and set to : today");
+        return appointmentDAO.getDoctorsCancelledAppointmentsForToday(id);
+    }
+
     /**
      * Resource for getting number of all likes
      * @param loggedUser user that is sending a request
