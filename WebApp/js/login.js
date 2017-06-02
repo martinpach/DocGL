@@ -6,7 +6,7 @@ $(document).ready(function () {
     $(document).on('click', '#btn-login', function() {
         window.location.href = "login.html";
     });
-    $(document).on('click', '#btn-doctor-register', function() {
+    $(document).on('click', '#btn-register', function() {
         window.location.href = "doctor/registration.html";
     });
 

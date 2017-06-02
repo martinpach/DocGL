@@ -31,11 +31,6 @@
 	word-break : break-word;
 }
 
-.heading-appointments{
-	margin-left: 30px;
-	display: block
-}
-
 .appointment-day h3{
 	margin: 0;
 }
@@ -52,10 +47,10 @@
 
 .btn-appointments{
 	background: #41ccb9 !important;
-	border: 2px solid #41ccb9;
 	height: 50px;
 	display: inline-block;
 	margin-top: -2px !important;
+	width:100%;
 }
 .app-menu {
 	float: right;
@@ -66,11 +61,11 @@
 
 .btn-appointments.active {
 	background: #034F85 !important;
-	border: 2px solid #034F85;
+
 }
 .btn-appointments:hover {
 	background: #034F85 !important;
-	border: 2px solid #034F85;
+
 }
 
 .ui-widget.ui-widget-content {
@@ -80,4 +75,33 @@
 .apointment-select {
 	margin-bottom: 10px !important;
 	margin-right: 15px;
+}
+
+#appointmentContainer{
+	position:relative;
+	padding-right: 20px;
+}
+
+#noAppointments{
+	padding-top:40px;
+}
+
+.appointmentsForm{
+	padding-top:10px;
+	padding-bottom:10px;
+}
+
+#day-input{
+	border:2px solid #41ccb9!important;
+	color:#034F85;
+	width:100%;
+	position:relative;
+	margin-top:0!important;
+	margin-bottom:2px;
+	margin-right:20px;
+}
+
+.navigationRow{
+	padding-right: 20px;
+	padding-left:20px;
 }
