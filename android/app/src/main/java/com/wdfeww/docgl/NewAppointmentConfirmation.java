@@ -83,7 +83,7 @@ public class NewAppointmentConfirmation extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.new_appointment_confirmation);
-        doctor = new Doctor();
+       
         newPatient = new Patients();
         dbHandler = new MyDBHandler(getApplicationContext());
         SharedPreferences prefs = this.getSharedPreferences("com.wdfeww.docgl", Context.MODE_PRIVATE);
