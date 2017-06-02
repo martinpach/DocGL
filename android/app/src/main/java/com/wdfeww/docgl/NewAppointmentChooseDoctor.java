@@ -11,6 +11,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
@@ -60,11 +61,14 @@ public class NewAppointmentChooseDoctor extends AppCompatActivity {
     LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
     LinearLayout.LayoutParams txt_params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
     User user;
+    RadioGroup radioGroup;
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.new_appointment_choose_doctor);
+
+
 
         SharedPreferences prefs = this.getSharedPreferences("com.wdfeww.docgl", Context.MODE_PRIVATE);
         Gson gson = new Gson();
@@ -89,7 +93,8 @@ public class NewAppointmentChooseDoctor extends AppCompatActivity {
         chooseSpecLayout = new LinearLayout(this);
         chooseSpecLayout.setLayoutParams(params);
         chooseSpecLayout.setOrientation(LinearLayout.HORIZONTAL);
-        final RadioGroup radioGroup = new RadioGroup(this);
+
+        radioGroup = new RadioGroup(this);
         radioGroup.setLayoutParams(txt_params);
         RadioButton rbD = new RadioButton(this);
         rbD.setText("Dentist");
@@ -103,6 +108,9 @@ public class NewAppointmentChooseDoctor extends AppCompatActivity {
         radioGroup.addView(rbD);
         radioGroup.addView(rbC);
         radioGroup.addView(rbO);
+        radioGroup.getChildAt(0).setId(1);
+        radioGroup.getChildAt(1).setId(2);
+        radioGroup.getChildAt(2).setId(3);
         radioGroup.check(radioGroup.getChildAt(0).getId());
         chooseSpecLayout.addView(radioGroup);
 
@@ -184,6 +192,7 @@ public class NewAppointmentChooseDoctor extends AppCompatActivity {
                             case 3:
                                 spec = "ORTHOPEDIST";
                                 break;
+
                         }
                         searchDoctor();
                     }
@@ -191,7 +200,6 @@ public class NewAppointmentChooseDoctor extends AppCompatActivity {
 
                 search.setOnKeyListener(new View.OnKeyListener() {
                     public boolean onKey(View v, int keyCode, KeyEvent event) {
-
                         if ((event.getAction() == KeyEvent.ACTION_DOWN) &&
                                 (keyCode == KeyEvent.KEYCODE_ENTER)) {
                             name = search.getText().toString().trim();
@@ -205,6 +213,7 @@ public class NewAppointmentChooseDoctor extends AppCompatActivity {
                                 case 3:
                                     spec = "ORTHOPEDIST";
                                     break;
+
                             }
                             searchDoctor();
 
@@ -218,6 +227,7 @@ public class NewAppointmentChooseDoctor extends AppCompatActivity {
         });
 
     }
+
 
     private void selectFromFavouritelist() {
         Service service = ServiceGenerator.createService(Service.class, token);
@@ -236,15 +246,17 @@ public class NewAppointmentChooseDoctor extends AppCompatActivity {
                         if(radioButton1.isChecked())
                         showResults(doctors);
                     } else {
+                        if(radioButton1.isChecked()){
                         successMessage.setVisibility(View.GONE);
                         errorMessage.setVisibility(View.VISIBLE);
-                        errorMessage.setText("your favourite list of doctors is empty");
+                        errorMessage.setText("your favourite list of doctors is empty");}
                     }
 
                 } else {
+                    if(radioButton1.isChecked()){
                     successMessage.setVisibility(View.GONE);
                     errorMessage.setVisibility(View.VISIBLE);
-                    errorMessage.setText("Problem with search doctors.");
+                    errorMessage.setText("Problem with search doctors.");}
                 }
 
             }

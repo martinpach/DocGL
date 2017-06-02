@@ -11,6 +11,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.text.InputType;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
@@ -107,6 +108,7 @@ public class NewAppointmentChooseDatetime extends AppCompatActivity {
         txtdateFrom.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                txtdateFrom.setInputType(InputType.TYPE_NULL);
                 DateDialog dialog = new DateDialog(v);
                 FragmentTransaction ft = getFragmentManager().beginTransaction();
                 dialog.show(ft, "DatePicker");
