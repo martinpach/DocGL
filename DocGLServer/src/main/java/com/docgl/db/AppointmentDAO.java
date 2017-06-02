@@ -71,6 +71,7 @@ public class AppointmentDAO extends AbstractDAO<Appointment> {
                 .setParameter("id", id)
                 .setParameter("date", date)
                 .list();
+        markAsDonePastAppointments(appointments);
         return appointments;
     }
 
@@ -189,7 +190,7 @@ public class AppointmentDAO extends AbstractDAO<Appointment> {
      * @param appointments list of Appointments
      */
     private void markAsDonePastAppointments(List<Appointment> appointments) {
-        if  (appointments != null) {
+        if  (!appointments.isEmpty()) {
             Doctor doctor = appointments.get(0).getDoctor();
             int appTime = doctor.getAppointmentsDuration();
             LocalDate date;
