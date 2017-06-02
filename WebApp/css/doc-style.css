@@ -47,6 +47,16 @@
 	background-color: #FF7B95;
 }
 
+#canceled{
+	cursor:pointer;
+}
+
+.canceledAppointment{
+	background-color:#FF7B95;
+	color:white;
+	margin-bottom:10px;
+	padding:5px;
+}
 /*profile*/
 .docProfileHeader{
 	background-color:#034F84;

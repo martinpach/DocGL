@@ -18,18 +18,20 @@ $(document).ready(function() {
         token: localStorage.getItem("token")
     };
 
-    console.log(docData);
-
     var ajaxData;
     var appointments;
     var appointmentsToday=[];
     var appointmentCount;
+    var canceledAppointments;
+    var canceledAmount;
     var freeHours;
     var workingHours;
 
     var today = new Date();
     var dateToday = today.getFullYear()+"-"+(today.getMonth()+1)+"-"+today.getDate();
     var time= today.getHours()+":"+today.getMinutes()+":"+today.getSeconds();
+
+    getCanceledAppointments();
 
     var usernameTemplate = "<p>{{firstName}} {{lastName}}</p>";
     var html = Mustache.to_html(usernameTemplate, docData);
@@ -68,6 +70,7 @@ $(document).ready(function() {
         getTodaysAppointmentsInfo();
         getAllAppointmentsInfo();  
         getUpcomingAppointment();
+        getCanceledAppointments();
     });
 
 
@@ -364,6 +367,29 @@ $(document).ready(function() {
         return dfd.promise();
     });
 
+    $(document).on("click","#cancelledAppointments",function(){
+        getCanceledAppointments();
+        $("#canceledModal").modal("show");
+
+    });
+
+    function getCanceledAppointments(){
+        var dfd=$.Deferred();
+        ajaxRequest("/doctors/" + docData.id + "/appointments/cancelled?timePeriod=today","GET").done(function(){
+            canceledAppointments=ajaxData;
+            canceledAmount=canceledAppointments.length;
+            $("#canceledContainer").empty();
+            for(var i=0;i<canceledAppointments.length;i++){
+                $("#canceledContainer").append("<div class='col-md-12 text-center canceledAppointment'>"+
+                    "<p><b>"+canceledAppointments[i].time+"</b></p>"+
+                    "<p>"+canceledAppointments[i].patientFirstName+" "+canceledAppointments[i].patientLastName+"</p>"+
+                    "<p>"+canceledAppointments[i].note+"</p>"+
+                    "</div>");
+            }
+            dfd.resolve();
+        });
+        return dfd.promise();
+    }
 
     function getTodaysAppointmentsInfo(){
         var dfd=$.Deferred();
@@ -390,6 +416,7 @@ $(document).ready(function() {
         var dfd=$.Deferred();
         ajaxRequest("/doctors/" + docData.id + "/appointments?date="+dateToday, "GET").done(function(){
             appointmentsToday=ajaxData;
+            var done=0;
             var time={
                 next:null
             }
@@ -397,6 +424,7 @@ $(document).ready(function() {
                 for(var i=0;i<appointmentsToday.length;i++){
                     if(appointmentsToday[i].done==false&&appointmentsToday[i].canceled==false){
                         time.next=appointmentsToday[i].time;
+                        done++;
                         break;
                     }
                 }
@@ -404,6 +432,8 @@ $(document).ready(function() {
                 template = "{{next}}";
                 html = Mustache.to_html(template, time);
                 $("#nextAppointmentTime").html(html);
+                if(time.next==null)
+                    $("#nextAppointmentAt").html("All appointments are done.");
             }
             else{
                 $("#nextAppointmentContainer").hide();
@@ -424,16 +454,7 @@ $(document).ready(function() {
             var template = "{{count}}";
             var html = Mustache.to_html(template, appointmentCount);
             $("#totalAppointments").html(html);
-
-            canceledCount=0;
-            if(appointments.length>0){
-            for(var i=0; i<appointments.length;i++){
-                if(appointments[i].canceled==true)
-                    canceledCount++;
-            }
-            $("#canceled").html(canceledCount + " patients canceled an appointment.");
-        }
-    
+            $("#canceled").html(canceledAmount + " patients canceled an appointment today.");    
             dfd.resolve();
         });
         return dfd.promise();
