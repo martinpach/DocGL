@@ -90,6 +90,11 @@ public class FavouriteDoctors extends AppCompatActivity {
         getFavouriteDoctors();
     }
 
+    @Override
+    public void onBackPressed() {
+        navigationMenu.redirect();
+    }
+
 
     private void getFavouriteDoctors() {
         Service service = ServiceGenerator.createService(Service.class, token);
@@ -127,7 +132,7 @@ public class FavouriteDoctors extends AppCompatActivity {
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     private void showResults() {
-        params.setMargins(0,0,0,20);
+        params.setMargins(0, 0, 0, 20);
         results.removeAllViews();
         for (final Doctor doctor : doctors) {
             final LinearLayout linearLayout = new LinearLayout(this);
@@ -180,7 +185,7 @@ public class FavouriteDoctors extends AppCompatActivity {
             tv5.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View view, MotionEvent motionEvent) {
-                   removeFromFavourites(doctor);
+                    removeFromFavourites(doctor);
                     return false;
                 }
             });
@@ -188,7 +193,7 @@ public class FavouriteDoctors extends AppCompatActivity {
         }
     }
 
-    private void removeFromFavourites(Doctor doctor){
+    private void removeFromFavourites(Doctor doctor) {
         JSONObject json = JsonReqestBody.addDoctorToFavourite(doctor.getId());
         RequestBody body = RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"), (json.toString()));
         Service service =
@@ -198,10 +203,10 @@ public class FavouriteDoctors extends AppCompatActivity {
             @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                if(response.isSuccessful()){
+                if (response.isSuccessful()) {
                     Toast.makeText(getApplicationContext(), "Doctor was removed from your favourite list", Toast.LENGTH_LONG).show();
                     navigationMenu.redirect(FavouriteDoctors.class);
-                }else {
+                } else {
                     Toast.makeText(getApplicationContext(), "Error: Doctor was not removed from your favourite list", Toast.LENGTH_LONG).show();
                 }
             }

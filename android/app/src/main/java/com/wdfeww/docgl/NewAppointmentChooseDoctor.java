@@ -62,12 +62,12 @@ public class NewAppointmentChooseDoctor extends AppCompatActivity {
     LinearLayout.LayoutParams txt_params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
     User user;
     RadioGroup radioGroup;
+
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.new_appointment_choose_doctor);
-
 
 
         SharedPreferences prefs = this.getSharedPreferences("com.wdfeww.docgl", Context.MODE_PRIVATE);
@@ -228,6 +228,11 @@ public class NewAppointmentChooseDoctor extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onBackPressed() {
+        navigationMenu.redirect();
+    }
+
 
     private void selectFromFavouritelist() {
         Service service = ServiceGenerator.createService(Service.class, token);
@@ -243,20 +248,22 @@ public class NewAppointmentChooseDoctor extends AppCompatActivity {
 
                         for (Doctor doctor : doctors)
                             doctor.setFavourite(true);
-                        if(radioButton1.isChecked())
-                        showResults(doctors);
+                        if (radioButton1.isChecked())
+                            showResults(doctors);
                     } else {
-                        if(radioButton1.isChecked()){
-                        successMessage.setVisibility(View.GONE);
-                        errorMessage.setVisibility(View.VISIBLE);
-                        errorMessage.setText("your favourite list of doctors is empty");}
+                        if (radioButton1.isChecked()) {
+                            successMessage.setVisibility(View.GONE);
+                            errorMessage.setVisibility(View.VISIBLE);
+                            errorMessage.setText("your favourite list of doctors is empty");
+                        }
                     }
 
                 } else {
-                    if(radioButton1.isChecked()){
-                    successMessage.setVisibility(View.GONE);
-                    errorMessage.setVisibility(View.VISIBLE);
-                    errorMessage.setText("Problem with search doctors.");}
+                    if (radioButton1.isChecked()) {
+                        successMessage.setVisibility(View.GONE);
+                        errorMessage.setVisibility(View.VISIBLE);
+                        errorMessage.setText("Problem with search doctors.");
+                    }
                 }
 
             }

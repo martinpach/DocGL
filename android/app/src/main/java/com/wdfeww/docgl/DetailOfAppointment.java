@@ -97,6 +97,11 @@ public class DetailOfAppointment extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        navigationMenu.redirect();
+    }
+
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     private void showDetail() throws ParseException {
         SimpleDateFormat sdf1 = new SimpleDateFormat("MM/dd/yyyy");

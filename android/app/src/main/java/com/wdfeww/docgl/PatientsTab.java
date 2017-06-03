@@ -38,18 +38,19 @@ public class PatientsTab extends AppCompatActivity {
     NavigationMenu navigationMenu;
     DrawerLayout drawer_layout;
     NavigationView nav_view;
-    LinearLayout main_layout,results;
+    LinearLayout main_layout, results;
     EditText et1, et2;
     Button btn1;
     TextView errorMessage, successMessage;
 
     Runnable mRunnable;
-    Handler mHandler=new Handler();
+    Handler mHandler = new Handler();
 
     MyDBHandler dbHandler;
 
     Patients newPatient;
     User user;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -90,7 +91,7 @@ public class PatientsTab extends AppCompatActivity {
 
         dbHandler = new MyDBHandler(getApplicationContext());
 
-        mRunnable=new Runnable() {
+        mRunnable = new Runnable() {
 
             @Override
             public void run() {
@@ -103,8 +104,8 @@ public class PatientsTab extends AppCompatActivity {
         btn1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(Checker.isNameValid(et1.getText().toString().trim())){
-                    if(Checker.isNameValid(et2.getText().toString().trim())){
+                if (Checker.isNameValid(et1.getText().toString().trim())) {
+                    if (Checker.isNameValid(et2.getText().toString().trim())) {
 
                         newPatient.set_patientFirstName(et1.getText().toString().trim());
                         newPatient.set_patientLastName(et2.getText().toString().trim());
@@ -119,14 +120,14 @@ public class PatientsTab extends AppCompatActivity {
                         mHandler.postDelayed(mRunnable, 2000);
                         initPatients();
 
-                    }else{
+                    } else {
 
                         errorMessage.setVisibility(View.VISIBLE);
                         errorMessage.setText("Please type patient last name.");
                         successMessage.setVisibility(View.GONE);
 
                     }
-                }else{
+                } else {
 
                     errorMessage.setVisibility(View.VISIBLE);
                     errorMessage.setText("Please type patient first name.");
@@ -140,15 +141,20 @@ public class PatientsTab extends AppCompatActivity {
 
     }
 
-    public void initPatients(){
+    @Override
+    public void onBackPressed() {
+        navigationMenu.redirect();
+    }
+
+    public void initPatients() {
         List<DBOutput> dbOutputs = dbHandler.databaseToString(patient.getId());
         results.removeAllViews();
-        for(final DBOutput dbOutput: dbOutputs){
+        for (final DBOutput dbOutput : dbOutputs) {
 
             LinearLayout.LayoutParams text_params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
             text_params.setMargins(30, 30, 30, 0);
             TextView tv = new TextView(this);
-            tv.setText(dbOutput.getFirstname()+" "+dbOutput.getLastname());
+            tv.setText(dbOutput.getFirstname() + " " + dbOutput.getLastname());
             tv.setLayoutParams(text_params);
             tv.setGravity(Gravity.LEFT);
             tv.setTextAppearance(this, R.style.profile_text);

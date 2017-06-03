@@ -65,6 +65,7 @@ public class NewAppointmentChooseDatetime extends AppCompatActivity {
     private List<String> listDataHeader;
     private HashMap<String, List<String>> listHashMap;
     User user;
+
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,7 +110,7 @@ public class NewAppointmentChooseDatetime extends AppCompatActivity {
         txtdateFrom.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                if(event.getAction() == MotionEvent.ACTION_DOWN) {
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
                     DateDialog dialog = new DateDialog(v);
                     FragmentTransaction ft = getFragmentManager().beginTransaction();
                     dialog.show(ft, "DatePicker");
@@ -117,19 +118,20 @@ public class NewAppointmentChooseDatetime extends AppCompatActivity {
                 return true;
             }
         });
-       txtdateTo.setOnTouchListener(new View.OnTouchListener() {
 
-           @Override
-           public boolean onTouch(View v, MotionEvent event) {
-                if(event.getAction() == MotionEvent.ACTION_DOWN) {
+        txtdateTo.setOnTouchListener(new View.OnTouchListener() {
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_DOWN) {
                     DateDialog dialog = new DateDialog(v);
                     FragmentTransaction ft = getFragmentManager().beginTransaction();
                     dialog.show(ft, "DatePicker");
 
                 }
-               return true;
-           }
-       });
+                return true;
+            }
+        });
 
 
         btn_chceckAppointments = (Button) findViewById(R.id.btn_chceckAppointments);
@@ -142,7 +144,7 @@ public class NewAppointmentChooseDatetime extends AppCompatActivity {
         className = getClass();
         nav_view = (NavigationView) findViewById(R.id.nav_view);
         drawer_layout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        navigationMenu = new NavigationMenu( this, toolbar, drawer_layout, nav_view, className);
+        navigationMenu = new NavigationMenu(this, toolbar, drawer_layout, nav_view, className);
         navigationMenu.initMenu();
     }
 

@@ -30,6 +30,7 @@ public class Settings extends AppCompatActivity {
     LinearLayout main_layout;
     MyDBHandler dbHandler;
     User user;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,6 +58,11 @@ public class Settings extends AppCompatActivity {
         dbHandler = new MyDBHandler(getApplicationContext());
 
         toggleButtonNotifications();
+    }
+
+    @Override
+    public void onBackPressed() {
+        navigationMenu.redirect();
     }
 
     private void toggleButtonNotifications() {

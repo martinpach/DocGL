@@ -47,11 +47,11 @@ public class NavigationMenu extends Activity {
         this.toolbar = toolbar;
         this.drawer_layout = drawer_layout;
         this.nav_view = nav_view;
-        this.className=className;
+        this.className = className;
 
     }
 
-    public void initMenu(){
+    public void initMenu() {
 
         SharedPreferences prefs = context.getSharedPreferences("com.wdfeww.docgl", Context.MODE_PRIVATE);
         Gson gson = new Gson();
@@ -70,10 +70,10 @@ public class NavigationMenu extends Activity {
 
             @Override
             public void onClick(View v) {
-                if (drawer_layout.isDrawerOpen(Gravity.RIGHT)) {
-                    drawer_layout.closeDrawer(Gravity.RIGHT);
+                if (drawer_layout.isDrawerOpen(Gravity.LEFT)) {
+                    drawer_layout.closeDrawer(Gravity.LEFT);
                 } else {
-                    drawer_layout.openDrawer(Gravity.RIGHT);
+                    drawer_layout.openDrawer(Gravity.LEFT);
                 }
             }
         });
@@ -91,31 +91,31 @@ public class NavigationMenu extends Activity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.nav_home:
-                        drawer_layout.closeDrawer(Gravity.RIGHT);
-                        if(!(className.equals(Home.class)))
+                        drawer_layout.closeDrawer(Gravity.LEFT);
+                        if (!(className.equals(Home.class)))
                             redirect(Home.class);
                         break;
                     case R.id.nav_profile:
-                        drawer_layout.closeDrawer(Gravity.RIGHT);
+                        drawer_layout.closeDrawer(Gravity.LEFT);
                         redirect(Profile.class);
                         break;
                     case R.id.nav_favorites:
-                        drawer_layout.closeDrawer(Gravity.RIGHT);
-                        if(!(className.equals(FavouriteDoctors.class)))
+                        drawer_layout.closeDrawer(Gravity.LEFT);
+                        if (!(className.equals(FavouriteDoctors.class)))
                             redirect(FavouriteDoctors.class);
                         break;
                     case R.id.nav_patients:
-                        drawer_layout.closeDrawer(Gravity.RIGHT);
-                        if(!(className.equals(PatientsTab.class)))
+                        drawer_layout.closeDrawer(Gravity.LEFT);
+                        if (!(className.equals(PatientsTab.class)))
                             redirect(PatientsTab.class);
                         break;
                     case R.id.nav_settings:
-                        drawer_layout.closeDrawer(Gravity.RIGHT);
-                        if(!(className.equals(Settings.class)))
+                        drawer_layout.closeDrawer(Gravity.LEFT);
+                        if (!(className.equals(Settings.class)))
                             redirect(Settings.class);
                         break;
                     case R.id.nav_logout:
-                        drawer_layout.closeDrawer(Gravity.RIGHT);
+                        drawer_layout.closeDrawer(Gravity.LEFT);
                         logout();
                         break;
 
@@ -124,24 +124,29 @@ public class NavigationMenu extends Activity {
             }
         });
     }
+
     public void redirect(Class nameOfClass) {
+
         Intent intent = new Intent(context, nameOfClass);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        if (nameOfClass == Home.class)
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        else
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
 
     }
 
     public void redirect() {
         Intent intent = new Intent(context, Home.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         context.startActivity(intent);
 
     }
 
-    private void logout(){
+    private void logout() {
         Intent intent = new Intent(context, AppLogin.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        ((Activity)context).finish();
+        ((Activity) context).finish();
         context.startActivity(intent);
 
     }
