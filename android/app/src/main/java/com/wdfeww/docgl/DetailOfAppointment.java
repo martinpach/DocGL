@@ -244,7 +244,7 @@ public class DetailOfAppointment extends AppCompatActivity {
         btn2.setGravity(Gravity.CENTER);
         btn2.setLayoutParams(btn_confirmation_params);
         btn2.setBackground(this.getResources().getDrawable(R.drawable.btn_transparent_background));
-        btn2.setTextColor(this.getResources().getColor(R.color.color1));
+        btn2.setTextColor(this.getResources().getColor(R.color.color5));
         btn2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

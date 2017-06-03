@@ -97,8 +97,10 @@ public class Profile extends AppCompatActivity {
     @Override
     public void onBackPressed() {
 
-        if(i==1)
+        if(i==1){
+            i = 0;
             navigationMenu.redirect(Profile.class);
+        }
         else
             navigationMenu.redirect();
     }
@@ -188,6 +190,7 @@ public class Profile extends AppCompatActivity {
         btn1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                i = 1;
                 editProfile();
             }
         });
@@ -203,7 +206,7 @@ public class Profile extends AppCompatActivity {
         btn2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                i = 1;
                 changePassword();
             }
         });
