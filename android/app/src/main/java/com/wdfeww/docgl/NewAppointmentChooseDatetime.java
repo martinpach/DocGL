@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.InputType;
 import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -105,24 +106,31 @@ public class NewAppointmentChooseDatetime extends AppCompatActivity {
         listDataHeader = new ArrayList<>();
         listHashMap = new HashMap<>();
 
-        txtdateFrom.setOnClickListener(new View.OnClickListener() {
+        txtdateFrom.setOnTouchListener(new View.OnTouchListener() {
             @Override
-            public void onClick(View v) {
-                txtdateFrom.setInputType(InputType.TYPE_NULL);
-                DateDialog dialog = new DateDialog(v);
-                FragmentTransaction ft = getFragmentManager().beginTransaction();
-                dialog.show(ft, "DatePicker");
+            public boolean onTouch(View v, MotionEvent event) {
+                if(event.getAction() == MotionEvent.ACTION_DOWN) {
+                    DateDialog dialog = new DateDialog(v);
+                    FragmentTransaction ft = getFragmentManager().beginTransaction();
+                    dialog.show(ft, "DatePicker");
+                }
+                return true;
             }
         });
+       txtdateTo.setOnTouchListener(new View.OnTouchListener() {
 
-        txtdateTo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                DateDialog dialog = new DateDialog(v);
-                FragmentTransaction ft = getFragmentManager().beginTransaction();
-                dialog.show(ft, "DatePicker");
-            }
-        });
+           @Override
+           public boolean onTouch(View v, MotionEvent event) {
+                if(event.getAction() == MotionEvent.ACTION_DOWN) {
+                    DateDialog dialog = new DateDialog(v);
+                    FragmentTransaction ft = getFragmentManager().beginTransaction();
+                    dialog.show(ft, "DatePicker");
+
+                }
+               return true;
+           }
+       });
+
 
         btn_chceckAppointments = (Button) findViewById(R.id.btn_chceckAppointments);
         btn_chceckAppointments.setOnClickListener(new View.OnClickListener() {
