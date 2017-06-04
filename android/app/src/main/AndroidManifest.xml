@@ -3,7 +3,7 @@
     package="com.wdfeww.docgl">
 
     <uses-sdk android:minSdkVersion="14" />
-
+    <meta-data android:name="com.android.vending.derived.apk.id" android:value="[ID]" />.
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_CALENDAR" />
     <uses-permission android:name="android.permission.WRITE_CALENDAR" />

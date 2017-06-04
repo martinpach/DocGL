@@ -10,4 +10,7 @@
     <item name="tv8" type="id">tv8</item>
     <item name="tv9" type="id">tv9</item>
     <item name="s" type="id">appointments</item>
+    <item name="den" type="integer">1</item>
+    <item name="cardio" type="integer">2</item>
+    <item name="ortho" type="integer">3</item>
 </resources>

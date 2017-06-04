@@ -1,6 +1,14 @@
 apply plugin: 'com.android.application'
 
 android {
+    signingConfigs{
+        release{
+            keyAlias 'DocGL'
+            keyPassword 'Akademiasovy'
+            storeFile file("DocGL.keystore")
+            storePassword 'Akademiasovy'
+        }
+    }
     compileSdkVersion 25
     buildToolsVersion "25.0.2"
     defaultConfig {

@@ -180,6 +180,7 @@ public class NewAppointmentConfirmation extends AppCompatActivity {
         rb1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                errorMessage.setVisibility(View.GONE);
                 et1.setVisibility(View.VISIBLE);
                 et2.setVisibility(View.VISIBLE);
                 spinner.setVisibility(View.GONE);
@@ -189,6 +190,7 @@ public class NewAppointmentConfirmation extends AppCompatActivity {
         rb2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                errorMessage.setVisibility(View.GONE);
                 et1.setText("");
                 et2.setText("");
                 et1.setVisibility(View.GONE);
@@ -271,6 +273,7 @@ public class NewAppointmentConfirmation extends AppCompatActivity {
                             errorMessage.setVisibility(View.GONE);
                             successMessage.setVisibility(View.GONE);
 
+                            createAppointment();
 
                         } else {
 
@@ -288,14 +291,23 @@ public class NewAppointmentConfirmation extends AppCompatActivity {
                     }
 
                 } else {
+                    try{
+                        errorMessage.setVisibility(View.GONE);
+                        pFirstName = dbOutputs.get(spinner.getSelectedItemPosition()).getFirstname();
+                        pLastName = dbOutputs.get(spinner.getSelectedItemPosition()).getLastname();
+                        createAppointment();
+                    }catch (Exception ex){
+                        errorMessage.setVisibility(View.VISIBLE);
+                        successMessage.setVisibility(View.GONE);
+                        errorMessage.setText("You have no patients in your list");
+                    }
 
-                    pFirstName = dbOutputs.get(spinner.getSelectedItemPosition()).getFirstname();
-                    pLastName = dbOutputs.get(spinner.getSelectedItemPosition()).getLastname();
+
 
                 }
                 note = et3.getText().toString().trim();
 
-                createAppointment();
+
 
             }
 

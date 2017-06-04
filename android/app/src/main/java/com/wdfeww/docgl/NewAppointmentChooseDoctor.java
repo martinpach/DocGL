@@ -62,7 +62,7 @@ public class NewAppointmentChooseDoctor extends AppCompatActivity {
     LinearLayout.LayoutParams txt_params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
     User user;
     RadioGroup radioGroup;
-
+    final int den = 1, cardio = 2, ortho = 3;
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,9 +108,10 @@ public class NewAppointmentChooseDoctor extends AppCompatActivity {
         radioGroup.addView(rbD);
         radioGroup.addView(rbC);
         radioGroup.addView(rbO);
-        radioGroup.getChildAt(0).setId(1);
-        radioGroup.getChildAt(1).setId(2);
-        radioGroup.getChildAt(2).setId(3);
+
+        radioGroup.getChildAt(0).setId(den);
+        radioGroup.getChildAt(1).setId(cardio);
+        radioGroup.getChildAt(2).setId(ortho);
         radioGroup.check(radioGroup.getChildAt(0).getId());
         chooseSpecLayout.addView(radioGroup);
 
