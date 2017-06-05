@@ -1,0 +1,94 @@
+html,body{
+	height: 100%;
+}
+body{
+	font-family: 'Roboto' sans-serif !important;
+	min-height: inherit;	  
+    background: rgba(46, 166, 158, 1) fixed !important;
+    background: -moz-linear-gradient(top, rgba(46, 166, 158, 1) 0%, rgba(10, 60, 113, 1) 100%) fixed !important;
+    background: -webkit-gradient(left top, right top, color-stop(0%, rgba(46, 166, 158, 1)), color-stop(100%, rgba(10, 60, 113, 1))) fixed !important;
+    background: -webkit-linear-gradient(top, rgba(46, 166, 158, 1) 0%, rgba(10, 60, 113, 1) 100%) fixed !important;
+    background: -o-linear-gradient(top, rgba(46, 166, 158, 1) 0%, rgba(10, 60, 113, 1) 100%) fixed !important;
+    background: -ms-linear-gradient(top, rgba(46, 166, 158, 1) 0%, rgba(10, 60, 113, 1) 100%) fixed !important;
+    background: linear-gradient(to bottom, rgba(46, 166, 158, 1) 0%, rgba(10, 60, 113, 1) 100%) fixed !important;
+}
+
+h1,h2,p,label, .interval{
+	color: #034f84;
+}
+.myLabel{
+	display: block;
+}
+
+h1{
+	font-weight: 500;
+	padding-top: 50px;
+}
+
+h2{
+	font-weight: 400;
+}
+
+p{
+	font-size: 18px;
+}
+
+.interval{
+	margin-top: 50px;
+	background-color: #B5DFFD;
+	display: block;
+	padding: 10px 30px;
+	font-size: 20px;
+	max-width: 350px;
+	text-align: center;
+	border-radius: 10px;
+	margin: 15px 0 !important;
+}
+
+main{
+	background-color: white;
+	padding: 0 0 0 10%;
+}
+
+input, select{
+	width: 210px !important;
+	position: relative;
+    border: none !important;
+    font-family: roboto;
+    background-color: #B5DFFD !important;
+    color: #034F84 !important;
+    margin-bottom: 10px !important;
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+    font-size: 16px !important;
+    height: 33px !important;
+}
+
+select{
+	padding: 0;
+    height: 51px !important;
+    margin: 0;
+    margin-top: 2px;
+}
+
+button{
+	background-color: #034F84 !important;
+	padding: 5px 15px !important;
+	font-size: 25px !important;	
+}
+
+
+#add-button{
+	margin-top: 20px !important;
+}
+
+#btn-submit{
+	margin-top: -2px;
+	display: block;
+}
+
+img{
+	width: 150px;
+	height: auto;
+	float: right;
+}

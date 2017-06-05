@@ -149,6 +149,12 @@
             <version>4.12</version>
             <scope>compile</scope>
         </dependency>
+        <!--dropwizard assets-->
+        <dependency>
+            <groupId>io.dropwizard</groupId>
+            <artifactId>dropwizard-assets</artifactId>
+            <version>${dropwizard.version}</version>
+        </dependency>
 
     </dependencies>
 

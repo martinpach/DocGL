@@ -1,0 +1,120 @@
+<div class="row"">
+	<div class="col-md-8">
+		<h1 class="heading" id="heading">Settings</h1>
+	</div>
+</div>
+<div class="container contentTab z-depth-1" id="contentTab">
+	<div class="row">
+		<div class="col-md-12" >
+			<div class="docProfileHeader" id="settingsMenu">
+				<span id="workingHours" class="settingsMenuItem activeItem">Working hours</span>
+				<span id="freeHours" class=" settingsMenuItem">Free hours</span>
+			</div>
+		</div>
+	</div>
+	<div class="row" id="workingHoursTab">
+		<div class="col-md-6">
+			<div class="docProfileHeader">Set working hours</div>
+			<div class="row">
+				<div class="col-md-12">
+					<div class="form-group">
+                        <label for="day" class="lbl">Day</label>
+                        <select id="input-day" class="editProfileInput form-control">
+                            <option value="mon">Monday</option>
+                            <option value="tue">Tuesday</option>
+                            <option value="wed">Wednesday</option>
+                            <option value="thu">Thursday</option>
+                            <option value="fri">Friday</option>
+                        </select>
+                    </div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-6">
+					<h6 class="lbl">From</h6>
+					<input type="text" id="workingFrom" class="editProfileInput timepicker">
+				</div>
+				<div class="col-md-6">
+					<h6 class="lbl">To</h6>
+					<input type="text" id="workingTo" class="editProfileInput timepicker">
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+					<div class="docProfileHeader settingsBtn">Add<i class="fa fa-plus add" id="setWorkingHours" aria-hidden="true"></i></div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-12" id="warningContainer">
+				<p class="profileErrMsg" id="workingHoursError">Two intervals per day allowed.</p>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-12" id="hoursContainer">
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+					<h6 class="lbl"></h6>
+					<div class="docProfileHeader settingsBtn" id="submitHours">Set<i class="fa fa-cog add" id="submitWorkingHours" aria-hidden="true"></i></div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-6">
+		</div>
+	</div>
+	<div class="row" id="freeHoursTab">
+		<div class="col-md-12">
+			<div id="freeHrsText">Even doctors need a day off from time to time. Let your patients know you won't be available.</div>
+			<div class="row">
+				<div class="col-md-6" id="freeHoursDiv">
+					<div class="docProfileHeader">Choose free hours</div>
+					<div class="row">
+						<div class="col-md-12">
+							<div class="form-group">
+                        		<label for="day" class="lbl">Day</label>
+                        		<input type="text" class="form-control datepicker editProfileInput" placeholder="day" id="day">
+                    	</div>
+					</div>
+				</div>
+					<div class="row">
+						<div class="col-md-6">
+							<h6 class="lbl">From</h6>
+							<input type="text" id="notWorkingFrom" class="editProfileInput timepicker">
+						</div>
+						<div class="col-md-6">
+							<h6 class="lbl">To</h6>
+							<input type="text" id="notWorkingTo" class="editProfileInput timepicker">
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-12">
+							<div class="docProfileHeader settingsBtn">Add<i class="fa fa-plus add" id="addFreeHrs" aria-hidden="true"></i></div>
+						</div>
+					</div>
+					<div class="row">
+						<div class='col-md-12'>
+						<div id="freeHoursContainer"></div>
+						</div>
+					</div>	
+				</div>
+			</div>
+		</div>		
+	</div>	
+</div>
+<div id="warningModal" class="modal fade" role="dialog">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header text-center">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title headingModal"></h4>
+			</div>
+			<div class="modal-body text-center">
+				<p class="subHeadingBlue">Please cancel all upcoming appointments before changing working hours!</p>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">OK</button>
+			</div>
+		</div>
+	</div>
+</div>

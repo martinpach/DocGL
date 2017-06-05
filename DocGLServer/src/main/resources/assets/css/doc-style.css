@@ -1,0 +1,140 @@
+/*homepage*/
+
+.notificationCard{
+	color:white;
+	padding:10px;
+	margin-bottom:10px;
+}
+
+.notificationText{
+	font-weight: 400;
+	font-size:25px;
+	cursor:context-menu;
+}
+.notificationLink{
+	font-weight:300;
+	cursor:pointer;
+}
+#newAppointments{
+	background-color:#41CCB9;
+}
+
+#cancelledAppointments{
+	background-color: #FF7B95;
+}
+
+#nextAppointmentContainer{
+	margin-top:20px;
+}
+#nextAppointmentAt{
+	font-size:20px;
+	font-weight:400;
+	margin:0;
+}
+#nextAppointmentTime{
+	margin-bottom:30px;
+}
+.huuugeText{
+	font-size:60px;
+	font-weight:500;
+}
+
+.countContainer{
+	background-color:#034F84;
+}
+
+.likeContainer{
+	background-color: #FF7B95;
+}
+
+#canceled{
+	cursor:pointer;
+}
+
+.canceledAppointment{
+	background-color:#FF7B95;
+	color:white;
+	margin-bottom:10px;
+	padding:5px;
+}
+/*profile*/
+.docProfileHeader{
+	background-color:#034F84;
+	font-weight:400;
+	color:#41CCB9;
+	padding:5px;
+	padding-left: 20px;
+	position:relative;
+	margin-bottom: 10px;
+
+}
+#changePhoneDiv{
+	display:none;
+}
+
+/*settings*/
+#settingsMenu{
+	margin-bottom:20px;
+
+}
+.settingsMenuItem{
+	font-size: 20px;
+	cursor: pointer;
+	margin-left:5px;
+}
+
+.activeItem{
+	color:white;
+}
+
+#freeHoursTab{
+	display: none;
+}
+
+.add{
+	color:#41CCB9;
+	font-size:20px;
+	margin-left:5px;
+	margin-right:10px;
+	cursor:pointer;
+	border-radius: 10;
+	float:right;
+}
+
+.add:hover{
+	color:#ffffff;
+}
+
+.listItem{
+	background-color: #B5DFFD;
+	padding:20px;
+	margin-bottom:5px;
+}
+
+.deleteWorkingHours{
+	cursor:pointer;
+	float:right;
+}
+.freeHoursOption{
+	color:#41CCB9;
+}
+#freeHrsText{
+	font-size:20px;
+	margin-bottom:10px;
+}
+#day-to{
+	margin-right:0px;
+}
+
+.settingsBtn{
+	width:100px;
+	margin-top:20px;
+	margin-left:40%;
+	float:right;
+}
+
+
+#submitHours,#workingHoursError,
+#saveFreeHrs,#setDuration{
+	display:none;
+}

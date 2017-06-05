@@ -7,6 +7,7 @@ import com.docgl.enums.UserType;
 import com.docgl.resources.*;
 import com.github.toastshaman.dropwizard.auth.jwt.JwtAuthFilter;
 import io.dropwizard.Application;
+import io.dropwizard.assets.AssetsBundle;
 import io.dropwizard.auth.AuthDynamicFeature;
 import io.dropwizard.auth.AuthValueFactoryProvider;
 import io.dropwizard.auth.Authenticator;
@@ -50,6 +51,8 @@ public class DocGLServerApplication extends Application<DocGLServerConfiguration
     @Override
     public void initialize(final Bootstrap<DocGLServerConfiguration> bootstrap) {
         bootstrap.addBundle(hibernate);
+        bootstrap.addBundle(new AssetsBundle("/assets/", "/", "index.html" ));
+
     }
 
     @Override
