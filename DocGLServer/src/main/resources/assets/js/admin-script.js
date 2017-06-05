@@ -1,5 +1,10 @@
 /*insert js here*/
 $(document).ready(function () {
+    $(this).idleTimer(10000);
+    $(this).on( "idle.idleTimer", function(){
+        localStorage.removeItem('token');
+        window.location.href = '../index.html';
+    });
     var adminData = {
         id: localStorage.getItem("id"),
         firstName: localStorage.getItem("firstName"),
