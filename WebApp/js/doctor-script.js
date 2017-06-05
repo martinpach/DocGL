@@ -275,30 +275,6 @@ $(document).ready(function() {
                         $("#hoursContainer").append("<div id='"+i+"' class='listItem'><b>"+ day+" </b>"+updatedWorkingHours[day][i].from+" - "+updatedWorkingHours[day][i].to+"</div>");
         }
 
-        $("#duration").on("change",function(){
-            $("#setDuration").show();
-            $("#durationMsg").html("");
-            $("#durationMsg").removeClass(".profileErrMsg");
-        })
-
-        $(document).on("click","#setAppointmentDuration", function(event){
-            event.preventDefault();
-            var newDuration=$("#duration").val();
-            if(duration.length==0){
-                $("#durationMsg").addClass(".profileErrMsg");
-                $("#durationMsg").html("Input field must not be empty.");
-            }
-            else{
-                var dataToSend=JSON.stringify({
-                    duration:newDuration
-                });
-                ajaxRequest("/doctors/"+docData.id+"/duration","PUT",dataToSend).done(function(){
-                    $("#setDuration").hide();
-                    $("#durationMsg").html("Update successful.");
-
-                });
-            }
-        });
 
         $("#freeHours").on("click",function(){
             $(this).addClass("activeItem");
@@ -454,7 +430,7 @@ $(document).ready(function() {
             var template = "{{count}}";
             var html = Mustache.to_html(template, appointmentCount);
             $("#totalAppointments").html(html);
-            $("#canceled").html(canceledAmount + " patients canceled an appointment today.");    
+            $("#canceled").html(canceledAmount + " canceled appointments");    
             dfd.resolve();
         });
         return dfd.promise();
