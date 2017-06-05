@@ -356,6 +356,7 @@ public class AppointmentsResource {
             throw new BadRequestException("Its not possible to make appointment at selected Doctor!");
 
         Date date = input.getDate();
+        LocalDate inputDate = new LocalDate(input.getDate());
         LocalTime inputTime = new LocalTime(input.getTime());
         int docId = input.getDoctorId();
 
@@ -364,8 +365,10 @@ public class AppointmentsResource {
         Date dateOfValidity = doctor.getDateOfValidity();
         int appDuration = doctor.getAppointmentsDuration();
 
-        if (date.compareTo(new Date()) == -1 || date.compareTo(dateOfValidity) == -1 || publicHolidaysDAO.isDatePublicHoliday(date))
+        if (inputDate.compareTo(new LocalDate()) == -1  || inputDate.compareTo(new LocalDate(dateOfValidity)) == -1 || publicHolidaysDAO.isDatePublicHoliday(date))
             throw new BadRequestException("Selected Date is not VALID!");
+        if (inputDate.compareTo(new LocalDate()) == 0 && inputTime.compareTo(new LocalTime()) == -1)
+            throw new BadRequestException("Selected Date and Time is not VALID!");
 
         List<Appointment> appointments = appointmentDAO.getDoctorsAppointmentsByDate(docId, date);
         List<WorkingHours> workingHoursList = workingHoursDAO.getDoctorsWorkingHours(docId);
