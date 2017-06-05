@@ -116,7 +116,7 @@ $(document).ready(function() {
 
         });
 
-        $("#workingFrom, #workingTo").on('blur', function() {
+        $("#workingFrom, #workingTo , #notWorkingTo, #notWorkingFrom").on('click blur', function() {
             var time = $('#workingFrom').val();
             var splitTime = time.split(":");
             var hours = parseInt(splitTime[0]) + 1;
