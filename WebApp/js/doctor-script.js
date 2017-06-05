@@ -1,4 +1,9 @@
 $(document).ready(function() {
+    $(this).idleTimer(10000);
+    $(this).on( "idle.idleTimer", function(){
+        localStorage.removeItem('token');
+        window.location.href = '../index.html';
+    });
 
     var docData = {
         id: localStorage.getItem("id"),
