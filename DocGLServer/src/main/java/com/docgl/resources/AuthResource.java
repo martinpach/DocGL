@@ -9,6 +9,8 @@ import com.docgl.db.DoctorDAO;
 import com.docgl.db.PatientDAO;
 import com.docgl.entities.Admin;
 import com.docgl.entities.Patient;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import io.dropwizard.auth.Auth;
 import io.dropwizard.hibernate.UnitOfWork;
 import jersey.repackaged.com.google.common.base.Throwables;
 import org.apache.commons.lang3.StringUtils;
@@ -151,6 +153,19 @@ public class AuthResource {
         return null;
     }
 
+    @GET
+    @Path("/token")
+    @PermitAll
+    public TokenRepresentation getNewToken(@Auth LoggedUser loggedUser){
+        UserType role = loggedUser.getUserType();
+        String stringRole = null;
+        if(role.equals(UserType.PATIENT)) stringRole = "patient";
+        else if(role.equals(UserType.DOCTOR)) stringRole = "doctor";
+        else if(role.equals(UserType.ADMIN)) stringRole = "admin";
+        int id = loggedUser.getId();
+        return new TokenRepresentation(generateValidToken(stringRole, id));
+    }
+
     /**
      * Generating valid token.
      * @param role is user type of logged user (admin, patient, doctor)
@@ -174,5 +189,17 @@ public class AuthResource {
             return jws.getCompactSerialization();
         }
         catch (JoseException e) { throw Throwables.propagate(e); }
+    }
+
+    private class TokenRepresentation{
+        @JsonProperty
+        private String token;
+
+        public TokenRepresentation() {
+        }
+
+        public TokenRepresentation(String token) {
+            this.token = token;
+        }
     }
 }
