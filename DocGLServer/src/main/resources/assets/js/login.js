@@ -87,7 +87,7 @@ $(document).ready(function () {
                         } else {
                             window.location.href = "doctor/home.html"
                         }
-                    }
+                    }                    
                 },
                 error: function () {
                     $("#errorMsg").html("Incorrect username or password.");

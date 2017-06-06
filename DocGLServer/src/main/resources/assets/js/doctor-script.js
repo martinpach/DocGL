@@ -1,9 +1,15 @@
 $(document).ready(function() {
-    $(this).idleTimer(10000);
+    $(this).idleTimer(3600000);
     $(this).on( "idle.idleTimer", function(){
         localStorage.removeItem('token');
         window.location.href = '../index.html';
     });
+
+    (function requestForNewToken() {
+        setTimeout(requestForNewToken, 3540000);
+        ajaxRequest("/auth/token", "GET");
+        localStorage.setItem("token", docData.token);
+    })();
 
     var docData = {
         id: localStorage.getItem("id"),
@@ -573,7 +579,12 @@ $(document).ready(function() {
             data: dataToSend,
             contentType: 'application/json',
             success: function(data) {
-                if (data != null) ajaxData = data;
+                if (data != null && data.token === undefined){
+                    ajaxData = data;
+                }
+                else if(data != null){
+                    docData.token = data.token;
+                }
                 dfd.resolve();
             },
             error: function(errorData) {
