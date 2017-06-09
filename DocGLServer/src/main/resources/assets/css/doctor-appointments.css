@@ -68,6 +68,10 @@
 
 }
 
+.done{
+	font-size:40px;
+}
+
 .ui-widget.ui-widget-content {
 	z-index: 2 !important;
 }

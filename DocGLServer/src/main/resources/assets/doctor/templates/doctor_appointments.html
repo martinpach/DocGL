@@ -80,6 +80,8 @@ function showDayAppointments(date) {
                     var appointmentNoteBox = $('<p class="note"></p>');
                     var btnCancelAppointment = $('<button type="button" class="btn btn-danger btn-sm btn-cancel-appointment" id="' + appointments[i].id + '">Cancel</button>');
                     var colMd4 = $('<div class="col-md-4"></div>');
+                    if(appointments[i].done==true)
+                        btnCancelAppointment='<i class="fa fa-check-circle-o tableIcon statusIcon approvedIcon done" aria-hidden="true"></i>';
                     appointmentTimeBox.text((appointments[i].time).substr(0, 5));
                     appointmentPatientBox.text((appointments[i].patientFirstName == "" ? appointments[i].patient.firstName : appointments[i].patientFirstName) + " " + (appointments[i].patientLastName == "" ? appointments[i].patient.lastName : appointments[i].patientLastName));
                     appointmentNoteBox.text(appointments[i].note);
@@ -157,6 +159,7 @@ $(document).on('click', '.appointment-week', function() {
     $("#week").removeClass("active");
     $('#appointmentContainer').empty();
     showDayAppointments(date);
+    $("#day-input").val(date);
     $('#appointmentContainer').empty();
 });
 
@@ -164,7 +167,8 @@ $(document).on('click', '.btn-cancel-appointment', function() {
     var appointmentId = $(this).attr('id');
     ajaxRequest("appointments/" + appointmentId, 'DELETE').done(function () {
         $('#appointmentContainer').empty();    
-        showDayAppointments($('#day-input').val());   
+        showDayAppointments($('#day-input').val()); 
+        $("#appointments").trigger("click");
     });
 });
 </script>
