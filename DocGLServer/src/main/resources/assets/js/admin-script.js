@@ -6,12 +6,6 @@ $(document).ready(function () {
         window.location.href = '../index.html';
     });
 
-    (function requestForNewToken() {
-        setTimeout(requestForNewToken, 3540000);
-        ajaxRequest("/auth/token", "GET");
-        localStorage.setItem("token", adminData.token);
-    })();
-
     var adminData = {
         id: localStorage.getItem("id"),
         firstName: localStorage.getItem("firstName"),
@@ -21,6 +15,13 @@ $(document).ready(function () {
         passwordChanged: localStorage.getItem("passwordChanged"),
         token: localStorage.getItem("token")
     };
+
+    (function requestForNewToken() {
+        setTimeout(requestForNewToken, 3540000);
+        ajaxRequest("/auth/token", "GET").done(function () {
+            localStorage.setItem("token", adminData.token);
+        });
+    })();
     var ajaxData;
 
     var start = 1;

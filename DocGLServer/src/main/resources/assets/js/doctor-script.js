@@ -5,12 +5,6 @@ $(document).ready(function() {
         window.location.href = '../index.html';
     });
 
-    (function requestForNewToken() {
-        setTimeout(requestForNewToken, 3540000);
-        ajaxRequest("/auth/token", "GET");
-        localStorage.setItem("token", docData.token);
-    })();
-
     var docData = {
         id: localStorage.getItem("id"),
         firstName: localStorage.getItem("firstName"),
@@ -28,6 +22,13 @@ $(document).ready(function() {
         appointmentCount: 0,
         token: localStorage.getItem("token")
     };
+
+    (function requestForNewToken() {
+        setTimeout(requestForNewToken, 3540000);
+        ajaxRequest("/auth/token", "GET").done(function(){
+            localStorage.setItem("token", docData.token)
+        });
+    })();
 
     var ajaxData;
     var appointments;
