@@ -1,4 +1,4 @@
-/*insert js here*/
+ /*insert js here*/
 $(document).ready(function () {
     $(this).idleTimer(3600000);
     $(this).on( "idle.idleTimer", function(){
@@ -84,27 +84,29 @@ $(document).ready(function () {
     $("#doctors").on("click", function () {
         $(this).addClass("selected");
         $("#users, #home").removeClass("selected");
-        $("#container").load('templates/admin_doctors.html');
-        start = 1;
-        getCountOfDoctors();
-        getDoctors(start, limit, sortByDocs, wayDocs);
-        setText(countDocs);
-        setButtons(countDocs);
-        $("#paginationContainer").show();
-        setActionToDoctorsSearchBox();
+        $("#container").load('templates/admin_doctors.html',function(){
+            start = 1;
+            getCountOfDoctors();
+            getDoctors(start, limit, sortByDocs, wayDocs);
+            setText(countDocs);
+            setButtons(countDocs);
+            $("#paginationContainer").show();
+            setActionToDoctorsSearchBox();
+        });
     });
 
     $("#users").on("click", function () {
         $(this).addClass("selected");
         $("#home, #doctors").removeClass("selected");
-        $("#container").load('templates/admin_users.html');
-        start = 1;
-        getCountOfUsers();
-        getUsers(start, limit, sortByUsers, wayUsers);
-        setText(countUsers);
-        setButtons(countUsers);
-        $("#paginationContainer").show();
-        setActionToUsersSearchBox();
+        $("#container").load('templates/admin_users.html',function(){
+            start = 1;
+            getCountOfUsers();
+            getUsers(start, limit, sortByUsers, wayUsers);
+            setText(countUsers);
+            setButtons(countUsers);
+            $("#paginationContainer").show();
+            setActionToUsersSearchBox();
+        });
     });
 
     //logout

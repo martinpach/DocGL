@@ -69,6 +69,7 @@ $('#day-input').change(function() {
     }
 });
 function showDayAppointments(date) {
+    var d =$.Deferred();
     ajaxRequest("doctors/" + localStorage.getItem("id") + "/appointments?date=" + date, 'GET').done(function() {
         $(".appointment-day").remove();
         if(appointments.length!=0)
@@ -94,8 +95,9 @@ function showDayAppointments(date) {
             $("#appointmentContainer").empty();
             $("#appointmentContainer").append("<div class='text-center subHeadingBlue ' id='noAppointments'>No appointments scheduled for today.</div>");
         }
-                
+        d.resolve();                
     });
+    return d.promise();
 }
 function showWeeklyAppointments() {
     ajaxRequest("doctors/" + localStorage.getItem("id") + "/appointments?date=" + $('#day-input').val() + "&timePeriod=week", 'GET').done(function() {
@@ -166,9 +168,9 @@ $(document).on('click', '.appointment-week', function() {
 $(document).on('click', '.btn-cancel-appointment', function() {
     var appointmentId = $(this).attr('id');
     ajaxRequest("appointments/" + appointmentId, 'DELETE').done(function () {
-        $('#appointmentContainer').empty();    
+        $('#appointmentContainer').html("");    
         showDayAppointments($('#day-input').val()); 
-        $("#appointments").trigger("click");
     });
+    showDayAppointments($('#day-input').val());
 });
 </script>

@@ -142,7 +142,6 @@ $(document).ready(function() {
             var dfd =$.Deferred();
             ajaxRequest("/doctors/"+docData.id+"/workingHours","GET").done(function(){
                 workingHours=ajaxData;
-                console.log(workingHours);
                 dfd.resolve();
             });
             return dfd.promise();
@@ -191,7 +190,6 @@ $(document).ready(function() {
 
         function addWorkingHour(){
             var dayInput=$("#input-day").val();
-            console.log(dayInput);
             var fromInput=$("#workingFrom").val();
             var toInput=$("#workingTo").val();
 
@@ -209,9 +207,6 @@ $(document).ready(function() {
                     $("#workingHoursError").show();
                 }
             }
-            else{
-                console.log("inputs must not be empty.");
-            }
 
         }
 
@@ -219,7 +214,6 @@ $(document).ready(function() {
             if (updatedWorkingHours.mon[0] != undefined) {
                 workingHours1st.mondayFrom = updatedWorkingHours.mon[0].from;
                 workingHours1st.mondayTo = updatedWorkingHours.mon[0].to;
-                console.log(workingHours1st.mondayFrom+" "+workingHours1st.mondayTo);
             }
             if (updatedWorkingHours.mon[1] != undefined) {
                 workingHours2nd.mondayFrom = updatedWorkingHours.mon[1].from;
@@ -265,9 +259,7 @@ $(document).ready(function() {
             event.preventDefault();
             setIntervalValues();
             var workingHoursObj=JSON.stringify([workingHours1st,workingHours2nd]);
-            console.log(workingHoursObj);
             ajaxRequest("/doctors/"+docData.id+"/workingHours","PUT",workingHoursObj).done(function(){
-                console.log("update successful.");
                 }).fail(function(){
                     $("#warningModal").modal("show");
             });
@@ -435,7 +427,6 @@ $(document).ready(function() {
         var dfd=$.Deferred();
         ajaxRequest("/doctors/" + docData.id + "/appointments", "GET").done(function(){
             appointments=ajaxData;
-            console.log(appointments);
             var appointmentCount={
                 count:appointments.length
             }
@@ -590,8 +581,7 @@ $(document).ready(function() {
             },
             error: function(errorData) {
                 dfd.reject();
-                console.log(errorData);
-            }
+                            }
         });
         return dfd.promise();
     }
