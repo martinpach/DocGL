@@ -9,9 +9,13 @@ import com.docgl.enums.SortableDoctorColumns;
 import com.docgl.enums.SortingWays;
 import com.docgl.enums.SpecializationsEnum;
 import com.docgl.enums.UserType;
+import com.docgl.exceptions.ValidationException;
 import org.apache.commons.lang3.time.DateUtils;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
+import javax.ws.rs.BadRequestException;
 import java.util.Date;
 import java.util.List;
 
@@ -28,6 +32,9 @@ import static org.junit.Assert.assertNotNull;
 public class DoctorDAOTest extends AbstractDAO {
 
     private final DoctorDAO dao = new DoctorDAO(sessionFactory);
+
+    @Rule
+    public final ExpectedException exception = ExpectedException.none();
 
     /**
      * getAllDoctorsTest tests
@@ -100,6 +107,50 @@ public class DoctorDAOTest extends AbstractDAO {
         assertEquals(0, doctor.size());
     }
 
+    @Test
+    public void getAllDoctorsTest11(){
+        exception.expect(ValidationException.class);
+        List<Doctor> doctor = dao.getAllDoctors(5, 0, SortableDoctorColumns.ID, null,
+                "Button", null);
+        assertEquals(0, doctor.size());
+    }
+
+    @Test
+    public void getAllDoctorsTest12(){
+        List<Doctor> doctor = dao.getAllDoctors(5, 0, null, null,
+                "Button", null);
+        assertEquals(0, doctor.size());
+    }
+
+    @Test
+    public void getAllDoctorsTest13(){
+        exception.expect(ValidationException.class);
+        List<Doctor> doctor = dao.getAllDoctors(5, 1, null, null,
+                null, null);
+        assertEquals(0, doctor.size());
+    }
+
+    @Test
+    public void getAllDoctorsTest14(){
+        exception.expect(ValidationException.class);
+        List<Doctor> doctor = dao.getAllDoctors(-5, -1, null, null,
+                null, null);
+        assertEquals(0, doctor.size());
+    }
+    @Test
+    public void getAllDoctorsTest15(){
+        List<Doctor> doctor = dao.getAllDoctors(-5, 0, SortableDoctorColumns.ID, SortingWays.ASC,
+                null, SpecializationsEnum.CARDIOLOGIST);
+        assertEquals(2, doctor.size());
+    }
+
+    @Test
+    public void getAllDoctorsTest16(){
+        List<Doctor> doctor = dao.getAllDoctors(5, -2, SortableDoctorColumns.ID, SortingWays.ASC,
+                null, SpecializationsEnum.CARDIOLOGIST);
+        assertEquals(2, doctor.size());
+    }
+
     /**
      * isUserNameAndEmailUnique tests
      */
@@ -170,6 +221,13 @@ public class DoctorDAOTest extends AbstractDAO {
     @Test
     public void approveDoctorTest() {
         dao.approveDoctor(3);
+        Doctor doctor = dao.getLoggedDoctorInformation("jinn", "docwho123");
+        assertTrue(doctor.isApproved());
+    }
+    @Test
+    public void approveDoctorTest2() {
+        exception.expect(BadRequestException.class);
+        dao.approveDoctor(1);
         Doctor doctor = dao.getLoggedDoctorInformation("doctorwho", "docwho123");
         assertTrue(doctor.isApproved());
     }
@@ -323,6 +381,55 @@ public class DoctorDAOTest extends AbstractDAO {
         assertEquals("buttontest", doctor.getLastName());
         assertEquals("rastobutton123test", Cryptor.decrypt(doctor.getPassword()));
         assertEquals("rasto@buttontest.sk", doctor.getEmail());
+        assertEquals("0944341879", doctor.getPhone());
+    }
+
+    @Test
+    public void updateProfileTest2(){
+        dao.updateProfile("", "buttontest",
+                "rasto@buttontest.sk", "rastobutton123test", "0944341879", 1);
+        Doctor doctor = dao.getDoctor(1);
+        assertEquals("doctor", doctor.getFirstName());
+        assertEquals("buttontest", doctor.getLastName());
+        assertEquals("rastobutton123test", Cryptor.decrypt(doctor.getPassword()));
+        assertEquals("rasto@buttontest.sk", doctor.getEmail());
+        assertEquals("0944341879", doctor.getPhone());
+    }
+
+    @Test
+    public void updateProfileTest3(){
+        dao.updateProfile("rastotest", "",
+                "rasto@buttontest.sk", "rastobutton123test", "0944341879", 1);
+        Doctor doctor = dao.getDoctor(1);
+        assertEquals("rastotest", doctor.getFirstName());
+        assertEquals("who", doctor.getLastName());
+        assertEquals("rastobutton123test", Cryptor.decrypt(doctor.getPassword()));
+        assertEquals("rasto@buttontest.sk", doctor.getEmail());
+        assertEquals("0944341879", doctor.getPhone());
+    }
+
+    @Test
+    public void updateProfileTest4(){
+        dao.updateProfile("rastotest", "buttontest",
+                "", "rastobutton123test", "999999999", 1);
+        Doctor doctor = dao.getDoctor(1);
+        assertEquals("rastotest", doctor.getFirstName());
+        assertEquals("buttontest", doctor.getLastName());
+        assertEquals("rastobutton123test", Cryptor.decrypt(doctor.getPassword()));
+        assertEquals("doctor@who.sk", doctor.getEmail());
+        assertEquals("999999999", doctor.getPhone());
+    }
+
+    @Test
+    public void updateProfileTest5(){
+        dao.updateProfile("rastotest", "buttontest",
+                "", "rastobutton123test", "", 1);
+        Doctor doctor = dao.getDoctor(1);
+        assertEquals("rastotest", doctor.getFirstName());
+        assertEquals("buttontest", doctor.getLastName());
+        assertEquals("rastobutton123test", Cryptor.decrypt(doctor.getPassword()));
+        assertEquals("doctor@who.sk", doctor.getEmail());
+        assertEquals("0949473196", doctor.getPhone());
     }
 
     @Test
