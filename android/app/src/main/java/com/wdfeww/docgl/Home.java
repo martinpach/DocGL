@@ -54,14 +54,14 @@ public class Home extends AppCompatActivity {
     Class className;
     FloatingActionButton fab;
     NavigationMenu navigationMenu;
-
+    SharedPreferences prefs;
     User user;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.home);
 
-        SharedPreferences prefs = this.getSharedPreferences("com.wdfeww.docgl", Context.MODE_PRIVATE);
+        prefs = this.getSharedPreferences("com.wdfeww.docgl", Context.MODE_PRIVATE);
         Gson gson = new Gson();
         String json = prefs.getString("LoggedUser", "");
         user = gson.fromJson(json, User.class);
@@ -106,6 +106,7 @@ public class Home extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         if (doubleBackToExitPressedOnce) {
+            prefs.edit().clear();
             super.onBackPressed();
             return;
         }

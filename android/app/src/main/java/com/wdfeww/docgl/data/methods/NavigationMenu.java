@@ -40,7 +40,7 @@ public class NavigationMenu extends Activity {
     Class className;
     private Patient patient;
     User user;
-
+    SharedPreferences prefs;
     public NavigationMenu(Context context, Toolbar toolbar, DrawerLayout drawer_layout,
                           NavigationView nav_view, Class className) {
         this.context = context;
@@ -53,7 +53,7 @@ public class NavigationMenu extends Activity {
 
     public void initMenu() {
 
-        SharedPreferences prefs = context.getSharedPreferences("com.wdfeww.docgl", Context.MODE_PRIVATE);
+        prefs = context.getSharedPreferences("com.wdfeww.docgl", Context.MODE_PRIVATE);
         Gson gson = new Gson();
         String json = prefs.getString("LoggedUser", "");
         user = gson.fromJson(json, User.class);
@@ -145,6 +145,7 @@ public class NavigationMenu extends Activity {
 
     private void logout() {
         Intent intent = new Intent(context, AppLogin.class);
+        prefs.edit().clear();
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         ((Activity) context).finish();
         context.startActivity(intent);

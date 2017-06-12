@@ -86,7 +86,7 @@ public class FavouriteDoctors extends AppCompatActivity {
         navigationMenu.initMenu();
 
         noResult = (TextView) findViewById(R.id.noResult);
-
+        noResult.setText("");
         getFavouriteDoctors();
     }
 
@@ -106,16 +106,18 @@ public class FavouriteDoctors extends AppCompatActivity {
                 if (response.isSuccessful()) {
                     doctors = response.body();
                     if (doctors.size() > 0) {
+                        noResult.setText("");
                         noResult.setVisibility(View.GONE);
                         showResults();
                     } else {
 
                         noResult.setVisibility(View.VISIBLE);
+                        noResult.setText("You don't have any favourite doctor");
 
                     }
 
                 } else {
-
+                    noResult.setText("");
                     noResult.setVisibility(View.VISIBLE);
 
                 }
