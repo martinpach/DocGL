@@ -6,6 +6,7 @@ import com.docgl.entities.FreeHours;
 import org.junit.Test;
 
 import java.util.Date;
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
@@ -29,4 +30,11 @@ public class FreeHoursDAOTest extends AbstractDAO{
         freeHoursDAO.setDoctorsFreeHours(freeHours);
         assertEquals(1, doctor.getFreeHours().size());
     }
+
+    @Test
+    public void getDoctorsFreeHoursTest(){
+        List<FreeHours> freeHours = freeHoursDAO.getDoctorsFreeHours(2);
+        assertEquals(0, freeHours.size());
+    }
+
 }
