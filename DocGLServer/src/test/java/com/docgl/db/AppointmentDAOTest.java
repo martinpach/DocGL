@@ -50,6 +50,12 @@ public class AppointmentDAOTest extends AbstractDAO {
         List<Appointment> appointmentList = dao.getAppointments(1, UserType.DOCTOR);
         assertEquals(7, appointmentList.size());
     }
+
+    @Test
+    public void getAppointments3Test() {
+        List<Appointment> appointmentList = dao.getAppointments(1, UserType.PATIENT);
+        assertEquals(4, appointmentList.size());
+    }
     /**
      * getAppointment test
      */

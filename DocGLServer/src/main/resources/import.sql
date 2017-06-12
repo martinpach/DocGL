@@ -9,6 +9,8 @@ insert into Patients(email, first_name, last_name, password, user_name, registra
 insert into Patients(email, first_name, last_name, password, user_name, registration_date) values("anakin@skywalker.com", "Anakin", "Skywalker", "71dfd7af6d2ae6abf10b62b719e6600f", "pat2", CURDATE());
 insert into Patients(email, first_name, last_name, password, user_name, registration_date) values("yoda@master.com", "Yoda", "Master", "71dfd7af6d2ae6abf10b62b719e6600f", "pat3", CURDATE());
 insert into Patients(email, first_name, last_name, password, user_name, registration_date) values("darth@tyranus.sk", "Darth", "Tyranus", "71dfd7af6d2ae6abf10b62b719e6600f", "pat4", CURDATE());
+insert into Patients(email, first_name, last_name, password, user_name, registration_date) values("anicka@dusicka.sk", "Anicka", "Dusicka", "71dfd7af6d2ae6abf10b62b719e6600f", "pat5", CURDATE());
+insert into Patients(email, first_name, last_name, password, user_name, registration_date) values("martin@pach.sk", "Martin", "Pach", "71dfd7af6d2ae6abf10b62b719e6600f", "pat6", CURDATE());
 
 insert into Appointments(date, time, note, doctor_id, patient_id, patient_first_name, patient_last_name, canceled) values("2017-06-28", "7:30:00", "Headache", 1, 1, "Janko", "Hrasko", true);
 insert into Appointments(date, time, note, doctor_id, patient_id, patient_first_name, patient_last_name) values("2017-05-19", "9:30:00", "Ear ache", 1, 2, "Chuck", "Norris");

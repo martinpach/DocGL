@@ -60,6 +60,36 @@ public class AdminDAOTest extends AbstractDAO {
     }
 
     @Test
+    public void updateProfileTest2(){
+        dao.updateProfile("rastotest", "", "rastobutton123test", "rasto@buttontest.sk", 1);
+        Admin admin = dao.getLoggedAdminInformation(1);
+        assertEquals("rastotest", admin.getFirstName());
+        assertEquals("button", admin.getLastName());
+        assertEquals("rastobutton123test", Cryptor.decrypt(admin.getPassword()));
+        assertEquals("rasto@buttontest.sk", admin.getEmail());
+    }
+
+    @Test
+    public void updateProfileTest3(){
+        dao.updateProfile("", "buttontest", "rastobutton123test", "rasto@buttontest.sk", 1);
+        Admin admin = dao.getLoggedAdminInformation(1);
+        assertEquals("rasto", admin.getFirstName());
+        assertEquals("buttontest", admin.getLastName());
+        assertEquals("rastobutton123test", Cryptor.decrypt(admin.getPassword()));
+        assertEquals("rasto@buttontest.sk", admin.getEmail());
+    }
+
+    @Test
+    public void updateProfileTest4(){
+        dao.updateProfile("rastotest", "buttontest", "rastobutton123test", "", 1);
+        Admin admin = dao.getLoggedAdminInformation(1);
+        assertEquals("rastotest", admin.getFirstName());
+        assertEquals("buttontest", admin.getLastName());
+        assertEquals("rastobutton123test", Cryptor.decrypt(admin.getPassword()));
+        assertEquals("rasto@button.sk", admin.getEmail());
+    }
+
+    @Test
     public void updateProfileEmptyPasswordTest(){
         dao.updateProfile("rastotest", "buttontest", "", "rasto@buttontest.sk", 1);
         Admin admin = dao.getLoggedAdminInformation(1);

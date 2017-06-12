@@ -408,7 +408,4 @@ public class AppointmentsResource {
 
     }
 
-    /*public List<Doctor> getListOfAvailableDoctorsInDateInterval(AvailableDoctorsInput input) {
-        return null;
-    }*/
 }
