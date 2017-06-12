@@ -347,7 +347,7 @@ $(document).ready(function() {
         return dfd.promise();
     });
 
-    $(document).on("click","#cancelledAppointments",function(){
+    $(document).on("click","#viewCanceledAppointments",function(){
         getCanceledAppointments();
         $("#canceledModal").modal("show");
 
@@ -358,6 +358,7 @@ $(document).ready(function() {
         ajaxRequest("/doctors/" + docData.id + "/appointments/cancelled?timePeriod=today","GET").done(function(){
             canceledAppointments=ajaxData;
             canceledAmount=canceledAppointments.length;
+            localStorage.setItem("canceledCount",canceledAmount);
             $("#canceledContainer").empty();
             for(var i=0;i<canceledAppointments.length;i++){
                 $("#canceledContainer").append("<div class='col-md-12 text-center canceledAppointment'>"+
@@ -433,7 +434,7 @@ $(document).ready(function() {
             var template = "{{count}}";
             var html = Mustache.to_html(template, appointmentCount);
             $("#totalAppointments").html(html);
-            $("#canceled").html(canceledAmount + " canceled appointments");    
+            $("#canceled").html(localStorage.getItem("canceledCount") + " canceled appointments today.");    
             dfd.resolve();
         });
         return dfd.promise();

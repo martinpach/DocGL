@@ -170,6 +170,9 @@ $(document).on('click', '.btn-cancel-appointment', function() {
     ajaxRequest("appointments/" + appointmentId, 'DELETE').done(function () {
         $('#appointmentContainer').html("");    
         showDayAppointments($('#day-input').val()); 
+        var canceledCount=localStorage.getItem("canceledCount");
+        canceledCount++;
+        localStorage.setItem("canceledCount",canceledCount);
     });
     showDayAppointments($('#day-input').val());
 });
