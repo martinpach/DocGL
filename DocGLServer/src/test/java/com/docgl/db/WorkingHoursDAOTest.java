@@ -3,7 +3,6 @@ package com.docgl.db;
 import com.docgl.entities.WorkingHours;
 import org.junit.Test;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
@@ -47,6 +46,19 @@ public class WorkingHoursDAOTest extends AbstractDAO {
         assertEquals("Tuesday", workingDays.get(1));
         assertEquals("Wednesday", workingDays.get(2));
         assertEquals("Thursday", workingDays.get(3));
+    }
+
+    @Test
+    public void getDoctorsWorkingDaysTest4() {
+        List<String> workingDays =dao.getDoctorsWorkingDays(4);
+        assertEquals(null, workingDays);
+    }
+
+    @Test
+    public void updateDoctorsWorkingHoursTest() {
+        List<WorkingHours> workingHours = dao.getDoctorsWorkingHours(2);
+        dao.updateDoctorsWorkingHours(2, workingHours);
+        assertEquals(2, workingHours.size());
     }
 
 }

@@ -7,8 +7,11 @@ import com.docgl.entities.Patient;
 import com.docgl.enums.SortablePatientColumns;
 import com.docgl.enums.SortingWays;
 import com.docgl.enums.UserType;
+import com.docgl.exceptions.ValidationException;
 import org.apache.commons.lang3.time.DateUtils;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 import java.util.Collection;
 import java.util.Date;
@@ -29,9 +32,121 @@ public class PatientDAOTest extends AbstractDAO {
     private final PatientDAO patientDAO = new PatientDAO(sessionFactory);
     private final DoctorDAO doctorDAO = new DoctorDAO(sessionFactory);
 
+    @Rule
+    public final ExpectedException exception = ExpectedException.none();
+
     @Test
     public void getAllPatientsTest() {
         List<Patient> patient = patientDAO.getAllPatients(5, 0, SortablePatientColumns.ID, SortingWays.ASC, "");
+        assertEquals(4, patient.size());
+    }
+    @Test
+    public void getAllPatientsTest2(){
+        List<Patient> patient = patientDAO.getAllPatients(5, 0, SortablePatientColumns.ID, SortingWays.ASC,
+                null);
+        assertEquals(4, patient.size());
+    }
+    //Limit test
+    @Test
+    public void getAllPatientsTest3(){
+        List<Patient> patient = patientDAO.getAllPatients(1, 0, SortablePatientColumns.ID, SortingWays.ASC,
+                null);
+        assertEquals(1, patient.size());
+    }
+    //SortingWays ASC test
+    @Test
+    public void getAllPatientsTest4(){
+        List<Patient> patient = patientDAO.getAllPatients(5, 0, SortablePatientColumns.ID, SortingWays.ASC,
+                null);
+        assertEquals(2, patient.get(1).getId());
+    }
+    //SortingWays DESC test
+    @Test
+    public void getAllPatientsTest5(){
+        List<Patient> patient = patientDAO.getAllPatients(5, 0, SortablePatientColumns.ID, SortingWays.DESC,
+                null);
+        assertEquals(3, patient.get(1).getId());
+    }
+    //Start test
+    @Test
+    public void getAllPatientsTest6(){
+        List<Patient> patient = patientDAO.getAllPatients(5, 1, SortablePatientColumns.ID, SortingWays.ASC,
+                null);
+        assertEquals(2, patient.get(0).getId());
+    }
+    //SortableDoctorColumns tests
+    @Test
+    public void getAllPatientsTest7(){
+        List<Patient> patient = patientDAO.getAllPatients(5, 0, SortablePatientColumns.LASTNAME, SortingWays.ASC,
+                null);
+        assertEquals("Master", patient.get(0).getLastName());
+    }
+    @Test
+    public void getAllPatientsTest8(){
+        List<Patient> patient = patientDAO.getAllPatients(5, 0, SortablePatientColumns.LASTNAME, SortingWays.DESC,
+                null);
+        assertEquals("who", patient.get(0).getLastName());
+    }
+    //Search by name tests
+    @Test
+    public void getAllPatientsTest9(){
+        List<Patient> patient = patientDAO.getAllPatients(5, 0, SortablePatientColumns.ID, SortingWays.DESC,
+                "Yoda");
+        assertEquals("Master", patient.get(0).getLastName());
+    }
+    @Test
+    public void getAllPatientsTest10(){
+        List<Patient> patient = patientDAO.getAllPatients(5, 0, SortablePatientColumns.ID, SortingWays.DESC,
+                "Button");
+        assertEquals(0, patient.size());
+    }
+
+    @Test
+    public void getAllPatientsTest11(){
+        exception.expect(ValidationException.class);
+        List<Patient> patient = patientDAO.getAllPatients(5, 0, SortablePatientColumns.ID, null,
+                "Button");
+        assertEquals(0, patient.size());
+    }
+
+    @Test
+    public void getAllPatientsTest12(){
+        List<Patient> patient = patientDAO.getAllPatients(5, 0, null, null,
+                "Button");
+        assertEquals(0, patient.size());
+    }
+
+    @Test
+    public void getAllPatientsTest13(){
+        List<Patient> patient = patientDAO.getAllPatients(5, 1, null, null,
+                null);
+        assertEquals(3, patient.size());
+    }
+
+    @Test
+    public void getAllPatientsTest14(){
+        List<Patient> patient = patientDAO.getAllPatients(-5, -1, null, null,
+                null);
+        assertEquals(4, patient.size());
+    }
+
+    @Test
+    public void getAllPatientsTest15(){
+        exception.expect(ValidationException.class);
+        List<Patient> patient = patientDAO.getAllPatients(-5, -1, SortablePatientColumns.ID, null,
+                null);
+    }
+    @Test
+    public void getAllPatientsTest16(){
+        List<Patient> patient = patientDAO.getAllPatients(-5, 0, SortablePatientColumns.ID, SortingWays.ASC,
+                null);
+        assertEquals(4, patient.size());
+    }
+
+    @Test
+    public void getAllPatientsTest17(){
+        List<Patient> patient = patientDAO.getAllPatients(5, -2, SortablePatientColumns.ID, SortingWays.ASC,
+                null);
         assertEquals(4, patient.size());
     }
 
@@ -230,6 +345,36 @@ public class PatientDAOTest extends AbstractDAO {
         assertEquals("rastotest", patient.getFirstName());
         assertEquals("buttontest", patient.getLastName());
         assertEquals("rasto@buttontest.sk", patient.getEmail());
+    }
+
+    @Test
+    public void updateProfileTest2(){
+        patientDAO.updateProfile("", "buttontest",
+                "rasto@buttontest.sk", 1);
+        Patient patient = patientDAO.getPatient(1);
+        assertEquals("patient", patient.getFirstName());
+        assertEquals("buttontest", patient.getLastName());
+        assertEquals("rasto@buttontest.sk", patient.getEmail());
+    }
+
+    @Test
+    public void updateProfileTest3(){
+        patientDAO.updateProfile("rastotest", "",
+                "rasto@buttontest.sk", 1);
+        Patient patient = patientDAO.getPatient(1);
+        assertEquals("rastotest", patient.getFirstName());
+        assertEquals("who", patient.getLastName());
+        assertEquals("rasto@buttontest.sk", patient.getEmail());
+    }
+
+    @Test
+    public void updateProfileTest4(){
+        patientDAO.updateProfile("rastotest", "buttontest",
+                "", 1);
+        Patient patient = patientDAO.getPatient(1);
+        assertEquals("rastotest", patient.getFirstName());
+        assertEquals("buttontest", patient.getLastName());
+        assertEquals("patient@who.cz", patient.getEmail());
     }
 
 
