@@ -1,5 +1,6 @@
 html {
     height: 100%;
+    width: calc(100% - 15px);
 }
 
 body {
@@ -13,6 +14,7 @@ body {
     background: -ms-linear-gradient(top, rgba(46, 166, 158, 1) 0%, rgba(10, 60, 113, 1) 100%) fixed !important;
     background: linear-gradient(to bottom, rgba(46, 166, 158, 1) 0%, rgba(10, 60, 113, 1) 100%) fixed !important;
 }
+
 
 .container {
     background-color: none;

@@ -91,3 +91,20 @@ footer{
 .secondLink{
     margin-top: 30px
 }
+
+@media screen and (min-width: 992px) {
+    .linksContainer {
+        height: 470px;
+    }
+    .loginsContainer {
+        height: 470px;
+    }
+    .firstLink {
+        position: absolute;
+        bottom: 35%;
+    }
+    .secondLink {
+        position: absolute;
+        bottom: 5%;
+    }
+}
