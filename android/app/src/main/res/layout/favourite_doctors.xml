@@ -56,7 +56,7 @@ android:layout_height="match_parent">
                         android:layout_marginLeft="10dp"
                         android:layout_marginTop="30dp"
                         android:layout_gravity="center"
-                        android:text="You don't have any favourite doctor"
+                        android:text=""
                         android:theme="@style/profile_text" />
 
                     <LinearLayout
